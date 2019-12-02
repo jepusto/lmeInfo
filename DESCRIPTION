@@ -1,0 +1,18 @@
+Package: lmeInfo
+Title: Information Matrices for lmeStruct Objects
+Version: 0.1.0.9000
+Authors@R: 
+    person(given = "James", 
+           family = "Pustejovsky", 
+           email = "jepusto@gmail.com", 
+           role = c("aut", "cre"), 
+           comment = c(ORCID = "0000-0003-0591-9465"))
+Description: Provides analytic derivatives and information matrices for fitted lmeStruct models from nlme::lme().
+URL: https://github.com/jepusto/lmeInfo
+BugReports: https://github.com/jepusto/lmeInfo/issues
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    covr,
+    testthat (>= 2.1.0)
