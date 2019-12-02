@@ -3,11 +3,14 @@
 #------------------------------------------------------------------------------
 
 extract_varcomp <- function(mod) {
-  sigma_sq <- mod$sigma^2                                         # sigma^2
-  phi <- as.double(coef(mod$modelStruct$corStruct, FALSE))        # phi
-  Tau_coef <- coef(mod$modelStruct$reStruct, FALSE) * sigma_sq    # unique coefficients in Tau
 
-  varcomp <- list(Tau = Tau_coef, phi=phi, sigma_sq=sigma_sq)
+  sigma_sq <- mod$sigma^2                                           # sigma^2
+  cor_params <- as.double(coef(mod$modelStruct$corStruct, FALSE))   # correlation structure
+  var_params <- as.double(coef(mod$modelStruct$varStruct, FALSE))   # variance structure
+  Tau_params <- coef(mod$modelStruct$reStruct, FALSE) * sigma_sq    # unique coefficients in Tau
+
+  varcomp <- list(Tau = Tau_params, cor_params = cor_params, var_params = var_params, sigma_sq=sigma_sq)
+
   class(varcomp) <- "varcomp"
   return(varcomp)
 }
