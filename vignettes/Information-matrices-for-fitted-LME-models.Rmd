@@ -17,6 +17,7 @@ $$
 \def\Cov{{\text{Cov}}}
 \def\trace{{\text{tr}}}
 \def\Info{{\mathcal{I}}}
+\def\Jnfo{{\mathcal{J}}}
 $$
 
 ```{r, include = FALSE}
@@ -91,7 +92,7 @@ $$
 $$
 for $i = 1,...,m$.
 
-For estimation purposes, it will be convenient to use notation for the full data vectors. Let $\bmat{y} = \left(\bmat{y}_1' \cdots \bmat{y}_m'\right)'$, $\bmat{X} = \left(\bmat{X}_1' \cdots \bmat{X}_m'\right)'$, and $\bmat{Z} = \bigoplus_{i=1}^m \bmat{Z}_i$. Let $\bm{V} = \bigoplus_{i=1}^m \bmat{V}_i$, with $\bmat{T}$, $\bmat{S}$, and $\bmat{R}$ similarly defined, so that 
+For estimation purposes, it will be convenient to use notation for the full data vectors. Let $\bmat{y} = \left(\bmat{y}_1' \cdots \bmat{y}_m'\right)'$, $\bmat{X} = \left(\bmat{X}_1' \cdots \bmat{X}_m'\right)'$, and $\bmat{Z} = \bigoplus_{i=1}^m \bmat{Z}_i$. Let $\bmat{V} = \bigoplus_{i=1}^m \bmat{V}_i$, with $\bmat{T}$, $\bmat{S}$, and $\bmat{R}$ similarly defined, so that 
 $$
 \bmat{V} = \bmat{Z} \bmat{T} \bmat{Z}' + \sigma^2 \bmat{S} \bmat{R} \bmat{S}
 $$
@@ -134,15 +135,19 @@ Let $\hat{\bs\theta}_F$ and $\hat{\bs\theta}_R$ denote the FML and RML estimator
 
 ## Sampling variance of variance parameters
 
-The analyst might need to obtain estimates of the uncertainty in $\hat{\bs\theta}$, either for purposes of inference or as a component of small-sample approximations for other statistics. For purposes of inference, a recommended approach to obtain a confidence interval for a single component of $\bs\theta$ is to use profile likelihood methods. Another approach is to use approximations based on the information matrix of the full or restricted likelihood. The inverse of the observed, expected, or average Fisher information provides an approximate estimate of $\Var(\hat{\bs\theta})$, valid as the number of groups grows large. 
-
-The observed information is the Hessian matrix of second derivatives of the log likelihood, evaluated using the (full or restricted) maximum likelihood estimator of $\theta$. For RML estimators, the observed information matrix has entries
+The analyst might need to obtain estimates of the uncertainty in $\hat{\bs\theta}$, either for purposes of inference or as a component of small-sample approximations for other statistics. For purposes of inference, a recommended approach to obtain a confidence interval for a single component of $\bs\theta$ is to use profile likelihood methods. Another approach is to use approximations based on the information matrix of the full or restricted likelihood. The inverse of the observed, expected, or average Fisher information provides an approximate estimate of $\Var(\hat{\bs\theta})$, valid as the number of groups grows large. Thus, define
 $$
-\Info^{RO}_{st} = \left. \frac{\partial^2 l_R(\theta)}{\partial \theta_s \theta_t} \right|_{\bs\theta = \hat{\bs\theta}} = \frac{1}{2} \bmat{y}'\bmat{Q}\left(\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t + \dot{\bmat{V}}_t\bmat{Q}\dot{\bmat{V}}_s - \ddot{\bmat{V}}_{st}\right) \bmat{Q}\bmat{y} - \frac{1}{2}\trace\left(\bmat{Q}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t - \bmat{Q}\ddot{\bmat{V}}_{st}\right)
+\bmat{C}(\hat{\bs\theta}) = \Info^{-1},
+$$
+where $\Info$ is the observed, expected, or average information matrix. We now define these matrices in detail.
+
+The observed information is the negative Hessian matrix (-1 times the matrix of second derivatives) of the log likelihood, evaluated using the full or restricted maximum likelihood estimator of $\theta$. For RML estimators, the observed information matrix has entries
+$$
+\Info^{RO}_{st} = \left. -\frac{\partial^2 l_R(\theta)}{\partial \theta_s \theta_t} \right|_{\bs\theta = \hat{\bs\theta}} = \frac{1}{2} \bmat{y}'\bmat{Q}\left(\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t + \dot{\bmat{V}}_t\bmat{Q}\dot{\bmat{V}}_s - \ddot{\bmat{V}}_{st}\right) \bmat{Q}\bmat{y} - \frac{1}{2}\trace\left(\bmat{Q}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t - \bmat{Q}\ddot{\bmat{V}}_{st}\right)
 $$
 for $s,t = 1,...,r$, where $\dot{\bmat{V}}_s = \left. \partial \bmat{V} / \partial \theta_s \right|_{\bs\theta = \hat{\bs\theta}}$, $\ddot{\bmat{V}}_{st} = \left. \partial^2 \bmat{V} / \partial \theta_s \partial \theta_t \right|_{\bs\theta = \hat{\bs\theta}}$, and $\bmat{Q} = \bmat{Q}(\hat{\bs\theta})$.
 
-The expected information matrix is the expected value of $\Info^{RO}$ over the distribution of $\bmat{y}$, and again evaluated at the maximum likelihood estimator of $\theta$. For RML estimators, the expected information has entries
+The expected information matrix is the expected value of $\Info^{RO}$ over the distribution of $\bmat{y}$, evaluated at the maximum likelihood estimator of $\theta$. For RML estimators, the expected information has entries
 $$
 \Info^{RE}_{st} = \frac{1}{2}\trace\left(\bmat{Q}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t\right)
 $$
@@ -153,5 +158,15 @@ $$
 \Info^{RA}_{st} = \frac{1}{2} \bmat{y}'\bmat{Q}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t\bmat{Q}\bmat{y}
 $$
 for $s,t = 1,...,r$. The average information matrix is used by the program `ASReml` [@Gilmour2009ASReml] due to its computational efficiency for models with large sample sizes.
+
+Numerical optimization algorithms will often use a parameterization of the model that differs from the parameter definitions of interest. For example, we might want to approximate the variance of a sum of several variance components in their natural parameterization, but the optimization algorithm may use a log likelihood defined in terms of the natural logs of standard deviations. Thus, we will sometimes need to convert information matrices from one parameterization to another. Suppose that we have the information matrix calculated in terms of a parameter $\bs\xi = g(\bs\theta)$, where $g()$ is a one-to-one function with inverse $h(). Define the Jacobian matrix of the inverse as
+$$
+\nabla_\xi h = \left[\frac{\partial h_s}{\partial \xi_t} \right]_{s,t = 1,...,r}.
+$$
+Let $\Jnfo$ denote the information matrix (observed, expected, or average) in the $\bs\xi$ parameterization. An approximate covariance matrix for the maximum likelihood estimator $\hat{\bs\theta}$ is
+$$
+\bmat{C}(\hat{\bs\theta}) = \left(\nabla_\xi h \right) \left[\Jnfo^{-1}\right] \left(\nabla_\xi h \right)',
+$$
+where $\nabla_\xi h$ is evaluated at $\hat{\bs\xi}$.
 
 # References
