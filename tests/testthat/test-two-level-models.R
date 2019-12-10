@@ -36,3 +36,6 @@ extract_varcomp(Laski_iid)
 
 mod <- Laski_iid
 getGroups(mod)
+
+targetVariance(mod)
+
