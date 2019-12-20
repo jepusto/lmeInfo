@@ -7,7 +7,7 @@ ZDZt <- function(D, Z_list) {
 
 targetVariance <- function(obj, cluster = nlme::getGroups(obj, level = 1)) {
 
-  if (any("nlme" == class(obj))) stop("not implemented for \"nlme\" objects")
+  if (inherits(obj, "nlme")) stop("not implemented for \"nlme\" objects")
 
   all_groups <- rev(obj$groups)
   smallest_groups <- all_groups[[1]]
@@ -66,6 +66,7 @@ targetVariance <- function(obj, cluster = nlme::getGroups(obj, level = 1)) {
 
   tb_groups <- table(largest_groups)
   tb_cluster <- table(cluster)
+
   if (length(tb_groups) < length(tb_cluster) |
       any(as.vector(tb_groups) != rep(as.vector(tb_cluster), length.out = length(tb_groups))) |
       any(names(tb_groups) != rep(names(tb_cluster), length.out = length(tb_groups)))) {

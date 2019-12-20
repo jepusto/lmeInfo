@@ -102,7 +102,8 @@ Bryant2018_RML4 <- lme(fixed = outcome ~ session_c + treatment + session_trt,
                      data = Bryant2018,
                      control=lmeControl(msMaxIter = 50, apVar=FALSE, returnObject=TRUE))
 
-extract_varcomp(Bryant2018_RML3)
+obj <- Bryant2018_RML4
+extract_varcomp(obj)
 
 mod <- Bryant2018_RML3
 getGroups(mod)
