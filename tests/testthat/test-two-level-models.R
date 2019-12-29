@@ -39,3 +39,20 @@ getGroups(mod)
 
 targetVariance(mod)
 
+test_that("targetVariance() works with 2-level models.", {
+  expect_output(targetVariance(Laski_iid))
+  expect_output(targetVariance(Laski_het))
+  expect_output(targetVariance(Laski_AR1))
+  expect_output(targetVariance(Laski_hetAR1))
+  expect_output(targetVariance(Laski_CAR1))
+  expect_output(targetVariance(Laski_MA1))
+})
+
+test_that("targetVariance() works with 2-level models.", {
+  expect_is(targetVariance(Laski_iid), "list")
+  expect_is(targetVariance(Laski_het), "list")
+  expect_is(targetVariance(Laski_AR1), "list")
+  expect_is(targetVariance(Laski_hetAR1), "list")
+  expect_is(targetVariance(Laski_CAR1), "list")
+  expect_is(targetVariance(Laski_MA1), "list")
+})
