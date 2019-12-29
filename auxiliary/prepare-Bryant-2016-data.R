@@ -1,7 +1,14 @@
 # Read in Bryant 2016
+library(tidyverse)
 
 Bryant2016 <- read.csv("auxiliary/Bryant2016.csv", stringsAsFactors = FALSE)
 str(Bryant2016)
+
+Bryant2016 <- Bryant2016 %>%
+  arrange(school, case, session) %>%
+  group_by(school, case) %>%
+  mutate(
+    trt_time = pmax(0, session - max(session[treatment == "A"])))
 
 Bryant2016 <- within(Bryant2016, {
   school <- factor(school)
@@ -9,12 +16,6 @@ Bryant2016 <- within(Bryant2016, {
   treatment <- ifelse(treatment == "A", "baseline", "treatment")
   treatment <- factor(treatment)
 })
-
-Bryant2016 <- Bryant2016 %>%
-  arrange(school, case, session) %>%
-  group_by(school, case) %>%
-  mutate(
-    trt_time = pmax(0, session - max(session[treatment == "A"])))
 
 # time-point constants
 A <- 4

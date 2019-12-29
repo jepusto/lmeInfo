@@ -1,7 +1,14 @@
 # Read in Thiemann 2004
+library(tidyverse)
 
 Thiemann2004 <- read.csv("auxiliary/Thiemann2004.csv", stringsAsFactors = FALSE)
 str(Thiemann2004)
+
+Thiemann2004 <- Thiemann2004 %>%
+  arrange(case, series, time) %>%
+  group_by(case, series) %>%
+  mutate(
+    trt_time = pmax(0, time - max(time[treatment == "A"])))
 
 Thiemann2004 <- within(Thiemann2004, {
   case <- factor(case)
@@ -9,12 +16,6 @@ Thiemann2004 <- within(Thiemann2004, {
   treatment <- ifelse(treatment == "A", "baseline", "treatment")
   treatment <- factor(treatment)
 })
-
-Thiemann2004 <- Thiemann2004 %>%
-  arrange(case, series, time) %>%
-  group_by(case, series) %>%
-  mutate(
-    trt_time = pmax(0, time - max(time[treatment == "A"])))
 
 # time-point constants
 A <- 10
