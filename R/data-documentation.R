@@ -36,11 +36,13 @@ NULL
 #'   comments, and initiating requests.
 #'   \item \code{time}. Measurement occasion.
 #'   \item \code{treatment}. Indicator for treatment phase.
+#'   \item \code{trt_time}. Measurement occasion times treatment phase.
+#'   \item \code{time_c}. Measurement occasion centered at the follow-up time.
 #' }
 #'
 #' @docType data
 #' @keywords datasets
-#' @format A data frame with 221 rows and 6 variables
+#' @format A data frame with 221 rows and 8 variables
 #' @name Thiemann2001
 #' @source Thiemann, K.S., & Goldstein, H. (2001).
 #' Social stories, written text cues, and video feedback: effects on social communication
@@ -63,11 +65,13 @@ NULL
 #'   social activity for each behavior for all sessions.
 #'   \item \code{time}. Measurement occasion.
 #'   \item \code{treatment}. Indicator for treatment phase.
+#'   \item \code{trt_time}. Measurement occasion times treatment phase.
+#'   \item \code{time_c}. Measurement occasion centered at the follow-up time.
 #' }
 #'
 #' @docType data
 #' @keywords datasets
-#' @format A data frame with 408 rows and 6 variables
+#' @format A data frame with 408 rows and 8 variables
 #' @name Thiemann2004
 #' @source Thiemann, K.S., & Goldstein, H. (2004).
 #' Effects of peer training and written text cueing on social communication of
@@ -88,11 +92,13 @@ NULL
 #'   \item \code{session}. Measurement occasion.
 #'   \item \code{treatment}. Indicator for treatment phase.
 #'   \item \code{outcome}. Texas Early Mathematics Inventory (TEMI-Aim Check) scores.
+#'   \item \code{trt_time}. Measurement occasion times treatment phase.
+#'   \item \code{session_c}. Measurement occasion centered at the follow-up time.
 #' }
 #'
 #' @docType data
 #' @keywords datasets
-#' @format A data frame with 299 rows and 6 variables
+#' @format A data frame with 299 rows and 8 variables
 #' @name Bryant2016
 #' @source Bryant, B. R., Bryant, D. P., Porterfield, J., Dennis, M. S., Falcomata, T.,
 #' Valentine, C., Brewer, C., & Bell, K. (2016).
@@ -108,22 +114,19 @@ NULL
 #' Data from a multiple baseline across clusters design conducted by
 #' Bryant et al. (2018). The variables are as follows:
 #' \itemize{
+#'   \item \code{Study_ID}. Study identifier.
 #'   \item \code{school}. School identifier.
-#'   \item \code{group}. Group identifier.
-#'   \item \code{key_math_std_score}. Key Math Standard Score (Age).
-#'   \item \code{student}. Student identifier.
-#'   \item \code{S}. Session identifier.
-#'   \item \code{AC}. Outcome.
-#'   \item \code{Measure}. Outcome measurement.
-#'   \item \code{phase}. Indicator for treatment phase.
+#'   \item \code{case}. Student identifier.
+#'   \item \code{treatment}. Indicator for treatment phase.
 #'   \item \code{session}. Measurement occasion.
 #'   \item \code{session_trt}. Measurement occasion times treatment phase.
-#'   \item \code{studentID}. Categorical indicator for student.
+#'   \item \code{outcome}. Texas Early Mathematics Inventory (TEMI-Aim Check) scores.
+#'   \item \code{session_c}. Measurement occasion centered at the follow-up time.
 #' }
 #'
 #' @docType data
 #' @keywords datasets
-#' @format A data frame with 536 rows and 11 variables
+#' @format A data frame with 536 rows and 8 variables
 #' @name Bryant2018
 #' @source Bryant, D. R., Bryant, B. R., Sorelle-Miner, D. A., Falcomata, T. S.
 #' & Nozari, M. (2018).
