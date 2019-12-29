@@ -23,7 +23,7 @@ Thiemann2001_RML3 <- lme(fixed = outcome ~ time_c + treatment + trt_time,
                       data = Thiemann2001)
 
 ## Varying Intercepts, Fixed Treatment Effects, Varying Trends
-Thiemann1_RML4 <- lme(fixed = outcome ~ time_c + treatment + trt_time,
+Thiemann2001_RML4 <- lme(fixed = outcome ~ time_c + treatment + trt_time,
                       random = ~ time_c | case/series,
                       correlation = corAR1(0, ~ time_c | case/series),
                       data = Thiemann2001,
@@ -102,11 +102,48 @@ Bryant2018_RML4 <- lme(fixed = outcome ~ session_c + treatment + session_trt,
                      data = Bryant2018,
                      control=lmeControl(msMaxIter = 50, apVar=FALSE, returnObject=TRUE))
 
-obj <- Bryant2018_RML4
-extract_varcomp(obj)
+extract_varcomp(Bryant2018_RML3)
 
 mod <- Bryant2018_RML3
 getGroups(mod)
 
 targetVariance(mod)
+
+test_that("targetVariance() works with 3-level models.", {
+  expect_output(targetVariance(Thiemann2001_RML1))
+  expect_output(targetVariance(Thiemann2001_RML2))
+  expect_output(targetVariance(Thiemann2001_RML3))
+  expect_output(targetVariance(Thiemann2001_RML4))
+  expect_output(targetVariance(Thiemann2004_RML1))
+  expect_output(targetVariance(Thiemann2004_RML2))
+  expect_output(targetVariance(Thiemann2004_RML3))
+  expect_output(targetVariance(Thiemann2004_RML4))
+  expect_output(targetVariance(Bryant2016_RML1))
+  expect_output(targetVariance(Bryant2016_RML2))
+  expect_output(targetVariance(Bryant2016_RML3))
+  expect_output(targetVariance(Bryant2016_RML4))
+  expect_output(targetVariance(Bryant2018_RML1))
+  expect_output(targetVariance(Bryant2018_RML2))
+  expect_output(targetVariance(Bryant2018_RML3))
+  expect_output(targetVariance(Bryant2018_RML4))
+})
+
+test_that("targetVariance() works with 3-level models.", {
+  expect_is(targetVariance(Thiemann2001_RML1), "list")
+  expect_is(targetVariance(Thiemann2001_RML2), "list")
+  expect_is(targetVariance(Thiemann2001_RML3), "list")
+  expect_is(targetVariance(Thiemann2001_RML4), "list")
+  expect_is(targetVariance(Thiemann2004_RML1), "list")
+  expect_is(targetVariance(Thiemann2004_RML2), "list")
+  expect_is(targetVariance(Thiemann2004_RML3), "list")
+  expect_is(targetVariance(Thiemann2004_RML4), "list")
+  expect_is(targetVariance(Bryant2016_RML1), "list")
+  expect_is(targetVariance(Bryant2016_RML2), "list")
+  expect_is(targetVariance(Bryant2016_RML3), "list")
+  expect_is(targetVariance(Bryant2016_RML4), "list")
+  expect_is(targetVariance(Bryant2018_RML1), "list")
+  expect_is(targetVariance(Bryant2018_RML2), "list")
+  expect_is(targetVariance(Bryant2018_RML3), "list")
+  expect_is(targetVariance(Bryant2018_RML4), "list")
+})
 
