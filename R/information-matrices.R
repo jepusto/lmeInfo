@@ -9,7 +9,13 @@ extract_varcomp <- function(mod) {
   var_params <- as.double(coef(mod$modelStruct$varStruct, FALSE))   # variance structure
   Tau_params <- coef(mod$modelStruct$reStruct, FALSE) * sigma_sq    # unique coefficients in Tau
 
-  varcomp <- list(Tau = Tau_params, cor_params = cor_params, var_params = var_params, sigma_sq=sigma_sq)
+  # split Tau by grouping variables
+  group_names <- names(mod$groups)
+  Tau_param_list <- sapply(group_names,
+                           function(x) Tau_params[grep(x, names(Tau_params))],
+                           simplify = FALSE, USE.NAMES = TRUE)
+
+  varcomp <- list(Tau = Tau_param_list, cor_params = cor_params, var_params = var_params, sigma_sq=sigma_sq)
 
   class(varcomp) <- "varcomp"
   return(varcomp)
@@ -52,12 +58,26 @@ Q_matrix <- function(block, X_design, Z_design, theta, times=NULL) {
 Info_Expected <- function(mod) {
 
   theta <- extract_varcomp(mod)
+  blocks <- mod$groups
   X_design <- model.matrix(mod, data = mod$data)
   Z_design <- model.matrix(mod$modelStruct$reStruct, data = mod$data)
-  block <- nlme::getGroups(mod)
   times <- attr(mod$modelStruct$corStruct, "covariate")
 
   Q_mat <- Q_matrix(block, X_design, Z_design, theta, times=times)
+
+  Z_list <- sapply(names(blocks),
+                   function(x) Z_design[,grep(x, colnames(Z_design)), drop = FALSE],
+                   simplify = FALSE, USE.NAMES = TRUE)
+
+
+  # Calculate derivative matrix-lists
+  sigma_sq <-                                            # sigma^2
+  cor_params <- dV_dcorStruct(mod$modelStruct$corStruct)    # correlation structure
+  var_params <- dV_dvarStruct(mod$modelStruct$varStruct)    # variance structure
+  Tau_params <- mapply(dV_dTau_unstruct,                    # Tau
+                       block = blocks, Z_design = Z_list,
+                       SIMPLIFY = FALSE)
+
 
   # create N * N * r array with QdV entries
   r <- length(unlist(theta))
