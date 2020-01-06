@@ -33,42 +33,45 @@ Q_matrix <- function(block, X_design, Z_design, theta, times=NULL) {
 }
 
 #------------------------------------------------------------------------------
-# Expected Information Matrix
+# Information Matrices
 #------------------------------------------------------------------------------
 
-#' @title Calculate expected information matrix
+#' @title Calculate expected, observed, or average information matrix
 #'
-#' @description Calculates the expected information matrix from a fitted linear mixed effects
-#' model (lmeStruct object)
+#' @description Calculates the expected, observed, or average information matrix
+#'   from a fitted linear mixed effects model (lmeStruct object)
 #'
 #' @param mod Fitted model of class lmeStruct
+#' @param type Type of information matrix. One of \code{"expected"} (the default),
+#'   \code{"observed"}, or \code{"average"}.
 #'
 #' @export
 #'
-#' @return Expected Information matrix corresponding to variance components of \code{mod}.
+#' @return Information matrix corresponding to variance component parameters of
+#'   \code{mod}.
 #'
 #' @examples
+#'
 #' data(Laski)
 #' Laski_RML <- lme(fixed = outcome ~ treatment,
 #'                  random = ~ 1 | case,
 #'                  correlation = corAR1(0, ~ time | case),
 #'                  data = Laski)
-#' Info_Expected(Laski_RML)
+#' Fisher_info(Laski_RML, type = "expected")
+#'
 
-Info_Expected <- function(mod) {
+Fisher_info <- function(mod, type = "expected") {
 
   theta <- extract_varcomp(mod)
 
   # Calculate derivative matrix-lists
-  sigma_sq <- build_Sigma_mats(mod, sigma_scale = FALSE)    # sigma^2
+  Tau_params <- dV_dreStruct(mod)                           # random effects structure(s)
   cor_params <- dV_dcorStruct(mod)                          # correlation structure
   var_params <- dV_dvarStruct(mod)                          # variance structure
-  Tau_params <- mapply(dV_dTau_unstruct,                    # Tau
-                       block = blocks, Z_design = Z_list,
-                       SIMPLIFY = FALSE)
+  sigma_sq <- build_Sigma_mats(mod, sigma_scale = FALSE)    # sigma^2
 
 
-  # Create list with QdV entries
+  # Create list with QdV or (V^-1)dV entries
 
   # calculate I_E
   I_E <- matrix(NA, r, r)
@@ -79,4 +82,40 @@ Info_Expected <- function(mod) {
 
   return(I_E)
 
+}
+
+
+#------------------------------------------------------------------------------
+# Sampling variance-covariance of variance component parameters
+#------------------------------------------------------------------------------
+
+#' @title Estimated sampling variance-covariance of variance component
+#'   parameters.
+#'
+#' @description Estimate the sampling variance-covariance of variance component
+#'   parameters from a fitted linear mixed effects model (lmeStruct object)
+#'   using the inverse Fisher information.
+#'
+#' @inheritParams Fisher_info
+#'
+#' @export
+#'
+#' @return Sampling variance-covariance matrix corresponding to variance
+#'   component parameters of \code{mod}.
+#'
+#' @examples
+#'
+#' data(Laski)
+#' Laski_RML <- lme(fixed = outcome ~ treatment,
+#'                  random = ~ 1 | case,
+#'                  correlation = corAR1(0, ~ time | case),
+#'                  data = Laski)
+#' varcomp_vcov(Laski_RML, type = "expected")
+#'
+
+varcomp_vcov <- function(mod, type = "expected") {
+
+  Info <- Fisher_info(mod)
+
+  chol2inv(chol(InfO))
 }
