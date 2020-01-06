@@ -1,35 +1,34 @@
 library(nlme)
 
 # Thiemann 2001
+
 data(Thiemann2001)
 
-## Varying intercepts, fixed treatment effect, no trends
 Thiemann2001_RML1 <- lme(fixed = outcome ~ treatment,
                      random = ~ 1 | case/series,
                      correlation = corAR1(0, ~ time | case/series),
                      data = Thiemann2001)
 
-## Varying intercepts, varying treatment effect, no trends
 Thiemann2001_RML2 <- lme(fixed = outcome ~ treatment,
                       random = ~ treatment | case/series,
                       correlation = corAR1(0, ~ time | case/series),
                       data = Thiemann2001,
                       control=lmeControl(msMaxIter = 200, apVar=FALSE, returnObject=TRUE))
 
-## Varying Intercepts, Fixed Treatment Effect, Fixed Trends
 Thiemann2001_RML3 <- lme(fixed = outcome ~ time_c + treatment + trt_time,
                       random = ~ 1 | case/series,
                       correlation = corAR1(0, ~ time_c | case/series),
                       data = Thiemann2001)
 
-## Varying Intercepts, Fixed Treatment Effects, Varying Trends
 Thiemann2001_RML4 <- lme(fixed = outcome ~ time_c + treatment + trt_time,
-                      random = ~ time_c | case/series,
+                      random = list(~ 1 | case, ~ treatment | series),
                       correlation = corAR1(0, ~ time_c | case/series),
                       data = Thiemann2001,
                       control=lmeControl(msMaxIter = 50, apVar=FALSE, returnObject=TRUE))
 
+
 # Thiemann 2004
+
 data(Thiemann2004)
 
 Thiemann2004_RML1 <- lme(fixed = outcome ~ treatment,
@@ -38,10 +37,10 @@ Thiemann2004_RML1 <- lme(fixed = outcome ~ treatment,
                      data = Thiemann2004)
 
 Thiemann2004_RML2 <- lme(fixed = outcome ~ treatment,
-                         random = ~ treatment | case/series,
+                         random =list(~ 1 | case, ~ treatment | series),
                          correlation = corAR1(0, ~ time | case/series),
                          data = Thiemann2004,
-                         control=lmeControl(msMaxIter = 200, apVar=FALSE, returnObject=TRUE))
+                         control=lmeControl(msMaxIter = 50, apVar=FALSE, returnObject=TRUE))
 
 Thiemann2004_RML3 <- lme(fixed = outcome ~ time_c + treatment + trt_time,
                       random = ~ 1 | case/series,
@@ -49,12 +48,14 @@ Thiemann2004_RML3 <- lme(fixed = outcome ~ time_c + treatment + trt_time,
                       data = Thiemann2004)
 
 Thiemann2004_RML4 <- lme(fixed = outcome ~ time_c + treatment + trt_time,
-                      random = ~ time_c | case/series,
+                      random = list(~ treatment | case, ~ time_c | series),
                       correlation = corAR1(0, ~ time_c | case/series),
                       data = Thiemann2004,
                       control=lmeControl(msMaxIter = 50, apVar=FALSE, returnObject=TRUE))
 
+
 # Bryant 2016
+
 data(Bryant2016)
 
 Bryant2016_RML1 <- lme(fixed = outcome ~ treatment,
@@ -73,7 +74,7 @@ Bryant2016_RML3 <- lme(fixed = outcome ~ session_c + treatment + trt_time,
                      data = Bryant2016)
 
 Bryant2016_RML4 <- lme(fixed = outcome ~ session_c + treatment + trt_time,
-                       random = ~ session_c | school/case,
+                       random = list(~ 1 | school, ~ session_c | case),
                        correlation = corAR1(0, ~ session_c | school/case),
                        data = Bryant2016,
                        control=lmeControl(msMaxIter = 50, apVar=FALSE, returnObject=TRUE))
@@ -102,37 +103,32 @@ Bryant2018_RML4 <- lme(fixed = outcome ~ session_c + treatment + session_trt,
                      data = Bryant2018,
                      control=lmeControl(msMaxIter = 50, apVar=FALSE, returnObject=TRUE))
 
-expect_correct_dims <- function(mod, grp) {
-  grp_size <- as.numeric(table(grp))
-  dims <- sapply(targetVariance(mod), dim)
-  expect_equal(grp_size, dims[1,], check.attributes = FALSE)
-  expect_equal(grp_size, dims[2,], check.attributes = FALSE)
-}
 
 test_that("targetVariance() works with 3-level models.", {
-  expect_correct_dims(Thiemann2001_RML1, Thiemann2001$case)
-  expect_correct_dims(Thiemann2001_RML2, Thiemann2001$case)
-  expect_correct_dims(Thiemann2001_RML3, Thiemann2001$case)
-  expect_correct_dims(Thiemann2001_RML4, Thiemann2001$case)
-  expect_correct_dims(Thiemann2004_RML1, Thiemann2004$case)
-  expect_correct_dims(Thiemann2004_RML2, Thiemann2004$case)
-  expect_correct_dims(Thiemann2004_RML3, Thiemann2004$case)
-  expect_correct_dims(Thiemann2004_RML4, Thiemann2004$case)
-  expect_correct_dims(Bryant2016_RML1, Bryant2016$school)
-  expect_correct_dims(Bryant2016_RML2, Bryant2016$school)
-  expect_correct_dims(Bryant2016_RML3, Bryant2016$school)
-  expect_correct_dims(Bryant2016_RML4, Bryant2016$school)
-  expect_correct_dims(Bryant2018_RML1, Bryant2018$school)
-  expect_correct_dims(Bryant2018_RML2, Bryant2018$school)
-  expect_correct_dims(Bryant2018_RML3, Bryant2018$school)
-  expect_correct_dims(Bryant2018_RML4, Bryant2018$school)
 
-  expect_error(expect_correct_dims(Bryant2016_RML1, Thiemann2001$case))
-  expect_error(expect_correct_dims(Bryant2016_RML1, Bryant2016$case))
-  expect_error(expect_correct_dims(Bryant2016_RML1, Bryant2018$school))
+  test_Sigma_mats(Thiemann2001_RML1, Thiemann2001$case)
+  test_Sigma_mats(Thiemann2001_RML2, Thiemann2001$case)
+  test_Sigma_mats(Thiemann2001_RML3, Thiemann2001$case)
+  test_Sigma_mats(Thiemann2001_RML4, Thiemann2001$case)
+  test_Sigma_mats(Thiemann2004_RML1, Thiemann2004$case)
+  test_Sigma_mats(Thiemann2004_RML2, Thiemann2004$case)
+  test_Sigma_mats(Thiemann2004_RML3, Thiemann2004$case)
+  test_Sigma_mats(Thiemann2004_RML4, Thiemann2004$case)
+  test_Sigma_mats(Bryant2016_RML1, Bryant2016$school)
+  test_Sigma_mats(Bryant2016_RML2, Bryant2016$school)
+  test_Sigma_mats(Bryant2016_RML3, Bryant2016$school)
+  test_Sigma_mats(Bryant2016_RML4, Bryant2016$school)
+  test_Sigma_mats(Bryant2018_RML1, Bryant2018$school)
+  test_Sigma_mats(Bryant2018_RML2, Bryant2018$school)
+  test_Sigma_mats(Bryant2018_RML3, Bryant2018$school)
+  test_Sigma_mats(Bryant2018_RML4, Bryant2018$school)
 
-  expect_error(expect_correct_dims(Bryant2018_RML1, Thiemann2001$case))
-  expect_error(expect_correct_dims(Bryant2018_RML1, Bryant2018$case))
-  expect_error(expect_correct_dims(Bryant2018_RML1, Bryant2016$school))
+  expect_error(test_Sigma_mats(Bryant2016_RML1, Thiemann2001$case))
+  expect_error(test_Sigma_mats(Bryant2016_RML1, Bryant2016$case))
+  expect_error(test_Sigma_mats(Bryant2016_RML1, Bryant2018$school))
+
+  expect_error(test_Sigma_mats(Bryant2018_RML1, Thiemann2001$case))
+  expect_error(test_Sigma_mats(Bryant2018_RML1, Bryant2018$case))
+  expect_error(test_Sigma_mats(Bryant2018_RML1, Bryant2016$school))
 
 })

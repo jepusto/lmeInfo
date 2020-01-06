@@ -72,6 +72,33 @@ block_minus_matrix <- function(A, B, block=NULL) {
   return(mat)
 }
 
+add_submatrices <- function(indices, small_mat, big_mat) {
+  levs <- levels(indices)
+  for (i in 1:length(levs)) {
+    ind <- levs[i] == indices
+    big_mat[ind,ind] <- big_mat[ind,ind] + small_mat[[i]]
+  }
+  big_mat
+}
+
+add_bdiag <- function(small_mats, big_mats, crosswalk) {
+  small_indices <- lapply(split(crosswalk[[1]], crosswalk[[2]]), droplevels)
+  big_indices <- unique(crosswalk)
+  big_indices <- big_indices[[2]][order(big_indices[[1]])]
+  small_mats <- split(small_mats, big_indices)
+  Map(add_submatrices, indices = small_indices, small_mat = small_mats, big_mat = big_mats)
+}
+
+# sum of conformable diagonal matrix and block-diagonal matrix
+
+add_diag <- function(d, M) {
+  diag(M) <- diag(M) + d
+  M
+}
+
+add_diag_bdiag <- function(diag_mats, big_mats) {
+  Map(add_diag, d = diag_mats, M = big_mats)
+}
 
 # product of two conformable block-diagonal matrices
 
@@ -127,4 +154,5 @@ product_trace <- function(A,B) sum(as.vector(t(A)) * as.vector(B))
 
 product_trace_blockblock <- function(A, B)
   mapply(function(a, b) product_trace(a,b), a = A, b = B)
+
 

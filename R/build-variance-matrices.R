@@ -1,106 +1,176 @@
 
-# from clubSandwich
+# Construct list of block-diagonal correlation matrices
 
-add_submatrices <- function(indices, small_mat, big_mat) {
-  levs <- levels(indices)
-  for (i in 1:length(levs)) {
-    ind <- levs[i] == indices
-    big_mat[ind,ind] <- big_mat[ind,ind] + small_mat[[i]]
+build_corr_mats <- function(mod) {
+
+  if (is.null(mod$modelStruct$corStruct)) {
+    return(NULL)
+  } else {
+    grps <- nlme::getGroups(mod, form = getGroupsFormula(mod$modelStruct$corStruct))
+    # R_list <- as.list(rep(1, nlevels(grps)))
+    # names(R_list) <- levels(grps)
+    # R_sublist <- nlme::corMatrix(mod$modelStruct$corStruct)
+    # R_list[names(R_sublist)] <- R_sublist
+    R_list <- nlme::corMatrix(mod$modelStruct$corStruct)
+    attr(R_list, "groups") <- grps
+    return(R_list)
   }
-  big_mat
 }
 
-add_bdiag <- function(small_mats, big_mats, crosswalk) {
-  small_indices <- lapply(split(crosswalk[[1]], crosswalk[[2]]), droplevels)
-  big_indices <- unique(crosswalk)
-  big_indices <- big_indices[[2]][order(big_indices[[1]])]
-  small_mats <- split(small_mats, big_indices)
-  Map(add_submatrices, indices = small_indices, small_mat = small_mats, big_mat = big_mats)
+# Construct list of block-diagonal lowest-level var-cov matrices
+
+build_var_cor_mats <- function(mod, R_list = build_corr_mats(mod), sigma_scale = FALSE) {
+
+  sigma_sq <- if (sigma_scale) mod$sigma^2 else 1
+
+  if (is.null(R_list)) {
+
+    # if there is no correlation structure,
+    # then build block-diagonals with first available grouping variable
+
+    if (is.null(mod$modelStruct$varStruct)) {
+      V_list <- split(rep(sigma_sq, length(mod$groups[[1]])),  mod$groups[[1]])
+    } else {
+      all_groups <- rev(mod$groups)
+      wts <- nlme::varWeights(mod$modelStruct$varStruct)[order(do.call(order, all_groups))]
+      V_list <- split(sigma_sq / wts^2, mod$groups[[1]])
+    }
+    attr(V_list, "groups") <- "diagonal"
+
+  } else {
+
+    # if there is a correlation structure,
+    # build block-diagonals according to its grouping structure
+
+    if (is.null(mod$modelStruct$varStruct)) {
+      V_list <- if (sigma_scale) lapply(R_list, function(x) x * sigma_sq) else R_list
+    } else {
+      all_groups <- rev(mod$groups)
+      sd_vec <- sqrt(sigma_sq) / nlme::varWeights(mod$modelStruct$varStruct)[order(do.call(order, all_groups))]
+      sd_list <- split(sd_vec, attr(R_list, "groups"))
+      V_list <- Map(function(R, s) tcrossprod(s) * R, R = R_list, s = sd_list)
+    }
+
+    attr(V_list, "groups") <- attr(R_list, "groups")
+  }
+
+  return(V_list)
 }
+
+# Create block-diagonal covariance structure from Z-design and Tau matrices
 
 ZDZt <- function(D, Z_list) {
   lapply(Z_list, function(z) z %*% D %*% t(z))
 }
 
-targetVariance <- function(obj, cluster = nlme::getGroups(obj, level = 1)) {
+# Construct list of block-diagonal matrices for each random effects grouping structure
 
-  if (inherits(obj, "nlme")) stop("not implemented for \"nlme\" objects")
-
-  all_groups <- rev(obj$groups)
-  smallest_groups <- all_groups[[1]]
-  largest_groups <- all_groups[[length(all_groups)]]
-
-  # Get level-1 variance-covariance structure as V_list
-
-  if (is.null(obj$modelStruct$corStruct)) {
-    if (is.null(obj$modelStruct$varStruct)) {
-      V_list <- matrix_list(rep(1, length(smallest_groups)), smallest_groups, "both")
-    } else {
-      wts <- nlme::varWeights(obj$modelStruct$varStruct)[order(do.call(order, all_groups))]
-      V_list <- matrix_list(1 / wts^2, smallest_groups, "both")
-    }
-  } else {
-    R_list <- as.list(rep(1, nlevels(smallest_groups)))
-    names(R_list) <- levels(smallest_groups)
-    R_sublist <- nlme::corMatrix(obj$modelStruct$corStruct)
-    R_list[names(R_sublist)] <- R_sublist
-    if (is.null(obj$modelStruct$varStruct)) {
-      V_list <- R_list
-    } else {
-      sd_vec <- 1 / nlme::varWeights(obj$modelStruct$varStruct)[order(do.call(order, all_groups))]
-      sd_list <- split(sd_vec, smallest_groups)
-      V_list <- Map(function(R, s) tcrossprod(s) * R, R = R_list, s = sd_list)
-    }
-  }
+build_RE_mats <- function(mod, sigma_scale = FALSE) {
 
   # Get random effects structure
+  all_groups <- rev(mod$groups)
 
   if (length(all_groups) == 1) {
-    D_mat <- as.matrix(obj$modelStruct$reStruct[[1]])
-    Z_mat <- model.matrix(obj$modelStruct$reStruc, getData(obj))
+
+    D_mat <- as.matrix(mod$modelStruct$reStruct[[1]])
+    if (sigma_scale) D_mat <- mod$sigma^2 * D_mat
+    Z_mat <- model.matrix(mod$modelStruct$reStruc, getData(mod))
     row.names(Z_mat) <- NULL
     Z_list <- matrix_list(Z_mat, all_groups[[1]], "row")
     ZDZ_list <- ZDZt(D_mat, Z_list)
-    target_list <- Map("+", ZDZ_list, V_list)
+
+    attr(ZDZ_list, "groups") <- all_groups[[1]]
+
   } else {
-    D_list <- lapply(obj$modelStruct$reStruct, as.matrix)
-    Z_mat <- model.matrix(obj$modelStruct$reStruc, getData(obj))
+    if (sigma_scale) {
+      D_list <- lapply(mod$modelStruct$reStruct, function(x) mod$sigma^2 * as.matrix(x))
+    } else {
+      D_list <- lapply(mod$modelStruct$reStruct, as.matrix)
+    }
+    Z_mat <- model.matrix(mod$modelStruct$reStruc, getData(mod))
     Z_names <- sapply(strsplit(colnames(Z_mat), ".", fixed=TRUE), function(x) x[1])
     row.names(Z_mat) <- NULL
     Z_levels <- lapply(names(all_groups), function(x) Z_mat[,x==Z_names,drop=FALSE])
     Z_levels <- Map(matrix_list, x = Z_levels, fac = all_groups, dim = "row")
+
     ZDZ_lists <- Map(ZDZt, D = D_list, Z_list = Z_levels)
-    ZDZ_lists[[1]] <- Map("+", ZDZ_lists[[1]], V_list)
+
     for (i in 2:length(all_groups)) {
       ZDZ_lists[[i]] <- add_bdiag(small_mats = ZDZ_lists[[i-1]],
                                   big_mats = ZDZ_lists[[i]],
                                   crosswalk = all_groups[c(i-1,i)])
     }
-    target_list <- ZDZ_lists[[i]]
+
+    ZDZ_list <- ZDZ_lists[[i]]
+
+    attr(ZDZ_list, "groups") <- all_groups[[i]]
+
   }
 
-  # check if clustering level is higher than highest level of random effects
+  ZDZ_list
 
-  tb_groups <- table(largest_groups)
-  tb_cluster <- table(cluster)
+}
 
-  if (length(tb_groups) < length(tb_cluster) |
-      any(as.vector(tb_groups) != rep(as.vector(tb_cluster), length.out = length(tb_groups))) |
-      any(names(tb_groups) != rep(names(tb_cluster), length.out = length(tb_groups)))) {
+build_Sigma_mats <- function(mod, invert = FALSE, sigma_scale = FALSE) {
 
-    # check that random effects are nested within clusters
-    tb_cross <- table(largest_groups, cluster)
-    nested <- apply(tb_cross, 1, function(x) sum(x > 0) == 1)
-    if (!all(nested)) stop("Random effects are not nested within clustering variable.")
+  if (inherits(mod, "nlme")) stop("not implemented for \"nlme\" objects")
 
-    # expand target_list to level of clustering
-    crosswalk <- data.frame(largest_groups, cluster)
-    target_list <- add_bdiag(small_mats = target_list,
-                             big_mats = matrix_list(rep(0, length(cluster)), cluster, dim = "both"),
-                             crosswalk = crosswalk)
+  # lowest-level covariance structure
+  V_list <- build_var_cor_mats(mod, sigma_scale = sigma_scale)
+
+  # random effects covariance structure
+  ZDZ_list <- build_RE_mats(mod, sigma_scale = sigma_scale)
+
+  V_grps <- attr(V_list, "groups")
+
+  if (identical(V_grps, "diagonal")) {
+
+    Sigma_list <- add_diag_bdiag(V_list, ZDZ_list)
+    Sigma_grps <- attr(ZDZ_list, "groups")
+
+  } else {
+
+    # Check if lowest-level covariance structure is nested within RE structure
+    ZDZ_grps <- attr(ZDZ_list, "groups")
+    group_mapping <- tapply(ZDZ_grps, V_grps, function(x) length(unique(x)))
+    nested <- all(group_mapping == 1L)
+    if (nested) {
+      Sigma_list <- add_bdiag(V_list, ZDZ_list, data.frame(V_grps, ZDZ_grps))
+      Sigma_grps <- attr(ZDZ_list, "groups")
+    } else {
+      V_mat <- unblock(V_list, block = V_grps)
+      ZDZ_mat <- unblock(ZDZ_list, block = ZDZ_grps)
+      Sigma_list <- V_mat + ZDZ_mat
+      Sigma_grps <- factor(rep("A", nrow(Sigma_list)))
+    }
   }
 
-  return(target_list)
+  if (invert) {
+    Sigma_list <- lapply(Sigma_list, function(x) chol2inv(chol(x)))
+  }
+
+  attr(Sigma_list, "groups") <- Sigma_grps
+
+  return(Sigma_list)
+}
+
+test_Sigma_mats <- function(mod, grps = mod$groups[[1]], sigma_scale = FALSE) {
+
+  Sigma_list <- build_Sigma_mats(mod, invert = TRUE, sigma_scale = sigma_scale)
+
+  # check dimensions
+  grp_size <- as.numeric(table(grps))
+  dims <- sapply(Sigma_list, dim)
+  testthat::expect_equal(grp_size, dims[1,], check.attributes = FALSE)
+  testthat::expect_equal(grp_size, dims[2,], check.attributes = FALSE)
+
+  # check that (XWX)^-1 is equivalent to vcov(mod)
+  X_design <- model.matrix(mod, data = mod$data)
+  XVinv <- prod_matrixblock(A = t(X_design), B = Sigma_list, block = attr(Sigma_list, "groups"))
+  XWX <- XVinv %*% X_design
+  B <- chol2inv(chol(XWX))
+  if (!sigma_scale) B <- mod$sigma^2 * B
+  testthat::expect_equal(B, vcov(mod), check.attributes = FALSE)
 }
 
 #------------------------------------------------------------------------------

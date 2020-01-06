@@ -32,24 +32,11 @@ Laski_MA1 <- lme(fixed = outcome ~ treatment,
                  data = Laski)
 
 
-extract_varcomp(Laski_iid)
-
-mod <- Laski_iid
-getGroups(mod)
-grp <- Laski$case
-
-expect_correct_dims <- function(mod, grp) {
-  grp_size <- as.numeric(table(grp))
-  dims <- sapply(targetVariance(mod), dim)
-  expect_equal(grp_size, dims[1,], check.attributes = FALSE)
-  expect_equal(grp_size, dims[2,], check.attributes = FALSE)
-}
-
 test_that("targetVariance() works with 2-level models.", {
-  expect_correct_dims(Laski_iid, Laski$case)
-  expect_correct_dims(Laski_het, Laski$case)
-  expect_correct_dims(Laski_AR1, Laski$case)
-  expect_correct_dims(Laski_hetAR1, Laski$case)
-  expect_correct_dims(Laski_CAR1, Laski$case)
-  expect_correct_dims(Laski_MA1, Laski$case)
+  test_Sigma_mats(Laski_iid, Laski$case)
+  test_Sigma_mats(Laski_het, Laski$case)
+  test_Sigma_mats(Laski_AR1, Laski$case)
+  test_Sigma_mats(Laski_hetAR1, Laski$case)
+  test_Sigma_mats(Laski_CAR1, Laski$case)
+  test_Sigma_mats(Laski_MA1, Laski$case)
 })
