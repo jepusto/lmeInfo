@@ -58,33 +58,17 @@ Q_matrix <- function(block, X_design, Z_design, theta, times=NULL) {
 Info_Expected <- function(mod) {
 
   theta <- extract_varcomp(mod)
-  blocks <- mod$groups
-  X_design <- model.matrix(mod, data = mod$data)
-  Z_design <- model.matrix(mod$modelStruct$reStruct, data = mod$data)
-  times <- attr(mod$modelStruct$corStruct, "covariate")
-
-  Q_mat <- Q_matrix(block, X_design, Z_design, theta, times=times)
-
-  Z_list <- sapply(names(blocks),
-                   function(x) Z_design[,grep(x, colnames(Z_design)), drop = FALSE],
-                   simplify = FALSE, USE.NAMES = TRUE)
-
 
   # Calculate derivative matrix-lists
-  sigma_sq <-                                            # sigma^2
-  cor_params <- dV_dcorStruct(mod$modelStruct$corStruct)    # correlation structure
-  var_params <- dV_dvarStruct(mod$modelStruct$varStruct)    # variance structure
+  sigma_sq <- build_Sigma_mats(mod, sigma_scale = FALSE)    # sigma^2
+  cor_params <- dV_dcorStruct(mod)                          # correlation structure
+  var_params <- dV_dvarStruct(mod)                          # variance structure
   Tau_params <- mapply(dV_dTau_unstruct,                    # Tau
                        block = blocks, Z_design = Z_list,
                        SIMPLIFY = FALSE)
 
 
-  # create N * N * r array with QdV entries
-  r <- length(unlist(theta))
-  QdV <- array(NA, dim = c(dim(Q_mat),r))
-  QdV[,,1] <- prod_matrixblock(Q_mat, dV_dsigmasq(block=block, times=times, phi=theta$phi), block=block)
-  QdV[,,2] <- prod_matrixblock(Q_mat, dV_dphi(block=block, times=times, phi=theta$phi, sigma_sq=theta$sigma_sq), block=block)
-  QdV[,,-2:-1] <- unlist(lapply(dV_dTau_unstruct(block, Z_design), prod_matrixblock, A=Q_mat, block=block))
+  # Create list with QdV entries
 
   # calculate I_E
   I_E <- matrix(NA, r, r)
