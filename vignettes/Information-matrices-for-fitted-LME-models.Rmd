@@ -169,7 +169,7 @@ $$
 $$
 for $s,t = 1,...,r$, where $\hat{\bmat{r}} = \bmat{y} - \bmat{X} \hat{\bs\beta}$. The average information matrix is used by the program `ASReml` [@Gilmour2009ASReml] due to its computational efficiency for models with large sample sizes.
 
-Numerical optimization algorithms will often use a parameterization of the model that differs from the parameter definitions of interest. For example, we might want to approximate the variance of a sum of several variance components in their natural parameterization, but the optimization algorithm may use a log likelihood defined in terms of the natural logs of standard deviations. Thus, we will sometimes need to convert information matrices from one parameterization to another. Suppose that we have the information matrix calculated in terms of a parameter $\bs\xi = g(\bs\theta)$, where $g()$ is a one-to-one function with inverse $h(). Define the Jacobian matrix of the inverse as
+Numerical optimization algorithms will often use a parameterization of the model that differs from the parameter definitions of interest. For example, we might want to approximate the variance of a sum of several variance components in their natural parameterization, but the optimization algorithm may use a log likelihood defined in terms of the natural logs of standard deviations. Thus, we will sometimes need to convert information matrices from one parameterization to another. Suppose that we have the information matrix calculated in terms of a parameter $\bs\xi = g(\bs\theta)$, where $g()$ is a one-to-one function with inverse $h()$. Define the Jacobian matrix of the inverse as
 $$
 \nabla_\xi h = \left[\frac{\partial h_s}{\partial \xi_t} \right]_{s,t = 1,...,r}.
 $$
