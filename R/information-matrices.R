@@ -52,6 +52,7 @@ Q_matrix <- function(block, X_design, Z_design, theta, times=NULL) {
 #'
 #' @examples
 #'
+#' library(nlme)
 #' data(Laski)
 #' Laski_RML <- lme(fixed = outcome ~ treatment,
 #'                  random = ~ 1 | case,
@@ -59,6 +60,12 @@ Q_matrix <- function(block, X_design, Z_design, theta, times=NULL) {
 #'                  data = Laski)
 #' Fisher_info(Laski_RML, type = "expected")
 #'
+#' @importFrom stats coef
+#' @importFrom stats dist
+#' @importFrom stats model.matrix
+#' @importFrom stats vcov
+#'
+
 
 Fisher_info <- function(mod, type = "expected") {
 
@@ -72,17 +79,20 @@ Fisher_info <- function(mod, type = "expected") {
   sigma_sq <- build_var_cor_mats(mod, sigma_scale = FALSE)  # sigma^2
 
 
-  # Create list with QdV or (V^-1)dV entries
-
-  # calculate I_E
-
-  I_E <- matrix(NA, r, r)
-  for (i in 1:r)
-    for (j in 1:i)
-      I_E[i,j] <- product_trace(QdV[,,i], QdV[,,j]) / 2
-  I_E[upper.tri(I_E)] <- t(I_E)[upper.tri(I_E)]
-
-  return(I_E)
+  # # Create list with QdV or (V^-1)dV entries
+  # QdV <- rep(1L, r)
+  #
+  # # calculate I_E
+  # r <- sum(lengths(theta))
+  #
+  # I_E <- matrix(NA, r, r)
+  # for (i in 1:r)
+  #   for (j in 1:i)
+  #     I_E[i,j] <- product_trace(QdV[[i]], QdV[[j]]) / 2
+  #
+  # I_E[upper.tri(I_E)] <- t(I_E)[upper.tri(I_E)]
+  #
+  # return(I_E)
 
 }
 
@@ -108,6 +118,8 @@ Fisher_info <- function(mod, type = "expected") {
 #' @examples
 #'
 #' data(Laski)
+#' library(nlme)
+#'
 #' Laski_RML <- lme(fixed = outcome ~ treatment,
 #'                  random = ~ 1 | case,
 #'                  correlation = corAR1(0, ~ time | case),
@@ -117,7 +129,7 @@ Fisher_info <- function(mod, type = "expected") {
 
 varcomp_vcov <- function(mod, type = "expected") {
 
-  Info <- Fisher_info(mod)
+  info_mat <- Fisher_info(mod, type = type)
 
-  chol2inv(chol(InfO))
+  chol2inv(chol(info_mat))
 }

@@ -1,5 +1,5 @@
 ^\.travis\.yml$
 ^codecov\.yml$
-auxilliary
+auxiliary
 ^.*\.Rproj$
 ^\.Rproj\.user$
