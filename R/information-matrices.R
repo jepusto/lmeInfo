@@ -65,15 +65,17 @@ Fisher_info <- function(mod, type = "expected") {
   theta <- extract_varcomp(mod)
 
   # Calculate derivative matrix-lists
+
   Tau_params <- dV_dreStruct(mod)                           # random effects structure(s)
   cor_params <- dV_dcorStruct(mod)                          # correlation structure
   var_params <- dV_dvarStruct(mod)                          # variance structure
-  sigma_sq <- build_Sigma_mats(mod, sigma_scale = FALSE)    # sigma^2
+  sigma_sq <- build_var_cor_mats(mod, sigma_scale = FALSE)  # sigma^2
 
 
   # Create list with QdV or (V^-1)dV entries
 
   # calculate I_E
+
   I_E <- matrix(NA, r, r)
   for (i in 1:r)
     for (j in 1:i)
