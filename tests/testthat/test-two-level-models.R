@@ -40,3 +40,9 @@ test_that("targetVariance() works with 2-level models.", {
   test_Sigma_mats(Laski_CAR1, Laski$case)
   test_Sigma_mats(Laski_MA1, Laski$case)
 })
+
+test_that("dR_dcorStruct.corCAR1 returns the same result as dR_dcorStruct.corAR1.", {
+  expect_equal(dR_dcorStruct.corCAR1(Laski_CAR1$modelStruct$corStruct),
+               dR_dcorStruct.corAR1(Laski_AR1$modelStruct$corStruct))
+})
+
