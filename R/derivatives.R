@@ -68,23 +68,35 @@ dR_dcorStruct.corAR1 <- function(struct) {
 
 # corCAR1
 
-dR_dcorStruct.corAR1 <- function(struct) {
-
+dR_dcorStruct.corCAR1 <- function(struct) {
+  cor_CAR1 <- as.double(coef(mod$modelStruct$corStruct, FALSE))
+  covariate <- attr(struct, "covariate")
+  lapply(covariate, function(x) as.matrix(dist(x)) * cor_CAR1^(as.matrix(dist(x)) - 1L))
 }
 
 # corCompSymm
 
 dR_dcorStruct.corCompSymm <- function(struct) {
   covariate <- attr(struct, "covariate")
-  sym_mat <- lapply(covariate, function(x) matrix(1, length(x), length(x)))
-  lapply(sym_mat, function(x) { diag(x) <- 0; x})
+  lapply(covariate, function(x) 1L - diag(1L, nrow = length(x)))
 }
 
 # corSymm
 
-dR_dcorStruct.corSymm <- function(struct) {
-
+dR_dCorsymm <- function(x){
+  cor_Symm <- as.double(coef(mod$modelStruct$corStruct, FALSE)) # get the correlations among measurements
+  R_list <- replicate(length(cor_Symm), x, simplify=FALSE) # make a list of multiple R matrices for one student
+  for (i in 1:length(cor_Symm)) {
+    R_list[[i]] <- 0L + (R_list[[i]] == cor_Symm[i]) # result list of matrices of each measurement for one student
+  }
+  return(R_list) # returning the result list of matrices for one student
 }
+
+dR_dcorStruct.corSymm <- function(struct) {
+  R_mat_list <- as.matrix(struct) # a list of R matrix of each student
+  lapply(R_mat_list, dR_dCorsymm) # a result list of matrices for all students
+}
+
 
 #------------------------------------------------------------------------------
 # First derivative matrices wrt variance structures
