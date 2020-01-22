@@ -83,8 +83,12 @@ dR_dcorStruct.corCompSymm <- function(struct) {
 
 # corSymm
 
-dR_dCorsymm <- function(x){
-  cor_Symm <- as.double(coef(mod$modelStruct$corStruct, FALSE)) # get the correlations among measurements
+# return list of matrices with derivative for one parameter
+dR_dcorsymm <- function(row, col, dim_vec) {
+
+}
+
+dR_dCorsymm <- function(x) {
   R_list <- replicate(length(cor_Symm), x, simplify=FALSE) # make a list of multiple R matrices for one student
   for (i in 1:length(cor_Symm)) {
     R_list[[i]] <- 0L + (R_list[[i]] == cor_Symm[i]) # result list of matrices of each measurement for one student
@@ -93,7 +97,16 @@ dR_dCorsymm <- function(x){
 }
 
 dR_dcorStruct.corSymm <- function(struct) {
-  R_mat_list <- as.matrix(struct) # a list of R matrix of each student
+
+  cor_Symm <- as.double(coef(struct, FALSE)) # get the correlations among measurements
+
+  # max dimension of the correlation matrices
+  cor_q <- 4
+  cor_index <- combn(1:cor_q, 2)
+  # sort cor_index appropriately
+
+  # get dimensions of block-diagonal matrices
+
   lapply(R_mat_list, dR_dCorsymm) # a result list of matrices for all students
 }
 

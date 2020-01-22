@@ -20,3 +20,10 @@ summary(bdf_MVML)
 
 bdf_MVML$modelStruct$corStruct
 bdf_MVML$modelStruct$varStruct
+
+mod <- bdf_MVML
+
+struct <- mod$modelStruct$corStruct
+
+thing <- dR_dcorStruct(struct)
+
