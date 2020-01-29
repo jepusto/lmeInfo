@@ -25,5 +25,7 @@ mod <- bdf_MVML
 
 struct <- mod$modelStruct$corStruct
 
-thing <- dR_dcorStruct(struct)
+res <- dR_dcorStruct(struct)
+
+
 
