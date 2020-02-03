@@ -88,7 +88,7 @@ dR_dcor_index <- function(row, col, dim_vec, q) {
   R_mat <- matrix(0, q, q)
   R_mat[row, col] <- 1
   R_mat[col, row] <- 1
-  replicate(s, R_mat, simplify=FALSE)
+  replicate(dim_vec, R_mat, simplify=FALSE)
 }
 
 # return a list of block diagonal matrix for all parameters
@@ -105,7 +105,7 @@ dR_dcorStruct.corSymm <- function(struct) {
   grps <- attr(struct, "groups")
   dim_vec <- length(unique(grps)) # dim of the block diagonal matrix
 
-  apply(cor_index, 1, function(t) dR_dcor_index(t[1], t[2], dim_vec, q))
+  apply(cor_index, 1, function(t) dR_dcor_index(t[1], t[2], dim_vec, cor_q))
 }
 
 #------------------------------------------------------------------------------
@@ -165,14 +165,64 @@ dsd_dvarStruct.varIdent <- function(struct) {
 # varExp
 
 dsd_dvarStruct.varExp <- function(struct) {
+  var_Exp <- coef(struct, FALSE) # get the parameter
 
+  if(length(var_Exp) == 1){ # if one par exists
+    covariate <- attr(struct, "covariate")
+    res <- exp(covariate * as.double(var_Exp)) * covariate
+  } else{ # if more than one par exist
+    grps <- attr(struct, "groups")
+    covariate <- attr(struct, "covariate")
+    par_val <- as.double(coef(struct, FALSE)) # sd parameter values
+    par_name <- names(coef(struct, FALSE)) # sd parameter names
+    res <- lapply(par_name, function(x) exp(covariate * par_val) * covariate * as.integer(x == grps))
+  }
+  res
 }
 
 # varPower
 
 dsd_dvarStruct.varPower <- function(struct) {
+  var_Power <- coef(struct, FALSE)
 
+  if(length(var_Power) == 1){
+    covariate <- attr(struct, "covariate")
+    abs <- abs(covariate)
+    res <- abs^as.double(var_Power) * log(abs)
+  } else{
+    grps <- attr(struct, "groups")
+    covariate <- attr(struct, "covariate")
+    par_val <- as.double(coef(struct, FALSE)) # sd parameter values
+    par_name <- names(coef(struct, FALSE)) # sd parameter names
+    res <- lapply(par_name, function(x) (abs(covariate))^par_val * log(abs(covariate)) * as.integer(x == grps))
+  }
+  res
 }
+
+
+########## BELOW DOES NOT WORK, NOT SURE WHY ##########
+# return a list of derivative for one variance parameter
+dsd_dvarPower <- function(x, struct){
+  grps <- attr(struct, "groups")
+  covariate <- attr(struct, "covariate")
+  par_val <- as.double(x)
+  par_name <- attr(x, "names")
+  (abs(covariate))^par_val * log(abs(covariate)) * as.integer(par_name == grps)
+}
+
+# return the result for all variance parameters
+dsd_dvarStruct.varPower <- function(struct) {
+  var_Power <- coef(struct, FALSE)
+
+  if(length(var_Power) == 1){
+    covariate <- attr(struct, "covariate")
+    abs <- abs(covariate)
+    abs^as.double(var_Power) * log(abs)
+  } else{
+    lapply(var_Power, dsd_dvarPower, struct = struct)
+  }
+}
+########## ABOVE DOES NOT WORK, NOT SURE WHY ##########
 
 # varConstPower
 
