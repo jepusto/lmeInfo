@@ -212,6 +212,62 @@ dsd_dvarStruct.varPower <- function(struct) {
 
 # varConstPower
 
+# for one stratum (two parameters: const and power)
+
+dsd_dConstPower1 <- function(x, strt = struct) {
+  var_ConstPower <- coef(strt, FALSE)
+  par_val <- as.double(var_ConstPower)
+  #par_name <- as.list(names(var_ConstPower))
+  covariate <- attr(strt, "covariate")
+  abs_covariate <- abs(covariate)
+
+  if (x == "const") {
+    res <- rep(1, length(covariate))
+  } else {
+    res <- abs_covariate^par_val[2] * log(abs_covariate)
+  }
+  res
+}
+
+# for two or more strata (multiple const and power parameters)
+
+dsd_dConstPower2 <- function(val, type, grp, strt = struct) {
+  grps <- attr(strt, "groups")
+  covariate <- as.numeric(attr(strt, "covariate"))
+  abs_covariate <- abs(covariate)
+
+  if (type == "const") {
+    as.integer(grp == grps)
+  } else {
+    abs_covariate^val * log(abs_covariate) * as.integer(grp == grps)
+  }
+}
+
 dsd_dvarStruct.varConstPower <- function(struct) {
+
+  # get the var struct
+  var_ConstPower <- coef(struct, FALSE)
+
+  # get the var struct names
+  par_name <- names(var_ConstPower)
+
+  # get the par values
+  par_val <- as.double(var_ConstPower)
+
+  # indicates whether the par is a const or power, can be used for one stratum scenario
+  par_type <- substr(par_name, 1, 5)
+
+  # indicates the stratum of the par, cannot be used for one stratum scenario
+  par_grp <- substring(par_name, 7)
+
+  if (length(var_ConstPower) == 2) {
+
+    lapply(par_name, dsd_dConstPower1)
+
+  } else {
+
+    Map(dsd_dConstPower2, val = par_val, type = par_type, grp = par_grp)
+
+  }
 
 }
