@@ -84,6 +84,7 @@ dR_dcorStruct.corCompSymm <- function(struct) {
 # corSymm
 
 # return list of matrices with derivative for one parameter
+
 dR_dcor_index <- function(row, col, dim_vec, q) {
   R_mat <- matrix(0, q, q)
   R_mat[row, col] <- 1
@@ -92,6 +93,7 @@ dR_dcor_index <- function(row, col, dim_vec, q) {
 }
 
 # return a list of block diagonal matrix for all parameters
+
 dR_dcorStruct.corSymm <- function(struct) {
   cor_Symm <- as.double(coef(struct, FALSE)) # parameters
 
@@ -114,6 +116,14 @@ dR_dcorStruct.corSymm <- function(struct) {
 
 # Derivative of Sigma with respect to variance structure parameters
 
+sdRds <- function(dsd_list, sd_list, R_list) {
+  dsd_list <- Map(function(s, d) tcrossprod(s, d),
+             s = sd_list, d = dsd_list)
+  dV_list <- Map(function(dsd, R) (dsd + t(dsd)) * R,
+                 dsd = dsd_list, R = R_list)
+  attr(dV_list, "groups") <- attr(R_list, "groups")
+}
+
 dV_dvarStruct <- function(mod) {
 
   # No derivatives if there's no variance structure or only varFixed structure
@@ -128,17 +138,20 @@ dV_dvarStruct <- function(mod) {
 
   if (is.null(R_list)) {
 
-    sd_list <- split(mod$sigma / wts, mod$groups[[1]])
-    dV_list <- Map(function(s, d) 2 * s * d,
-                   s = sd_list, d = dsd_dvar)
-    attr(dV_list, "groups") <- "diagonal"
+    dV_dvar <- lapply(dsd_dvar, function(d) 2 * d * mod$sigma / wts)
+
+    dV_list <- lapply(dV_dvar, function(v) {
+      v_list <- split(v, f = mod$groups[[1]])
+      attr(v_list, "groups") <- "diagonal"
+      v_list
+    })
 
   } else {
 
     sd_list <- split(mod$sigma / wts, attr(R_list, "groups"))
-    dV_list <- Map(function(R, s, d) (tcrossprod(s, d) + tcrossprod(d, s)) * R,
-                  R = R_list, s = sd_list, d = dsd_dvar)
-    attr(dV_list, "groups") <- attr(R_list, "groups")
+    dsd_list <- lapply(dsd_dvar, split, f = mod$groups[[1]])
+    dV_list <- lapply(dsd_list, sdRds, sd_list = sd_list, R_list = R_list)
+
   }
 
   dV_list
@@ -170,7 +183,6 @@ dsd_dvarExp <- function(val, grp, strt = struct) {
   exp(covariate * val) * covariate * as.integer(grp == grps)
 }
 
-# return the result for all variance parameters
 dsd_dvarStruct.varExp <- function(struct) {
   var_Exp <- coef(struct, FALSE) # get the parameter
   par_val <- as.double(var_Exp)
@@ -186,8 +198,6 @@ dsd_dvarStruct.varExp <- function(struct) {
 
 # varPower
 
-# return a list of derivative for one variance parameter
-
 dsd_dvarPower <- function(val, grp, strt = struct) {
   grps <- attr(strt, "groups")
   covariate <- as.numeric(attr(strt, "covariate"))
@@ -195,7 +205,6 @@ dsd_dvarPower <- function(val, grp, strt = struct) {
   abs_covariate^val * log(abs_covariate) * as.integer(grp == grps)
 }
 
-# return the result for all variance parameters
 dsd_dvarStruct.varPower <- function(struct) {
   var_Power <- as.list(coef(struct, FALSE))
   par_val <- as.double(var_Power)
@@ -217,7 +226,6 @@ dsd_dvarStruct.varPower <- function(struct) {
 dsd_dConstPower1 <- function(x, strt = struct) {
   var_ConstPower <- coef(strt, FALSE)
   par_val <- as.double(var_ConstPower)
-  #par_name <- as.list(names(var_ConstPower))
   covariate <- attr(strt, "covariate")
   abs_covariate <- abs(covariate)
 
