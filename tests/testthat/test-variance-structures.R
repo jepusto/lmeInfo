@@ -1,5 +1,7 @@
 # fit some example models
 
+library(nlme)
+
 # for varPower
 
 # Orthodont
