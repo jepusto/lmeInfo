@@ -138,7 +138,7 @@ dV_dvarStruct <- function(mod) {
 
   if (is.null(R_list)) {
 
-    dV_dvar <- lapply(dsd_dvar, function(d) 2 * d * mod$sigma / wts)
+    dV_dvar <- lapply(dsd_dvar, function(d) 2 * d * mod$sigma^2 / wts)
 
     dV_list <- lapply(dV_dvar, function(v) {
       v_list <- split(v, f = mod$groups[[1]])
@@ -148,9 +148,9 @@ dV_dvarStruct <- function(mod) {
 
   } else {
 
-    sd_list <- split(mod$sigma / wts, attr(R_list, "groups"))
+    sigmasq_S_list <- split(mod$sigma^2 / wts, attr(R_list, "groups"))
     dsd_list <- lapply(dsd_dvar, split, f = mod$groups[[1]])
-    dV_list <- lapply(dsd_list, sdRds, sd_list = sd_list, R_list = R_list)
+    dV_list <- lapply(dsd_list, sdRds, sd_list = sigmasq_S_list, R_list = R_list)
 
   }
 
@@ -177,45 +177,56 @@ dsd_dvarStruct.varIdent <- function(struct) {
 
 # varExp
 
-dsd_dvarExp <- function(val, grp, strt = struct) {
-  grps <- attr(strt, "groups")
-  covariate <- as.numeric(attr(strt, "covariate"))
-  exp(covariate * val) * covariate * as.integer(grp == grps)
+dsd_dvarExp <- function(val, grp, groups, covariate) {
+  exp(covariate * val) * covariate * as.integer(grp == groups)
 }
 
 dsd_dvarStruct.varExp <- function(struct) {
-  var_Exp <- coef(struct, FALSE) # get the parameter
+  var_Exp <- coef(struct, FALSE)
   par_val <- as.double(var_Exp)
   par_name <- attr(var_Exp, "names")
+  groups <- attr(struct, "groups")
+  covariate <- attr(struct, "covariate")
 
   if (length(var_Exp) == 1) {
+
     covariate <- attr(struct, "covariate")
-    exp(covariate * par_val) * covariate
+    list(exp(covariate * par_val) * covariate)
+
   } else{
-    Map(dsd_dvarExp, val = par_val, grp = par_name)
+
+    mapply(dsd_dvarExp, val = par_val, grp = par_name,
+           MoreArgs = list(groups = groups, covariate = covariate),
+           SIMPLIFY = FALSE)
+    #Map(dsd_dvarExp, val = par_val, grp = par_name, groups = groups, covariate = covariate)
   }
 }
 
 # varPower
 
-dsd_dvarPower <- function(val, grp, strt = struct) {
-  grps <- attr(strt, "groups")
-  covariate <- as.numeric(attr(strt, "covariate"))
+dsd_dvarPower <- function(val, grp, groups, covariate) {
   abs_covariate <- abs(covariate)
-  abs_covariate^val * log(abs_covariate) * as.integer(grp == grps)
+  abs_covariate^val * log(abs_covariate) * as.integer(grp == groups)
 }
 
 dsd_dvarStruct.varPower <- function(struct) {
-  var_Power <- as.list(coef(struct, FALSE))
+  var_Power <- coef(struct, FALSE)
   par_val <- as.double(var_Power)
   par_name <- attr(var_Power, "names")
+  groups <- attr(struct, "groups")
+  covariate <- attr(struct, "covariate")
 
   if (length(var_Power) == 1) {
-    covariate <- attr(struct, "covariate")
+
     abs_covariate <- abs(covariate)
-    abs_covariate^par_val * log(abs_covariate)
+    list(abs_covariate^par_val * log(abs_covariate))
+
   } else{
-    Map(dsd_dvarPower, val = par_val, grp = par_name)
+
+    mapply(dsd_dvarPower, val = par_val, grp = par_name,
+           MoreArgs = list(groups = groups, covariate = covariate),
+           SIMPLIFY = FALSE)
+
   }
 }
 
@@ -223,43 +234,31 @@ dsd_dvarStruct.varPower <- function(struct) {
 
 # for one stratum (two parameters: const and power)
 
-dsd_dConstPower1 <- function(x, strt = struct) {
-  var_ConstPower <- coef(strt, FALSE)
-  par_val <- as.double(var_ConstPower)
-  covariate <- attr(strt, "covariate")
+dsd_dConstPower1 <- function(x, val, covariate) {
   abs_covariate <- abs(covariate)
-
   if (x == "const") {
-    res <- rep(1, length(covariate))
+    rep(1, length(covariate))
   } else {
-    res <- abs_covariate^par_val[2] * log(abs_covariate)
+    abs_covariate^val[2] * log(abs_covariate) # [2] is the power par
   }
-  res
 }
 
 # for two or more strata (multiple const and power parameters)
 
-dsd_dConstPower2 <- function(val, type, grp, strt = struct) {
-  grps <- attr(strt, "groups")
-  covariate <- as.numeric(attr(strt, "covariate"))
+dsd_dConstPower2 <- function(val, type, grp, groups, covariate) {
   abs_covariate <- abs(covariate)
-
   if (type == "const") {
-    as.integer(grp == grps)
+    as.integer(grp == groups)
   } else {
-    abs_covariate^val * log(abs_covariate) * as.integer(grp == grps)
+    abs_covariate^val * log(abs_covariate) * as.integer(grp == groups)
   }
 }
 
 dsd_dvarStruct.varConstPower <- function(struct) {
-
-  # get the var struct
+  groups <- attr(struct, "groups")
+  covariate <- attr(struct, "covariate")
   var_ConstPower <- coef(struct, FALSE)
-
-  # get the var struct names
   par_name <- names(var_ConstPower)
-
-  # get the par values
   par_val <- as.double(var_ConstPower)
 
   # indicates whether the par is a const or power, can be used for one stratum scenario
@@ -270,12 +269,13 @@ dsd_dvarStruct.varConstPower <- function(struct) {
 
   if (length(var_ConstPower) == 2) {
 
-    lapply(par_name, dsd_dConstPower1)
+    lapply(par_name, dsd_dConstPower1, val = par_val, covariate = covariate)
 
   } else {
 
-    Map(dsd_dConstPower2, val = par_val, type = par_type, grp = par_grp)
+    mapply(dsd_dConstPower2, val = par_val, type = par_type, grp = par_grp,
+           MoreArgs = list(groups = groups, covariate = covariate),
+           SIMPLIFY = FALSE)
 
   }
-
 }
