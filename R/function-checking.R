@@ -27,9 +27,18 @@ test_Sigma_mats <- function(mod, grps = mod$groups[[1]], sigma_scale = FALSE) {
 # Checks that dimensions of derivatives are consistent with number of parameters
 #--------------------------------------------------------------------------------
 
+check_block_dims <- function(x, m, ni) {
+  x_dims <- sapply(x, dim)
+  testthat::expect_identical(length(x), m)
+  testthat::expect_identical(as.integer(x_dims[1,]), ni)
+  testthat::expect_identical(as.integer(x_dims[2,]), ni)
+}
+
 test_deriv_dims <- function(mod) {
 
   vc_est <- extract_varcomp(mod)
+  m <- mod$dims$ngrps[[1]]
+  ni <- as.integer(table(rev(mod$groups)[[1]]))
 
   d_Tau <- dV_dreStruct(mod)
   testthat::expect_identical(lengths(d_Tau), lengths(vc_est$Tau))
@@ -41,6 +50,7 @@ test_deriv_dims <- function(mod) {
 
   d_var <- dV_dvarStruct(mod)
   testthat::expect_identical(length(d_var), length(vc_est$var_params))
+  lapply(d_var, check_block_dims, m = m, ni = ni)
   # also check that dimensions of d_var are consistent with structure of mod
 
   d_sigma <- build_var_cor_mats(mod, sigma_scale = FALSE)
