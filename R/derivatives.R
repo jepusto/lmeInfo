@@ -61,18 +61,20 @@ dR_dcorStruct.default <- function(struct) {
 # corAR1
 
 dR_dcorStruct.corAR1 <- function(struct) {
-  cor_AR1 <- as.double(coef(mod$modelStruct$corStruct, FALSE))
+  cor_AR1 <- as.double(coef(struct, FALSE))
   covariate <- attr(struct, "covariate")
   dR <- lapply(covariate, function(x) as.matrix(dist(x)) * cor_AR1^(as.matrix(dist(x)) - 1L))
+  attr(dR, "groups") <- attr(struct, "groups")
   list(dR)
 }
 
 # corCAR1
 
 dR_dcorStruct.corCAR1 <- function(struct) {
-  cor_CAR1 <- as.double(coef(mod$modelStruct$corStruct, FALSE))
+  cor_CAR1 <- as.double(coef(struct, FALSE))
   covariate <- attr(struct, "covariate")
   dR <- lapply(covariate, function(x) as.matrix(dist(x)) * cor_CAR1^(as.matrix(dist(x)) - 1L))
+  attr(dR, "groups") <- attr(struct, "groups")
   list(dR)
 }
 
@@ -81,6 +83,7 @@ dR_dcorStruct.corCAR1 <- function(struct) {
 dR_dcorStruct.corCompSymm <- function(struct) {
   covariate <- attr(struct, "covariate")
   dR <- lapply(covariate, function(x) 1L - diag(1L, nrow = length(x)))
+  attr(dR, "groups") <- attr(struct, "groups")
   list(dR)
 }
 
@@ -88,11 +91,12 @@ dR_dcorStruct.corCompSymm <- function(struct) {
 
 # return list of matrices with derivative for one parameter
 
-dR_dcor_index <- function(row, col, dim_vec, q) {
+dR_dcor_index <- function(row, col, dim_vec, q, grps) {
   R_mat <- matrix(0, q, q)
   R_mat[row, col] <- 1
   R_mat[col, row] <- 1
-  replicate(dim_vec, R_mat, simplify=FALSE)
+  dR <- replicate(dim_vec, R_mat, simplify=FALSE)
+  attr(dR, "groups") <- grps
 }
 
 # return a list of block diagonal matrix for all parameters
@@ -110,7 +114,7 @@ dR_dcorStruct.corSymm <- function(struct) {
   grps <- attr(struct, "groups")
   dim_vec <- length(unique(grps)) # dim of the block diagonal matrix
 
-  apply(cor_index, 1, function(t) dR_dcor_index(t[1], t[2], dim_vec, cor_q))
+  apply(cor_index, 1, function(t) dR_dcor_index(t[1], t[2], dim_vec, cor_q, grps = grps))
 }
 
 #------------------------------------------------------------------------------
@@ -125,6 +129,7 @@ sdRds <- function(dsd_list, sd_list, R_list) {
   dV_list <- Map(function(dsd, R) (dsd + t(dsd)) * R,
                  dsd = dsd_list, R = R_list)
   attr(dV_list, "groups") <- attr(R_list, "groups")
+  dV_list
 }
 
 dV_dvarStruct <- function(mod) {
@@ -145,14 +150,14 @@ dV_dvarStruct <- function(mod) {
 
     dV_list <- lapply(dV_dvar, function(v) {
       v_list <- split(v, f = mod$groups[[1]])
-      attr(v_list, "groups") <- "diagonal"
+      attr(v_list, "groups") <- mod$groups[[1]]
       v_list
     })
 
   } else {
-
-    sigmasq_S_list <- split(mod$sigma^2 / wts, attr(R_list, "groups"))
-    dsd_list <- lapply(dsd_dvar, split, f = mod$groups[[1]])
+    grps <- attr(R_list, "groups")
+    sigmasq_S_list <- split(mod$sigma^2 / wts, grps)
+    dsd_list <- lapply(dsd_dvar, split, f = grps)
     dV_list <- lapply(dsd_list, sdRds, sd_list = sigmasq_S_list, R_list = R_list)
 
   }
@@ -201,7 +206,6 @@ dsd_dvarStruct.varExp <- function(struct) {
     mapply(dsd_dvarExp, val = par_val, grp = par_name,
            MoreArgs = list(groups = groups, covariate = covariate),
            SIMPLIFY = FALSE)
-    #Map(dsd_dvarExp, val = par_val, grp = par_name, groups = groups, covariate = covariate)
   }
 }
 
@@ -224,7 +228,7 @@ dsd_dvarStruct.varPower <- function(struct) {
     abs_covariate <- abs(covariate)
     list(abs_covariate^par_val * log(abs_covariate))
 
-  } else{
+  } else {
 
     mapply(dsd_dvarPower, val = par_val, grp = par_name,
            MoreArgs = list(groups = groups, covariate = covariate),
