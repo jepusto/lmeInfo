@@ -63,7 +63,8 @@ dR_dcorStruct.default <- function(struct) {
 dR_dcorStruct.corAR1 <- function(struct) {
   cor_AR1 <- as.double(coef(mod$modelStruct$corStruct, FALSE))
   covariate <- attr(struct, "covariate")
-  lapply(covariate, function(x) as.matrix(dist(x)) * cor_AR1^(as.matrix(dist(x)) - 1L))
+  dR <- lapply(covariate, function(x) as.matrix(dist(x)) * cor_AR1^(as.matrix(dist(x)) - 1L))
+  list(dR)
 }
 
 # corCAR1
@@ -71,14 +72,16 @@ dR_dcorStruct.corAR1 <- function(struct) {
 dR_dcorStruct.corCAR1 <- function(struct) {
   cor_CAR1 <- as.double(coef(mod$modelStruct$corStruct, FALSE))
   covariate <- attr(struct, "covariate")
-  lapply(covariate, function(x) as.matrix(dist(x)) * cor_CAR1^(as.matrix(dist(x)) - 1L))
+  dR <- lapply(covariate, function(x) as.matrix(dist(x)) * cor_CAR1^(as.matrix(dist(x)) - 1L))
+  list(dR)
 }
 
 # corCompSymm
 
 dR_dcorStruct.corCompSymm <- function(struct) {
   covariate <- attr(struct, "covariate")
-  lapply(covariate, function(x) 1L - diag(1L, nrow = length(x)))
+  dR <- lapply(covariate, function(x) 1L - diag(1L, nrow = length(x)))
+  list(dR)
 }
 
 # corSymm
