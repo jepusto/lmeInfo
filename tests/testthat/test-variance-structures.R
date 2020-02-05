@@ -10,135 +10,90 @@ data(Orthodont)
 data(Dialyzer)
 data(BodyWeight)
 
-# for varIdent
-Laski_het <- lme(fixed = outcome ~ treatment,
-                 random = ~ treatment | case,
-                 weights = varIdent(form = ~ 1 | treatment),
-                 data = Laski)
-
-Laski_het$modelStruct$varStruct
-dsd_dvarStruct(Laski_het$modelStruct$varStruct)
-dV_dvarStruct(Laski_het)
-
-# for varPower
-
 # Orthodont
 
 Ortho_A <- lme(distance ~ age + Sex,
                data = Orthodont,
                random = ~ age | Subject)
-dsd_dvarStruct(Ortho_A$modelStruct$varStruct)
-dV_dvarStruct(Ortho_A)
 
 Ortho_B_Power <- update(Ortho_A, weights = varPower()) # fitted(.) is used by default
-summary(Ortho_B_Power)
-dsd_dvarStruct(Ortho_B_Power$modelStruct$varStruct)
-dV_dvarStruct(Ortho_B_Power)
-
 Ortho_C_Power <- update(Ortho_A, weights = varPower(form = ~ age))
-summary(Ortho_C_Power)
-dsd_dvarStruct(Ortho_C_Power$modelStruct$varStruct)
-dV_dvarStruct(Ortho_C_Power)
-
 Ortho_D_Power <- update(Ortho_A, weights = varPower(form = ~ age | Sex))
-summary(Ortho_D_Power)
-dsd_dvarStruct(Ortho_D_Power$modelStruct$varStruct)
-dV_dvarStruct(Ortho_D_Power)
+Ortho_B_Exp <- update(Ortho_A, weights = varExp())
+Ortho_C_Exp <- update(Ortho_A, weights = varExp(form = ~ age))
+Ortho_D_Exp <- update(Ortho_A, weights = varExp(form = ~ age | Sex))
+Ortho_B_Const <- update(Ortho_A, weights = varConstPower()) # fitted(.) is used by default
+Ortho_D_Const <- update(Ortho_A, weights = varConstPower(form = ~ age | Sex))
+
+test_that("targetVariance() works with Orthodont models.", {
+  test_Sigma_mats(Ortho_A, Orthodont$Subject)
+  test_Sigma_mats(Ortho_B_Power, Orthodont$Subject)
+  test_Sigma_mats(Ortho_C_Power, Orthodont$Subject)
+  test_Sigma_mats(Ortho_D_Power, Orthodont$Subject)
+  test_Sigma_mats(Ortho_B_Exp, Orthodont$Subject)
+  test_Sigma_mats(Ortho_C_Exp, Orthodont$Subject)
+  test_Sigma_mats(Ortho_D_Exp, Orthodont$Subject)
+  test_Sigma_mats(Ortho_B_Const, Orthodont$Subject)
+  test_Sigma_mats(Ortho_D_Const, Orthodont$Subject)
+})
+
+test_that("Derivative matrices are of correct dimension with Orthodont models.", {
+  test_deriv_dims(Ortho_A)
+  test_deriv_dims(Ortho_B_Power)
+  test_deriv_dims(Ortho_C_Power)
+  test_deriv_dims(Ortho_D_Power)
+  test_deriv_dims(Ortho_B_Exp)
+  test_deriv_dims(Ortho_C_Exp)
+  test_deriv_dims(Ortho_D_Exp)
+  test_deriv_dims(Ortho_B_Const)
+  test_deriv_dims(Ortho_D_Const)
+
+})
+
 
 # Dialyzer
 
 Dialyzer_A <- lme(rate ~ (pressure + I(pressure^2)) * QB,
                   data = Dialyzer,
                   random = ~ pressure | Subject)
-dV_dvarStruct(Dialyzer_A)
-
-
 Dialyzer_B_Power <- update(Dialyzer_A, weights = varPower())
-summary(Dialyzer_B_Power)
-dsd_dvarStruct(Dialyzer_B_Power$modelStruct$varStruct)
-dV_dvarStruct(Dialyzer_B_Power)
-
 Dialyzer_C_Power <- update(Dialyzer_A, weights = varPower(form = ~ pressure))
-summary(Dialyzer_C_Power)
-dsd_dvarStruct(Dialyzer_C_Power$modelStruct$varStruct)
-dV_dvarStruct(Dialyzer_C_Power)
-
 Dialyzer_D_Power <- update(Dialyzer_A, weights = varPower(form = ~ pressure | QB))
-summary(Dialyzer_D_Power)
-dsd_dvarStruct(Dialyzer_D_Power$modelStruct$varStruct)
-dV_dvarStruct(Dialyzer_D_Power)
-mod <- Dialyzer_D_Power
 
+test_that("targetVariance() works with Dialyzer models.", {
+  test_Sigma_mats(Dialyzer_A, Dialyzer$Subject)
+  test_Sigma_mats(Dialyzer_B_Power, Dialyzer$Subject)
+  test_Sigma_mats(Dialyzer_C_Power, Dialyzer$Subject)
+  test_Sigma_mats(Dialyzer_D_Power, Dialyzer$Subject)
+})
+
+test_that("Derivative matrices are of correct dimension with Dialyzer models.", {
+  test_deriv_dims(Dialyzer_A)
+  test_deriv_dims(Dialyzer_B_Power)
+  test_deriv_dims(Dialyzer_C_Power)
+  test_deriv_dims(Dialyzer_D_Power)
+})
 
 # BodyWeight
 
 BodyWeight_A <- lme(weight ~ Time * Diet,
                     data = BodyWeight,
                     random = ~ Time | Rat)
-dV_dvarStruct(BodyWeight_A)
-
 Bodyweight_B_Power <- update(BodyWeight_A, weights = varPower()) # fitted(.) is used by default
-summary(Bodyweight_B_Power)
-struct <- Bodyweight_B_Power$modelStruct$varStruct
-dsd_dvarStruct(struct)
-dV_dvarStruct(Bodyweight_B_Power)
-
 Bodyweight_C_Power <- update(BodyWeight_A, weights = varPower(form = ~ Time))
-summary(Bodyweight_C_Power)
-struct <- Bodyweight_C_Power$modelStruct$varStruct
-dsd_dvarStruct(struct)
-dV_dvarStruct(Bodyweight_C_Power)
-
 Bodyweight_D_Power <- update(BodyWeight_A, weights = varPower(form = ~ Time | Diet))
-summary(Bodyweight_D_Power)
-struct <- Bodyweight_D_Power$modelStruct$varStruct
-dsd_dvarStruct(struct)
-dV_dvarStruct(Bodyweight_D_Power)
 
-mod <- Bodyweight_B_Power
-struct <- mod$modelStruct$varStruct
-struct
-str(struct)
-attr(struct, "covariate") # the variance covariate
-attr(struct, "weights") # the inverse of variance function
+test_that("targetVariance() works with BodyWeight models.", {
+  test_Sigma_mats(BodyWeight_A, BodyWeight$Rat)
+  test_Sigma_mats(Bodyweight_B_Power, BodyWeight$Rat)
+  test_Sigma_mats(Bodyweight_C_Power, BodyWeight$Rat)
+  test_Sigma_mats(Bodyweight_D_Power, BodyWeight$Rat)
+})
 
-# for varExp
+test_that("Derivative matrices are of correct dimension with BodyWeight models.", {
+  test_deriv_dims(BodyWeight_A)
+  test_deriv_dims(Bodyweight_B_Power)
+  test_deriv_dims(Bodyweight_C_Power)
+  test_deriv_dims(Bodyweight_D_Power)
+})
 
-Ortho_B_Exp <- update(Ortho_A, weights = varExp())
-summary(Ortho_B_Exp)
-dsd_dvarStruct(Ortho_B_Exp$modelStruct$varStruct)
-dV_dvarStruct(Ortho_B_Exp)
-
-Ortho_C_Exp <- update(Ortho_A, weights = varExp(form = ~ age))
-summary(Ortho_C_Exp)
-dsd_dvarStruct(Ortho_C_Exp$modelStruct$varStruct)
-dV_dvarStruct(Ortho_C_Exp)
-
-Ortho_D_Exp <- update(Ortho_A, weights = varExp(form = ~ age | Sex))
-summary(Ortho_D_Exp)
-dsd_dvarStruct(Ortho_D_Exp$modelStruct$varStruct)
-dV_dvarStruct(Ortho_D_Exp)
-
-# for varConstPower
-
-Ortho_B_Const <- update(Ortho_A, weights = varConstPower()) # fitted(.) is used by default
-summary(Ortho_B_Const)
-struct <- Ortho_B_Const$modelStruct$varStruct
-dsd_dvarStruct(struct)
-dV_dvarStruct(Ortho_B_Const)
-
-Ortho_D_Const <- update(Ortho_A, weights = varConstPower(form = ~ age | Sex))
-summary(Ortho_D_Const)
-struct <- Ortho_D_Const$modelStruct$varStruct
-dsd_dvarStruct(struct)
-dV_dvarStruct(Ortho_D_Const)
-
-mod <- Ortho_B_Const
-struct <- mod$modelStruct$varStruct
-struct
-str(struct)
-pars <- coef(struct, FALSE)
-pars
-attr(struct, "covariate") # the variance covariate
-attr(struct, "weights") # the inverse of variance function
-dsd_dvarStruct(struct) # the derivative results

@@ -1,5 +1,5 @@
-library(dplyr)
-library(tidyr)
+library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
+library(tidyr, quietly = TRUE)
 library(nlme)
 data(bdf, package = "mlmRev")
 
@@ -22,10 +22,12 @@ bdf_MVML$modelStruct$corStruct
 bdf_MVML$modelStruct$varStruct
 
 mod <- bdf_MVML
-
 struct <- mod$modelStruct$corStruct
-res <- dR_dcorStruct(struct)
 
-mod$modelStruct$varStruct
-dsd_dvarStruct(mod$modelStruct$varStruct)
-dV_dvarStruct(mod)
+test_that("targetVariance() works with multivariate models.", {
+  test_Sigma_mats(bdf_MVML, bdf_long$schoolNR)
+})
+
+test_that("Derivative matrices are of correct dimension with multivariate models.", {
+  test_deriv_dims(bdf_MVML)
+})
