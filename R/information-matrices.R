@@ -25,11 +25,10 @@ extract_varcomp <- function(mod) {
 # create Q matrix
 #------------------------------------------------------------------------------
 
-Q_matrix <- function(block, X_design, Z_design, theta, times=NULL) {
-  V_inv <- lmeAR1_cov_block_inv(block=block, Z_design=Z_design, theta=theta, times=times)
-  Vinv_X <- prod_blockmatrix(V_inv, X_design, block = block)
-  VinvX_XVXinv_XVinv <- Vinv_X %*% chol2inv(chol(t(X_design) %*% Vinv_X)) %*% t(Vinv_X)
-  block_minus_matrix(V_inv, VinvX_XVXinv_XVinv, block)
+Q_matrix <- function(mod) {
+  V_inv <- build_Sigma_mats(mod, invert = TRUE, sigma_scale = TRUE)
+  X <- model.matrix(mod, data = mod$data)
+  # fill in
 }
 
 #------------------------------------------------------------------------------
@@ -78,6 +77,14 @@ Fisher_info <- function(mod, type = "expected") {
   var_params <- dV_dvarStruct(mod)                          # variance structure
   sigma_sq <- build_var_cor_mats(mod, sigma_scale = FALSE)  # sigma^2
 
+
+  est_method <- mod$method
+
+  if (est_method == "FIML") {
+
+  } else if (est_method == "REML") {
+
+  }
 
   # # Create list with QdV or (V^-1)dV entries
   # QdV <- rep(1L, r)
