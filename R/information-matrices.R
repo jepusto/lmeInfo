@@ -82,8 +82,6 @@ Fisher_info <- function(mod, type = "expected") {
 
   if (est_method == "FIML") {
 
-  } else if (est_method == "REML") {
-
     r <- length(unlist(theta))
     V_inv <- build_Sigma_mats(mod, invert = TRUE, sigma_scale = TRUE)
 
@@ -109,6 +107,10 @@ Fisher_info <- function(mod, type = "expected") {
     I_E[upper.tri(I_E)] <- t(I_E)[upper.tri(I_E)]
 
     return(I_E)
+
+  } else if (est_method == "REML") {
+
+
 
   }
 
