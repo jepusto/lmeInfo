@@ -84,25 +84,50 @@ Fisher_info <- function(mod, type = "expected") {
 
   } else if (est_method == "REML") {
 
-  }
+    r <- length(unlist(theta))
+    V_inv <- build_Sigma_mats(mod, invert = TRUE, sigma_scale = TRUE)
 
-  # # Create list with QdV or (V^-1)dV entries
-  # QdV <- rep(1L, r)
-  #
-  # # calculate I_E
-  # r <- sum(lengths(theta))
-  #
-  # I_E <- matrix(NA, r, r)
-  # for (i in 1:r)
-  #   for (j in 1:i)
-  #     I_E[i,j] <- product_trace(QdV[[i]], QdV[[j]]) / 2
-  #
-  # I_E[upper.tri(I_E)] <- t(I_E)[upper.tri(I_E)]
-  #
-  # return(I_E)
+    # create list with V_inv_dV entries
+    V_inv_dV <- list()
+
+    V_inv_Tau_params <- lapply(Tau_params[[1]], prod_blockblock, A = V_inv)
+    V_inv_cor_params <- lapply(cor_params, prod_blockblock, A = V_inv)
+    V_inv_var_params <- lapply(var_params, prod_blockblock, A = V_inv)
+    V_inv_sigma_sq <- prod_blockblock(V_inv, sigma_sq)
+
+    V_inv_dV[[1]] <- V_inv_sigma_sq
+    V_inv_dV <- unlist(list(V_inv_Tau_params, V_inv_cor_params, V_inv_var_params, V_inv_dV), recursive = FALSE)
+
+    # calculate I_E
+
+    I_E <- matrix(NA, r, r)
+
+    for (i in 1:r)
+      for (j in 1:i)
+        I_E[i,j] <- sum(product_trace_blockblock(V_inv_dV[[i]], V_inv_dV[[j]])) / 2
+
+    I_E[upper.tri(I_E)] <- t(I_E)[upper.tri(I_E)]
+
+    return(I_E)
+
+  }
 
 }
 
+# # Create list with QdV or (V^-1)dV entries
+# QdV <- rep(1L, r)
+#
+# # calculate I_E
+# r <- sum(lengths(theta))
+#
+# I_E <- matrix(NA, r, r)
+# for (i in 1:r)
+#   for (j in 1:i)
+#     I_E[i,j] <- product_trace(QdV[[i]], QdV[[j]]) / 2
+#
+# I_E[upper.tri(I_E)] <- t(I_E)[upper.tri(I_E)]
+#
+# return(I_E)
 
 #------------------------------------------------------------------------------
 # Sampling variance-covariance of variance component parameters
