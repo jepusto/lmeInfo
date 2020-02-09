@@ -28,7 +28,11 @@ extract_varcomp <- function(mod) {
 Q_matrix <- function(mod) {
   V_inv <- build_Sigma_mats(mod, invert = TRUE, sigma_scale = TRUE)
   X <- model.matrix(mod, data = mod$data)
-  # fill in
+  Vinv_X <- prod_blockmatrix(V_inv, X)
+  XVXinv <- chol2inv(chol(t(X) %*% Vinv_X))
+  X_Vinv <- t(Vinv_X)
+  VinvX_XVXinv_XVinv <- Vinv_X %*% XVXinv %*% X_Vinv
+  block_minus_matrix(V_inv, VinvX_XVXinv_XVinv)
 }
 
 #------------------------------------------------------------------------------
@@ -69,6 +73,7 @@ Q_matrix <- function(mod) {
 Fisher_info <- function(mod, type = "expected") {
 
   theta <- extract_varcomp(mod)
+  r <- length(unlist(theta))
 
   # Calculate derivative matrix-lists
 
@@ -77,24 +82,23 @@ Fisher_info <- function(mod, type = "expected") {
   var_params <- dV_dvarStruct(mod)                          # variance structure
   sigma_sq <- build_var_cor_mats(mod, sigma_scale = FALSE)  # sigma^2
 
+  # Create a list of derivative matrices
+
+  dV_list <- list()
+  dV_list[[1]] <- sigma_sq
+  dV_list <- unlist(list(Tau_params[[1]], cor_params, var_params, dV_list), recursive = FALSE)
+  #!! need to work on Tau_params for 3-level or more levels;
+  #!! The order of pars in scdhlm: sigma_sq, cor_params, Tau_params
 
   est_method <- mod$method
 
   if (est_method == "FIML") {
 
-    r <- length(unlist(theta))
     V_inv <- build_Sigma_mats(mod, invert = TRUE, sigma_scale = TRUE)
 
-    # create list with V_inv_dV entries
-    V_inv_dV <- list()
+    # create list with Vinv_dV entries
 
-    V_inv_Tau_params <- lapply(Tau_params[[1]], prod_blockblock, A = V_inv)
-    V_inv_cor_params <- lapply(cor_params, prod_blockblock, A = V_inv)
-    V_inv_var_params <- lapply(var_params, prod_blockblock, A = V_inv)
-    V_inv_sigma_sq <- prod_blockblock(V_inv, sigma_sq)
-
-    V_inv_dV[[1]] <- V_inv_sigma_sq
-    V_inv_dV <- unlist(list(V_inv_Tau_params, V_inv_cor_params, V_inv_var_params, V_inv_dV), recursive = FALSE)
+    Vinv_dV <- lapply(dV_list, prod_blockblock, A = V_inv)
 
     # calculate I_E
 
@@ -102,7 +106,7 @@ Fisher_info <- function(mod, type = "expected") {
 
     for (i in 1:r)
       for (j in 1:i)
-        I_E[i,j] <- sum(product_trace_blockblock(V_inv_dV[[i]], V_inv_dV[[j]])) / 2
+        I_E[i,j] <- sum(product_trace_blockblock(Vinv_dV[[i]], Vinv_dV[[j]])) / 2
 
     I_E[upper.tri(I_E)] <- t(I_E)[upper.tri(I_E)]
 
@@ -110,7 +114,23 @@ Fisher_info <- function(mod, type = "expected") {
 
   } else if (est_method == "REML") {
 
+    Q_mat <- Q_matrix(mod)
 
+    # create list with Q_dV entries
+
+    Q_dV <- lapply(dV_list, prod_matrixblock, A = Q_mat)
+
+    # calculate I_E
+
+    I_E <- matrix(NA, r, r)
+
+    for (i in 1:r)
+      for (j in 1:i)
+        I_E[i,j] <- product_trace(Q_dV[[i]], Q_dV[[j]]) / 2
+
+    I_E[upper.tri(I_E)] <- t(I_E)[upper.tri(I_E)]
+
+    return(I_E)
 
   }
 
