@@ -178,6 +178,6 @@ product_trace <- function(A,B) sum(as.vector(t(A)) * as.vector(B))
 # trace of the product of two conformable block-diagonal matrices
 
 product_trace_blockblock <- function(A, B)
-  mapply(function(a, b) product_trace(a,b), a = A, b = B)
+  sum(mapply(function(a, b) product_trace(a,b), a = A, b = B))
 
 
