@@ -16,11 +16,6 @@ bdf_MVML <- lme(score ~ 0 + measure,
                 weights = varIdent(form = ~ 1 | measure),
                 data = bdf_long)
 
-summary(bdf_MVML)
-
-bdf_MVML$modelStruct$corStruct
-bdf_MVML$modelStruct$varStruct
-
 mod <- bdf_MVML
 struct <- mod$modelStruct$corStruct
 

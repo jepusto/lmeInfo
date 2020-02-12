@@ -98,6 +98,7 @@ dR_dcor_index <- function(row, col, dim_vec, q, grps) {
   R_mat[col, row] <- 1
   dR <- replicate(dim_vec, R_mat, simplify=FALSE)
   attr(dR, "groups") <- grps
+  dR
 }
 
 # return a list of block diagonal matrix for all parameters
@@ -115,7 +116,7 @@ dR_dcorStruct.corSymm <- function(struct) {
   grps <- attr(struct, "groups")
   dim_vec <- length(unique(grps)) # dim of the block diagonal matrix
 
-  apply(cor_index, 1, function(t) dR_dcor_index(t[1], t[2], dim_vec, cor_q, grps = grps))
+  apply(cor_index, 1, function(t) dR_dcor_index(t[1], t[2], dim_vec = dim_vec, q = cor_q, grps = grps))
 }
 
 #------------------------------------------------------------------------------
