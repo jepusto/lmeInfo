@@ -80,15 +80,10 @@ Fisher_info <- function(mod, type = "expected") {
   Tau_params <- dV_dreStruct(mod)                           # random effects structure(s)
   cor_params <- dV_dcorStruct(mod)                          # correlation structure
   var_params <- dV_dvarStruct(mod)                          # variance structure
-  sigma_sq <- build_var_cor_mats(mod, sigma_scale = FALSE)  # sigma^2
+  sigma_sq <- list(build_var_cor_mats(mod, sigma_scale = FALSE))  # sigma^2
 
   # Create a list of derivative matrices
-
-  dV_list <- list()
-  dV_list[[1]] <- sigma_sq
-  dV_list <- unlist(list(Tau_params[[1]], cor_params, var_params, dV_list), recursive = FALSE)
-  #!! need to work on Tau_params for 3-level or more levels;
-  #!! The order of pars in scdhlm: sigma_sq, cor_params, Tau_params
+  dV_list <- c(unlist(Tau_params, recursive = FALSE), cor_params, var_params, sigma_sq)
 
   est_method <- mod$method
 
@@ -106,9 +101,7 @@ Fisher_info <- function(mod, type = "expected") {
 
     for (i in 1:r)
       for (j in 1:i)
-        I_E[i,j] <- sum(product_trace_blockblock(Vinv_dV[[i]], Vinv_dV[[j]])) / 2
-
-    I_E[upper.tri(I_E)] <- t(I_E)[upper.tri(I_E)]
+        I_E[i,j] <- I_E[j,i] <- product_trace_blockblock(Vinv_dV[[i]], Vinv_dV[[j]]) / 2
 
     return(I_E)
 
@@ -126,9 +119,7 @@ Fisher_info <- function(mod, type = "expected") {
 
     for (i in 1:r)
       for (j in 1:i)
-        I_E[i,j] <- product_trace(Q_dV[[i]], Q_dV[[j]]) / 2
-
-    I_E[upper.tri(I_E)] <- t(I_E)[upper.tri(I_E)]
+        I_E[i,j] <- I_E[j,i] <- product_trace(Q_dV[[i]], Q_dV[[j]]) / 2
 
     return(I_E)
 
