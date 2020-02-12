@@ -75,7 +75,7 @@ test_deriv_dims <- function(mod) {
   d_sigma <- build_var_cor_mats(mod, sigma_scale = FALSE)
   expect_correct_block_dims(d_sigma, m = m[[G]], ni = ni[[G]], is_list = FALSE)
 
-  # info_E <- Fisher_info(mod, type = "expected")
-  # testthat::expect_identical(dim(info_E), rep(length(unlist(vc_est)), 2))
+  info_E <- Fisher_info(mod, type = "expected")
+  testthat::expect_identical(dim(info_E), rep(length(unlist(vc_est)), 2))
 
 }
