@@ -151,7 +151,7 @@ dV_dvarStruct <- function(mod) {
     dV_dvar <- lapply(dsd_dvar, function(d) 2 * d * mod$sigma^2 / wts)
 
     dV_list <- lapply(dV_dvar, function(v) {
-      v_list <- split(v, f = mod$groups[[1]])
+      v_list <- tapply(v, mod$groups[[1]], diag)
       attr(v_list, "groups") <- mod$groups[[1]]
       v_list
     })

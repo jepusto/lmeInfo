@@ -29,13 +29,13 @@ build_var_cor_mats <- function(mod, R_list = build_corr_mats(mod), sigma_scale =
     # then build block-diagonals with first available grouping variable
 
     if (is.null(mod$modelStruct$varStruct)) {
-      V_list <- split(rep(sigma_sq, length(mod$groups[[1]])),  mod$groups[[1]])
+      V_list <- tapply(rep(sigma_sq, length(mod$groups[[1]])),  mod$groups[[1]], diag)
     } else {
       all_groups <- rev(mod$groups)
       wts <- nlme::varWeights(mod$modelStruct$varStruct)[order(do.call(order, all_groups))]
-      V_list <- split(sigma_sq / wts^2, mod$groups[[1]])
+      V_list <- tapply(sigma_sq / wts^2, mod$groups[[1]], diag)
     }
-    attr(V_list, "groups") <- "diagonal"
+    attr(V_list, "groups") <- mod$groups[[1]]
 
   } else {
 
@@ -123,26 +123,19 @@ build_Sigma_mats <- function(mod, invert = FALSE, sigma_scale = FALSE) {
 
   V_grps <- attr(V_list, "groups")
 
-  if (identical(V_grps, "diagonal")) {
+  # Check if lowest-level covariance structure is nested within RE structure
+  ZDZ_grps <- attr(ZDZ_list, "groups")
+  group_mapping <- tapply(ZDZ_grps, V_grps, function(x) length(unique(x)))
+  nested <- all(group_mapping == 1L)
 
-    Sigma_list <- add_diag_bdiag(V_list, ZDZ_list)
+  if (nested) {
+    Sigma_list <- add_bdiag(V_list, ZDZ_list, data.frame(V_grps, ZDZ_grps))
     Sigma_grps <- attr(ZDZ_list, "groups")
-
   } else {
-
-    # Check if lowest-level covariance structure is nested within RE structure
-    ZDZ_grps <- attr(ZDZ_list, "groups")
-    group_mapping <- tapply(ZDZ_grps, V_grps, function(x) length(unique(x)))
-    nested <- all(group_mapping == 1L)
-    if (nested) {
-      Sigma_list <- add_bdiag(V_list, ZDZ_list, data.frame(V_grps, ZDZ_grps))
-      Sigma_grps <- attr(ZDZ_list, "groups")
-    } else {
-      V_mat <- unblock(V_list, block = V_grps)
-      ZDZ_mat <- unblock(ZDZ_list, block = ZDZ_grps)
-      Sigma_list <- V_mat + ZDZ_mat
-      Sigma_grps <- factor(rep("A", nrow(Sigma_list)))
-    }
+    V_mat <- unblock(V_list, block = V_grps)
+    ZDZ_mat <- unblock(ZDZ_list, block = ZDZ_grps)
+    Sigma_list <- V_mat + ZDZ_mat
+    Sigma_grps <- factor(rep("A", nrow(Sigma_list)))
   }
 
   if (invert) {

@@ -12,7 +12,7 @@ Laski_het <- lme(fixed = outcome ~ treatment,
 
 Laski_AR1 <- lme(fixed = outcome ~ treatment,
                  random = ~ treatment | case,
-                 correlation = corAR1(0, ~ time | case),
+                 correlation = corAR1(0.2, ~ time | case),
                  data = Laski)
 
 Laski_hetAR1 <- lme(fixed = outcome ~ treatment,
@@ -46,11 +46,12 @@ test_that("Derivative matrices are of correct dimension with 2-level models.", {
   test_deriv_dims(Laski_AR1)
   test_deriv_dims(Laski_hetAR1)
   test_deriv_dims(Laski_CAR1)
-  # test_deriv_dims(Laski_MA1)
+  expect_error(Fisher_info(Laski_MA1))
 })
 
 test_that("dR_dcorStruct.corCAR1 returns the same result as dR_dcorStruct.corAR1.", {
   expect_equal(dR_dcorStruct.corCAR1(Laski_CAR1$modelStruct$corStruct),
-               dR_dcorStruct.corAR1(Laski_AR1$modelStruct$corStruct))
+               dR_dcorStruct.corAR1(Laski_AR1$modelStruct$corStruct),
+               tol = 10^-5)
 })
 

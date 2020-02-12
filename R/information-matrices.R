@@ -127,21 +127,6 @@ Fisher_info <- function(mod, type = "expected") {
 
 }
 
-# # Create list with QdV or (V^-1)dV entries
-# QdV <- rep(1L, r)
-#
-# # calculate I_E
-# r <- sum(lengths(theta))
-#
-# I_E <- matrix(NA, r, r)
-# for (i in 1:r)
-#   for (j in 1:i)
-#     I_E[i,j] <- product_trace(QdV[[i]], QdV[[j]]) / 2
-#
-# I_E[upper.tri(I_E)] <- t(I_E)[upper.tri(I_E)]
-#
-# return(I_E)
-
 #------------------------------------------------------------------------------
 # Sampling variance-covariance of variance component parameters
 #------------------------------------------------------------------------------
