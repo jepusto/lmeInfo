@@ -100,10 +100,35 @@ add_diag_bdiag <- function(diag_mats, big_mats) {
   Map(add_diag, d = diag_mats, M = big_mats)
 }
 
-# product of two conformable block-diagonal matrices
+# product of two block-diagonal matrices
 
-prod_blockblock <- function(A, B)
-  mapply(function(a, b) a %*% b, a = A, b = B, SIMPLIFY = FALSE)
+prod_blockblock <- function(A, B) {
+
+  A_groups <- attr(A, "groups")
+  B_groups <- attr(B, "groups")
+
+  B_in_A <- all(tapply(A_groups, B_groups, function(x) length(unique(x)) == 1))
+  A_in_B <- all(tapply(B_groups, A_groups, function(x) length(unique(x)) == 1))
+
+  if (B_in_A & A_in_B) {
+    res <- mapply(function(a, b) a %*% b, a = A, b = B, SIMPLIFY = FALSE)
+  } else if (B_in_A) {
+    # B is nested in A
+    block_list <- split(B_groups, A_groups)
+    B_list <- tapply(B_groups, A_groups, function(x) B[unique(x)])
+    res <- mapply(prod_matrixblock, A = A, B = B_list, block = block_list)
+  } else if (A_in_B) {
+    # A is nested in B
+    block_list <- split(A_groups, B_groups)
+    A_list <- tapply(A_groups, B_groups, function(x) A[unique(x)])
+    res <- mapply(prod_blockmatrix, A = A_list, B = B, block = block_list)
+  } else {
+    stop("The A and B matrices are not nested.")
+  }
+
+  attr(res, "groups") <- A_groups
+  return(res)
+}
 
 
 
