@@ -123,7 +123,7 @@ dR_dcorStruct.corSymm <- function(struct) {
 
 # get dR_dcorStruct.corMA1 first
 
-dR_dcorMA1 <- function(covariate, cor){
+dR_dcorMA1 <- function(covariate, cor) {
   dist_mat <- as.matrix(dist(covariate))
   dist_mat[dist_mat != 1] <- 0
   dist_mat[dist_mat == 1] <- (1 - cor^2) / ((1 + cor^2)^2)
@@ -140,7 +140,7 @@ dR_dcorStruct.corMA1 <- function(struct) {
 
 # get corARMA
 
-dR_dcorStruct.corARMA <- function(struct){
+dR_dcorStruct.corARMA <- function(struct) {
   cor_ARMA <- coef(struct, FALSE)
   cor_name <- names(cor_ARMA)
   p <- length(grep("Phi", cor_name, value = TRUE))
@@ -151,7 +151,7 @@ dR_dcorStruct.corARMA <- function(struct){
   } else if (p == 0 & q == 1) {
     dR_dcorStruct.corMA1(struct)
   } else {
-    stop("p plus q must be one.")
+    stop("Derivatives not available for correlation structures of class corARMA, except for the simple cases of AR(1) or MA(1).")
   }
 }
 
