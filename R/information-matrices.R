@@ -144,28 +144,28 @@ Fisher_info <- function(mod, type = "expected") {
       Vinv_unblock <- unblock(V_inv) # unblock the Vinv
       rVd_Vinv <- lapply(res_VinV_dV, function(x) x %*% Vinv_unblock) # get the rhat*Vinv*dV * Vinv
 
-      I_E <- matrix(NA, r, r)
+      I_A <- matrix(NA, r, r)
 
       for (i in 1:r)
         for (j in 1:i)
-          I_E[i,j] <- I_E[j,i] <- tcrossprod(rVd_Vinv[[i]], res_VinV_dV[[j]]) / 2
+          I_A[i,j] <- I_A[j,i] <- tcrossprod(rVd_Vinv[[i]], res_VinV_dV[[j]]) / 2
 
-      rownames(I_E) <- colnames(I_E) <- theta_names
-      return(I_E)
+      rownames(I_A) <- colnames(I_A) <- theta_names
+      return(I_A)
 
     } else if (est_method == "REML") {
 
       Q_mat <- Q_matrix(mod)
       rVd_Q <- lapply(res_VinV_dV, function(x) x %*% Q_mat) # get the rhat*Vinv*dV * Q
 
-      I_E <- matrix(NA, r, r)
+      I_A <- matrix(NA, r, r)
 
       for (i in 1:r)
         for (j in 1:i)
-          I_E[i,j] <- I_E[j,i] <- tcrossprod(rVd_Q[[i]], res_VinV_dV[[j]]) / 2
+          I_A[i,j] <- I_A[j,i] <- tcrossprod(rVd_Q[[i]], res_VinV_dV[[j]]) / 2
 
-      rownames(I_E) <- colnames(I_E) <- theta_names
-      return(I_E)
+      rownames(I_A) <- colnames(I_A) <- theta_names
+      return(I_A)
 
     }
   }
