@@ -72,7 +72,9 @@ Q_matrix <- function(mod) {
 
 Fisher_info <- function(mod, type = "expected") {
 
-  theta <- extract_varcomp(mod)
+  theta <- extract_varcomp(mod) # could do unlist(theta) to return a named vector of the pars
+  theta_names <- vapply(strsplit(names(unlist(theta)), split = "[.]"),
+                        function(x) paste(unique(x), collapse = "."), character(1L))
   r <- length(unlist(theta))
 
   # Calculate derivative matrix-lists
@@ -87,44 +89,86 @@ Fisher_info <- function(mod, type = "expected") {
 
   est_method <- mod$method
 
-  if (est_method == "FIML") {
+  if (type == "expected") {
+
+    if (est_method == "FIML") {
+
+      V_inv <- build_Sigma_mats(mod, invert = TRUE, sigma_scale = TRUE)
+
+      # create list with Vinv_dV entries
+
+      Vinv_dV <- lapply(dV_list, prod_blockblock, A = V_inv)
+
+      # calculate I_E
+
+      I_E <- matrix(NA, r, r)
+
+      for (i in 1:r)
+        for (j in 1:i)
+          I_E[i,j] <- I_E[j,i] <- product_trace_blockblock(Vinv_dV[[i]], Vinv_dV[[j]]) / 2
+
+      rownames(I_E) <- colnames(I_E) <- theta_names
+      return(I_E)
+
+    } else if (est_method == "REML") {
+
+      Q_mat <- Q_matrix(mod)
+
+      # create list with Q_dV entries
+
+      Q_dV <- lapply(dV_list, prod_matrixblock, A = Q_mat)
+
+      # calculate I_E
+
+      I_E <- matrix(NA, r, r)
+
+      for (i in 1:r)
+        for (j in 1:i)
+          I_E[i,j] <- I_E[j,i] <- product_trace(Q_dV[[i]], Q_dV[[j]]) / 2
+
+      rownames(I_E) <- colnames(I_E) <- theta_names
+      return(I_E)
+
+    }
+
+  } else if (type == "averaged") {
 
     V_inv <- build_Sigma_mats(mod, invert = TRUE, sigma_scale = TRUE)
-
-    # create list with Vinv_dV entries
-
     Vinv_dV <- lapply(dV_list, prod_blockblock, A = V_inv)
 
-    # calculate I_E
+    resids <- as.matrix(mod$residuals[,"fixed"]) # get the rhat
+    res_VinV_dV <- lapply(Vinv_dV, prod_matrixblock, A = t(resids)) # get the rhat*Vinv*dV
 
-    I_E <- matrix(NA, r, r)
+    if (est_method == "FIML") {
 
-    for (i in 1:r)
-      for (j in 1:i)
-        I_E[i,j] <- I_E[j,i] <- product_trace_blockblock(Vinv_dV[[i]], Vinv_dV[[j]]) / 2
+      Vinv_unblock <- unblock(V_inv) # unblock the Vinv
+      rVd_Vinv <- lapply(res_VinV_dV, function(x) x %*% Vinv_unblock) # get the rhat*Vinv*dV * Vinv
 
-    return(I_E)
+      I_E <- matrix(NA, r, r)
 
-  } else if (est_method == "REML") {
+      for (i in 1:r)
+        for (j in 1:i)
+          I_E[i,j] <- I_E[j,i] <- tcrossprod(rVd_Vinv[[i]], res_VinV_dV[[j]]) / 2
 
-    Q_mat <- Q_matrix(mod)
+      rownames(I_E) <- colnames(I_E) <- theta_names
+      return(I_E)
 
-    # create list with Q_dV entries
+    } else if (est_method == "REML") {
 
-    Q_dV <- lapply(dV_list, prod_matrixblock, A = Q_mat)
+      Q_mat <- Q_matrix(mod)
+      rVd_Q <- lapply(res_VinV_dV, function(x) x %*% Q_mat) # get the rhat*Vinv*dV * Q
 
-    # calculate I_E
+      I_E <- matrix(NA, r, r)
 
-    I_E <- matrix(NA, r, r)
+      for (i in 1:r)
+        for (j in 1:i)
+          I_E[i,j] <- I_E[j,i] <- tcrossprod(rVd_Q[[i]], res_VinV_dV[[j]]) / 2
 
-    for (i in 1:r)
-      for (j in 1:i)
-        I_E[i,j] <- I_E[j,i] <- product_trace(Q_dV[[i]], Q_dV[[j]]) / 2
+      rownames(I_E) <- colnames(I_E) <- theta_names
+      return(I_E)
 
-    return(I_E)
-
+    }
   }
-
 }
 
 #------------------------------------------------------------------------------
