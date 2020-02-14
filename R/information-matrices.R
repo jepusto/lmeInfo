@@ -134,37 +134,31 @@ Fisher_info <- function(mod, type = "expected") {
   } else if (type == "averaged") {
 
     V_inv <- build_Sigma_mats(mod, invert = TRUE, sigma_scale = TRUE)
-    Vinv_dV <- lapply(dV_list, prod_blockblock, A = V_inv)
 
-    resids <- as.matrix(mod$residuals[,"fixed"]) # get the rhat
-    res_VinV_dV <- lapply(Vinv_dV, prod_matrixblock, A = t(resids)) # get the rhat*Vinv*dV
+    Vinv_unblock <- unblock(V_inv)
+
+    rhat <- residuals(mod, level = 0) # fixed residuals
+
+    Vinv_rhat <- Vinv_unblock %*% rhat # N*1 matrix
+
+    dVr <- sapply(dV_list, prod_blockmatrix, B = Vinv_rhat, simplify = TRUE) # dV*Vinv*rhat (N * r matrix)
 
     if (est_method == "FIML") {
 
-      Vinv_unblock <- unblock(V_inv) # unblock the Vinv
-      rVd_Vinv <- lapply(res_VinV_dV, function(x) x %*% Vinv_unblock) # get the rhat*Vinv*dV * Vinv
-
-      I_A <- matrix(NA, r, r)
-
-      for (i in 1:r)
-        for (j in 1:i)
-          I_A[i,j] <- I_A[j,i] <- tcrossprod(rVd_Vinv[[i]], res_VinV_dV[[j]]) / 2
+      I_A <- (t(dVr) %*% prod_blockmatrix(V_inv, dVr)) / 2
 
       rownames(I_A) <- colnames(I_A) <- theta_names
+
       return(I_A)
 
     } else if (est_method == "REML") {
 
       Q_mat <- Q_matrix(mod)
-      rVd_Q <- lapply(res_VinV_dV, function(x) x %*% Q_mat) # get the rhat*Vinv*dV * Q
 
-      I_A <- matrix(NA, r, r)
-
-      for (i in 1:r)
-        for (j in 1:i)
-          I_A[i,j] <- I_A[j,i] <- tcrossprod(rVd_Q[[i]], res_VinV_dV[[j]]) / 2
+      I_A <- (t(dVr) %*% Q_mat %*% dVr) / 2
 
       rownames(I_A) <- colnames(I_A) <- theta_names
+
       return(I_A)
 
     }
