@@ -50,6 +50,19 @@ test_that("Derivative matrices are of correct dimension with Orthodont models.",
 
 })
 
+test_that("Information matrices work with FIML with Orthodont models.", {
+  test_with_FIML(Ortho_A)
+  test_with_FIML(Ortho_B_Power)
+  test_with_FIML(Ortho_C_Power)
+  test_with_FIML(Ortho_D_Power)
+  test_with_FIML(Ortho_B_Exp)
+  test_with_FIML(Ortho_C_Exp)
+  test_with_FIML(Ortho_D_Exp)
+  test_with_FIML(Ortho_B_Const)
+  test_with_FIML(Ortho_D_Const)
+
+})
+
 
 # Dialyzer
 
@@ -74,6 +87,13 @@ test_that("Derivative matrices are of correct dimension with Dialyzer models.", 
   test_deriv_dims(Dialyzer_D_Power)
 })
 
+test_that("Information matrices work with FIML with Dialyzer models.", {
+  test_with_FIML(Dialyzer_A)
+  test_with_FIML(Dialyzer_B_Power)
+  test_with_FIML(Dialyzer_C_Power)
+  test_with_FIML(Dialyzer_D_Power)
+})
+
 # BodyWeight
 
 BodyWeight_A <- lme(weight ~ Time * Diet,
@@ -95,5 +115,12 @@ test_that("Derivative matrices are of correct dimension with BodyWeight models."
   test_deriv_dims(Bodyweight_B_Power)
   test_deriv_dims(Bodyweight_C_Power)
   test_deriv_dims(Bodyweight_D_Power)
+})
+
+test_that("Information matrices work with FIML with Dialyzer models.", {
+  test_with_FIML(BodyWeight_A)
+  test_with_FIML(Bodyweight_B_Power)
+  test_with_FIML(Bodyweight_C_Power)
+  test_with_FIML(Bodyweight_D_Power)
 })
 

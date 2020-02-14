@@ -16,8 +16,8 @@ bdf_MVML <- lme(score ~ 0 + measure,
                 weights = varIdent(form = ~ 1 | measure),
                 data = bdf_long)
 
-mod <- bdf_MVML
-struct <- mod$modelStruct$corStruct
+# mod <- bdf_MVML
+# struct <- mod$modelStruct$corStruct
 
 test_that("targetVariance() works with multivariate models.", {
   test_Sigma_mats(bdf_MVML, bdf_long$schoolNR)
@@ -25,4 +25,8 @@ test_that("targetVariance() works with multivariate models.", {
 
 test_that("Derivative matrices are of correct dimension with multivariate models.", {
   test_deriv_dims(bdf_MVML)
+})
+
+test_that("Information matrices work with FIML too.", {
+  test_with_FIML(bdf_MVML)
 })

@@ -76,8 +76,23 @@ test_deriv_dims <- function(mod) {
   expect_correct_block_dims(d_sigma, m = m[[G]], ni = ni[[G]], is_list = FALSE)
 
   info_E <- Fisher_info(mod, type = "expected")
+  info_A <- Fisher_info(mod, type = "averaged")
   r_dim <- rep(length(unlist(vc_est)), 2)
 
   testthat::expect_identical(dim(info_E), r_dim)
+  testthat::expect_identical(dim(info_A), r_dim)
+}
+
+test_with_FIML <- function(mod) {
+
+  r_dim <- rep(length(unlist(extract_varcomp(mod))), 2)
+
+  mod_FIML <- update(mod, method = "ML")
+
+  info_E <- Fisher_info(mod, type = "expected")
+  info_A <- Fisher_info(mod, type = "averaged")
+
+  testthat::expect_identical(dim(info_E), r_dim)
+  testthat::expect_identical(dim(info_A), r_dim)
 
 }
