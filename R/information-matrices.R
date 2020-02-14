@@ -91,7 +91,7 @@ Fisher_info <- function(mod, type = "expected") {
 
   if (type == "expected") {
 
-    if (est_method == "FIML") {
+    if (est_method == "ML") {
 
       V_inv <- build_Sigma_mats(mod, invert = TRUE, sigma_scale = TRUE)
 
@@ -143,7 +143,7 @@ Fisher_info <- function(mod, type = "expected") {
 
     dVr <- sapply(dV_list, prod_blockmatrix, B = Vinv_rhat, simplify = TRUE) # dV*Vinv*rhat (N * r matrix)
 
-    if (est_method == "FIML") {
+    if (est_method == "ML") {
 
       I_A <- (t(dVr) %*% prod_blockmatrix(V_inv, dVr)) / 2
 

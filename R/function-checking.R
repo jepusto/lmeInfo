@@ -87,10 +87,10 @@ test_with_FIML <- function(mod) {
 
   r_dim <- rep(length(unlist(extract_varcomp(mod))), 2)
 
-  mod_FIML <- update(mod, method = "ML")
+  mod_FIML <- purrr::quietly(update)(mod, data = getData(mod), method = "ML")$result
 
-  info_E <- Fisher_info(mod, type = "expected")
-  info_A <- Fisher_info(mod, type = "averaged")
+  info_E <- Fisher_info(mod_FIML, type = "expected")
+  info_A <- Fisher_info(mod_FIML, type = "averaged")
 
   testthat::expect_identical(dim(info_E), r_dim)
   testthat::expect_identical(dim(info_A), r_dim)
