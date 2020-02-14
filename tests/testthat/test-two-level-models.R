@@ -46,7 +46,7 @@ test_that("Derivative matrices are of correct dimension with 2-level models.", {
   test_deriv_dims(Laski_AR1)
   test_deriv_dims(Laski_hetAR1)
   test_deriv_dims(Laski_CAR1)
-  expect_error(Fisher_info(Laski_MA1))
+  test_deriv_dims(Laski_MA1)
 })
 
 test_that("Information matrices work with FIML too.", {
@@ -55,6 +55,7 @@ test_that("Information matrices work with FIML too.", {
   test_with_FIML(Laski_AR1)
   test_with_FIML(Laski_hetAR1)
   test_with_FIML(Laski_CAR1)
+  test_with_FIML(Laski_MA1)
 })
 
 test_that("dR_dcorStruct.corCAR1 returns the same result as dR_dcorStruct.corAR1.", {
