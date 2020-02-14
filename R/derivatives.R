@@ -119,6 +119,42 @@ dR_dcorStruct.corSymm <- function(struct) {
   apply(cor_index, 1, function(t) dR_dcor_index(t[1], t[2], dim_vec = dim_vec, q = cor_q, grps = grps))
 }
 
+# corARMA
+
+# get dR_dcorStruct.corMA1 first
+
+dR_dcorMA1 <- function(covariate, cor){
+  dist_mat <- as.matrix(dist(covariate))
+  dist_mat[dist_mat != 1] <- 0
+  dist_mat[dist_mat == 1] <- (1 - cor^2) / ((1 + cor^2)^2)
+  return(dist_mat)
+}
+
+dR_dcorStruct.corMA1 <- function(struct) {
+  cor_MA1 <- as.double(coef(struct, FALSE))
+  covariate <- attr(struct, "covariate")
+  dR <- lapply(covariate, dR_dcorMA1, cor = cor_MA1)
+  attr(dR, "groups") <- attr(struct, "groups")
+  list(dR)
+}
+
+# get corARMA
+
+dR_dcorStruct.corARMA <- function(struct){
+  cor_ARMA <- coef(struct, FALSE)
+  cor_name <- names(cor_ARMA)
+  p <- length(grep("Phi", cor_name, value = TRUE))
+  q <- length(grep("Theta", cor_name, value = TRUE))
+
+  if (p == 1 & q == 0) {
+    dR_dcorStruct.corAR1(struct)
+  } else if (p == 0 & q == 1) {
+    dR_dcorStruct.corMA1(struct)
+  } else {
+    stop("p plus q must be one.")
+  }
+}
+
 #------------------------------------------------------------------------------
 # First derivative matrices wrt variance structures
 #------------------------------------------------------------------------------
