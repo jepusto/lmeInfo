@@ -90,33 +90,50 @@ dR_dcorStruct.corCompSymm <- function(struct) {
 
 # corSymm
 
-# return list of matrices with derivative for one parameter
+# return list of derivative matrices for one cor parameter
 
-dR_dcor_index <- function(row, col, dim_vec, q, grps) {
-  R_mat <- matrix(0, q, q)
-  R_mat[row, col] <- 1
-  R_mat[col, row] <- 1
-  dR <- replicate(dim_vec, R_mat, simplify=FALSE)
-  attr(dR, "groups") <- grps
-  dR
+# replace <- function(x, y, row, col) {
+#
+#   if (row %in% y & col %in% y) {
+#     x[row, col] <- x[col, row] <- 1
+#   } else {
+#     x
+#   }
+#   return(x)
+# }
+
+dR_dcor_index <- function(row, col, covariate, groups) {
+
+  # get R_null
+  R_null <- lapply(covariate, function(x) matrix(0L, nrow = length(x), ncol = length(x)))
+
+  # replace some entries with 1 according to covariate values
+  for (i in 1:length(R_null)) {
+    if (row %in% covariate[[i]] & col %in% covariate[[i]]) {
+      R_null[[i]][row, col] <- R_null[[i]][col, row] <- 1
+    } else {
+      R_null
+    }
+  }
+
+  # dR <- mapply(replace, x = R_null, y = covariate, MoreArgs = list(row = row, col = col), SIMPLIFY = FALSE)
+
+  # then spit it back out
+  attr(R_null, "groups") <- groups
+  R_null
 }
 
-# return a list of block diagonal matrix for all parameters
+
+# return a list of derivative matrices for all cor parameters
 
 dR_dcorStruct.corSymm <- function(struct) {
   cor_Symm <- as.double(coef(struct, FALSE)) # parameters
-
-  # max dimension of the correlation matrices
-  cor_q <- (1 + sqrt(1 + 8 * length(cor_Symm))) / 2 # number of cols of R matrix
-
-  # the index for which we are taking derivatives wrt
+  cor_q <- (1 + sqrt(1 + 8 * length(cor_Symm))) / 2 # number of cols/rows of R mat
   cor_index <- as.matrix(t(combn(1:cor_q, 2))) # sort cor_index appropriately
-
-  # get dimensions of block-diagonal matrices
   grps <- attr(struct, "groups")
-  dim_vec <- length(unique(grps)) # dim of the block diagonal matrix
-
-  apply(cor_index, 1, function(t) dR_dcor_index(t[1], t[2], dim_vec = dim_vec, q = cor_q, grps = grps))
+  covariate <- attr(struct, "covariate")
+  covariate_new <- lapply(covariate, function(x) as.double(x + 1)) # add 1 to covariate to align with cor_index
+  apply(cor_index, 1, function(t) dR_dcor_index(t[1], t[2], covariate = covariate_new, groups = grps))
 }
 
 # corARMA
