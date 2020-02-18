@@ -31,3 +31,24 @@ test_that("Derivative matrices are of correct dimension with multivariate models
 test_that("Information matrices work with FIML too.", {
   test_with_FIML(bdf_MVML)
 })
+
+
+# introduce random missing to bdf_long
+
+bdf_long_wm <- bdf_long %>%
+  mutate(row_index = sample(c(0,1), replace = TRUE, size = dim(bdf_long)[1], prob = c(.1, .9)),
+         score = score * row_index) %>%
+  filter(score != 0) %>%
+  select(-row_index)
+
+bdf_wm <- lme(score ~ 0 + measure,
+              random = ~ 1| schoolNR / pupilNR,
+              corr = corSymm(form = ~ 1 | schoolNR / pupilNR),
+              weights = varIdent(form = ~ 1 | measure),
+              data = bdf_long_wm,
+              control=lmeControl(msMaxIter = 100, apVar = FALSE, returnObject = TRUE))
+
+test_that("targetVariance() works with multivariate models.", {
+  test_Sigma_mats(bdf_wm, bdf_long_wm$schoolNR)
+})
+
