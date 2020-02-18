@@ -79,6 +79,38 @@ dR_dcorStruct.corCAR1 <- function(struct) {
   list(dR)
 }
 
+# corARMA
+
+dR_dcorMA1 <- function(covariate, cor) {
+  dist_mat <- as.matrix(dist(covariate))
+  dist_mat[dist_mat != 1] <- 0
+  dist_mat[dist_mat == 1] <- (1 - cor^2) / ((1 + cor^2)^2)
+  return(dist_mat)
+}
+
+dR_dcorStruct.corMA1 <- function(struct) {
+  cor_MA1 <- as.double(coef(struct, FALSE))
+  covariate <- attr(struct, "covariate")
+  dR <- lapply(covariate, dR_dcorMA1, cor = cor_MA1)
+  attr(dR, "groups") <- attr(struct, "groups")
+  list(dR)
+}
+
+dR_dcorStruct.corARMA <- function(struct) {
+  cor_ARMA <- coef(struct, FALSE)
+  cor_name <- names(cor_ARMA)
+  p <- length(grep("Phi", cor_name, value = TRUE))
+  q <- length(grep("Theta", cor_name, value = TRUE))
+
+  if (p == 1 & q == 0) {
+    dR_dcorStruct.corAR1(struct)
+  } else if (p == 0 & q == 1) {
+    dR_dcorStruct.corMA1(struct)
+  } else {
+    stop("Derivatives not available for correlation structures of class corARMA, except for the simple cases of AR(1) or MA(1).")
+  }
+}
+
 # corCompSymm
 
 dR_dcorStruct.corCompSymm <- function(struct) {
@@ -92,15 +124,12 @@ dR_dcorStruct.corCompSymm <- function(struct) {
 
 # return list of derivative matrices for one cor parameter
 
-# replace <- function(x, y, row, col) {
-#
-#   if (row %in% y & col %in% y) {
-#     x[row, col] <- x[col, row] <- 1
-#   } else {
-#     x
-#   }
-#   return(x)
-# }
+replace <- function(x, y, row, col) {
+  row_index <- y == row
+  col_index <- y == col
+  x[row_index, col_index] <- x[col_index, row_index] <- 1L
+  x
+}
 
 dR_dcor_index <- function(row, col, covariate, groups) {
 
@@ -130,47 +159,12 @@ dR_dcorStruct.corSymm <- function(struct) {
   cor_Symm <- as.double(coef(struct, FALSE)) # parameters
   cor_q <- (1 + sqrt(1 + 8 * length(cor_Symm))) / 2 # number of cols/rows of R mat
   cor_index <- as.matrix(t(combn(1:cor_q, 2))) # sort cor_index appropriately
-  grps <- attr(struct, "groups")
+  groups <- attr(struct, "groups")
   covariate <- attr(struct, "covariate")
-  covariate_new <- lapply(covariate, function(x) as.double(x + 1)) # add 1 to covariate to align with cor_index
-  apply(cor_index, 1, function(t) dR_dcor_index(t[1], t[2], covariate = covariate_new, groups = grps))
+  covariate <- lapply(covariate, function(x) as.integer(x + 1)) # add 1 to covariate to align with cor_index
+  apply(cor_index, 1, function(t) dR_dcor_index(t[1], t[2], covariate = covariate, groups = groups))
 }
 
-# corARMA
-
-# get dR_dcorStruct.corMA1 first
-
-dR_dcorMA1 <- function(covariate, cor) {
-  dist_mat <- as.matrix(dist(covariate))
-  dist_mat[dist_mat != 1] <- 0
-  dist_mat[dist_mat == 1] <- (1 - cor^2) / ((1 + cor^2)^2)
-  return(dist_mat)
-}
-
-dR_dcorStruct.corMA1 <- function(struct) {
-  cor_MA1 <- as.double(coef(struct, FALSE))
-  covariate <- attr(struct, "covariate")
-  dR <- lapply(covariate, dR_dcorMA1, cor = cor_MA1)
-  attr(dR, "groups") <- attr(struct, "groups")
-  list(dR)
-}
-
-# get corARMA
-
-dR_dcorStruct.corARMA <- function(struct) {
-  cor_ARMA <- coef(struct, FALSE)
-  cor_name <- names(cor_ARMA)
-  p <- length(grep("Phi", cor_name, value = TRUE))
-  q <- length(grep("Theta", cor_name, value = TRUE))
-
-  if (p == 1 & q == 0) {
-    dR_dcorStruct.corAR1(struct)
-  } else if (p == 0 & q == 1) {
-    dR_dcorStruct.corMA1(struct)
-  } else {
-    stop("Derivatives not available for correlation structures of class corARMA, except for the simple cases of AR(1) or MA(1).")
-  }
-}
 
 #------------------------------------------------------------------------------
 # First derivative matrices wrt variance structures
