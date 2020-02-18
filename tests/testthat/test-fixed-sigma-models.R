@@ -27,11 +27,11 @@ test_that("targetVariance() works with models when sigma is fixed.", {
 })
 
 test_that("Derivative matrices are of correct dimension with models when sigma is fixed.", {
-  test_deriv_dims(Laski_fx_sigma)
-  test_deriv_dims(Thiemann2001_fx_sigma)
+  expect_error(test_deriv_dims(Laski_fx_sigma))
+  expect_error(test_deriv_dims(Thiemann2001_fx_sigma))
 })
 
 test_that("Information matrices work with FIML too when sigma is fixed.", {
-  test_with_FIML(Laski_fx_sigma)
-  test_with_FIML(Thiemann2001_fx_sigma)
+  expect_error(test_with_FIML(Laski_fx_sigma))
+  expect_error(test_with_FIML(Thiemann2001_fx_sigma))
 })
