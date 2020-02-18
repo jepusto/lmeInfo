@@ -82,7 +82,15 @@ Fisher_info <- function(mod, type = "expected") {
   Tau_params <- dV_dreStruct(mod)                           # random effects structure(s)
   cor_params <- dV_dcorStruct(mod)                          # correlation structure
   var_params <- dV_dvarStruct(mod)                          # variance structure
-  sigma_sq <- list(build_var_cor_mats(mod, sigma_scale = FALSE))  # sigma^2
+  fixed_sigma <- attr(mod$modelStruct, "fixedSigma")
+  if (fixed_sigma == "FALSE") {
+    sigma_sq <- list(build_var_cor_mats(mod, sigma_scale = FALSE))  # sigma^2
+  } else {
+    sigma_sq_nfx <- build_var_cor_mats(mod, sigma_scale = FALSE)
+    sigma_sq_fx <- lapply(sigma_sq_nfx, function(x) matrix(0L, nrow = dim(x)[1], ncol = dim(x)[2]))
+    attr(sigma_sq_fx, "groups") <- attr(sigma_sq_nfx, "groups")
+    sigma_sq <- list(sigma_sq_fx)
+  }
 
   # Create a list of derivative matrices
   dV_list <- c(unlist(Tau_params, recursive = FALSE), cor_params, var_params, sigma_sq)
