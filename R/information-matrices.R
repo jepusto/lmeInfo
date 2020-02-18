@@ -72,7 +72,17 @@ Q_matrix <- function(mod) {
 
 Fisher_info <- function(mod, type = "expected") {
 
-  theta <- extract_varcomp(mod) # could do unlist(theta) to return a named vector of the pars
+  fixed_sigma <- attr(mod$modelStruct, "fixedSigma")
+
+  if (fixed_sigma == TRUE) {
+    theta <- extract_varcomp(mod)
+    theta <- theta[-length(theta)]
+    sigma_sq <- NULL                                       # dV_dsigmasq
+  } else {
+    theta <- extract_varcomp(mod)
+    sigma_sq <- list(build_var_cor_mats(mod, sigma_scale = FALSE))
+  }
+
   theta_names <- vapply(strsplit(names(unlist(theta)), split = "[.]"),
                         function(x) paste(unique(x), collapse = "."), character(1L))
   r <- length(unlist(theta))
@@ -82,15 +92,6 @@ Fisher_info <- function(mod, type = "expected") {
   Tau_params <- dV_dreStruct(mod)                           # random effects structure(s)
   cor_params <- dV_dcorStruct(mod)                          # correlation structure
   var_params <- dV_dvarStruct(mod)                          # variance structure
-  fixed_sigma <- attr(mod$modelStruct, "fixedSigma")
-  if (fixed_sigma == "FALSE") {
-    sigma_sq <- list(build_var_cor_mats(mod, sigma_scale = FALSE))  # sigma^2
-  } else {
-    sigma_sq_nfx <- build_var_cor_mats(mod, sigma_scale = FALSE)
-    sigma_sq_fx <- lapply(sigma_sq_nfx, function(x) matrix(0L, nrow = dim(x)[1], ncol = dim(x)[2]))
-    attr(sigma_sq_fx, "groups") <- attr(sigma_sq_nfx, "groups")
-    sigma_sq <- list(sigma_sq_fx)
-  }
 
   # Create a list of derivative matrices
   dV_list <- c(unlist(Tau_params, recursive = FALSE), cor_params, var_params, sigma_sq)
