@@ -6,6 +6,8 @@ data(bdf, package = "mlmRev")
 
 bdf_long <-
   bdf %>%
+  filter(schoolNR %in% levels(schoolNR)[1:12]) %>%
+  droplevels() %>%
   pivot_longer(cols = c(IQ.verb, IQ.perf, aritPRET),
                names_to = "measure",
                values_to = "score") %>%
@@ -38,11 +40,11 @@ test_that("Information matrices work with FIML too.", {
 bdf_long_wm <-
   bdf_long %>%
   mutate(
-    row_index = sample(c(0,1), replace = TRUE, size = dim(bdf_long)[1], prob = c(.1, .9)),
-    score = score * row_index,
+    row_index = rbinom(n = n(), size = 1, prob = 0.9),
+    score = if_else(row_index == 1, score, as.numeric(NA)),
     measure_id = as.integer(factor(measure))
   ) %>%
-  filter(score != 0) %>%
+  filter(!is.na(score)) %>%
   select(-row_index)
 
 bdf_wm <- lme(score ~ 0 + measure,
