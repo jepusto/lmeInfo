@@ -96,3 +96,39 @@ test_with_FIML <- function(mod) {
   testthat::expect_identical(dim(info_A), r_dim)
 
 }
+
+check_name_order <- function(x_list, group_levels = NULL) {
+  if (is.null(group_levels)) group_levels <- levels(attr(x_list, "groups"))
+  expect_identical(names(x_list), group_levels)
+}
+
+build_block_matrices <- function(mod) {
+
+  R_list <- build_corr_mats(mod)
+
+  check_name_order(R_list)
+
+  all_groups <- rev(mod$groups)
+  sd_vec <- mod$sigma / nlme::varWeights(mod$modelStruct$varStruct)[order(do.call(order, all_groups))]
+  sd_list <- split(sd_vec, attr(R_list, "groups"))
+
+  check_name_order(sd_list, group_levels = levels(attr(R_list, "groups")))
+
+  V_list <- build_var_cor_mats(mod, sigma_scale = TRUE)
+
+  check_name_order(V_list)
+
+  ZDZ_list <- build_RE_mats(mod, sigma_scale = TRUE)
+
+  check_name_order(ZDZ_list)
+
+  Tau_params <- dV_dreStruct(mod)
+  sapply(Tau_params, check_name_order)
+
+  cor_params <- dV_dcorStruct(mod)
+  sapply(cor_params, check_name_order)
+
+  var_params <- dV_dvarStruct(mod)
+  sapply(var_params, check_name_order)
+
+}

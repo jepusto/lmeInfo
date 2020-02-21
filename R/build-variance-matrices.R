@@ -11,7 +11,7 @@ build_corr_mats <- function(mod) {
     # names(R_list) <- levels(grps)
     # R_sublist <- nlme::corMatrix(mod$modelStruct$corStruct)
     # R_list[names(R_sublist)] <- R_sublist
-    R_list <- nlme::corMatrix(mod$modelStruct$corStruct)
+    R_list <- nlme::corMatrix(mod$modelStruct$corStruct)[levels(grps)]
     attr(R_list, "groups") <- grps
     return(R_list)
   }
