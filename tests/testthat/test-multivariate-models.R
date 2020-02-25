@@ -50,7 +50,7 @@ bdf_long_wm <-
 bdf_wm <- lme(score ~ 0 + measure,
               random = ~ 1| schoolNR / pupilNR,
               corr = corSymm(form = ~ measure_id | schoolNR / pupilNR),
-              weights = varIdent(form = ~ 1 | measure),
+              weights = varIdent(form = ~ 1 | measure_id),
               data = bdf_long_wm,
               control=lmeControl(msMaxIter = 100, apVar = FALSE, returnObject = TRUE))
 
