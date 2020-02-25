@@ -132,26 +132,11 @@ replace <- function(x, y, row, col) {
 }
 
 dR_dcor_index <- function(row, col, covariate, groups) {
-
-  # get R_null
   R_null <- lapply(covariate, function(x) matrix(0L, nrow = length(x), ncol = length(x)))
-
-  # replace some entries with 1 according to covariate values
-  for (i in 1:length(R_null)) {
-    if (row %in% covariate[[i]] & col %in% covariate[[i]]) {
-      R_null[[i]][row, col] <- R_null[[i]][col, row] <- 1
-    } else {
-      R_null
-    }
-  }
-
-  # dR <- mapply(replace, x = R_null, y = covariate, MoreArgs = list(row = row, col = col), SIMPLIFY = FALSE)
-
-  # then spit it back out
-  attr(R_null, "groups") <- groups
-  R_null
+  dR <- mapply(replace, x = R_null, y = covariate, MoreArgs = list(row = row, col = col), SIMPLIFY = FALSE)
+  attr(dR, "groups") <- groups
+  dR
 }
-
 
 # return a list of derivative matrices for all cor parameters
 
@@ -165,6 +150,21 @@ dR_dcorStruct.corSymm <- function(struct) {
   apply(cor_index, 1, function(t) dR_dcor_index(t[1], t[2], covariate = covariate, groups = groups))
 }
 
+#------------------------------------------------------------------------------
+# First derivative matrices wrt sigma^2
+#------------------------------------------------------------------------------
+
+dV_dsigmasq <- function(mod) {
+
+  fixed_sigma <- attr(mod$modelStruct, "fixedSigma")
+
+  if (fixed_sigma) {
+    NULL
+  } else {
+    list(build_var_cor_mats(mod, sigma_scale = FALSE))
+  }
+
+}
 
 #------------------------------------------------------------------------------
 # First derivative matrices wrt variance structures
