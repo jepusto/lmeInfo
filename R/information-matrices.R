@@ -5,9 +5,9 @@
 extract_varcomp <- function(mod) {
 
   sigma_sq <- mod$sigma^2                                           # sigma^2
+  Tau_params <- coef(mod$modelStruct$reStruct, FALSE) * sigma_sq    # unique coefficients in Tau
   cor_params <- as.double(coef(mod$modelStruct$corStruct, FALSE))   # correlation structure
   var_params <- as.double(coef(mod$modelStruct$varStruct, FALSE))   # variance structure
-  Tau_params <- coef(mod$modelStruct$reStruct, FALSE) * sigma_sq    # unique coefficients in Tau
 
   # split Tau by grouping variables
   group_names <- names(mod$groups)
@@ -15,10 +15,21 @@ extract_varcomp <- function(mod) {
                            function(x) Tau_params[grep(x, names(Tau_params))],
                            simplify = FALSE, USE.NAMES = TRUE)
 
-  varcomp <- list(Tau = Tau_param_list, cor_params = cor_params, var_params = var_params, sigma_sq=sigma_sq)
+  fixed_sigma <- attr(mod$modelStruct, "fixedSigma")
+
+  sigma_sq <- if (fixed_sigma) NULL else sigma_sq
+
+  varcomp <- list(Tau = Tau_param_list, cor_params = cor_params, var_params = var_params, sigma_sq = sigma_sq)
+
+  # if (fixed_sigma) {
+  #   varcomp <- list(Tau = Tau_param_list, cor_params = cor_params, var_params = var_params)
+  # } else {
+  #   varcomp <- list(Tau = Tau_param_list, cor_params = cor_params, var_params = var_params, sigma_sq = sigma_sq)
+  # }
 
   class(varcomp) <- "varcomp"
   return(varcomp)
+
 }
 
 #------------------------------------------------------------------------------
@@ -72,19 +83,10 @@ Q_matrix <- function(mod) {
 
 Fisher_info <- function(mod, type = "expected") {
 
-  fixed_sigma <- attr(mod$modelStruct, "fixedSigma")
-
-  if (fixed_sigma == TRUE) {
-    theta <- extract_varcomp(mod)
-    theta <- theta[-length(theta)]
-    sigma_sq <- NULL                                       # dV_dsigmasq
-  } else {
-    theta <- extract_varcomp(mod)
-    sigma_sq <- list(build_var_cor_mats(mod, sigma_scale = FALSE))
-  }
-
+  theta <- extract_varcomp(mod)
   theta_names <- vapply(strsplit(names(unlist(theta)), split = "[.]"),
                         function(x) paste(unique(x), collapse = "."), character(1L))
+
   r <- length(unlist(theta))
 
   # Calculate derivative matrix-lists
@@ -92,6 +94,7 @@ Fisher_info <- function(mod, type = "expected") {
   Tau_params <- dV_dreStruct(mod)                           # random effects structure(s)
   cor_params <- dV_dcorStruct(mod)                          # correlation structure
   var_params <- dV_dvarStruct(mod)                          # variance structure
+  sigma_sq <- dV_dsigmasq(mod)                              # sigma_sq
 
   # Create a list of derivative matrices
   dV_list <- c(unlist(Tau_params, recursive = FALSE), cor_params, var_params, sigma_sq)
