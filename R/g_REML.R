@@ -1,4 +1,4 @@
-g_REML <- function(mod, p_const, r_const, type = "expected", returnModel=TRUE) {
+g_REML <- function(mod, p_const, r_const, Infotype = "expected", returnModel=TRUE) {
 
   # basic model estimates
   p_beta <- sum(nlme::fixed.effects(mod) * p_const)               # p'Beta
@@ -9,9 +9,10 @@ g_REML <- function(mod, p_const, r_const, type = "expected", returnModel=TRUE) {
   cnvg_warn <- !is.null(attr(mod,"warning"))                      # indicator that RML estimation has not converged
 
   # calculate inverse Fisher expected information
-  I_E <- Fisher_info(mod, type = type)
+  I_E <- Fisher_info(mod, type = Infotype)
   I_E_inv <- chol2inv(chol(I_E))
-  SE_theta <- sqrt(diag(I_E))                                     # SE of theta
+  rownames(I_E_inv) <- colnames(I_E_inv) <- rownames(I_E)
+  SE_theta <- sqrt(diag(I_E_inv))                                # SE of theta
 
   # get degree of freedom
   nu <- 2 * r_theta^2 / (t(r_const) %*% I_E_inv %*% r_const)      # df
@@ -26,9 +27,9 @@ g_REML <- function(mod, p_const, r_const, type = "expected", returnModel=TRUE) {
   # J_nu_tr <- 1 - 3 / (4 * nu_trunc - 1)
   # V_g_AB <- J_nu^2 * (nu_trunc * kappa_sq / (nu_trunc - 2) + g_AB^2 * (nu_trunc / (nu_trunc - 2) - 1 / J_nu_tr^2))
 
-  res <- c(list(p_beta = p_beta, r_theta = r_theta, delta_AB = delta_AB, nu = nu, kappa = sqrt(kappa_sq),
-                g_AB = g_AB, SE_g_AB = SE_g_AB, cnvg_warn=cnvg_warn), theta, SE_theta = SE_theta,
-                list(I_E_inv = I_E_inv, p_const = p_const, r_const = r_const))
+  res <- c(list(p_beta = p_beta, r_theta = r_theta, delta_AB = delta_AB, nu = nu, J_nu = J_nu, kappa = sqrt(kappa_sq),
+                g_AB = g_AB, SE_g_AB = SE_g_AB, cnvg_warn=cnvg_warn), list(theta = theta, SE_theta = SE_theta),
+           list(I_E_inv = I_E_inv, p_const = p_const, r_const = r_const))
 
   if (returnModel) {
     res <- c(res, mod)
