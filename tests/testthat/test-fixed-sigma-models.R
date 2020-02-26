@@ -8,8 +8,8 @@ Laski_fx_sigma <- lme(fixed = outcome ~ treatment,
                       control = lmeControl(sigma = 2),
                       data = Laski)
 
-attr(Laski_fx_sigma$modelStruct, "fixedSigma") # Indicating whether sigma is fixed or not
-Fisher_info(Laski_fx_sigma, type = "averaged")
+# attr(Laski_fx_sigma$modelStruct, "fixedSigma") # Indicating whether sigma is fixed or not
+# Fisher_info(Laski_fx_sigma, type = "averaged")
 
 # Three-level model
 Thiemann2001_fx_sigma <- lme(fixed = outcome ~ treatment,
@@ -18,8 +18,8 @@ Thiemann2001_fx_sigma <- lme(fixed = outcome ~ treatment,
                              control = lmeControl(sigma = 1),
                              data = Thiemann2001)
 
-attr(Thiemann2001_fx_sigma$modelStruct, "fixedSigma")
-Fisher_info(Thiemann2001_fx_sigma, type = "expected")
+# attr(Thiemann2001_fx_sigma$modelStruct, "fixedSigma")
+# Fisher_info(Thiemann2001_fx_sigma, type = "expected")
 
 test_that("targetVariance() works with models when sigma is fixed.", {
   test_Sigma_mats(Laski_fx_sigma, Laski$case)

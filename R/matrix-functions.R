@@ -85,8 +85,8 @@ add_bdiag <- function(small_mats, big_mats, crosswalk) {
   small_indices <- lapply(split(crosswalk[[1]], crosswalk[[2]]), droplevels)
   big_indices <- unique(crosswalk)
   big_indices <- big_indices[[2]][order(big_indices[[1]])]
-  small_mats <- split(small_mats, big_indices)
-  Map(add_submatrices, indices = small_indices, small_mat = small_mats, big_mat = big_mats)
+  small_mats_list <- split(small_mats, big_indices)
+  Map(add_submatrices, indices = small_indices, small_mat = small_mats_list, big_mat = big_mats)
 }
 
 # sum of conformable diagonal matrix and block-diagonal matrix

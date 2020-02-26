@@ -94,6 +94,7 @@ build_RE_mats <- function(mod, sigma_scale = FALSE) {
     Z_levels <- Map(matrix_list, x = Z_levels, fac = all_groups, dim = "row")
 
     ZDZ_lists <- Map(ZDZt, D = D_list, Z_list = Z_levels)
+    # ZDZ_lists <- Map(function(x,fac) x[order(fac)], x = ZDZ_lists, fac = all_groups)
 
     for (i in 2:length(all_groups)) {
       ZDZ_lists[[i]] <- add_bdiag(small_mats = ZDZ_lists[[i-1]],

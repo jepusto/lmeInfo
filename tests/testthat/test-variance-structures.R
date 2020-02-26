@@ -1,10 +1,5 @@
 # fit some example models for varPower, varExp and varConstPower
 
-# dat_A is the model without specifying a var function
-# dat_B is the model using fitted(.) as the covariate by default
-# dat_C is the model using a covariate from the data set but not specifying the stratum
-# dat_D is the model specifying a covariate and a stratum
-
 library(nlme)
 data(Orthodont)
 data(Dialyzer)
@@ -59,7 +54,7 @@ test_that("Information matrices work with FIML with Orthodont models.", {
   test_with_FIML(Ortho_C_Exp)
   test_with_FIML(Ortho_D_Exp)
   test_with_FIML(Ortho_B_Const)
-  test_with_FIML(Ortho_D_Const)
+  expect_error(test_with_FIML(Ortho_D_Const))
 
 })
 
