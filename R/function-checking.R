@@ -97,6 +97,21 @@ test_with_FIML <- function(mod) {
 
 }
 
+test_after_shuffling <- function(mod) {
+  dat <- getData(mod)
+  dat_shuffle <- dat[sample(nrow(dat)),]
+
+  mod_shuffle <- update(mod, data = dat_shuffle)
+
+  testthat::expect_equal(extract_varcomp(mod), extract_varcomp(mod_shuffle))
+
+  testthat::expect_equal(Fisher_info(mod, type = "expected"),
+                         Fisher_info(mod_shuffle, type = "expected"))
+  testthat::expect_equal(Fisher_info(mod, type = "averaged"),
+                         Fisher_info(mod_shuffle, type = "averaged"))
+
+}
+
 check_name_order <- function(x_list, group_levels = NULL) {
   if (is.null(group_levels)) group_levels <- levels(attr(x_list, "groups"))
   expect_identical(names(x_list), group_levels)
