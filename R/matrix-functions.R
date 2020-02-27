@@ -74,6 +74,7 @@ block_minus_matrix <- function(A, B, block=NULL) {
 
 add_submatrices <- function(indices, small_mat, big_mat) {
   levs <- levels(indices)
+  if (nlevels(indices) != length(small_mat)) stop("Levels of indices do not match entries of small_mat.")
   for (i in 1:length(levs)) {
     ind <- levs[i] == indices
     big_mat[ind,ind] <- big_mat[ind,ind] + small_mat[[i]]
@@ -102,10 +103,18 @@ add_diag_bdiag <- function(diag_mats, big_mats) {
 
 # product of two block-diagonal matrices
 
-prod_blockblock <- function(A, B) {
+prod_blockblock <- function(A, B, crosswalk = NULL) {
 
-  A_groups <- attr(A, "groups")
-  B_groups <- attr(B, "groups")
+  if (is.null(crosswalk)) {
+    A_groups <- attr(A, "groups")
+    B_groups <- attr(B, "groups")
+    if (is.null(A_groups) | is.null(B_groups)) {
+      stop("Must specify a crosswalk or use matrices with groups attribute.")
+    }
+  } else {
+    A_groups <- crosswalk[[1]]
+    B_groups <- crosswalk[[2]]
+  }
 
   B_in_A <- all(tapply(A_groups, B_groups, function(x) length(unique(x)) == 1))
   A_in_B <- all(tapply(B_groups, A_groups, function(x) length(unique(x)) == 1))
@@ -126,7 +135,10 @@ prod_blockblock <- function(A, B) {
     stop("The A and B matrices are not nested.")
   }
 
-  attr(res, "groups") <- A_groups
+  if (!is.null(attr(A, "groups"))) {
+    attr(res, "groups") <- A_groups
+  }
+
   return(res)
 }
 
