@@ -147,3 +147,27 @@ build_block_matrices <- function(mod) {
   sapply(var_params, check_name_order)
 
 }
+
+#--------------------------------------------------------------------
+# Checks that lmeInfo::g_REML() is consistent with scdhlm::g_REML()
+#--------------------------------------------------------------------
+
+test_gREML <- function(mod, p_lmeInfo, r_lmeInfo, p_scdhlm, r_scdhlm, infotype = "expected") {
+
+  g_lmeInfo <- lmeInfo::g_REML(mod, p_lmeInfo, r_lmeInfo)
+
+  g_scdhlm <- scdhlm::g_REML(mod, p_scdhlm, r_scdhlm)
+
+  testthat::expect_equal(g_lmeInfo$p_beta, g_scdhlm$p_beta) # numerator of effect size
+  testthat::expect_equal(g_lmeInfo$r_beta, g_scdhlm$r_beta) # squared denominator of effect size
+  testthat::expect_equal(g_lmeInfo$delta_AB, g_scdhlm$delta_AB) # unadjusted (REML) effect size estimate
+  testthat::expect_equal(g_lmeInfo$nu, g_scdhlm$nu) # degrees of freedom
+  testthat::expect_equal(g_lmeInfo$kappa, g_scdhlm$kappa) # constant kappa
+  testthat::expect_equal(g_lmeInfo$g_AB, g_scdhlm$g_AB) # corrected effect size estimate
+  testthat::expect_equal(g_lmeInfo$SE_g_AB^2, g_scdhlm$V_g_AB) # Approximate variance estimate
+  testthat::expect_equal(g_lmeInfo$theta$sigma_sq, g_scdhlm$sigma_sq) # Estimated level-1 variance
+  testthat::expect_equal(g_lmeInfo$theta$cor_params, g_scdhlm$phi) # Estimated autocorrelation
+  testthat::expect_equal(g_lmeInfo$theta$Tau$case, g_scdhlm$Tau) # Vector of level-2 variance components
+  testthat::expect_equal(det(g_lmeInfo$info_inv), det(g_scdhlm$I_E_inv)) # Expected information matrix
+
+}
