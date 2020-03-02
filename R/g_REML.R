@@ -115,6 +115,9 @@ summary.g_REML <- function(object, ...) {
   round(rbind(varcomp, betas, ES), 3)
 }
 
+#' @export
+#'
+
 print.g_REML <- function(object, ...) {
   ES <- with(object, cbind(est = c("unadjusted effect size" = delta_AB,
                                    "adjusted effect size" = g_AB,
