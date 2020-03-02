@@ -78,21 +78,9 @@ test_that("dR_dcorStruct.corCAR1 returns the same result as dR_dcorStruct.corAR1
                tol = 10^-5)
 })
 
-LaskiAR1_g <- g_REML(Laski_AR1, c(0,1), c(1,0,0,0,1), returnModel = FALSE)
-
-LaskiAR1_g_scdhlm <- scdhlm::g_REML(Laski_AR1, c(0, 1), c(c(1,0,1,0,0)), returnModel = FALSE)
-
-test_that("g_REML returns the same result as scdhlm::g_REML.", {
-  expect_equal(LaskiAR1_g$p_beta, LaskiAR1_g_scdhlm$p_beta)
-  expect_equal(LaskiAR1_g$r_beta, LaskiAR1_g_scdhlm$r_beta)
-  expect_equal(LaskiAR1_g$delta_AB, LaskiAR1_g_scdhlm$delta_AB)
-  expect_equal(LaskiAR1_g$nu, LaskiAR1_g_scdhlm$nu)
-  expect_equal(LaskiAR1_g$kappa, LaskiAR1_g_scdhlm$kappa)
-  expect_equal(LaskiAR1_g$g_AB, LaskiAR1_g_scdhlm$g_AB)
-  expect_equal(LaskiAR1_g$SE_g_AB, sqrt(LaskiAR1_g_scdhlm$V_g_AB))
-  expect_equal(LaskiAR1_g$theta$sigma_sq, LaskiAR1_g_scdhlm$sigma_sq)
-  expect_equal(LaskiAR1_g$theta$cor_params, LaskiAR1_g_scdhlm$phi)
-  expect_equal(LaskiAR1_g$theta$Tau$case, LaskiAR1_g_scdhlm$Tau)
-  expect_equal(det(LaskiAR1_g$I_E_inv), det(LaskiAR1_g_scdhlm$I_E_inv))
+test_that("lmeinfo::g_REML returns the same result as scdhlm::g_REML.", {
+  test_gREML(Laski_AR1,
+             p_lmeInfo = c(0,1), r_lmeInfo = c(1,0,0,0,1),
+             p_scdhlm = c(0,1), r_scdhlm = c(1,0,1,0,0))
 })
 
