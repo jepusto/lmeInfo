@@ -149,10 +149,10 @@ build_block_matrices <- function(mod) {
 }
 
 #--------------------------------------------------------------------
-# Checks that lmeInfo::g_REML() is consistent with scdhlm::g_REML()
+# Checks that lmeInfo::g_REML() matches scdhlm::g_REML()
 #--------------------------------------------------------------------
 
-test_gREML <- function(mod, p_lmeInfo, r_lmeInfo, p_scdhlm, r_scdhlm, infotype = "expected") {
+check_against_scdhlm <- function(mod, p_lmeInfo, r_lmeInfo, p_scdhlm, r_scdhlm, infotype = "expected") {
 
   g_lmeInfo <- lmeInfo::g_REML(mod, p_lmeInfo, r_lmeInfo)
 

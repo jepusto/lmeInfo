@@ -79,8 +79,8 @@ test_that("dR_dcorStruct.corCAR1 returns the same result as dR_dcorStruct.corAR1
 })
 
 test_that("lmeinfo::g_REML returns the same result as scdhlm::g_REML.", {
-  test_gREML(Laski_AR1,
-             p_lmeInfo = c(0,1), r_lmeInfo = c(1,0,0,0,1),
-             p_scdhlm = c(0,1), r_scdhlm = c(1,0,1,0,0))
+  check_against_scdhlm(Laski_AR1,
+                       p_lmeInfo = c(0,1), r_lmeInfo = c(1,0,0,0,1),
+                       p_scdhlm = c(0,1), r_scdhlm = c(1,0,1,0,0))
 })
 
