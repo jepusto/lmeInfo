@@ -43,8 +43,10 @@ Laski_RML3 <- lme(fixed = outcome ~ time + treatment + trt_time,
                   data = Laski)
 
 # Varying intercepts, fixed treatment effect, varying trends
-Laski_RML4 <- update(Laski_RML3, random = ~ time | case,
-                     control=lmeControl(msMaxIter = 50, apVar=FALSE, returnObject=TRUE))
+quietly_update <- purrr::quietly(update)
+
+Laski_RML4 <- quietly_update(Laski_RML3, random = ~ time | case,
+                            control=lmeControl(msMaxIter = 20, apVar=FALSE, returnObject=TRUE))$result
 
 
 data(Schutte)
@@ -67,8 +69,8 @@ Schutte_RML3 <- lme(fixed = fatigue ~ week + treatment + trt_week,
 Schutte_RML4 <- update(Schutte_RML3, random = ~ week | case)
 
 # Varying intercepts, varying trends, varying treatment-by-time interactions
-Schutte_RML5 <- update(Schutte_RML4, random = ~ week + trt_week | case,
-                       control=lmeControl(msMaxIter = 50, apVar=FALSE, returnObject=TRUE))
+Schutte_RML5 <- quietly_update(Schutte_RML4, random = ~ week + trt_week | case,
+                               control=lmeControl(msMaxIter = 50, apVar=FALSE, returnObject=TRUE))$result
 
 
 test_that("lmeinfo::g_REML returns the same result as scdhlm::g_REML.", {
