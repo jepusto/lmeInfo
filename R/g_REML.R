@@ -41,15 +41,17 @@
 #' \emph{Journal of Educational and Behavioral Statistics, 39}(4), 211-227. doi:\href{http://doi.org/10.3102/1076998614547577}{10.3102/1076998614547577}
 #'
 #' @examples
-#' data(Laski)
+#'
+#' library(nlme)
+#' data(Laski, package = "scdhlm")
 #' Laski_RML <- lme(fixed = outcome ~ treatment,
-#'                  random = ~ treatment | case,
-#'                  correlation = corAR1(0.2, ~ time | case),
+#'                  random = ~ 1 | case,
+#'                  correlation = corAR1(0, ~ time | case),
 #'                  data = Laski)
 #' summary(Laski_RML)
 #' g_REML(Laski_RML, p_const = c(0,1), r_const = c(1,0,0,0,1), returnModel = FALSE)
 #'
-#' data(Schutte)
+#' data(Schutte, package = "scdhlm")
 #' Schutte$trt.week <- with(Schutte, unlist(tapply((treatment=="treatment") * week,
 #'          list(treatment,case), function(x) x - min(x))) + (treatment=="treatment"))
 #' Schutte$week <- Schutte$week - 9
@@ -101,7 +103,6 @@ g_REML <- function(mod, p_const, r_const, infotype = "expected", returnModel = T
 }
 
 #' @export
-#'
 
 summary.g_REML <- function(object, digits = 3, ...) {
   varcomp <- with(object, cbind(est = c(unlist(theta), "total variance" = r_theta),
@@ -116,7 +117,6 @@ summary.g_REML <- function(object, digits = 3, ...) {
 }
 
 #' @export
-#'
 
 print.g_REML <- function(object, digits = 3, ...) {
   ES <- with(object, cbind(est = c("unadjusted effect size" = delta_AB,

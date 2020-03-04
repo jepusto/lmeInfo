@@ -67,12 +67,11 @@ Q_matrix <- function(mod) {
 #' @examples
 #'
 #' library(nlme)
-#' data(Laski)
+#' data(Laski, package = "scdhlm")
 #' Laski_RML <- lme(fixed = outcome ~ treatment,
 #'                  random = ~ 1 | case,
 #'                  correlation = corAR1(0, ~ time | case),
 #'                  data = Laski)
-#' Fisher_info(Laski_RML, type = "expected")
 #'
 #' @importFrom stats coef
 #' @importFrom stats dist
@@ -149,7 +148,7 @@ Fisher_info <- function(mod, type = "expected") {
 
     Vinv_unblock <- unblock(V_inv)
 
-    rhat <- residuals(mod, level = 0) # fixed residuals
+    rhat <- stats::residuals(mod, level = 0) # fixed residuals
 
     Vinv_rhat <- Vinv_unblock %*% rhat # N*1 matrix
 
@@ -197,13 +196,13 @@ Fisher_info <- function(mod, type = "expected") {
 #'
 #' @examples
 #'
-#' data(Laski)
 #' library(nlme)
-#'
+#' data(Laski, package = "scdhlm")
 #' Laski_RML <- lme(fixed = outcome ~ treatment,
 #'                  random = ~ 1 | case,
 #'                  correlation = corAR1(0, ~ time | case),
 #'                  data = Laski)
+#'
 #' varcomp_vcov(Laski_RML, type = "expected")
 #'
 

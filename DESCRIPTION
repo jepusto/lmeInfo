@@ -20,7 +20,10 @@ Suggests:
     testthat (>= 2.1.0),
     knitr,
     rmarkdown,
-    scdhlm
+    scdhlm,
+    dplyr,
+    tidyr,
+    mlmRev
 Imports: 
     nlme,
     stats

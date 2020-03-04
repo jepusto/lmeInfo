@@ -143,7 +143,7 @@ dR_dcor_index <- function(row, col, covariate, groups) {
 dR_dcorStruct.corSymm <- function(struct) {
   cor_Symm <- as.double(coef(struct, FALSE)) # parameters
   cor_q <- (1 + sqrt(1 + 8 * length(cor_Symm))) / 2 # number of cols/rows of R mat
-  cor_index <- as.matrix(t(combn(1:cor_q, 2))) # sort cor_index appropriately
+  cor_index <- as.matrix(t(utils::combn(1:cor_q, 2))) # sort cor_index appropriately
   groups <- attr(struct, "groups")
   covariate <- attr(struct, "covariate")
   covariate <- lapply(covariate, function(x) as.integer(x + 1)) # add 1 to covariate to align with cor_index

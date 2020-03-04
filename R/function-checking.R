@@ -87,7 +87,7 @@ test_with_FIML <- function(mod) {
 
   r_dim <- rep(length(unlist(extract_varcomp(mod))), 2)
 
-  mod_FIML <- suppressWarnings(update(mod, data = getData(mod), method = "ML"))
+  mod_FIML <- suppressWarnings(stats::update(mod, data = nlme::getData(mod), method = "ML"))
 
   info_E <- Fisher_info(mod_FIML, type = "expected")
   info_A <- Fisher_info(mod_FIML, type = "averaged")
@@ -99,10 +99,11 @@ test_with_FIML <- function(mod) {
 
 test_after_shuffling <- function(mod, tol_param = 10^-5, tol_info = .03) {
 
-  dat <- getData(mod)
-  dat_shuffle <- dat[sample(nrow(dat)),]
+  dat <- nlme::getData(mod)
+  shuffle <- sample(nrow(dat))
+  dat_shuffle <- dat[shuffle,]
 
-  mod_shuffle <- update(mod, data = dat_shuffle)
+  mod_shuffle <- stats::update(mod, data = dat_shuffle)
 
   varcomp_orig <- extract_varcomp(mod)
   varcomp_shuf <- extract_varcomp(mod_shuffle)
@@ -114,6 +115,13 @@ test_after_shuffling <- function(mod, tol_param = 10^-5, tol_info = .03) {
   averaged_info_ratio <- Fisher_info(mod, type = "averaged") / Fisher_info(mod_shuffle, type = "averaged")
   testthat::expect_equal(expected_info_ratio, One, tolerance = tol_info, check.attributes = FALSE)
   testthat::expect_equal(averaged_info_ratio, One, tolerance = tol_info, check.attributes = FALSE)
+
+  # extract_varcomp(mod) %>% unlist()
+  # extract_varcomp(mod_shuffle) %>% unlist()
+  #
+  # R_mat <- unblock(build_corr_mats(mod))[shuffle, shuffle]
+  # R_shuff <- unblock(build_corr_mats(mod_shuffle))
+  # expect_equal(R_mat, R_shuff)
 
 }
 

@@ -179,3 +179,29 @@ test_that("Information matrices work with FIML too.", {
   test_with_FIML(Bryant2018_RML3)
   test_with_FIML(Bryant2018_RML4)
 })
+
+test_that("Results do not depend on order of data.", {
+  skip("Not worrying about sort order yet.")
+
+  test_after_shuffling(Thiemann2001_RML1)
+  test_after_shuffling(Thiemann2001_RML2)
+  test_after_shuffling(Thiemann2001_RML3)
+  test_after_shuffling(Thiemann2001_RML4)
+
+  test_after_shuffling(Thiemann2004_RML1)
+  test_after_shuffling(Thiemann2004_RML2)
+  test_after_shuffling(Thiemann2004_RML3)
+  test_after_shuffling(Thiemann2004_RML4)
+
+  test_after_shuffling(Bryant2016_RML1)
+  test_after_shuffling(Bryant2016_RML2)
+  test_after_shuffling(Bryant2016_RML3)
+  test_after_shuffling(Bryant2016_RML4)
+
+  test_after_shuffling(Bryant2018_RML1)
+  test_after_shuffling(Bryant2018_RML2)
+  test_after_shuffling(Bryant2018_RML3)
+  test_after_shuffling(Bryant2018_RML4)
+})
+
+

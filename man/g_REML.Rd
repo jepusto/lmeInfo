@@ -8,7 +8,7 @@ g_REML(mod, p_const, r_const, infotype = "expected",
   returnModel = TRUE)
 }
 \arguments{
-\item{mod}{Fitted model of class lmeStruct}
+\item{mod}{Fitted model of class lmeStruct (estimated using \code{nlme::lme()})}
 
 \item{p_const}{Vector of constants for calculating numerator of effect size.
 Must be the same length as fixed effects in \code{mod}.}
@@ -43,15 +43,17 @@ from a multiple baseline design, using adjusted REML method as described in Pust
 & Shadish (2014). Note that the data must contain one row per measurement occasion per case.
 }
 \examples{
-data(Laski)
+
+library(nlme)
+data(Laski, package = "scdhlm")
 Laski_RML <- lme(fixed = outcome ~ treatment,
-                 random = ~ treatment | case,
-                 correlation = corAR1(0.2, ~ time | case),
+                 random = ~ 1 | case,
+                 correlation = corAR1(0, ~ time | case),
                  data = Laski)
 summary(Laski_RML)
 g_REML(Laski_RML, p_const = c(0,1), r_const = c(1,0,0,0,1), returnModel = FALSE)
 
-data(Schutte)
+data(Schutte, package = "scdhlm")
 Schutte$trt.week <- with(Schutte, unlist(tapply((treatment=="treatment") * week,
          list(treatment,case), function(x) x - min(x))) + (treatment=="treatment"))
 Schutte$week <- Schutte$week - 9

@@ -86,7 +86,7 @@ test_that("lmeinfo::g_REML returns the same result as scdhlm::g_REML.", {
 
 
 test_that("Results do not depend on order of data.", {
-  skip("Note worrying about sort order yet.")
+  skip("Not worrying about sort order yet.")
   test_after_shuffling(Laski_iid, tol_param = 5 * 10^-5)
   test_after_shuffling(Laski_het)
   test_after_shuffling(Laski_AR1)
