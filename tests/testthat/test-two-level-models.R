@@ -17,7 +17,7 @@ Laski_AR1 <- lme(fixed = outcome ~ treatment,
 
 Laski_hetAR1 <- lme(fixed = outcome ~ treatment,
                     random = ~ treatment | case,
-                    correlation = corAR1(0, ~ time | case),
+                    correlation = corAR1(0.2, ~ time | case),
                     weights = varIdent(form = ~ 1 | treatment),
                     data = Laski)
 
@@ -84,3 +84,12 @@ test_that("lmeinfo::g_REML returns the same result as scdhlm::g_REML.", {
                        p_scdhlm = c(0,1), r_scdhlm = c(1,0,1,0,0))
 })
 
+
+test_that("Results do not depend on order of data.", {
+  skip("Note worrying about sort order yet.")
+  test_after_shuffling(Laski_iid, tol_param = 5 * 10^-5)
+  test_after_shuffling(Laski_het)
+  test_after_shuffling(Laski_AR1)
+  test_after_shuffling(Laski_CAR1)
+  test_after_shuffling(Laski_MA1)
+})

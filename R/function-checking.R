@@ -87,7 +87,7 @@ test_with_FIML <- function(mod) {
 
   r_dim <- rep(length(unlist(extract_varcomp(mod))), 2)
 
-  mod_FIML <- purrr::quietly(update)(mod, data = getData(mod), method = "ML")$result
+  mod_FIML <- suppressWarnings(update(mod, data = getData(mod), method = "ML"))
 
   info_E <- Fisher_info(mod_FIML, type = "expected")
   info_A <- Fisher_info(mod_FIML, type = "averaged")
@@ -97,18 +97,23 @@ test_with_FIML <- function(mod) {
 
 }
 
-test_after_shuffling <- function(mod) {
+test_after_shuffling <- function(mod, tol_param = 10^-5, tol_info = .03) {
+
   dat <- getData(mod)
   dat_shuffle <- dat[sample(nrow(dat)),]
 
   mod_shuffle <- update(mod, data = dat_shuffle)
 
-  testthat::expect_equal(extract_varcomp(mod), extract_varcomp(mod_shuffle))
+  varcomp_orig <- extract_varcomp(mod)
+  varcomp_shuf <- extract_varcomp(mod_shuffle)
+  testthat::expect_equal(varcomp_orig, varcomp_shuf, tolerance = tol_param)
 
-  testthat::expect_equal(Fisher_info(mod, type = "expected"),
-                         Fisher_info(mod_shuffle, type = "expected"))
-  testthat::expect_equal(Fisher_info(mod, type = "averaged"),
-                         Fisher_info(mod_shuffle, type = "averaged"))
+  p <- length(unlist(varcomp_orig))
+  One <- matrix(1, p, p)
+  expected_info_ratio <- Fisher_info(mod, type = "expected") / Fisher_info(mod_shuffle, type = "expected")
+  averaged_info_ratio <- Fisher_info(mod, type = "averaged") / Fisher_info(mod_shuffle, type = "averaged")
+  testthat::expect_equal(expected_info_ratio, One, tolerance = tol_info, check.attributes = FALSE)
+  testthat::expect_equal(averaged_info_ratio, One, tolerance = tol_info, check.attributes = FALSE)
 
 }
 

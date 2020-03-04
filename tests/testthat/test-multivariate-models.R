@@ -13,7 +13,8 @@ bdf_long <-
   pivot_longer(cols = c(IQ.verb, IQ.perf, aritPRET),
                names_to = "measure",
                values_to = "score") %>%
-  select(schoolNR, pupilNR, sex, Minority, measure, score)
+  select(schoolNR, pupilNR, sex, Minority, measure, score) %>%
+  arrange(schoolNR, pupilNR, measure)
 
 bdf_MVML <- lme(score ~ 0 + measure,
                 random = ~ 1| schoolNR / pupilNR,
