@@ -10,7 +10,7 @@
 #' from a multiple baseline design, using adjusted REML method as described in Pustejovsky, Hedges,
 #' & Shadish (2014). Note that the data must contain one row per measurement occasion per case.
 #'
-#' @param mod Fitted model of class lmeStruct
+#' @param mod Fitted model of class lmeStruct (estimated using \code{nlme::lme()})
 #' @param p_const Vector of constants for calculating numerator of effect size.
 #' Must be the same length as fixed effects in \code{mod}.
 #' @param r_const Vector of constants for calculating denominator of effect size.
@@ -103,7 +103,7 @@ g_REML <- function(mod, p_const, r_const, infotype = "expected", returnModel = T
 #' @export
 #'
 
-summary.g_REML <- function(object, ...) {
+summary.g_REML <- function(object, digits = 3, ...) {
   varcomp <- with(object, cbind(est = c(unlist(theta), "total variance" = r_theta),
                                 se = c(unlist(SE_theta), r_theta * sqrt(2 / nu))))
   betas <- with(object, cbind(est = c(coefficients$fixed, "treatment effect at a specified time" = p_beta),
@@ -112,17 +112,17 @@ summary.g_REML <- function(object, ...) {
                                    "degree of freedom" = nu, "constant kappa" = kappa, logLik = logLik),
                            se = c(SE_g_AB / J_nu, SE_g_AB, NA, NA, NA)))
 
-  round(rbind(varcomp, betas, ES), 3)
+  round(rbind(varcomp, betas, ES), digits)
 }
 
 #' @export
 #'
 
-print.g_REML <- function(object, ...) {
+print.g_REML <- function(object, digits = 3, ...) {
   ES <- with(object, cbind(est = c("unadjusted effect size" = delta_AB,
                                    "adjusted effect size" = g_AB,
                                    "degree of freedom" = nu),
                            se = c(SE_g_AB / J_nu, SE_g_AB, NA)))
-  round(ES, 3)
+  round(ES, digits)
 }
 
