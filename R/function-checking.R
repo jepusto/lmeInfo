@@ -164,6 +164,26 @@ build_block_matrices <- function(mod) {
 }
 
 #--------------------------------------------------------------------
+# Checks using REML2
+#--------------------------------------------------------------------
+
+check_REML2 <- function(mod, print = FALSE) {
+  mod2 <- mod
+  mod2$method <- "REML2"
+
+  info1 <- Fisher_info(mod, type = "expected")
+  info2 <- Fisher_info(mod2, type = "expected")
+
+  if (print) {
+    rownames(info1) <- rownames(info2) <- colnames(info1) <- colnames(info2) <- NULL
+    print(list(REML = info1, REML2 = info2))
+  }
+
+  testthat::expect_equal(info1, info2)
+
+}
+
+#--------------------------------------------------------------------
 # Checks that lmeInfo::g_REML() matches scdhlm::g_REML()
 #--------------------------------------------------------------------
 

@@ -93,3 +93,14 @@ test_that("Results do not depend on order of data.", {
   test_after_shuffling(Laski_CAR1)
   test_after_shuffling(Laski_MA1)
 })
+
+
+test_that("New REML calculations work.", {
+
+  check_REML2(Laski_iid)
+  check_REML2(Laski_het)
+  check_REML2(Laski_AR1)
+  check_REML2(Laski_hetAR1)
+  check_REML2(Laski_CAR1)
+  check_REML2(Laski_MA1)
+})

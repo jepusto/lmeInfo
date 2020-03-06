@@ -204,4 +204,28 @@ test_that("Results do not depend on order of data.", {
   test_after_shuffling(Bryant2018_RML4)
 })
 
+test_that("New REML calculations work.", {
+
+  check_REML2(Thiemann2001_RML1)
+  check_REML2(Thiemann2001_RML2)
+  check_REML2(Thiemann2001_RML3)
+  check_REML2(Thiemann2001_RML4)
+
+  check_REML2(Thiemann2004_RML1)
+  check_REML2(Thiemann2004_RML2)
+  check_REML2(Thiemann2004_RML3)
+  check_REML2(Thiemann2004_RML4)
+
+  check_REML2(Bryant2016_RML1)
+  check_REML2(Bryant2016_RML2)
+  check_REML2(Bryant2016_RML3)
+  check_REML2(Bryant2016_RML4)
+
+  check_REML2(Bryant2018_RML1)
+  check_REML2(Bryant2018_RML2)
+  check_REML2(Bryant2018_RML3)
+  check_REML2(Bryant2018_RML4)
+})
+
+
 

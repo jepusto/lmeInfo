@@ -35,3 +35,9 @@ test_that("Information matrices work with FIML too when sigma is fixed.", {
   test_with_FIML(Laski_fx_sigma)
   test_with_FIML(Thiemann2001_fx_sigma)
 })
+
+test_that("New REML calculations work.", {
+
+  check_REML2(Laski_fx_sigma)
+  check_REML2(Thiemann2001_fx_sigma)
+})
