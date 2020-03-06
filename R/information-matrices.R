@@ -123,6 +123,37 @@ Fisher_info <- function(mod, type = "expected") {
 
     } else if (est_method == "REML") {
 
+      V_inv <- build_Sigma_mats(mod, invert = TRUE, sigma_scale = TRUE)
+
+      X <- model.matrix(mod, data = mod$data)
+      Vinv_X <- prod_blockmatrix(V_inv, X, block = attr(V_inv, "groups"))
+      M <- chol2inv(chol(t(X) %*% Vinv_X))
+      Vinv_X_M <- Vinv_X %*% M
+
+      # create lists with Vinv_dV entries
+
+      Vinv_dV <- lapply(dV_list, prod_blockblock, A = V_inv)
+      Xt_Vinv_dV <- lapply(Vinv_dV, prod_matrixblock, A = t(X))
+      Vinv_dV_Vinv_X_M <- lapply(Vinv_dV, prod_blockmatrix, B = Vinv_X_M)
+      dBinv_B <- lapply(Xt_Vinv_dV, function(x) x %*% Vinv_X_M)
+
+      # calculate I_E
+
+      I_E <- matrix(NA, r, r)
+
+      for (i in 1:r)
+        for (j in 1:i) {
+          tr_ij <- product_trace_blockblock(Vinv_dV[[i]], Vinv_dV[[j]]) -
+            2 * product_trace(Xt_Vinv_dV[[i]], Vinv_dV_Vinv_X_M[[j]]) +
+            product_trace(dBinv_B[[i]], dBinv_B[[j]])
+          I_E[i,j] <- I_E[j,i] <- tr_ij / 2
+        }
+
+      rownames(I_E) <- colnames(I_E) <- theta_names
+      return(I_E)
+
+    } else if (est_method == "REML2") {
+
       Q_mat <- Q_matrix(mod)
 
       # create list with Q_dV entries
@@ -172,6 +203,15 @@ Fisher_info <- function(mod, type = "expected") {
 
       return(I_A)
 
+    } else if (est_method == "REML2") {
+
+      Q_mat <- Q_matrix(mod)
+
+      I_A <- (t(dVr) %*% Q_mat %*% dVr) / 2
+
+      rownames(I_A) <- colnames(I_A) <- theta_names
+
+      return(I_A)
     }
   }
 }

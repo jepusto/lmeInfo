@@ -146,7 +146,7 @@ prod_blockblock <- function(A, B, crosswalk = NULL) {
 
 # product of a block-diagonal matrix and a generic matrix
 
-prod_blockmatrix <- function(A, B, block = NULL) {
+prod_blockmatrix <- function(A, B, block = attr(A, "groups")) {
 
   if (is.null(names(A))) names(A) <- 1:length(A)
   A_names <- names(A)
@@ -165,7 +165,7 @@ prod_blockmatrix <- function(A, B, block = NULL) {
 
 # product of a generic matrix and a block-diagonal matrix
 
-prod_matrixblock <- function(A, B, block = NULL) {
+prod_matrixblock <- function(A, B, block = attr(B, "groups")) {
 
   if (is.null(names(B))) names(B) <- 1:length(B)
   B_names <- names(B)
