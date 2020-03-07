@@ -49,7 +49,7 @@
 #'                  correlation = corAR1(0, ~ time | case),
 #'                  data = Laski)
 #' summary(Laski_RML)
-#' g_REML(Laski_RML, p_const = c(0,1), r_const = c(1,0,0,0,1), returnModel = FALSE)
+#' g_REML(Laski_RML, p_const = c(0,1), r_const = c(1,0,1), returnModel = FALSE)
 #'
 #' data(Schutte, package = "scdhlm")
 #' Schutte$trt.week <- with(Schutte, unlist(tapply((treatment=="treatment") * week,
@@ -118,8 +118,8 @@ summary.g_REML <- function(object, digits = 3, ...) {
 
 #' @export
 
-print.g_REML <- function(object, digits = 3, ...) {
-  ES <- with(object, cbind(est = c("unadjusted effect size" = delta_AB,
+print.g_REML <- function(x, digits = 3, ...) {
+  ES <- with(x, cbind(est = c("unadjusted effect size" = delta_AB,
                                    "adjusted effect size" = g_AB,
                                    "degree of freedom" = nu),
                            se = c(SE_g_AB / J_nu, SE_g_AB, NA)))

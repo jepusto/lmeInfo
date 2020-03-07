@@ -51,7 +51,7 @@ Laski_RML <- lme(fixed = outcome ~ treatment,
                  correlation = corAR1(0, ~ time | case),
                  data = Laski)
 summary(Laski_RML)
-g_REML(Laski_RML, p_const = c(0,1), r_const = c(1,0,0,0,1), returnModel = FALSE)
+g_REML(Laski_RML, p_const = c(0,1), r_const = c(1,0,1), returnModel = FALSE)
 
 data(Schutte, package = "scdhlm")
 Schutte$trt.week <- with(Schutte, unlist(tapply((treatment=="treatment") * week,
