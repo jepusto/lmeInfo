@@ -171,15 +171,19 @@ check_REML2 <- function(mod, print = FALSE) {
   mod2 <- mod
   mod2$method <- "REML2"
 
-  info1 <- Fisher_info(mod, type = "expected")
-  info2 <- Fisher_info(mod2, type = "expected")
+  I_E1 <- Fisher_info(mod, type = "expected")
+  I_E2 <- Fisher_info(mod2, type = "expected")
+  I_A1 <- Fisher_info(mod, type = "averaged")
+  I_A2 <- Fisher_info(mod2, type = "averaged")
 
   if (print) {
-    rownames(info1) <- rownames(info2) <- colnames(info1) <- colnames(info2) <- NULL
-    print(list(REML = info1, REML2 = info2))
+    rownames(I_E1) <- rownames(I_E2) <- colnames(I_E1) <- colnames(I_E2) <- NULL
+    rownames(I_A1) <- rownames(I_A2) <- colnames(I_A1) <- colnames(I_A2) <- NULL
+    print(list(REML_ex = I_E1, REML2_ex = I_E2, REML_av = I_A1, REML2_av = I_A2))
   }
 
-  testthat::expect_equal(info1, info2)
+  testthat::expect_equal(I_E1, I_E2)
+  testthat::expect_equal(I_A1, I_A2)
 
 }
 
