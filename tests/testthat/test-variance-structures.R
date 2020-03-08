@@ -19,6 +19,8 @@ Ortho_C_Exp <- update(Ortho_A, weights = varExp(form = ~ age))
 Ortho_D_Exp <- update(Ortho_A, weights = varExp(form = ~ age | Sex))
 Ortho_B_Const <- update(Ortho_A, weights = varConstPower()) # fitted(.) is used by default
 Ortho_D_Const <- update(Ortho_A, weights = varConstPower(form = ~ age | Sex))
+Ortho_D_Const <- update(Ortho_A, weights = varConstPower(form = ~ age | Sex))
+Ortho_D_Comb <- update(Ortho_A, weights = varComb(varIdent(form = ~1|Sex), varPower()))
 
 test_that("targetVariance() works with Orthodont models.", {
   test_Sigma_mats(Ortho_A, Orthodont$Subject)
@@ -30,6 +32,7 @@ test_that("targetVariance() works with Orthodont models.", {
   test_Sigma_mats(Ortho_D_Exp, Orthodont$Subject)
   test_Sigma_mats(Ortho_B_Const, Orthodont$Subject)
   test_Sigma_mats(Ortho_D_Const, Orthodont$Subject)
+  test_Sigma_mats(Ortho_D_Comb, Orthodont$Subject)
 })
 
 test_that("Derivative matrices are of correct dimension with Orthodont models.", {
@@ -42,7 +45,7 @@ test_that("Derivative matrices are of correct dimension with Orthodont models.",
   test_deriv_dims(Ortho_D_Exp)
   test_deriv_dims(Ortho_B_Const)
   test_deriv_dims(Ortho_D_Const)
-
+  expect_error(test_deriv_dims(Ortho_D_Comb))
 })
 
 test_that("Information matrices work with FIML with Orthodont models.", {

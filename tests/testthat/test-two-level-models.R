@@ -41,6 +41,17 @@ Laski_AR1MA1 <- lme(fixed = outcome ~ treatment,
                     correlation = corARMA(c(0,0), ~ time | case, p = 1, q = 1),
                     data = Laski)
 
+Laski_AR1MA1 <- lme(fixed = outcome ~ treatment,
+                    random = ~ treatment | case,
+                    correlation = corARMA(c(0,0), ~ time | case, p = 1, q = 1),
+                    data = Laski)
+
+Bodyweight_Gaus <- lme(weight ~ Time * Diet,
+                       data = BodyWeight,
+                       random = ~ Time,
+                       weights = varPower(),
+                       correlation = corGaus(form = ~ Time))
+
 test_that("targetVariance() works with 2-level models.", {
   test_Sigma_mats(Laski_iid, Laski$case)
   test_Sigma_mats(Laski_het, Laski$case)
@@ -50,6 +61,7 @@ test_that("targetVariance() works with 2-level models.", {
   test_Sigma_mats(Laski_MA1, Laski$case)
   test_Sigma_mats(Laski_MA2, Laski$case)
   test_Sigma_mats(Laski_AR1MA1, Laski$case)
+  test_Sigma_mats(Bodyweight_Gaus)
 })
 
 test_that("Derivative matrices are of correct dimension with 2-level models.", {
@@ -61,6 +73,7 @@ test_that("Derivative matrices are of correct dimension with 2-level models.", {
   test_deriv_dims(Laski_MA1)
   expect_error(test_deriv_dims(Laski_MA2))
   expect_error(test_deriv_dims(Laski_AR1MA1))
+  expect_error(test_deriv_dims(Bodyweight_Gaus))
 })
 
 test_that("Information matrices work with FIML too.", {
