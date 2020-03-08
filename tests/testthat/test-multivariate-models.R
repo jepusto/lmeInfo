@@ -89,6 +89,11 @@ test_that("Information matrices work with FIML too.", {
   test_with_FIML(bdf_wm)
 })
 
+test_that("Results do not depend on order of data.", {
+  skip("Not worrying about sort order yet.")
+  test_after_shuffling(bdf_MVML)
+  test_after_shuffling(bdf_wm)
+})
 
 test_that("New REML calculations work.", {
   check_REML2(bdf_MVML)

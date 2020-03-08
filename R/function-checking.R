@@ -101,6 +101,7 @@ test_after_shuffling <- function(mod, tol_param = 10^-5, tol_info = .03) {
 
   dat <- nlme::getData(mod)
   shuffle <- sample(nrow(dat))
+  unshuffle <- order(shuffle)
   dat_shuffle <- dat[shuffle,]
 
   mod_shuffle <- stats::update(mod, data = dat_shuffle)
@@ -116,13 +117,30 @@ test_after_shuffling <- function(mod, tol_param = 10^-5, tol_info = .03) {
   testthat::expect_equal(expected_info_ratio, One, tolerance = tol_info, check.attributes = FALSE)
   testthat::expect_equal(averaged_info_ratio, One, tolerance = tol_info, check.attributes = FALSE)
 
-  # extract_varcomp(mod) %>% unlist()
-  # extract_varcomp(mod_shuffle) %>% unlist()
-  #
-  # R_mat <- unblock(build_corr_mats(mod))[shuffle, shuffle]
-  # R_shuff <- unblock(build_corr_mats(mod_shuffle))
-  # expect_equal(R_mat, R_shuff)
+  unlist(extract_varcomp(mod))
+  unlist(extract_varcomp(mod_shuffle))
 
+  unscramble_block <- function(A, unshuffle) {
+    A_full <- unblock(A)[unshuffle, unshuffle]
+    groups <- attr(A, "groups")[unshuffle]
+    A_list <- matrix_list(A_full, fac = groups, dim = "both")
+    names(A_list) <- names(A)
+    A_list
+  }
+
+  R_mat <- build_corr_mats(mod)
+  R_shuff <- unscramble_block(build_corr_mats(mod_shuffle), unshuffle)
+  testthat::expect_equal(R_mat, R_shuff, check.attributes = FALSE)
+
+  V_list <- build_var_cor_mats(mod)
+  V_shuff <- unscramble_block(build_var_cor_mats(mod_shuffle), unshuffle)
+  testthat::expect_equal(V_list, V_shuff, check.attributes = FALSE)
+
+  RE_list <- build_RE_mats(mod)
+  RE_shuff <- build_RE_mats(mod_shuffle)
+  names(RE_shuff) <- levels(attr(RE_shuff, "groups"))
+  RE_shuff <- unscramble_block(RE_shuff, unshuffle)
+  testthat::expect_equal(RE_list, RE_shuff, check.attributes = FALSE)
 }
 
 check_name_order <- function(x_list, group_levels = NULL) {

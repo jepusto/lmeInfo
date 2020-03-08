@@ -36,6 +36,12 @@ test_that("Information matrices work with FIML too when sigma is fixed.", {
   test_with_FIML(Thiemann2001_fx_sigma)
 })
 
+test_that("Results do not depend on order of data.", {
+  skip("Not worrying about sort order yet.")
+  test_after_shuffling(Laski_fx_sigma)
+  test_after_shuffling(Thiemann2001_fx_sigma)
+})
+
 test_that("New REML calculations work.", {
 
   check_REML2(Laski_fx_sigma)

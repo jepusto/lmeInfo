@@ -26,11 +26,12 @@ matrix_list <- function(x, fac, dim) {
 
 # turn block-diagonal into regular matrix
 
-unblock <- function(A, block=NULL) {
-  if (is.null(block)) block <- rep(names(A), times = sapply(A, function(x) dim(x)[1]))
+unblock <- function(A, block=attr(A, "groups")) {
+
+  if (is.null(block)) block <- factor(rep(names(A), times = sapply(A, function(x) dim(x)[1])))
   n <- length(block)
   mat <- matrix(0, n, n)
-  for (i in unique(block)) {
+  for (i in levels(block)) {
     index <- i == block
     mat[index,index] <- A[[i]]
   }
