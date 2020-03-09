@@ -100,11 +100,17 @@ test_that("lmeinfo::g_REML returns the same result as scdhlm::g_REML.", {
 
 test_that("Results do not depend on order of data.", {
   skip("Not worrying about sort order yet.")
-  test_after_shuffling(Laski_iid)
-  test_after_shuffling(Laski_het)
-  test_after_shuffling(Laski_AR1)
-  test_after_shuffling(Laski_CAR1)
-  test_after_shuffling(Laski_MA1)
+  test_after_shuffling(Laski_iid, seed = 20)
+  test_after_shuffling(Laski_het, seed = 20)
+  test_after_shuffling(Laski_AR1, seed = 20)
+  test_after_shuffling(Laski_CAR1, seed = 20)
+  test_after_shuffling(Laski_MA1, seed = 20)
+
+  mod <- Laski_AR1
+  seed <- 20
+  by_var <- NULL
+  tol_param <- 10^-5
+  tol_info <- .01
 })
 
 

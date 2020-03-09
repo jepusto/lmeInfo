@@ -21,12 +21,6 @@ extract_varcomp <- function(mod) {
 
   varcomp <- list(Tau = Tau_param_list, cor_params = cor_params, var_params = var_params, sigma_sq = sigma_sq)
 
-  # if (fixed_sigma) {
-  #   varcomp <- list(Tau = Tau_param_list, cor_params = cor_params, var_params = var_params)
-  # } else {
-  #   varcomp <- list(Tau = Tau_param_list, cor_params = cor_params, var_params = var_params, sigma_sq = sigma_sq)
-  # }
-
   class(varcomp) <- "varcomp"
   return(varcomp)
 

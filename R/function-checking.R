@@ -97,7 +97,10 @@ test_with_FIML <- function(mod) {
 
 }
 
-test_after_shuffling <- function(mod, by_var = NULL, tol_param = 10^-5, tol_info = .03) {
+
+test_after_shuffling <- function(mod, by_var = NULL, tol_param = 10^-5, tol_info = .03, seed = NULL) {
+
+  if (!is.null(seed)) set.seed(seed)
 
   dat <- nlme::getData(mod)
 
@@ -121,9 +124,6 @@ test_after_shuffling <- function(mod, by_var = NULL, tol_param = 10^-5, tol_info
   averaged_info_ratio <- Fisher_info(mod, type = "averaged") / Fisher_info(mod_shuffle, type = "averaged")
   testthat::expect_equal(expected_info_ratio, One, tolerance = tol_info, check.attributes = FALSE)
   testthat::expect_equal(averaged_info_ratio, One, tolerance = tol_info, check.attributes = FALSE)
-
-  unlist(extract_varcomp(mod))
-  unlist(extract_varcomp(mod_shuffle))
 
   unscramble_block <- function(A, unshuffle) {
     A_full <- unblock(A)[unshuffle, unshuffle]
@@ -149,6 +149,46 @@ test_after_shuffling <- function(mod, by_var = NULL, tol_param = 10^-5, tol_info
   names(RE_shuff) <- levels(attr(RE_shuff, "groups"))
   RE_shuff <- unscramble_block(RE_shuff, unshuffle)
   testthat::expect_equal(RE_list, RE_shuff, check.attributes = FALSE)
+
+  Sigma_list <- build_Sigma_mats(mod)
+  Sigma_shuff <- build_Sigma_mats(mod_shuffle)
+  Sigma_shuff <- unscramble_block(Sigma_shuff, unshuffle)
+  testthat::expect_equal(Sigma_list, Sigma_shuff, check.attributes = FALSE)
+
+  Tau_params <- unlist(dV_dreStruct(mod), recursive = FALSE)
+  cor_params <- dV_dcorStruct(mod)
+  if (is.null(cor_params)) cor_params <- list()
+  var_params <- dV_dvarStruct(mod)
+  if (is.null(var_params)) var_params <- list()
+  sigma_sq <- dV_dsigmasq(mod)
+
+  Tau_shuff <-
+    dV_dreStruct(mod_shuffle) %>%
+    unlist(recursive = FALSE) %>%
+    lapply(unscramble_block, unshuffle = unshuffle)
+  cor_shuff <- lapply(dV_dcorStruct(mod_shuffle), unscramble_block, unshuffle = unshuffle)
+  var_shuff <- lapply(dV_dvarStruct(mod_shuffle), unscramble_block, unshuffle = unshuffle)
+  sigma_sq_shuff <- unscramble_block(dV_dsigmasq(mod_shuffle)[[1]], unshuffle)
+
+  testthat::expect_equal(Tau_params, Tau_shuff, check.attributes = FALSE)
+  testthat::expect_equal(cor_params, cor_shuff, check.attributes = FALSE)
+  testthat::expect_equal(var_params, var_shuff, check.attributes = FALSE)
+  testthat::expect_equal(sigma_sq[[1]], sigma_sq_shuff, check.attributes = FALSE)
+
+  dV_list <- c(Tau_params, cor_params, var_params, sigma_sq)
+
+  # block-diagonal V^-1
+  V_inv <- build_Sigma_mats(mod, invert = TRUE, sigma_scale = TRUE)
+
+  # list with V^-1 dV entries
+  Vinv_dV <- lapply(dV_list, prod_blockblock, A = V_inv)
+
+
+  if (!is.null(mod$modelStruct$varStruct)) {
+    dsd_dvar <- dsd_dvarStruct(mod$modelStruct$varStruct)
+    dsd_dvar_shuff <- dsd_dvarStruct(mod_shuffle$modelStruct$varStruct)
+  }
+
 }
 
 check_name_order <- function(x_list, group_levels = NULL) {
