@@ -26,6 +26,8 @@ bdf_MVML <- lme(score ~ 0 + measure,
 # struct <- mod$modelStruct$corStruct
 
 # introduce random missing to bdf_long
+bdf_long$school_id <- bdf_long$schoolNR
+levels(bdf_long$school_id) <- LETTERS[1:nlevels(bdf_long$school_id)]
 
 bdf_long_wm <-
   bdf_long %>%
@@ -35,7 +37,8 @@ bdf_long_wm <-
     measure_id = as.integer(factor(measure))
   ) %>%
   filter(!is.na(score)) %>%
-  select(-row_index)
+  select(-row_index) %>%
+  arrange(schoolNR, pupilNR, measure_id)
 
 bdf_wm <- lme(score ~ 0 + measure,
               random = ~ 1| schoolNR / pupilNR,
@@ -43,6 +46,53 @@ bdf_wm <- lme(score ~ 0 + measure,
               weights = varIdent(form = ~ 1 | measure_id),
               data = bdf_long_wm,
               control=lmeControl(msMaxIter = 100, apVar = FALSE, returnObject = TRUE))
+
+bdf_wm_id <- lme(score ~ 0 + measure,
+                  random = ~ 1| school_id / pupilNR,
+                  corr = corSymm(form = ~ measure_id | school_id / pupilNR),
+                  weights = varIdent(form = ~ 1 | measure_id),
+                  data = bdf_long_wm,
+                  control=lmeControl(msMaxIter = 100, apVar = FALSE, returnObject = TRUE))
+
+bdf_wm_sort <- lme(score ~ 0 + measure,
+                   random = ~ 1| school_id / pupilNR,
+                   corr = corSymm(form = ~ measure_id | school_id / pupilNR),
+                   weights = varIdent(form = ~ 1 | measure_id),
+                   data = arrange(bdf_long_wm, school_id, pupilNR, measure_id),
+                   control=lmeControl(msMaxIter = 100, apVar = FALSE, returnObject = TRUE))
+
+test_that("targetVariance() works with multivariate models.", {
+  test_Sigma_mats(bdf_MVML, bdf_long$schoolNR)
+  test_Sigma_mats(bdf_wm, bdf_long_wm$schoolNR)
+  test_Sigma_mats(bdf_wm_id, bdf_long_wm$school_id)
+  test_Sigma_mats(bdf_wm_sort, bdf_long_wm$school_id)
+})
+
+test_that("Derivative matrices are of correct dimension with multivariate models.", {
+  test_deriv_dims(bdf_MVML)
+  test_deriv_dims(bdf_wm)
+  test_deriv_dims(bdf_wm_id)
+  test_deriv_dims(bdf_wm_sort)
+})
+
+test_that("Information matrices work with FIML too.", {
+  test_with_FIML(bdf_MVML)
+  test_with_FIML(bdf_wm)
+  test_with_FIML(bdf_wm_id)
+  test_with_FIML(bdf_wm_sort)
+})
+
+test_that("Results do not depend on order of data.", {
+  skip("Not worrying about sort order yet.")
+  test_after_shuffling(bdf_MVML)
+  test_after_shuffling(bdf_wm)
+  test_after_shuffling(bdf_wm_id)
+})
+
+test_that("New REML calculations work.", {
+  check_REML2(bdf_MVML)
+  check_REML2(bdf_wm)
+})
 
 mod <- bdf_wm
 struct <- mod$modelStruct$corStruct
@@ -74,28 +124,3 @@ Sigma_sub <- lapply(V_list[V_sub], function(x) x + sum(unlist(theta$Tau)))
 Sigma_sub
 
 
-test_that("targetVariance() works with multivariate models.", {
-  test_Sigma_mats(bdf_MVML, bdf_long$schoolNR)
-  test_Sigma_mats(bdf_wm, bdf_long_wm$schoolNR)
-})
-
-test_that("Derivative matrices are of correct dimension with multivariate models.", {
-  test_deriv_dims(bdf_MVML)
-  test_deriv_dims(bdf_wm)
-})
-
-test_that("Information matrices work with FIML too.", {
-  test_with_FIML(bdf_MVML)
-  test_with_FIML(bdf_wm)
-})
-
-test_that("Results do not depend on order of data.", {
-  skip("Not worrying about sort order yet.")
-  test_after_shuffling(bdf_MVML)
-  test_after_shuffling(bdf_wm)
-})
-
-test_that("New REML calculations work.", {
-  check_REML2(bdf_MVML)
-  check_REML2(bdf_wm)
-})

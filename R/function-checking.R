@@ -97,10 +97,15 @@ test_with_FIML <- function(mod) {
 
 }
 
-test_after_shuffling <- function(mod, tol_param = 10^-5, tol_info = .03) {
+test_after_shuffling <- function(mod, by_var = NULL, tol_param = 10^-5, tol_info = .03) {
 
   dat <- nlme::getData(mod)
-  shuffle <- sample(nrow(dat))
+
+  if (is.null(by_var)) {
+    shuffle <- sample(nrow(dat))
+  } else {
+    shuffle <- unsplit(tapply(1:nrow(dat), by_var, sample), by_var)
+  }
   unshuffle <- order(shuffle)
   dat_shuffle <- dat[shuffle,]
 
@@ -129,8 +134,11 @@ test_after_shuffling <- function(mod, tol_param = 10^-5, tol_info = .03) {
   }
 
   R_mat <- build_corr_mats(mod)
-  R_shuff <- unscramble_block(build_corr_mats(mod_shuffle), unshuffle)
-  testthat::expect_equal(R_mat, R_shuff, check.attributes = FALSE)
+
+  if (!is.null(R_mat)) {
+    R_shuff <- unscramble_block(build_corr_mats(mod_shuffle), unshuffle)
+    testthat::expect_equal(R_mat, R_shuff, check.attributes = FALSE)
+  }
 
   V_list <- build_var_cor_mats(mod)
   V_shuff <- unscramble_block(build_var_cor_mats(mod_shuffle), unshuffle)
