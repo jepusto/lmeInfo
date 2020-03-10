@@ -2,7 +2,7 @@
 % Please edit documentation in R/g_mlm.R
 \name{g_mlm}
 \alias{g_mlm}
-\title{Calculates adjusted REML effect size}
+\title{Calculates adjusted mlm effect size}
 \usage{
 g_mlm(mod, p_const, r_const, infotype = "expected", returnModel = TRUE)
 }
@@ -25,7 +25,7 @@ A list with the following components
 \tabular{ll}{
 \code{p_beta} \tab Numerator of effect size \cr
 \code{r_theta} \tab Squared denominator of effect size \cr
-\code{delta_AB} \tab Unadjusted (REML) effect size estimate \cr
+\code{delta_AB} \tab Unadjusted (mlm) effect size estimate \cr
 \code{nu} \tab Estimated denominator degrees of freedom \cr
 \code{J_nu} \tab Biased correction factor for effect size estimate \cr
 \code{kappa} \tab Scaled standard error of numerator \cr
@@ -38,7 +38,7 @@ A list with the following components
 }
 \description{
 Estimates a design-comparable standardized mean difference effect size based on data
-from a multiple baseline design, using adjusted REML method as described in Pustejovsky, Hedges,
+from a multiple baseline design, using adjusted mlm method as described in Pustejovsky, Hedges,
 & Shadish (2014). Note that the data must contain one row per measurement occasion per case.
 }
 \examples{
