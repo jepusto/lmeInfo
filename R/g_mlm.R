@@ -1,13 +1,13 @@
 #----------------------------------
-# g REML
+# g mlm
 #----------------------------------
 
-## estimate adjusted REML effect size (with associated estimates) for multiple baseline design ####
+## estimate adjusted mlm effect size (with associated estimates) for multiple baseline design ####
 
-#' @title Calculates adjusted REML effect size
+#' @title Calculates adjusted mlm effect size
 #'
 #' @description Estimates a design-comparable standardized mean difference effect size based on data
-#' from a multiple baseline design, using adjusted REML method as described in Pustejovsky, Hedges,
+#' from a multiple baseline design, using adjusted mlm method as described in Pustejovsky, Hedges,
 #' & Shadish (2014). Note that the data must contain one row per measurement occasion per case.
 #'
 #' @param mod Fitted model of class lmeStruct (estimated using \code{nlme::lme()})
@@ -25,7 +25,7 @@
 #' \tabular{ll}{
 #' \code{p_beta} \tab Numerator of effect size \cr
 #' \code{r_theta} \tab Squared denominator of effect size \cr
-#' \code{delta_AB} \tab Unadjusted (REML) effect size estimate \cr
+#' \code{delta_AB} \tab Unadjusted (mlm) effect size estimate \cr
 #' \code{nu} \tab Estimated denominator degrees of freedom \cr
 #' \code{J_nu} \tab Biased correction factor for effect size estimate \cr
 #' \code{kappa} \tab Scaled standard error of numerator \cr
@@ -49,7 +49,7 @@
 #'                  correlation = corAR1(0, ~ time | case),
 #'                  data = Laski)
 #' summary(Laski_RML)
-#' g_REML(Laski_RML, p_const = c(0,1), r_const = c(1,0,1), returnModel = FALSE)
+#' g_mlm(Laski_RML, p_const = c(0,1), r_const = c(1,0,1), returnModel = FALSE)
 #'
 #' data(Schutte, package = "scdhlm")
 #' Schutte$trt.week <- with(Schutte, unlist(tapply((treatment=="treatment") * week,
@@ -60,10 +60,10 @@
 #'                    correlation = corAR1(0.2, ~ week | case),
 #'                    data = subset(Schutte, case != 4))
 #' summary(Schutte_RML)
-#' Schutte_g <- g_REML(Schutte_RML, p_const = c(0,0,1,7), r_const = c(1,0,0,0,1))
+#' Schutte_g <- g_mlm(Schutte_RML, p_const = c(0,0,1,7), r_const = c(1,0,0,0,1))
 #' summary(Schutte_g)
 
-g_REML <- function(mod, p_const, r_const, infotype = "expected", returnModel = TRUE) {
+g_mlm <- function(mod, p_const, r_const, infotype = "expected", returnModel = TRUE) {
 
   # basic model estimates
   p_beta <- sum(nlme::fixed.effects(mod) * p_const)               # p'Beta
@@ -97,14 +97,14 @@ g_REML <- function(mod, p_const, r_const, infotype = "expected", returnModel = T
     res <- c(res, mod)
   }
 
-  class(res) <- "g_REML"
+  class(res) <- "g_mlm"
 
   return(res)
 }
 
 #' @export
 
-summary.g_REML <- function(object, digits = 3, ...) {
+summary.g_mlm <- function(object, digits = 3, ...) {
   varcomp <- with(object, cbind(est = c(unlist(theta), "total variance" = r_theta),
                                 se = c(unlist(SE_theta), r_theta * sqrt(2 / nu))))
   betas <- with(object, cbind(est = c(coefficients$fixed, "treatment effect at a specified time" = p_beta),
@@ -118,11 +118,14 @@ summary.g_REML <- function(object, digits = 3, ...) {
 
 #' @export
 
-print.g_REML <- function(x, digits = 3, ...) {
+print.g_mlm <- function(x, digits = 3, ...) {
   ES <- with(x, cbind(est = c("unadjusted effect size" = delta_AB,
-                                   "adjusted effect size" = g_AB,
-                                   "degree of freedom" = nu),
-                           se = c(SE_g_AB / J_nu, SE_g_AB, NA)))
-  round(ES, digits)
+                              "adjusted effect size" = g_AB,
+                              "degree of freedom" = nu),
+                      se = c(SE_g_AB / J_nu, SE_g_AB, NA)))
+  res <- data.frame(round(ES, digits))
+  res[is.na(res)] <- ""
+  res
+  # print(round(ES, digits), na.print = "")
 }
 

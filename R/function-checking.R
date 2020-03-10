@@ -254,12 +254,12 @@ check_REML2 <- function(mod, print = FALSE) {
 }
 
 #--------------------------------------------------------------------
-# Checks that lmeInfo::g_REML() matches scdhlm::g_REML()
+# Checks that lmeInfo::g_mlm() matches scdhlm::g_REML()
 #--------------------------------------------------------------------
 
 check_against_scdhlm <- function(mod, p_lmeInfo, r_lmeInfo, p_scdhlm = p_lmeInfo, r_scdhlm, infotype = "expected") {
 
-  g_lmeInfo <- lmeInfo::g_REML(mod, p_lmeInfo, r_lmeInfo)
+  g_lmeInfo <- lmeInfo::g_mlm(mod, p_lmeInfo, r_lmeInfo)
 
   g_scdhlm <- scdhlm::g_REML(mod, p_scdhlm, r_scdhlm)
 
@@ -276,3 +276,4 @@ check_against_scdhlm <- function(mod, p_lmeInfo, r_lmeInfo, p_scdhlm = p_lmeInfo
   testthat::expect_equal(det(g_lmeInfo$info_inv), det(g_scdhlm$I_E_inv)) # Expected information matrix
 
 }
+
