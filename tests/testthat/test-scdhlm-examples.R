@@ -76,40 +76,61 @@ Schutte_RML5 <- suppressWarnings(
 )
 
 
-test_that("lmeinfo::g_REML returns the same result as scdhlm::g_REML.", {
+test_that("lmeInfo::g_mlm returns the same result as scdhlm::g_REML.", {
   check_against_scdhlm(Lambert_RML,
-                       p_lmeInfo = c(0,1), r_lmeInfo = c(1,0,1),
-                       p_scdhlm = c(0,1), r_scdhlm = c(1,0,1))
+                       p_lmeInfo = c(0,1), r_lmeInfo = c(1,0,1), r_scdhlm = c(1,0,1))
 
   check_against_scdhlm(Anglesea_RML,
-                       p_lmeInfo = c(0,1), r_lmeInfo = c(1,0,0,0,1),
-                       p_scdhlm = c(0,1), r_scdhlm = c(1,0,1,0,0))
+                       p_lmeInfo = c(0,1), r_lmeInfo = c(1,0,0,0,1), r_scdhlm = c(1,0,1,0,0))
 
   check_against_scdhlm(Saddler_quality_RML,
-                       p_lmeInfo = c(0,1), r_lmeInfo = c(1,0,1),
-                       p_scdhlm = c(0,1), r_scdhlm = c(1,0,1))
+                       p_lmeInfo = c(0,1), r_lmeInfo = c(1,0,1), r_scdhlm = c(1,0,1))
 
   # Laski
   check_against_scdhlm(Laski_RML3,
-                       p_lmeInfo = c(0,0,1,8), r_lmeInfo = c(1,0,1),
-                       p_scdhlm = c(0,0,1,8), r_scdhlm = c(1,0,1))
+                       p_lmeInfo = c(0,0,1,8), r_lmeInfo = c(1,0,1), r_scdhlm = c(1,0,1))
 
   check_against_scdhlm(Laski_RML4,
-                       p_lmeInfo = c(0,0,1,8), r_lmeInfo = c(1,0,0,0,1),
-                       p_scdhlm = c(0,0,1,8), r_scdhlm = c(1,0,1,0,0))
+                       p_lmeInfo = c(0,0,1,8), r_lmeInfo = c(1,0,0,0,1), r_scdhlm = c(1,0,1,0,0))
 
   # Schutte
   check_against_scdhlm(Schutte_RML3,
-                       p_lmeInfo = c(0,0,1,7), r_lmeInfo = c(1,0,1),
-                       p_scdhlm = c(0,0,1,7), r_scdhlm = c(1,0,1))
+                       p_lmeInfo = c(0,0,1,7), r_lmeInfo = c(1,0,1), r_scdhlm = c(1,0,1))
 
   check_against_scdhlm(Schutte_RML4,
-                       p_lmeInfo = c(0,0,1,7), r_lmeInfo = c(1,0,0,0,1),
-                       p_scdhlm = c(0,0,1,7), r_scdhlm = c(1,0,1,0,0))
+                       p_lmeInfo = c(0,0,1,7), r_lmeInfo = c(1,0,0,0,1), r_scdhlm = c(1,0,1,0,0))
 
   check_against_scdhlm(Schutte_RML5,
-                       p_lmeInfo = c(0,0,1,7), r_lmeInfo = c(1,0,0,0,0,0,0,1),
-                       p_scdhlm = c(0,0,1,7), r_scdhlm = c(1,0,1,0,0,0,0,0))
+                       p_lmeInfo = c(0,0,1,7),
+                       r_lmeInfo = c(1,0,0,0,0,0,0,1), r_scdhlm = c(1,0,1,0,0,0,0,0))
 
 })
 
+test_that("lmeInfo::CI_g returns the correct CIs for Schutte examples.", {
+
+  g_RML4 <- g_mlm(Schutte_RML4, p_const = c(0,0,1,7), r_const = c(1,0,0,0,1))
+  g_RML4_scdhlm <- scdhlm::g_REML(Schutte_RML4, p_const = c(0,0,1,7), r_const = c(1,0,1,0,0))
+  g_RML5 <- g_mlm(Schutte_RML5, p_const = c(0,0,1,7), r_const = c(1,0,0,0,0,0,0,1))
+  g_RML5_scdhlm <- scdhlm::g_REML(Schutte_RML5, p_const = c(0,0,1,7), r_const = c(1,0,1,0,0,0,0,0))
+
+  # symmetric CIs
+
+  CI_g_RML4 <- round(CI_g(g_RML4, symmetric = TRUE), 2)
+  expect_equal(-2.02, CI_g_RML4[1])
+  expect_equal(-.01, CI_g_RML4[2])
+
+  CI_g_RML5 <- round(CI_g(g_RML5, symmetric = TRUE), 2)
+  expect_equal(-3.29, CI_g_RML5[1])
+  expect_equal(.64, CI_g_RML5[2])
+
+  # approximate non-central t confidence interval
+  appro_CI4_lmeInfo <- CI_g(g_RML4, symmetric = FALSE)
+  appro_CI5_lmeInfo <- CI_g(g_RML5, symmetric = FALSE)
+
+  appro_CI4_scdhlm <- suppressWarnings(scdhlm::CI_g(g_RML4_scdhlm))
+  appro_CI5_scdhlm <- suppressWarnings(scdhlm::CI_g(g_RML5_scdhlm))
+
+  expect_equal(appro_CI4_lmeInfo, appro_CI4_scdhlm)
+  expect_equal(appro_CI5_lmeInfo, appro_CI5_scdhlm)
+
+})
