@@ -41,7 +41,7 @@ coverage <- function(delta, CI) CI[1,] < delta & CI[2,] > delta
 #' @return A vector of lower and upper confidence bounds.
 #'
 #' @examples
-#' data(Laski)
+#' data(Laski, package = "scdhlm")
 #' Laski_RML <- lme(fixed = outcome ~ treatment,
 #'                  random = ~ 1 | case,
 #'                  correlation = corAR1(0, ~ time | case),
