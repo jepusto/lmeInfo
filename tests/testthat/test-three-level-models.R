@@ -18,6 +18,7 @@ Thiemann2001_RML2 <- lme(fixed = outcome ~ treatment,
 Thiemann2001_RML3 <- lme(fixed = outcome ~ time_c + treatment + trt_time,
                       random = ~ 1 | case/series,
                       correlation = corAR1(0, ~ time_c | case/series),
+                      weights = varIdent(form = ~ 1 | treatment),
                       data = Thiemann2001)
 
 Thiemann2001_RML4 <- lme(fixed = outcome ~ time_c + treatment + trt_time,
@@ -34,6 +35,7 @@ data(Thiemann2004)
 Thiemann2004_RML1 <- lme(fixed = outcome ~ treatment,
                      random = ~ 1 | case/series,
                      correlation = corAR1(0, ~ time | case/series),
+                     weights = varIdent(form = ~ 1 | treatment),
                      data = Thiemann2004)
 
 Thiemann2004_RML2 <- lme(fixed = outcome ~ treatment,

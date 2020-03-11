@@ -31,8 +31,9 @@ build_var_cor_mats <- function(mod, R_list = build_corr_mats(mod), sigma_scale =
     if (is.null(mod$modelStruct$varStruct)) {
       V_list <- tapply(rep(sigma_sq, length(mod$groups[[1]])),  mod$groups[[1]], diag)
     } else {
-      all_groups <- rev(mod$groups)
-      wts <- nlme::varWeights(mod$modelStruct$varStruct)[order(do.call(order, all_groups))]
+      all_groups <- mod$groups
+      sort_order <- order(do.call(order, all_groups))
+      wts <- nlme::varWeights(mod$modelStruct$varStruct)[sort_order]
       V_list <- tapply(sigma_sq / wts^2, mod$groups[[1]], diag)
     }
     attr(V_list, "groups") <- mod$groups[[1]]
@@ -45,8 +46,9 @@ build_var_cor_mats <- function(mod, R_list = build_corr_mats(mod), sigma_scale =
     if (is.null(mod$modelStruct$varStruct)) {
       V_list <- if (sigma_scale) lapply(R_list, function(x) x * sigma_sq) else R_list
     } else {
-      all_groups <- rev(mod$groups)
-      sd_vec <- sqrt(sigma_sq) / nlme::varWeights(mod$modelStruct$varStruct)[order(do.call(order, all_groups))]
+      all_groups <- mod$groups
+      sort_order <- order(do.call(order, all_groups))
+      sd_vec <- sqrt(sigma_sq) / nlme::varWeights(mod$modelStruct$varStruct)[sort_order]
       sd_list <- split(sd_vec, attr(R_list, "groups"))
       V_list <- Map(function(R, s) tcrossprod(s) * R, R = R_list, s = sd_list)
     }
