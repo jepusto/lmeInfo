@@ -174,10 +174,8 @@ test_after_shuffling <- function(mod, by_var = NULL,
     if (is.null(var_params)) var_params <- list()
     sigma_sq <- dV_dsigmasq(mod)
 
-    Tau_shuff <-
-      dV_dreStruct(mod_shuffle) %>%
-      unlist(recursive = FALSE) %>%
-      lapply(unscramble_block, unshuffle = unshuffle)
+    Tau_shuff <- unlist(dV_dreStruct(mod_shuffle), recursive = FALSE)
+    Tau_shuff <- lapply(Tau_shuff, unscramble_block, unshuffle = unshuffle)
     cor_shuff <- lapply(dV_dcorStruct(mod_shuffle), unscramble_block, unshuffle = unshuffle)
     var_shuff <- lapply(dV_dvarStruct(mod_shuffle), unscramble_block, unshuffle = unshuffle)
     sigma_sq_shuff <- unscramble_block(dV_dsigmasq(mod_shuffle)[[1]], unshuffle)

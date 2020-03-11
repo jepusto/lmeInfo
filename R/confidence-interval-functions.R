@@ -1,12 +1,12 @@
 
 CI_SMD_single <- function(delta, kappa, nu, V_delta, cover, bound) {
   J_nu <- 1 - 3 / (4 * nu - 1)
-  start_val <- suppressWarnings(J_nu * (delta + c(-1, 1) * qt(1 - (1 - cover) / 2, df = nu) * sqrt(V_delta)) / kappa)
-  L <- kappa * nlminb(start = start_val[1],
-                      objective = function(ncp) suppressWarnings((qt((1 - cover) / 2, df = nu, ncp=-ncp) + delta / kappa)^2),
+  start_val <- suppressWarnings(J_nu * (delta + c(-1, 1) * stats::qt(1 - (1 - cover) / 2, df = nu) * sqrt(V_delta)) / kappa)
+  L <- kappa * stats::nlminb(start = start_val[1],
+                      objective = function(ncp) suppressWarnings((stats::qt((1 - cover) / 2, df = nu, ncp=-ncp) + delta / kappa)^2),
                       lower = -bound, upper = bound)$par
-  U <- kappa * nlminb(start = start_val[2],
-                      objective = function(ncp) suppressWarnings((qt((1 - cover)  / 2, df = nu, ncp=ncp) - delta / kappa)^2),
+  U <- kappa * stats::nlminb(start = start_val[2],
+                      objective = function(ncp) suppressWarnings((stats::qt((1 - cover)  / 2, df = nu, ncp=ncp) - delta / kappa)^2),
                       lower = -bound, upper = bound)$par
   if (L == -bound * kappa) L <- start_val[1] * kappa
   if (U == bound * kappa) U <- start_val[2] * kappa
@@ -28,19 +28,25 @@ coverage <- function(delta, CI) CI[1,] < delta & CI[2,] > delta
 
 #' @title Calculates confidence interval for BC-SMD effect size estimates
 #'
-#' @description Calculates a symmetric confidence interval given a \code{g_mlm} object,
-#' based on a central t distribution; and calculates an approximate confidence interval
-#' given a \code{g_mlm} object, based on a non-central t approximation.
+#' @description Calculates a confidence interval for a \code{g_mlm} object,
+#'   using either a central t distribution (for a symmetric interval) or a
+#'   non-central t distribution (for an asymmetric interval).
 #'
 #' @param g an estimated effect size object of class \code{g_mlm}
 #' @param cover confidence level
-#' @param bound numerical tolerance for non-centrality parameter in \code{\link{qt}}.
+#' @param bound numerical tolerance for non-centrality parameter in
+#'   \code{\link[stats]{qt}}.
+#' @param symmetric If \code{TRUE} (the default), use a symmetric confidence
+#'   interval. If \code{FALSE}, use a non-central t approximation to obtain an
+#'   asymmetric confidence interval.
 #'
 #' @export
 #'
 #' @return A vector of lower and upper confidence bounds.
 #'
 #' @examples
+#'
+#' library(nlme)
 #' data(Laski, package = "scdhlm")
 #' Laski_RML <- lme(fixed = outcome ~ treatment,
 #'                  random = ~ 1 | case,
@@ -68,7 +74,7 @@ CI_g.g_mlm <- function(g, cover = 0.95, bound = 35, symmetric = TRUE) {
 
   if (symmetric) {
 
-    suppressWarnings(g_AB + c(-1, 1) * qt(1 - (1 - cover) / 2, df = nu) * SE_g_AB)
+    suppressWarnings(g_AB + c(-1, 1) * stats::qt(1 - (1 - cover) / 2, df = nu) * SE_g_AB)
 
   } else {
 
