@@ -99,8 +99,8 @@ test_with_FIML <- function(mod) {
 
 
 test_after_shuffling <- function(mod, by_var = NULL,
-                                 tol_param = 10^-5, tol_info = .0001,
-                                 seed = NULL, full_test = FALSE) {
+                                 tol_param = 10^-5, tol_info = 10^-4,
+                                 test = "info", seed = NULL) {
 
   if (!is.null(seed)) set.seed(seed)
 
@@ -114,7 +114,7 @@ test_after_shuffling <- function(mod, by_var = NULL,
   unshuffle <- order(shuffle)
   dat_shuffle <- dat[shuffle,]
 
-  mod_shuffle <- stats::update(mod, data = dat_shuffle)
+  mod_shuffle <- suppressWarnings(stats::update(mod, data = dat_shuffle))
 
   varcomp_orig <- extract_varcomp(mod)
   varcomp_shuf <- extract_varcomp(mod_shuffle)
@@ -124,10 +124,18 @@ test_after_shuffling <- function(mod, by_var = NULL,
   One <- matrix(1, p, p)
   expected_info_ratio <- Fisher_info(mod, type = "expected") / Fisher_info(mod_shuffle, type = "expected")
   averaged_info_ratio <- Fisher_info(mod, type = "averaged") / Fisher_info(mod_shuffle, type = "averaged")
-  testthat::expect_equal(expected_info_ratio, One, tolerance = tol_info, check.attributes = FALSE)
-  testthat::expect_equal(averaged_info_ratio, One, tolerance = tol_info, check.attributes = FALSE)
 
-  if (full_test) {
+  if (test == "diag-info") {
+    testthat::expect_equal(diag(expected_info_ratio), diag(One), tolerance = tol_info, check.attributes = FALSE)
+    testthat::expect_equal(diag(averaged_info_ratio), diag(One), tolerance = tol_info, check.attributes = FALSE)
+  }
+
+  if (test %in% c("info","full")) {
+    testthat::expect_equal(expected_info_ratio, One, tolerance = tol_info, check.attributes = FALSE)
+    testthat::expect_equal(averaged_info_ratio, One, tolerance = tol_info, check.attributes = FALSE)
+  }
+
+  if (test == "full") {
 
     unscramble_block <- function(A, unshuffle) {
       A_full <- unblock(A)[unshuffle, unshuffle]

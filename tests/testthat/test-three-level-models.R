@@ -101,7 +101,7 @@ Bryant2018_RML4 <- lme(fixed = outcome ~ session_c + treatment + session_trt,
                      random = ~ session_c | school/case,
                      correlation = corAR1(0, ~ session_c | school/case),
                      data = Bryant2018,
-                     control=lmeControl(msMaxIter = 50, apVar=FALSE, returnObject=TRUE))
+                     control=lmeControl(msMaxIter = 200, apVar=FALSE, returnObject=TRUE))
 
 
 test_that("targetVariance() works with 3-level models.", {
@@ -181,27 +181,27 @@ test_that("Information matrices work with FIML too.", {
 })
 
 test_that("Results do not depend on order of data.", {
-  skip("Not worrying about sort order yet.")
 
-  test_after_shuffling(Thiemann2001_RML1)
-  test_after_shuffling(Thiemann2001_RML2)
-  test_after_shuffling(Thiemann2001_RML3)
-  test_after_shuffling(Thiemann2001_RML4)
+  test_after_shuffling(Thiemann2001_RML1, seed = 20)
+  test_after_shuffling(Thiemann2001_RML2, tol_param = 5 * 10^-4, tol_info = 10^-3, test = "diag-info", seed = 20)
+  test_after_shuffling(Thiemann2001_RML3, seed = 20)
+  test_after_shuffling(Thiemann2001_RML4, tol_param = 5 * 10^-4, tol_info = 10^-3, seed = 20)
 
-  test_after_shuffling(Thiemann2004_RML1)
-  test_after_shuffling(Thiemann2004_RML2)
-  test_after_shuffling(Thiemann2004_RML3)
-  test_after_shuffling(Thiemann2004_RML4)
+  test_after_shuffling(Thiemann2004_RML1, seed = 20)
+  test_after_shuffling(Thiemann2004_RML2, seed = 20)
+  test_after_shuffling(Thiemann2004_RML3, seed = 20)
+  test_after_shuffling(Thiemann2004_RML4, seed = 20)
 
-  test_after_shuffling(Bryant2016_RML1)
-  test_after_shuffling(Bryant2016_RML2)
-  test_after_shuffling(Bryant2016_RML3)
-  test_after_shuffling(Bryant2016_RML4)
+  test_after_shuffling(Bryant2016_RML1, tol_param = 5 * 10^-4, seed = 25)
+  test_after_shuffling(Bryant2016_RML2, seed = 20)
+  test_after_shuffling(Bryant2016_RML3, seed = 20)
+  test_after_shuffling(Bryant2016_RML4, seed = 20)
 
-  test_after_shuffling(Bryant2018_RML1)
-  test_after_shuffling(Bryant2018_RML2)
-  test_after_shuffling(Bryant2018_RML3)
-  test_after_shuffling(Bryant2018_RML4)
+  test_after_shuffling(Bryant2018_RML1, seed = 20)
+  test_after_shuffling(Bryant2018_RML2, seed = 20)
+  test_after_shuffling(Bryant2018_RML3, seed = 20)
+  test_after_shuffling(Bryant2018_RML4, tol_param = 5 * 10^-2, seed = 20)
+
 })
 
 test_that("New REML calculations work.", {

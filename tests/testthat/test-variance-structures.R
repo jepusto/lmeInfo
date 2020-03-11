@@ -19,7 +19,6 @@ Ortho_C_Exp <- update(Ortho_A, weights = varExp(form = ~ age))
 Ortho_D_Exp <- update(Ortho_A, weights = varExp(form = ~ age | Sex))
 Ortho_B_Const <- update(Ortho_A, weights = varConstPower()) # fitted(.) is used by default
 Ortho_D_Const <- update(Ortho_A, weights = varConstPower(form = ~ age | Sex))
-Ortho_D_Const <- update(Ortho_A, weights = varConstPower(form = ~ age | Sex))
 Ortho_D_Comb <- update(Ortho_A, weights = varComb(varIdent(form = ~1|Sex), varPower()))
 
 test_that("targetVariance() works with Orthodont models.", {
@@ -58,6 +57,19 @@ test_that("Information matrices work with FIML with Orthodont models.", {
   test_with_FIML(Ortho_D_Exp)
   test_with_FIML(Ortho_B_Const)
   expect_error(test_with_FIML(Ortho_D_Const))
+
+})
+
+test_that("Results do not depend on order of data.", {
+  test_after_shuffling(Ortho_A, seed = 20)
+  test_after_shuffling(Ortho_B_Power, tol_param = 5 * 10^-5, seed = 21)
+  test_after_shuffling(Ortho_C_Power, seed = 20)
+  test_after_shuffling(Ortho_D_Power, seed = 20)
+  test_after_shuffling(Ortho_B_Exp, seed = 20)
+  test_after_shuffling(Ortho_C_Exp, seed = 20)
+  test_after_shuffling(Ortho_D_Exp, seed = 20)
+  test_after_shuffling(Ortho_B_Const, tol_param = 10^-4, seed = 20)
+  test_after_shuffling(Ortho_D_Const, tol_param = 10^-4, seed = 21)
 
 })
 
