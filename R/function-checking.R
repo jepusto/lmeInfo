@@ -99,7 +99,7 @@ test_with_FIML <- function(mod) {
 
 
 test_after_shuffling <- function(mod, by_var = NULL,
-                                 tol_param = 10^-5, tol_info = 10^-4,
+                                 tol_param = 10^-3, tol_info = 10^-3,
                                  test = "info", seed = NULL) {
 
   if (!is.null(seed)) set.seed(seed)

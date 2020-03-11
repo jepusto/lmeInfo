@@ -62,14 +62,14 @@ test_that("Information matrices work with FIML with Orthodont models.", {
 
 test_that("Results do not depend on order of data.", {
   test_after_shuffling(Ortho_A, seed = 20)
-  test_after_shuffling(Ortho_B_Power, tol_param = 5 * 10^-5, seed = 21)
+  test_after_shuffling(Ortho_B_Power, seed = 21)
   test_after_shuffling(Ortho_C_Power, seed = 20)
   test_after_shuffling(Ortho_D_Power, seed = 20)
   test_after_shuffling(Ortho_B_Exp, seed = 20)
   test_after_shuffling(Ortho_C_Exp, seed = 20)
   test_after_shuffling(Ortho_D_Exp, seed = 20)
-  test_after_shuffling(Ortho_B_Const, tol_param = 10^-4, seed = 20)
-  test_after_shuffling(Ortho_D_Const, tol_param = 10^-4, seed = 21)
+  test_after_shuffling(Ortho_B_Const, seed = 20)
+  test_after_shuffling(Ortho_D_Const, seed = 21)
 
 })
 
