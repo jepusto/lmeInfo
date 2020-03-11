@@ -13,16 +13,6 @@ CI_SMD_single <- function(delta, kappa, nu, V_delta, cover, bound) {
   c(L,U)
 }
 
-CI_SMD <- function(delta, kappa, nu, cover = 0.95, bound = 35) {
-  J_nu <- 1 - 3 / (4 * nu - 1)
-  nu <- pmax(nu, 2.001)
-  V_delta = kappa^2 * nu / (nu - 2) + delta^2 * (nu / (nu - 2) - 1 / J_nu^2)
-  mapply(CI_SMD_single, delta = delta, kappa = kappa, nu = nu, V_delta = V_delta,
-         MoreArgs = list(cover = cover, bound = bound))
-}
-
-coverage <- function(delta, CI) CI[1,] < delta & CI[2,] > delta
-
 
 ## symmetric and approximate non-central t confidence interval ####
 
