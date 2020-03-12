@@ -26,7 +26,7 @@ matrix_list <- function(x, fac, dim) {
 
 # turn block-diagonal into regular matrix
 
-unblock <- function(A, block=attr(A, "groups")) {
+unblock <- function(A, block = attr(A, "groups")) {
 
   if (is.null(block)) block <- factor(rep(names(A), times = sapply(A, function(x) dim(x)[1])))
   n <- length(block)
@@ -47,7 +47,7 @@ sum_blockblock <- function(A, B)
 
 # generic matrix minus block-diagonal
 
-matrix_minus_block <- function(A, B, block=NULL) {
+matrix_minus_block <- function(A, B, block=attr(B, "groups")) {
   if (is.null(block)) block <- rep(names(B), times = sapply(B, function(x) dim(x)[1]))
 
   mat <- A
@@ -61,7 +61,7 @@ matrix_minus_block <- function(A, B, block=NULL) {
 
 # block-diagonal minus generic matrix
 
-block_minus_matrix <- function(A, B, block=NULL) {
+block_minus_matrix <- function(A, B, block = attr(A, "groups")) {
   if (is.null(block))
     block <- rep(names(A), times = sapply(A, function(x) dim(x)[1]))
 

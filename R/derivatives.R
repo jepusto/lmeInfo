@@ -50,6 +50,7 @@ dV_dcorStruct <- function(mod) {
   grps <- nlme::getGroups(mod, form = nlme::getGroupsFormula(mod$modelStruct$corStruct))
 
   dR_dcor <- lapply(dR_dcor, function(x) {
+    x <- x[levels(grps)]
     attr(x, "groups") <- grps
     x
   })
