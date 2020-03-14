@@ -34,3 +34,6 @@ test_that("vcov matrices are equivalent for equivalent models.", {
   expect_equal(sum(vcov_3level_exp[2:3,1]) / vcov_CScorr_exp[1,3], 1, tol = 10^-3)
 
 })
+
+
+library(merDeriv)
