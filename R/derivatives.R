@@ -49,11 +49,11 @@ dV_dcorStruct <- function(mod) {
 
   # grps <- nlme::getGroups(mod, form = nlme::getGroupsFormula(mod$modelStruct$corStruct))
   grps <- stats::model.frame(nlme::getGroupsFormula(mod$modelStruct$corStruct), data = nlme::getData(mod))
-  grps <- as.factor(apply(grps, 1, paste, collapse = "/"))
+  grps <- apply(grps, 1, paste, collapse = "/")
 
   dR_dcor <- lapply(dR_dcor, function(x) {
-    x <- x[levels(grps)]
-    attr(x, "groups") <- grps
+    x_grps <- factor(grps, levels = names(x))
+    attr(x, "groups") <- x_grps
     x
   })
 

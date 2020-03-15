@@ -40,12 +40,12 @@ expect_correct_block_dims <- function(x, m, ni, is_list = TRUE) {
   if (all(x_is_mat)) {
     x_dims <- sapply(x, dim)
     correct_dim <- c(
-      identical(as.integer(x_dims[1,]), as.integer(ni)),
-      identical(as.integer(x_dims[2,]), as.integer(ni))
+      identical(as.integer(x_dims[1,]), as.integer(ni[names(x)])),
+      identical(as.integer(x_dims[2,]), as.integer(ni[names(x)]))
     )
   } else if (all(!x_is_mat)) {
     x_dims <- lengths(x)
-    correct_dim <- identical(as.integer(x_dims), as.integer(ni))
+    correct_dim <- identical(as.integer(x_dims), as.integer(ni[names(x)]))
   } else {
     correct_dim <- FALSE
   }

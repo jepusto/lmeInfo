@@ -6,11 +6,10 @@ build_corr_mats <- function(mod) {
   if (is.null(mod$modelStruct$corStruct)) {
     return(NULL)
   } else {
+    R_list <- nlme::corMatrix(mod$modelStruct$corStruct)
     # grps <- nlme::getGroups(mod, form = nlme::getGroupsFormula(mod$modelStruct$corStruct))
     grps <- stats::model.frame(nlme::getGroupsFormula(mod$modelStruct$corStruct), data = nlme::getData(mod))
-    grps <- as.factor(apply(grps, 1, paste, collapse = "/"))
-    R_list <- nlme::corMatrix(mod$modelStruct$corStruct)
-    R_list <- R_list[levels(grps)]
+    grps <- factor(apply(grps, 1, paste, collapse = "/"), levels = names(R_list))
     attr(R_list, "groups") <- grps
     return(R_list)
   }
