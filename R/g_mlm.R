@@ -75,7 +75,6 @@ g_mlm <- function(mod, p_const, r_const, infotype = "expected", returnModel = TR
 
   # calculate inverse Fisher information
   info_inv <- varcomp_vcov(mod, type = infotype)
-  rownames(info_inv) <- colnames(info_inv) <- rownames(info)
   SE_theta <- sqrt(diag(info_inv))                                # SE of theta
 
   nu <- 2 * r_theta^2 / (t(r_const) %*% info_inv %*% r_const)      # df

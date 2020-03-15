@@ -23,7 +23,9 @@ Suggests:
     scdhlm,
     dplyr,
     tidyr,
-    mlmRev
+    mlmRev,
+    lme4,
+    merDeriv
 Imports: 
     nlme,
     stats
