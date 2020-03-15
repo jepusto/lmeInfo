@@ -74,8 +74,7 @@ g_mlm <- function(mod, p_const, r_const, infotype = "expected", returnModel = TR
   cnvg_warn <- !is.null(attr(mod,"warning"))                      # indicator that RML estimation has not converged
 
   # calculate inverse Fisher information
-  info <- Fisher_info(mod, type = infotype)
-  info_inv <- chol2inv(chol(info))
+  info_inv <- varcomp_vcov(mod, type = infotype)
   rownames(info_inv) <- colnames(info_inv) <- rownames(info)
   SE_theta <- sqrt(diag(info_inv))                                # SE of theta
 

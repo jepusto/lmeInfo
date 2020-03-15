@@ -223,7 +223,7 @@ check_REML2 <- function(mod, print = FALSE) {
 
 check_against_scdhlm <- function(mod, p_lmeInfo, r_lmeInfo, p_scdhlm = p_lmeInfo, r_scdhlm, infotype = "expected") {
 
-  g_lmeInfo <- lmeInfo::g_mlm(mod, p_lmeInfo, r_lmeInfo)
+  g_lmeInfo <- g_mlm(mod, p_lmeInfo, r_lmeInfo)
 
   g_scdhlm <- scdhlm::g_REML(mod, p_scdhlm, r_scdhlm)
 

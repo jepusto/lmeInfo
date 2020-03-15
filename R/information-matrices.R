@@ -224,5 +224,7 @@ varcomp_vcov <- function(mod, type = "expected") {
 
   info_mat <- Fisher_info(mod, type = type)
 
-  chol2inv(chol(info_mat))
+  res <- chol2inv(chol(info_mat))
+  dimnames(res) <- dimnames(info_mat)
+  res
 }
