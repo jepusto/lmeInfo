@@ -7,7 +7,7 @@ build_corr_mats <- function(mod) {
     return(NULL)
   } else {
     # grps <- nlme::getGroups(mod, form = nlme::getGroupsFormula(mod$modelStruct$corStruct))
-    grps <- stats::model.frame(nlme::getGroupsFormula(mod$modelStruct$corStruct), data = getData(mod))
+    grps <- stats::model.frame(nlme::getGroupsFormula(mod$modelStruct$corStruct), data = nlme::getData(mod))
     grps <- as.factor(apply(grps, 1, paste, collapse = "/"))
     R_list <- nlme::corMatrix(mod$modelStruct$corStruct)
     R_list <- R_list[levels(grps)]

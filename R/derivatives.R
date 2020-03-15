@@ -48,7 +48,7 @@ dV_dcorStruct <- function(mod) {
   dR_dcor <- dR_dcorStruct(mod$modelStruct$corStruct)
 
   # grps <- nlme::getGroups(mod, form = nlme::getGroupsFormula(mod$modelStruct$corStruct))
-  grps <- stats::model.frame(nlme::getGroupsFormula(mod$modelStruct$corStruct), data = getData(mod))
+  grps <- stats::model.frame(nlme::getGroupsFormula(mod$modelStruct$corStruct), data = nlme::getData(mod))
   grps <- as.factor(apply(grps, 1, paste, collapse = "/"))
 
   dR_dcor <- lapply(dR_dcor, function(x) {
