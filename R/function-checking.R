@@ -14,7 +14,7 @@ test_Sigma_mats <- function(mod, grps = mod$groups[[1]], sigma_scale = FALSE) {
   testthat::expect_equal(grp_size, dims[2,], check.attributes = FALSE)
 
   # check that (XWX)^-1 is equivalent to vcov(mod)
-  X_design <- model.matrix(mod, data = mod$data)
+  X_design <- model.matrix(mod, data = getData(mod))
   XVinv <- prod_matrixblock(A = t(X_design), B = Sigma_list, block = attr(Sigma_list, "groups"))
   XWX <- XVinv %*% X_design
   B <- chol2inv(chol(XWX))

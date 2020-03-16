@@ -27,14 +27,20 @@ build_var_cor_mats <- function(mod, R_list = build_corr_mats(mod), sigma_scale =
     # then build block-diagonals with first available grouping variable
 
     if (is.null(mod$modelStruct$varStruct)) {
-      V_list <- tapply(rep(sigma_sq, length(mod$groups[[1]])),  mod$groups[[1]], diag)
+      if (is.null(mod$groups)) {
+        V_list <- as.list(rep(sigma_sq, mod$dims$N))
+        attr(V_list, "groups") <- factor(1:mod$dims$N)
+      } else {
+        V_list <- tapply(rep(sigma_sq, length(mod$groups[[1]])),  mod$groups[[1]], diag)
+        attr(V_list, "groups") <- mod$groups[[1]]
+      }
     } else {
       all_groups <- mod$groups
       sort_order <- order(do.call(order, all_groups))
       wts <- nlme::varWeights(mod$modelStruct$varStruct)[sort_order]
       V_list <- tapply(sigma_sq / wts^2, mod$groups[[1]], diag)
+      attr(V_list, "groups") <- mod$groups[[1]]
     }
-    attr(V_list, "groups") <- mod$groups[[1]]
 
   } else {
 

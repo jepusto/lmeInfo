@@ -41,12 +41,17 @@ Laski_hetAR1 <- gls(outcome ~ 0 + case + case:treatment,
                     weights = varIdent(form = ~ 1 | treatment),
                     data = Laski)
 
-Laski_CAR1 <- lme(outcome ~ 0 + case + case:treatment,
+Laski_CAR1 <- gls(outcome ~ 0 + case + case:treatment,
                   correlation = corCAR1(0.2, ~ time | case),
                   data = Laski)
 
+mod <- Ovary_hom
+invert <- TRUE
+sigma_scale <- TRUE
+grps <- 1:nrow(Ovary)
+
 test_that("targetVariance() works with gls models.", {
-  test_Sigma_mats(Ovary_hom, Ovary$Mare)
+  test_Sigma_mats(Ovary_hom, 1:nrow(Ovary))
   test_Sigma_mats(Ovary_power, Ovary$Mare)
   test_Sigma_mats(Ovary_AR1, Ovary$Mare)
   test_Sigma_mats(Ovary_AR1_power, Ovary$Mare)
