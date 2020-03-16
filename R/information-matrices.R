@@ -128,7 +128,7 @@ Fisher_info <- function(mod, type = "expected") {
 
     } else if (est_method == "REML") {
 
-      X <- model.matrix(mod, data = mod$data)
+      X <- model.matrix(mod, data = nlme::getData(mod))
       Vinv_X <- prod_blockmatrix(V_inv, X, block = attr(V_inv, "groups"))
       M <- chol2inv(chol(t(X) %*% Vinv_X))
       Vinv_X_M <- Vinv_X %*% M
@@ -181,7 +181,7 @@ Fisher_info <- function(mod, type = "expected") {
 
     } else if (est_method == "REML") {
 
-      X <- model.matrix(mod, data = mod$data)
+      X <- model.matrix(mod, data = nlme::getData(mod))
       Vinv_X <- prod_blockmatrix(V_inv, X, block = attr(V_inv, "groups"))
       M <- chol2inv(chol(t(X) %*% Vinv_X))
 

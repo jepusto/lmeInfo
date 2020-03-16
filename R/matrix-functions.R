@@ -181,7 +181,7 @@ prod_matrixblock <- function(A, B, block = attr(B, "groups")) {
 
   for (b in B_names) {
     ind <- block == b
-    C[,ind] <- A[,ind] %*% B[[b]]
+    C[,ind] <- A[,ind,drop=FALSE] %*% B[[b]]
   }
   return(C)
 }

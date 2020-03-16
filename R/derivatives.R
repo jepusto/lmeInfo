@@ -80,7 +80,6 @@ dV_dcorStruct <- function(mod) {
 
   dR_dcor <- dR_dcorStruct(mod$modelStruct$corStruct)
 
-  # grps <- nlme::getGroups(mod, form = nlme::getGroupsFormula(mod$modelStruct$corStruct))
   grps <- stats::model.frame(nlme::getGroupsFormula(mod$modelStruct$corStruct), data = nlme::getData(mod))
   grps <- apply(grps, 1, paste, collapse = "/")
 
@@ -224,8 +223,9 @@ dV_dvarStruct <- function(mod) {
   # No derivatives if there's no variance structure or only varFixed structure
   if (is.null(mod$modelStruct$varStruct) | inherits(mod$modelStruct$varStruct,"varFixed")) return(NULL)
 
-  all_groups <- rev(mod$groups)
-  sort_order <- order(do.call(order, all_groups))
+  # all_groups <- rev(mod$groups)
+  # sort_order <- order(do.call(order, all_groups))
+  sort_order <- get_sort_order(mod)
 
   dsd_dvar <- dsd_dvarStruct(mod$modelStruct$varStruct)
 
@@ -239,9 +239,11 @@ dV_dvarStruct <- function(mod) {
 
     dV_dvar <- lapply(dsd_dvar, function(d) 2 * d * mod$sigma^2 / wts)
 
+    groups <- if (is.null(mod$groups)) factor(1:mod$dims$N) else mod$groups[[1]]
+
     dV_list <- lapply(dV_dvar, function(v) {
-      v_list <- tapply(v, mod$groups[[1]], diag)
-      attr(v_list, "groups") <- mod$groups[[1]]
+      v_list <- tapply(v, groups, function(x) diag(x, nrow = length(x)), simplify = FALSE)
+      attr(v_list, "groups") <- groups
       v_list
     })
 
