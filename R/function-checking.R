@@ -61,13 +61,9 @@ test_deriv_dims.gls <- function(mod) {
 
   vc_est <- extract_varcomp(mod)
 
-  if (is.null(mod$groups)) {
-    m <- mod$dims$N
-    ni <- table(1:m)
-  } else {
-    m <- nlevels(mod$groups)
-    ni <- table(mod$groups)
-  }
+  groups <- get_cor_grouping(mod)
+  m <- nlevels(groups)
+  ni <- table(groups)
 
   if (!is.null(mod$modelStruct$corStruct)) {
     d_cor <- dV_dcorStruct(mod)

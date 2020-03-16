@@ -1,3 +1,14 @@
+get_cor_grouping <- function(mod) {
+  if (!is.null(mod$groups)) {
+    grps <- stats::model.frame(nlme::getGroupsFormula(mod$modelStruct$corStruct), data = nlme::getData(mod))
+    grps <- factor(apply(grps, 1, paste, collapse = "/"), levels = names(R_list))
+  } else if (!is.null(mod$modelStruct$corStruct)) {
+    grps <- factor(rep("A",mod$dims$N))
+  } else {
+    grps <- factor(1:mod$dims$N)
+  }
+  grps
+}
 
 # Construct list of block-diagonal correlation matrices
 
@@ -7,9 +18,8 @@ build_corr_mats <- function(mod) {
     return(NULL)
   } else {
     R_list <- nlme::corMatrix(mod$modelStruct$corStruct)
-    # grps <- nlme::getGroups(mod, form = nlme::getGroupsFormula(mod$modelStruct$corStruct))
-    grps <- stats::model.frame(nlme::getGroupsFormula(mod$modelStruct$corStruct), data = nlme::getData(mod))
-    grps <- factor(apply(grps, 1, paste, collapse = "/"), levels = names(R_list))
+    grps <- get_cor_grouping(mod)
+    if (!is.list(R_list)) R_list <- list(A = R_list)
     attr(R_list, "groups") <- grps
     return(R_list)
   }
@@ -155,9 +165,9 @@ build_Sigma_mats.gls <- function(mod, invert = FALSE, sigma_scale = FALSE) {
 
   if (invert) {
     V_list <- lapply(V_list, function(x) chol2inv(chol(x)))
+    attr(V_list, "groups") <- V_grps
   }
 
-  attr(V_list, "groups") <- V_grps
 
   return(V_list)
 }

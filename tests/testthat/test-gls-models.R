@@ -1,7 +1,26 @@
 library(nlme, quietly=TRUE, warn.conflicts=FALSE)
 
+data(Hartnagel, package = "carData")
+
+Hart_AR <- gls(fconvict ~ tfr + partic + degrees + mconvict,
+                correlation=corAR1(0.3), method="REML",
+                data=Hartnagel)
+Hart_CAR <- gls(fconvict ~ tfr + partic + degrees + mconvict,
+                correlation=corAR1(0.3), method="REML",
+                data=Hartnagel)
+
+Hart_AR1 <- gls(fconvict ~ tfr + partic + degrees + mconvict,
+                correlation=corAR1(0.3, form = ~ year), method="REML",
+                data=Hartnagel)
+Hart_CAR1 <- gls(fconvict ~ tfr + partic + degrees + mconvict,
+                 correlation=corCAR1(0.3, form = ~ year), method="REML",
+                 data=Hartnagel)
+Hart_MA1 <- gls(fconvict ~ tfr + partic + degrees + mconvict,
+                correlation=corARMA(0.3, form = ~ year, p=0,q=1), method="REML",
+                data=Hartnagel)
+
+
 data(Orthodont)
-data(Laski, package = "scdhlm")
 
 Ortho_hom <- gls(distance ~ Subject:age + Sex,
                  data = Orthodont)
@@ -28,6 +47,8 @@ Ortho_CAR1_power <- gls(distance ~ age + Sex,
                        weights = varPower(),
                        data = Orthodont)
 
+data(Laski, package = "scdhlm")
+
 Laski_AR1 <- gls(outcome ~ 0 + case + case:treatment,
                  correlation = corAR1(0.2, ~ time | case),
                  data = Laski)
@@ -45,12 +66,18 @@ Laski_CAR1 <- gls(outcome ~ 0 + case + case:treatment,
                   correlation = corCAR1(0.2, ~ time | case),
                   data = Laski)
 
-# mod <- Laski_AR1
-# invert <- TRUE
-# sigma_scale <- TRUE
-# R_list <- build_corr_mats(mod)
+mod <- Hart_AR1
+grps <- rep("A",nrow(Hartnagel))
+invert <- TRUE
+sigma_scale <- TRUE
+R_list <- build_corr_mats(mod)
 
 test_that("targetVariance() works with gls models.", {
+  test_Sigma_mats(Hart_AR, rep("A", nrow(Hartnagel)))
+  test_Sigma_mats(Hart_CAR, rep("A", nrow(Hartnagel)))
+  test_Sigma_mats(Hart_AR1, rep("A", nrow(Hartnagel)))
+  test_Sigma_mats(Hart_CAR1, rep("A", nrow(Hartnagel)))
+  test_Sigma_mats(Hart_MA1, rep("A", nrow(Hartnagel)))
   test_Sigma_mats(Ortho_hom, 1:nrow(Orthodont))
   test_Sigma_mats(Ortho_power, 1:nrow(Orthodont))
   test_Sigma_mats(Ortho_AR1, Orthodont$Subject)
@@ -64,6 +91,11 @@ test_that("targetVariance() works with gls models.", {
 })
 
 test_that("Derivative matrices are of correct dimension with gls models.", {
+  test_deriv_dims(Hart_AR)
+  test_deriv_dims(Hart_CAR)
+  test_deriv_dims(Hart_AR1)
+  test_deriv_dims(Hart_CAR1)
+  test_deriv_dims(Hart_MA1)
   test_deriv_dims(Ortho_hom)
   test_deriv_dims(Ortho_power)
   test_deriv_dims(Ortho_AR1)
@@ -77,6 +109,11 @@ test_that("Derivative matrices are of correct dimension with gls models.", {
 })
 
 test_that("Information matrices work with FIML too.", {
+  test_with_FIML(Hart_AR)
+  test_with_FIML(Hart_CAR)
+  test_with_FIML(Hart_AR1)
+  test_with_FIML(Hart_CAR1)
+  test_with_FIML(Hart_MA1)
   test_with_FIML(Ortho_hom)
   test_with_FIML(Ortho_power)
   test_with_FIML(Ortho_AR1)
@@ -90,6 +127,12 @@ test_that("Information matrices work with FIML too.", {
 })
 
 test_that("dR_dcorStruct.corCAR1 returns the same result as dR_dcorStruct.corAR1.", {
+  expect_equal(dR_dcorStruct.corCAR1(Hart_AR1$modelStruct$corStruct),
+               dR_dcorStruct.corAR1(Hart_CAR1$modelStruct$corStruct),
+               tol = 10^-5)
+  expect_equal(dR_dcorStruct.corCAR1(Hart_AR$modelStruct$corStruct),
+               dR_dcorStruct.corAR1(Hart_CAR$modelStruct$corStruct),
+               tol = 10^-5)
   expect_equal(dR_dcorStruct.corCAR1(Ortho_AR1$modelStruct$corStruct),
                dR_dcorStruct.corAR1(Ortho_CAR1$modelStruct$corStruct),
                tol = 10^-5)
@@ -104,6 +147,11 @@ test_that("dR_dcorStruct.corCAR1 returns the same result as dR_dcorStruct.corAR1
 
 
 test_that("Results do not depend on order of data.", {
+  test_after_shuffling(Hart_AR, seed = 20)
+  test_after_shuffling(Hart_CAR, seed = 20)
+  test_after_shuffling(Hart_AR1, seed = 20)
+  test_after_shuffling(Hart_CAR1, seed = 20)
+  test_after_shuffling(Hart_MA1, seed = 20)
   test_after_shuffling(Ortho_hom, seed = 20)
   test_after_shuffling(Ortho_power, seed = 20)
   test_after_shuffling(Ortho_AR1, seed = 20)
@@ -119,6 +167,11 @@ test_that("Results do not depend on order of data.", {
 
 test_that("New REML calculations work.", {
 
+  check_REML2(Hart_AR)
+  check_REML2(Hart_CAR)
+  check_REML2(Hart_AR1)
+  check_REML2(Hart_CAR1)
+  check_REML2(Hart_MA1)
   check_REML2(Ortho_hom)
   check_REML2(Ortho_power)
   check_REML2(Ortho_AR1)

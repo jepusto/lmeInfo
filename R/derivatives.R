@@ -80,8 +80,7 @@ dV_dcorStruct <- function(mod) {
 
   dR_dcor <- dR_dcorStruct(mod$modelStruct$corStruct)
 
-  grps <- stats::model.frame(nlme::getGroupsFormula(mod$modelStruct$corStruct), data = nlme::getData(mod))
-  grps <- apply(grps, 1, paste, collapse = "/")
+  grps <- get_cor_grouping(mod)
 
   dR_dcor <- lapply(dR_dcor, function(x) {
     x_grps <- factor(grps, levels = names(x))
