@@ -1,4 +1,37 @@
 #------------------------------------------------------------------------------
+# Build list of derivative matrices wrt model parameters
+#------------------------------------------------------------------------------
+
+build_dV_list <- function(mod) UseMethod("build_dV_list")
+
+build_dV_list.default <- function(mod) {
+  mod_class <- paste(class(mod), collapse = "-")
+  stop(paste0("Derivatives not available for models of class ", mod_class, "."))
+
+}
+
+build_dV_list.gls <- function(mod) {
+  cor_params <- dV_dcorStruct(mod)                          # correlation structure
+  var_params <- dV_dvarStruct(mod)                          # variance structure
+  sigma_sq <- dV_dsigmasq(mod)                              # sigma_sq
+
+  # Create a list of derivative matrices
+  c(cor_params, var_params, sigma_sq)
+}
+
+build_dV_list.lme <- function(mod) {
+  Tau_params <- dV_dreStruct(mod)                           # random effects structure(s)
+  cor_params <- dV_dcorStruct(mod)                          # correlation structure
+  var_params <- dV_dvarStruct(mod)                          # variance structure
+  sigma_sq <- dV_dsigmasq(mod)                              # sigma_sq
+
+  # Create a list of derivative matrices
+  c(unlist(Tau_params, recursive = FALSE), cor_params, var_params, sigma_sq)
+}
+
+
+
+#------------------------------------------------------------------------------
 # First derivative matrices wrt unstructured random effects covariances
 #------------------------------------------------------------------------------
 

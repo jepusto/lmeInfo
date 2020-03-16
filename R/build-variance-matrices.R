@@ -112,7 +112,29 @@ build_RE_mats <- function(mod, sigma_scale = FALSE) {
 
 }
 
-build_Sigma_mats <- function(mod, invert = FALSE, sigma_scale = FALSE) {
+build_Sigma_mats <- function(mod, invert = FALSE, sigma_scale = FALSE) UseMethod("build_Sigma_mats")
+
+build_Sigma_mats.default <- function(mod, invert = FALSE, sigma_scale = FALSE) {
+  mod_class <- paste(class(mod), collapse = "-")
+  stop(paste0("Sigma matrices not available for models of class ", mod_class, "."))
+}
+
+build_Sigma_mats.gls <- function(mod, invert = FALSE, sigma_scale = FALSE) {
+
+  # lowest-level covariance structure
+  V_list <- build_var_cor_mats(mod, sigma_scale = sigma_scale)
+  V_grps <- attr(V_list, "groups")
+
+  if (invert) {
+    V_list <- lapply(V_list, function(x) chol2inv(chol(x)))
+  }
+
+  attr(V_list, "groups") <- V_grps
+
+  return(V_list)
+}
+
+build_Sigma_mats.lme <- function(mod, invert = FALSE, sigma_scale = FALSE) {
 
   if (inherits(mod, "nlme")) stop("not implemented for \"nlme\" objects")
 

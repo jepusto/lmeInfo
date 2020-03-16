@@ -2,7 +2,28 @@
 # extract variance components in natural parameterization
 #------------------------------------------------------------------------------
 
-extract_varcomp <- function(mod) {
+extract_varcomp <- function(mod) UseMethod("extract_varcomp")
+
+extract_varcomp.default <- function(mod) {
+  mod_class <- paste(class(mod), collapse = "-")
+  stop(paste0("Variance components not available for models of class ", mod_class, "."))
+}
+
+extract_varcomp.gls <- function(mod) {
+
+  fixed_sigma <- attr(mod$modelStruct, "fixedSigma")
+  sigma_sq <- if (fixed_sigma) NULL else mod$sigma^2                # sigma^2
+  cor_params <- as.double(coef(mod$modelStruct$corStruct, FALSE))   # correlation structure
+  var_params <- as.double(coef(mod$modelStruct$varStruct, FALSE))   # variance structure
+
+  varcomp <- list(cor_params = cor_params, var_params = var_params, sigma_sq = sigma_sq)
+
+  class(varcomp) <- "varcomp"
+  return(varcomp)
+
+}
+
+extract_varcomp.lme <- function(mod) {
 
   sigma_sq <- mod$sigma^2                                           # sigma^2
   Tau_params <- coef(mod$modelStruct$reStruct, FALSE) * sigma_sq    # unique coefficients in Tau
@@ -73,7 +94,6 @@ Q_matrix <- function(mod) {
 #' @importFrom stats vcov
 #'
 
-
 Fisher_info <- function(mod, type = "expected") {
 
   theta <- extract_varcomp(mod)
@@ -84,13 +104,7 @@ Fisher_info <- function(mod, type = "expected") {
 
   # Calculate derivative matrix-lists
 
-  Tau_params <- dV_dreStruct(mod)                           # random effects structure(s)
-  cor_params <- dV_dcorStruct(mod)                          # correlation structure
-  var_params <- dV_dvarStruct(mod)                          # variance structure
-  sigma_sq <- dV_dsigmasq(mod)                              # sigma_sq
-
-  # Create a list of derivative matrices
-  dV_list <- c(unlist(Tau_params, recursive = FALSE), cor_params, var_params, sigma_sq)
+  dV_list <- build_dV_list(mod)
 
   # block-diagonal V^-1
   V_inv <- build_Sigma_mats(mod, invert = TRUE, sigma_scale = TRUE)
