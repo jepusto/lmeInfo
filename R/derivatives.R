@@ -105,6 +105,7 @@ dR_dcorStruct.default <- function(struct) {
 dR_dcorStruct.corAR1 <- function(struct) {
   cor_AR1 <- as.double(coef(struct, FALSE))
   covariate <- attr(struct, "covariate")
+  if (!is.list(covariate)) covariate <- list(A = covariate)
   dR <- lapply(covariate, function(x) as.matrix(dist(x)) * cor_AR1^(as.matrix(dist(x)) - 1L))
   list(dR)
 }
@@ -114,6 +115,7 @@ dR_dcorStruct.corAR1 <- function(struct) {
 dR_dcorStruct.corCAR1 <- function(struct) {
   cor_CAR1 <- as.double(coef(struct, FALSE))
   covariate <- attr(struct, "covariate")
+  if (!is.list(covariate)) covariate <- list(A = covariate)
   dR <- lapply(covariate, function(x) as.matrix(dist(x)) * cor_CAR1^(as.matrix(dist(x)) - 1L))
   list(dR)
 }
@@ -130,6 +132,7 @@ dR_dcorMA1 <- function(covariate, cor) {
 dR_dcorStruct.corMA1 <- function(struct) {
   cor_MA1 <- as.double(coef(struct, FALSE))
   covariate <- attr(struct, "covariate")
+  if (!is.list(covariate)) covariate <- list(A = covariate)
   dR <- lapply(covariate, dR_dcorMA1, cor = cor_MA1)
   list(dR)
 }
@@ -153,6 +156,7 @@ dR_dcorStruct.corARMA <- function(struct) {
 
 dR_dcorStruct.corCompSymm <- function(struct) {
   covariate <- attr(struct, "covariate")
+  if (!is.list(covariate)) covariate <- list(A = covariate)
   dR <- lapply(covariate, function(x) 1L - diag(1L, nrow = length(x)))
   list(dR)
 }

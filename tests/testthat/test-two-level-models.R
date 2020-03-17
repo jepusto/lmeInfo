@@ -97,6 +97,11 @@ Schutte_RML5 <- suppressWarnings(
          control=lmeControl(msMaxIter = 50, apVar=FALSE, returnObject=TRUE))
 )
 
+# mod <- Laski_iid
+# grps <- Laski$case
+# invert <- TRUE
+# sigma_scale <- TRUE
+# R_list <- build_corr_mats(mod)
 
 test_that("targetVariance() works with 2-level models.", {
   test_Sigma_mats(Laski_iid, Laski$case)

@@ -14,6 +14,12 @@ Thiemann2001_CScorr <- lme(fixed = outcome ~ treatment,
                            data = Thiemann2001,
                            control = lmeControl(tolerance = 10^-8))
 
+# mod <- Thiemann2001_CScorr
+# type <- "expected"
+# invert <- TRUE
+# sigma_scale <- TRUE
+# R_list <- build_corr_mats(mod)
+
 test_that("vcov matrices are equivalent for equivalent models.", {
 
   expect_equal(fixef(Thiemann2001_3level), fixef(Thiemann2001_CScorr), tol = 10^-6)
@@ -34,6 +40,3 @@ test_that("vcov matrices are equivalent for equivalent models.", {
   expect_equal(sum(vcov_3level_exp[2:3,1]) / vcov_CScorr_exp[1,3], 1, tol = 10^-3)
 
 })
-
-
-library(merDeriv)

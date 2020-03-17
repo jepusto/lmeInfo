@@ -1,7 +1,13 @@
-get_cor_grouping <- function(mod) {
+
+get_cor_grouping <- function(mod, levels = NULL) {
   if (!is.null(mod$groups)) {
-    grps <- stats::model.frame(nlme::getGroupsFormula(mod$modelStruct$corStruct), data = nlme::getData(mod))
-    grps <- factor(apply(grps, 1, paste, collapse = "/"), levels = names(R_list))
+    struct <- mod$modelStruct$corStruct
+    if (is.null(struct)) struct <- mod
+    mod_formula <- nlme::getGroupsFormula(struct)
+    grps <- stats::model.frame(mod_formula, data = nlme::getData(mod))
+    grps <- apply(grps, 1, paste, collapse = "/")
+    if (is.null(levels)) levels <- unique(grps)
+    grps <- factor(grps, levels = levels)
   } else if (!is.null(mod$modelStruct$corStruct)) {
     grps <- factor(rep("A",mod$dims$N))
   } else {
@@ -18,7 +24,7 @@ build_corr_mats <- function(mod) {
     return(NULL)
   } else {
     R_list <- nlme::corMatrix(mod$modelStruct$corStruct)
-    grps <- get_cor_grouping(mod)
+    grps <- get_cor_grouping(mod, levels = names(R_list))
     if (!is.list(R_list)) R_list <- list(A = R_list)
     attr(R_list, "groups") <- grps
     return(R_list)
@@ -66,7 +72,8 @@ build_var_cor_mats <- function(mod, R_list = build_corr_mats(mod), sigma_scale =
       # if there are groups then make block-diagonal matrix-lists
 
       if (is.null(mod$modelStruct$varStruct)) {
-        V_list <- tapply(rep(sigma^2, length(mod$groups[[1]])),  mod$groups[[1]], diag)
+        grps <- mod$groups[[1]]
+        V_list <- tapply(rep(sigma^2, length(grps)),  grps, diag)
       } else {
         sort_order <- get_sort_order(mod)
         sd_vec <- sigma / as.numeric(nlme::varWeights(mod$modelStruct$varStruct))[sort_order]
