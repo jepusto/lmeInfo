@@ -113,7 +113,7 @@ summary.g_mlm <- function(object, digits = 3, ...) {
                                    "degree of freedom" = nu, "constant kappa" = kappa, logLik = logLik),
                            se = c(SE_g_AB / J_nu, SE_g_AB, NA, NA, NA)))
 
-  round(rbind(varcomp, betas, ES), digits)
+  print(round(rbind(varcomp, betas, ES), digits), na.print = "")
 }
 
 #' @export
@@ -123,9 +123,6 @@ print.g_mlm <- function(x, digits = 3, ...) {
                               "adjusted effect size" = g_AB,
                               "degree of freedom" = nu),
                       se = c(SE_g_AB / J_nu, SE_g_AB, NA)))
-  res <- data.frame(round(ES, digits))
-  res[is.na(res)] <- ""
-  res
-  # print(round(ES, digits), na.print = "")
+  print(round(ES, digits), na.print = "")
 }
 
