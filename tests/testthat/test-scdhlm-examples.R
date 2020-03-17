@@ -134,3 +134,13 @@ test_that("lmeInfo::CI_g returns the correct CIs for Schutte examples.", {
   expect_equal(appro_CI5_lmeInfo, appro_CI5_scdhlm)
 
 })
+
+test_that("lmeInfo::summary() and lmeInfo::print() return output.", {
+  g_RML4 <- g_mlm(Schutte_RML4, p_const = c(0,0,1,7), r_const = c(1,0,0,0,1))
+  expect_output(summary(g_RML4))
+  expect_output(print(g_RML4))
+
+  g_RML5 <- g_mlm(Schutte_RML5, p_const = c(0,0,1,7), r_const = c(1,0,0,0,0,0,0,1))
+  expect_output(summary(g_RML5))
+  expect_output(print(g_RML5))
+})
