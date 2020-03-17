@@ -14,7 +14,7 @@ test_Sigma_mats <- function(mod, grps = mod$groups[[1]], sigma_scale = FALSE) {
   testthat::expect_equal(grp_size, dims[2,], check.attributes = FALSE)
 
   # check that (XWX)^-1 is equivalent to vcov(mod)
-  X_design <- model.matrix(mod, data = mod$data)
+  X_design <- model.matrix(mod, data = nlme::getData(mod))
   XVinv <- prod_matrixblock(A = t(X_design), B = Sigma_list, block = attr(Sigma_list, "groups"))
   XWX <- XVinv %*% X_design
   B <- chol2inv(chol(XWX))
@@ -53,16 +53,53 @@ expect_correct_block_dims <- function(x, m, ni, is_list = TRUE) {
   testthat::expect(all(c(correct_m, correct_dim)), "Block dimensions are not correct.")
 }
 
-test_deriv_dims <- function(mod) {
+test_deriv_dims <- function(mod) UseMethod("test_deriv_dims")
+
+test_deriv_dims.default <- function(mod) stop("Shouldn't get here!")
+
+test_deriv_dims.gls <- function(mod) {
+
+  vc_est <- extract_varcomp(mod)
+
+  groups <- get_cor_grouping(mod)
+  m <- nlevels(groups)
+  ni <- table(groups)
+
+  if (!is.null(mod$modelStruct$corStruct)) {
+    d_cor <- dV_dcorStruct(mod)
+    testthat::expect_identical(length(d_cor), length(vc_est$cor_params))
+    expect_correct_block_dims(d_cor, m = m, ni = ni)
+  }
+
+  if (!is.null(mod$modelStruct$varStruct)) {
+    d_var <- dV_dvarStruct(mod)
+    testthat::expect_identical(length(d_var), length(vc_est$var_params))
+    expect_correct_block_dims(d_var, m = m, ni = ni)
+  }
+
+  d_sigma <- build_var_cor_mats(mod, sigma_scale = FALSE)
+  expect_correct_block_dims(d_sigma, m = m, ni = ni, is_list = FALSE)
+
+  info_E <- Fisher_info(mod, type = "expected")
+  info_A <- Fisher_info(mod, type = "averaged")
+  r_dim <- rep(length(unlist(vc_est)), 2)
+
+  testthat::expect_identical(dim(info_E), r_dim)
+  testthat::expect_identical(dim(info_A), r_dim)
+}
+
+test_deriv_dims.lme <- function(mod) {
 
   vc_est <- extract_varcomp(mod)
   m <- mod$dims$ngrps[names(vc_est$Tau)]
   ni <- lapply(mod$groups[names(vc_est$Tau)], table)
   G <- length(vc_est$Tau)
 
-  d_Tau <- dV_dreStruct(mod)
-  testthat::expect_identical(lengths(d_Tau), lengths(vc_est$Tau))
-  mapply(expect_correct_block_dims, x = d_Tau, m = m, ni = ni)
+  if (!is.null(mod$modelStruct$reStruct)) {
+    d_Tau <- dV_dreStruct(mod)
+    testthat::expect_identical(lengths(d_Tau), lengths(vc_est$Tau))
+    mapply(expect_correct_block_dims, x = d_Tau, m = m, ni = ni)
+  }
 
   d_cor <- dV_dcorStruct(mod)
   testthat::expect_identical(length(d_cor), length(vc_est$cor_params))
@@ -87,7 +124,9 @@ test_with_FIML <- function(mod) {
 
   r_dim <- rep(length(unlist(extract_varcomp(mod))), 2)
 
-  mod_FIML <- suppressWarnings(stats::update(mod, data = nlme::getData(mod), method = "ML"))
+  dat <- nlme::getData(mod)
+  mod_FIML <- suppressWarnings(stats::update(mod, data = dat, method = "ML"))
+  mod_FIML$data <- dat
 
   info_E <- Fisher_info(mod_FIML, type = "expected")
   info_A <- Fisher_info(mod_FIML, type = "averaged")
@@ -115,6 +154,7 @@ test_after_shuffling <- function(mod, by_var = NULL,
   dat_shuffle <- dat[shuffle,]
 
   mod_shuffle <- suppressWarnings(stats::update(mod, data = dat_shuffle))
+  mod_shuffle$data <- dat_shuffle
 
   varcomp_orig <- extract_varcomp(mod)
   varcomp_shuf <- extract_varcomp(mod_shuffle)
@@ -198,6 +238,7 @@ check_name_order <- function(x_list, group_levels = NULL) {
 #--------------------------------------------------------------------
 
 check_REML2 <- function(mod, print = FALSE) {
+  mod$data <- nlme::getData(mod)
   mod2 <- mod
   mod2$method <- "REML2"
 

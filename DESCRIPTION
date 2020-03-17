@@ -28,6 +28,7 @@ Suggests:
     dplyr,
     tidyr,
     mlmRev,
+    carData,
     lme4,
     merDeriv
 Imports: 
