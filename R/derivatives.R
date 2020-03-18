@@ -19,8 +19,8 @@ dV_dTau_unstruct <- function(block, Z_design) {
 dV_dreStruct <- function(mod) {
 
   blocks <- mod$groups
+  #blocks <- blocks[, !grepl("([.])", names(blocks))] # delete case.1 from the blocks?
   Z_design <- model.matrix(mod$modelStruct$reStruct, data = mod$data)
-  # Z_design <- model.matrix(mod$modelStruct$reStruct, nlme::getData(mod))
 
   if (length(blocks) == 1L) {
     Z_list <- list(Z_design)
@@ -28,8 +28,6 @@ dV_dreStruct <- function(mod) {
     Z_list <- sapply(names(blocks),
                      function(x) Z_design[,grep(x, colnames(Z_design)), drop = FALSE],
                      simplify = FALSE, USE.NAMES = TRUE)
-    #Z_names <- colnames(blocks)
-    #Z_list <- lapply(names(blocks), function(x) Z_design[,x==Z_names, drop = FALSE])
 
   }
 

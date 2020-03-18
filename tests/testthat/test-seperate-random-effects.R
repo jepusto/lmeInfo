@@ -49,9 +49,11 @@ summary(mod2_1)
 VarCorr(mod2_1) # pdLogChol(1) parametrization
 # intervals(mod2_1)
 
-g_mod2_1 <- g_mlm(mod2_1, p_const = c(0,0,1,17), r_const = c(1,1,0,0,1))
+Fisher_info(mod2_1)
+g_mod2_1 <- g_mlm(mod2_1, p_const = c(0,0,1,17), r_const = c(1,0,1,0,1))
 # issue: three groups (1 for school level, 2 for case level)
 summary(g_mod2_1)
+print(g_mod2_1)
 
 
 # second approach: pdDiag in pdMat classes
@@ -69,7 +71,10 @@ print(g_mod2_2)
 
 test_that("mod1_1 and mod1_2 returns the same results.", {
   expect_equal(mod2_1$coefficients$fixed, mod2_2$coefficients$fixed)
-  # expect_equal(VarCorr(mod2_1)[, 2], VarCorr(mod2_2)[, 2]) # L-3 intercept var differ at 4th decimals
+  expect_equal(as.numeric(VarCorr(mod2_1)[,2][2]), as.numeric(VarCorr(mod2_2)[,2][2]), tolerance = 1e-4)
+  expect_equal(as.numeric(VarCorr(mod2_1)[,2][4]), as.numeric(VarCorr(mod2_2)[,2][4]), tolerance = 1e-7)
+  expect_equal(as.numeric(VarCorr(mod2_1)[,2][6]), as.numeric(VarCorr(mod2_2)[,2][5]), tolerance = 1e-7)
+  expect_equal(as.numeric(VarCorr(mod2_1)[,2][7]), as.numeric(VarCorr(mod2_2)[,2][6]))
   expect_equal(mod2_1$sigma, mod2_2$sigma)
   expect_equal(mod2_1$varFix, mod2_2$varFix, tolerance = 1e-7) # intercept var differs at 6th decimals
   expect_equal(mod2_1$logLik, mod2_2$logLik)
