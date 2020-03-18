@@ -56,12 +56,13 @@ summary(g_mod2_1)
 
 # second approach: pdDiag in pdMat classes
 mod2_2 <- lme(fixed = outcome ~ session_c + treatment + session_trt,
-              random = list(school = pdDiag(~ 1), case = pdDiag(~ session_c)),
+              random = list(school = ~ 1, case = pdDiag(~ session_c)),
               correlation = corAR1(0, ~ session_c | school/case),
               data = Bryant2018)
 summary(mod2_2)
 VarCorr(mod2_2) # pdDiag(1) parametrization?
 
+Fisher_info(mod2_2)
 g_mod2_2 <- g_mlm(mod2_2, p_const = c(0,0,1,17), r_const = c(1,1,0,0,1))
 summary(g_mod2_2)
 print(g_mod2_2)
