@@ -26,7 +26,7 @@ matrix_list <- function(x, fac, dim) {
 
 # turn block-diagonal into regular matrix
 
-unblock <- function(A, block=attr(A, "groups")) {
+unblock <- function(A, block = attr(A, "groups")) {
 
   if (is.null(block)) block <- factor(rep(names(A), times = sapply(A, function(x) dim(x)[1])))
   n <- length(block)
@@ -47,7 +47,7 @@ sum_blockblock <- function(A, B)
 
 # generic matrix minus block-diagonal
 
-matrix_minus_block <- function(A, B, block=NULL) {
+matrix_minus_block <- function(A, B, block=attr(B, "groups")) {
   if (is.null(block)) block <- rep(names(B), times = sapply(B, function(x) dim(x)[1]))
 
   mat <- A
@@ -61,7 +61,7 @@ matrix_minus_block <- function(A, B, block=NULL) {
 
 # block-diagonal minus generic matrix
 
-block_minus_matrix <- function(A, B, block=NULL) {
+block_minus_matrix <- function(A, B, block = attr(A, "groups")) {
   if (is.null(block))
     block <- rep(names(A), times = sapply(A, function(x) dim(x)[1]))
 
@@ -124,13 +124,17 @@ prod_blockblock <- function(A, B, crosswalk = NULL) {
     res <- mapply(function(a, b) a %*% b, a = A, b = B, SIMPLIFY = FALSE)
   } else if (B_in_A) {
     # B is nested in A
+    if (is.null(names(A))) names(A) <- levels(A_groups)
     block_list <- split(B_groups, A_groups)
-    B_list <- tapply(B_groups, A_groups, function(x) B[unique(x)])
+    B_map <- tapply(levels(A_groups)[A_groups], B_groups, unique)[names(B)]
+    B_list <- split(B, B_map)[names(A)]
     res <- mapply(prod_matrixblock, A = A, B = B_list, block = block_list)
   } else if (A_in_B) {
     # A is nested in B
+    if (is.null(names(B))) names(B) <- levels(B_groups)
     block_list <- split(A_groups, B_groups)
-    A_list <- tapply(A_groups, B_groups, function(x) A[unique(x)])
+    A_map <- tapply(levels(B_groups)[B_groups], A_groups, unique)[names(A)]
+    A_list <- split(A, A_map)[names(B)]
     res <- mapply(prod_blockmatrix, A = A_list, B = B, block = block_list)
   } else {
     stop("The A and B matrices are not nested.")
@@ -177,7 +181,7 @@ prod_matrixblock <- function(A, B, block = attr(B, "groups")) {
 
   for (b in B_names) {
     ind <- block == b
-    C[,ind] <- A[,ind] %*% B[[b]]
+    C[,ind] <- A[,ind,drop=FALSE] %*% B[[b]]
   }
   return(C)
 }

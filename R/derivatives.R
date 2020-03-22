@@ -1,4 +1,37 @@
 #------------------------------------------------------------------------------
+# Build list of derivative matrices wrt model parameters
+#------------------------------------------------------------------------------
+
+build_dV_list <- function(mod) UseMethod("build_dV_list")
+
+build_dV_list.default <- function(mod) {
+  mod_class <- paste(class(mod), collapse = "-")
+  stop(paste0("Derivatives not available for models of class ", mod_class, "."))
+
+}
+
+build_dV_list.gls <- function(mod) {
+  cor_params <- dV_dcorStruct(mod)                          # correlation structure
+  var_params <- dV_dvarStruct(mod)                          # variance structure
+  sigma_sq <- dV_dsigmasq(mod)                              # sigma_sq
+
+  # Create a list of derivative matrices
+  c(cor_params, var_params, sigma_sq)
+}
+
+build_dV_list.lme <- function(mod) {
+  Tau_params <- dV_dreStruct(mod)                           # random effects structure(s)
+  cor_params <- dV_dcorStruct(mod)                          # correlation structure
+  var_params <- dV_dvarStruct(mod)                          # variance structure
+  sigma_sq <- dV_dsigmasq(mod)                              # sigma_sq
+
+  # Create a list of derivative matrices
+  c(unlist(Tau_params, recursive = FALSE), cor_params, var_params, sigma_sq)
+}
+
+
+
+#------------------------------------------------------------------------------
 # First derivative matrices wrt unstructured random effects covariances
 #------------------------------------------------------------------------------
 
@@ -53,6 +86,14 @@ dV_dcorStruct <- function(mod) {
 
   dR_dcor <- dR_dcorStruct(mod$modelStruct$corStruct)
 
+  grps <- get_cor_grouping(mod)
+
+  dR_dcor <- lapply(dR_dcor, function(x) {
+    x_grps <- factor(grps, levels = names(x))
+    attr(x, "groups") <- x_grps
+    x
+  })
+
   lapply(dR_dcor, build_var_cor_mats, mod = mod, sigma_scale = TRUE)
 }
 
@@ -70,8 +111,8 @@ dR_dcorStruct.default <- function(struct) {
 dR_dcorStruct.corAR1 <- function(struct) {
   cor_AR1 <- as.double(coef(struct, FALSE))
   covariate <- attr(struct, "covariate")
+  if (!is.list(covariate)) covariate <- list(A = covariate)
   dR <- lapply(covariate, function(x) as.matrix(dist(x)) * cor_AR1^(as.matrix(dist(x)) - 1L))
-  attr(dR, "groups") <- attr(struct, "groups")
   list(dR)
 }
 
@@ -80,8 +121,8 @@ dR_dcorStruct.corAR1 <- function(struct) {
 dR_dcorStruct.corCAR1 <- function(struct) {
   cor_CAR1 <- as.double(coef(struct, FALSE))
   covariate <- attr(struct, "covariate")
+  if (!is.list(covariate)) covariate <- list(A = covariate)
   dR <- lapply(covariate, function(x) as.matrix(dist(x)) * cor_CAR1^(as.matrix(dist(x)) - 1L))
-  attr(dR, "groups") <- attr(struct, "groups")
   list(dR)
 }
 
@@ -97,8 +138,8 @@ dR_dcorMA1 <- function(covariate, cor) {
 dR_dcorStruct.corMA1 <- function(struct) {
   cor_MA1 <- as.double(coef(struct, FALSE))
   covariate <- attr(struct, "covariate")
+  if (!is.list(covariate)) covariate <- list(A = covariate)
   dR <- lapply(covariate, dR_dcorMA1, cor = cor_MA1)
-  attr(dR, "groups") <- attr(struct, "groups")
   list(dR)
 }
 
@@ -121,8 +162,8 @@ dR_dcorStruct.corARMA <- function(struct) {
 
 dR_dcorStruct.corCompSymm <- function(struct) {
   covariate <- attr(struct, "covariate")
+  if (!is.list(covariate)) covariate <- list(A = covariate)
   dR <- lapply(covariate, function(x) 1L - diag(1L, nrow = length(x)))
-  attr(dR, "groups") <- attr(struct, "groups")
   list(dR)
 }
 
@@ -137,10 +178,9 @@ replace <- function(x, y, row, col) {
   x
 }
 
-dR_dcor_index <- function(row, col, covariate, groups) {
+dR_dcor_index <- function(row, col, covariate) {
   R_null <- lapply(covariate, function(x) matrix(0L, nrow = length(x), ncol = length(x)))
   dR <- mapply(replace, x = R_null, y = covariate, MoreArgs = list(row = row, col = col), SIMPLIFY = FALSE)
-  attr(dR, "groups") <- groups
   dR
 }
 
@@ -153,7 +193,7 @@ dR_dcorStruct.corSymm <- function(struct) {
   groups <- attr(struct, "groups")
   covariate <- attr(struct, "covariate")
   covariate <- lapply(covariate, function(x) as.integer(x + 1)) # add 1 to covariate to align with cor_index
-  apply(cor_index, 1, function(t) dR_dcor_index(t[1], t[2], covariate = covariate, groups = groups))
+  apply(cor_index, 1, function(t) dR_dcor_index(t[1], t[2], covariate = covariate))
 }
 
 #------------------------------------------------------------------------------
@@ -192,20 +232,27 @@ dV_dvarStruct <- function(mod) {
   # No derivatives if there's no variance structure or only varFixed structure
   if (is.null(mod$modelStruct$varStruct) | inherits(mod$modelStruct$varStruct,"varFixed")) return(NULL)
 
+  # all_groups <- rev(mod$groups)
+  # sort_order <- order(do.call(order, all_groups))
+  sort_order <- get_sort_order(mod)
+
   dsd_dvar <- dsd_dvarStruct(mod$modelStruct$varStruct)
+
+  dsd_dvar <- lapply(dsd_dvar, function(x) x[sort_order]) # reorder based on input data
 
   R_list <- build_corr_mats(mod)
 
-  all_groups <- rev(mod$groups)
-  wts <- nlme::varWeights(mod$modelStruct$varStruct)[order(do.call(order, all_groups))]
+  wts <- nlme::varWeights(mod$modelStruct$varStruct)[sort_order]
 
   if (is.null(R_list)) {
 
     dV_dvar <- lapply(dsd_dvar, function(d) 2 * d * mod$sigma^2 / wts)
 
+    groups <- if (is.null(mod$groups)) factor(1:mod$dims$N) else mod$groups[[1]]
+
     dV_list <- lapply(dV_dvar, function(v) {
-      v_list <- tapply(v, mod$groups[[1]], diag)
-      attr(v_list, "groups") <- mod$groups[[1]]
+      v_list <- tapply(v, groups, function(x) diag(x, nrow = length(x)), simplify = FALSE)
+      attr(v_list, "groups") <- groups
       v_list
     })
 

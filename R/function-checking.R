@@ -14,7 +14,7 @@ test_Sigma_mats <- function(mod, grps = mod$groups[[1]], sigma_scale = FALSE) {
   testthat::expect_equal(grp_size, dims[2,], check.attributes = FALSE)
 
   # check that (XWX)^-1 is equivalent to vcov(mod)
-  X_design <- model.matrix(mod, data = mod$data)
+  X_design <- model.matrix(mod, data = nlme::getData(mod))
   XVinv <- prod_matrixblock(A = t(X_design), B = Sigma_list, block = attr(Sigma_list, "groups"))
   XWX <- XVinv %*% X_design
   B <- chol2inv(chol(XWX))
@@ -40,12 +40,12 @@ expect_correct_block_dims <- function(x, m, ni, is_list = TRUE) {
   if (all(x_is_mat)) {
     x_dims <- sapply(x, dim)
     correct_dim <- c(
-      identical(as.integer(x_dims[1,]), as.integer(ni)),
-      identical(as.integer(x_dims[2,]), as.integer(ni))
+      identical(as.integer(x_dims[1,]), as.integer(ni[names(x)])),
+      identical(as.integer(x_dims[2,]), as.integer(ni[names(x)]))
     )
   } else if (all(!x_is_mat)) {
     x_dims <- lengths(x)
-    correct_dim <- identical(as.integer(x_dims), as.integer(ni))
+    correct_dim <- identical(as.integer(x_dims), as.integer(ni[names(x)]))
   } else {
     correct_dim <- FALSE
   }
@@ -53,16 +53,53 @@ expect_correct_block_dims <- function(x, m, ni, is_list = TRUE) {
   testthat::expect(all(c(correct_m, correct_dim)), "Block dimensions are not correct.")
 }
 
-test_deriv_dims <- function(mod) {
+test_deriv_dims <- function(mod) UseMethod("test_deriv_dims")
+
+test_deriv_dims.default <- function(mod) stop("Shouldn't get here!")
+
+test_deriv_dims.gls <- function(mod) {
+
+  vc_est <- extract_varcomp(mod)
+
+  groups <- get_cor_grouping(mod)
+  m <- nlevels(groups)
+  ni <- table(groups)
+
+  if (!is.null(mod$modelStruct$corStruct)) {
+    d_cor <- dV_dcorStruct(mod)
+    testthat::expect_identical(length(d_cor), length(vc_est$cor_params))
+    expect_correct_block_dims(d_cor, m = m, ni = ni)
+  }
+
+  if (!is.null(mod$modelStruct$varStruct)) {
+    d_var <- dV_dvarStruct(mod)
+    testthat::expect_identical(length(d_var), length(vc_est$var_params))
+    expect_correct_block_dims(d_var, m = m, ni = ni)
+  }
+
+  d_sigma <- build_var_cor_mats(mod, sigma_scale = FALSE)
+  expect_correct_block_dims(d_sigma, m = m, ni = ni, is_list = FALSE)
+
+  info_E <- Fisher_info(mod, type = "expected")
+  info_A <- Fisher_info(mod, type = "averaged")
+  r_dim <- rep(length(unlist(vc_est)), 2)
+
+  testthat::expect_identical(dim(info_E), r_dim)
+  testthat::expect_identical(dim(info_A), r_dim)
+}
+
+test_deriv_dims.lme <- function(mod) {
 
   vc_est <- extract_varcomp(mod)
   m <- mod$dims$ngrps[names(vc_est$Tau)]
   ni <- lapply(mod$groups[names(vc_est$Tau)], table)
   G <- length(vc_est$Tau)
 
-  d_Tau <- dV_dreStruct(mod)
-  testthat::expect_identical(lengths(d_Tau), lengths(vc_est$Tau))
-  mapply(expect_correct_block_dims, x = d_Tau, m = m, ni = ni)
+  if (!is.null(mod$modelStruct$reStruct)) {
+    d_Tau <- dV_dreStruct(mod)
+    testthat::expect_identical(lengths(d_Tau), lengths(vc_est$Tau))
+    mapply(expect_correct_block_dims, x = d_Tau, m = m, ni = ni)
+  }
 
   d_cor <- dV_dcorStruct(mod)
   testthat::expect_identical(length(d_cor), length(vc_est$cor_params))
@@ -87,7 +124,9 @@ test_with_FIML <- function(mod) {
 
   r_dim <- rep(length(unlist(extract_varcomp(mod))), 2)
 
-  mod_FIML <- suppressWarnings(stats::update(mod, data = nlme::getData(mod), method = "ML"))
+  dat <- nlme::getData(mod)
+  mod_FIML <- suppressWarnings(stats::update(mod, data = dat, method = "ML"))
+  mod_FIML$data <- dat
 
   info_E <- Fisher_info(mod_FIML, type = "expected")
   info_A <- Fisher_info(mod_FIML, type = "averaged")
@@ -98,7 +137,9 @@ test_with_FIML <- function(mod) {
 }
 
 
-test_after_shuffling <- function(mod, by_var = NULL, tol_param = 10^-5, tol_info = .03, seed = NULL) {
+test_after_shuffling <- function(mod, by_var = NULL,
+                                 tol_param = 10^-3, tol_info = 10^-3,
+                                 test = "info", seed = NULL) {
 
   if (!is.null(seed)) set.seed(seed)
 
@@ -112,7 +153,8 @@ test_after_shuffling <- function(mod, by_var = NULL, tol_param = 10^-5, tol_info
   unshuffle <- order(shuffle)
   dat_shuffle <- dat[shuffle,]
 
-  mod_shuffle <- stats::update(mod, data = dat_shuffle)
+  mod_shuffle <- suppressWarnings(stats::update(mod, data = dat_shuffle))
+  mod_shuffle$data <- dat_shuffle
 
   varcomp_orig <- extract_varcomp(mod)
   varcomp_shuf <- extract_varcomp(mod_shuffle)
@@ -122,71 +164,66 @@ test_after_shuffling <- function(mod, by_var = NULL, tol_param = 10^-5, tol_info
   One <- matrix(1, p, p)
   expected_info_ratio <- Fisher_info(mod, type = "expected") / Fisher_info(mod_shuffle, type = "expected")
   averaged_info_ratio <- Fisher_info(mod, type = "averaged") / Fisher_info(mod_shuffle, type = "averaged")
-  testthat::expect_equal(expected_info_ratio, One, tolerance = tol_info, check.attributes = FALSE)
-  testthat::expect_equal(averaged_info_ratio, One, tolerance = tol_info, check.attributes = FALSE)
 
-  unscramble_block <- function(A, unshuffle) {
-    A_full <- unblock(A)[unshuffle, unshuffle]
-    groups <- attr(A, "groups")[unshuffle]
-    A_list <- matrix_list(A_full, fac = groups, dim = "both")
-    names(A_list) <- names(A)
-    A_list
+  if (test == "diag-info") {
+    testthat::expect_equal(diag(expected_info_ratio), diag(One), tolerance = tol_info, check.attributes = FALSE)
+    testthat::expect_equal(diag(averaged_info_ratio), diag(One), tolerance = tol_info, check.attributes = FALSE)
   }
 
-  R_mat <- build_corr_mats(mod)
-
-  if (!is.null(R_mat)) {
-    R_shuff <- unscramble_block(build_corr_mats(mod_shuffle), unshuffle)
-    testthat::expect_equal(R_mat, R_shuff, check.attributes = FALSE)
+  if (test %in% c("info","full")) {
+    testthat::expect_equal(expected_info_ratio, One, tolerance = tol_info, check.attributes = FALSE)
+    testthat::expect_equal(averaged_info_ratio, One, tolerance = tol_info, check.attributes = FALSE)
   }
 
-  V_list <- build_var_cor_mats(mod)
-  V_shuff <- unscramble_block(build_var_cor_mats(mod_shuffle), unshuffle)
-  testthat::expect_equal(V_list, V_shuff, check.attributes = FALSE)
+  if (test == "full") {
 
-  RE_list <- build_RE_mats(mod)
-  RE_shuff <- build_RE_mats(mod_shuffle)
-  names(RE_shuff) <- levels(attr(RE_shuff, "groups"))
-  RE_shuff <- unscramble_block(RE_shuff, unshuffle)
-  testthat::expect_equal(RE_list, RE_shuff, check.attributes = FALSE)
+    unscramble_block <- function(A, unshuffle) {
+      A_full <- unblock(A)[unshuffle, unshuffle]
+      groups <- attr(A, "groups")[unshuffle]
+      A_list <- matrix_list(A_full, fac = groups, dim = "both")
+      names(A_list) <- names(A)
+      A_list
+    }
 
-  Sigma_list <- build_Sigma_mats(mod)
-  Sigma_shuff <- build_Sigma_mats(mod_shuffle)
-  Sigma_shuff <- unscramble_block(Sigma_shuff, unshuffle)
-  testthat::expect_equal(Sigma_list, Sigma_shuff, check.attributes = FALSE)
+    R_mat <- build_corr_mats(mod)
 
-  Tau_params <- unlist(dV_dreStruct(mod), recursive = FALSE)
-  cor_params <- dV_dcorStruct(mod)
-  if (is.null(cor_params)) cor_params <- list()
-  var_params <- dV_dvarStruct(mod)
-  if (is.null(var_params)) var_params <- list()
-  sigma_sq <- dV_dsigmasq(mod)
+    if (!is.null(R_mat)) {
+      R_shuff <- unscramble_block(build_corr_mats(mod_shuffle), unshuffle)
+      testthat::expect_equal(R_mat, R_shuff, check.attributes = FALSE)
+    }
 
-  Tau_shuff <-
-    dV_dreStruct(mod_shuffle) %>%
-    unlist(recursive = FALSE) %>%
-    lapply(unscramble_block, unshuffle = unshuffle)
-  cor_shuff <- lapply(dV_dcorStruct(mod_shuffle), unscramble_block, unshuffle = unshuffle)
-  var_shuff <- lapply(dV_dvarStruct(mod_shuffle), unscramble_block, unshuffle = unshuffle)
-  sigma_sq_shuff <- unscramble_block(dV_dsigmasq(mod_shuffle)[[1]], unshuffle)
+    V_list <- build_var_cor_mats(mod)
+    V_shuff <- unscramble_block(build_var_cor_mats(mod_shuffle), unshuffle)
+    testthat::expect_equal(V_list, V_shuff, check.attributes = FALSE)
 
-  testthat::expect_equal(Tau_params, Tau_shuff, check.attributes = FALSE)
-  testthat::expect_equal(cor_params, cor_shuff, check.attributes = FALSE)
-  testthat::expect_equal(var_params, var_shuff, check.attributes = FALSE)
-  testthat::expect_equal(sigma_sq[[1]], sigma_sq_shuff, check.attributes = FALSE)
+    RE_list <- build_RE_mats(mod)
+    RE_shuff <- build_RE_mats(mod_shuffle)
+    names(RE_shuff) <- levels(attr(RE_shuff, "groups"))
+    RE_shuff <- unscramble_block(RE_shuff, unshuffle)
+    testthat::expect_equal(RE_list, RE_shuff, check.attributes = FALSE)
 
-  dV_list <- c(Tau_params, cor_params, var_params, sigma_sq)
+    Sigma_list <- build_Sigma_mats(mod)
+    Sigma_shuff <- build_Sigma_mats(mod_shuffle)
+    Sigma_shuff <- unscramble_block(Sigma_shuff, unshuffle)
+    testthat::expect_equal(Sigma_list, Sigma_shuff, check.attributes = FALSE)
 
-  # block-diagonal V^-1
-  V_inv <- build_Sigma_mats(mod, invert = TRUE, sigma_scale = TRUE)
+    Tau_params <- unlist(dV_dreStruct(mod), recursive = FALSE)
+    cor_params <- dV_dcorStruct(mod)
+    if (is.null(cor_params)) cor_params <- list()
+    var_params <- dV_dvarStruct(mod)
+    if (is.null(var_params)) var_params <- list()
+    sigma_sq <- dV_dsigmasq(mod)
 
-  # list with V^-1 dV entries
-  Vinv_dV <- lapply(dV_list, prod_blockblock, A = V_inv)
+    Tau_shuff <- unlist(dV_dreStruct(mod_shuffle), recursive = FALSE)
+    Tau_shuff <- lapply(Tau_shuff, unscramble_block, unshuffle = unshuffle)
+    cor_shuff <- lapply(dV_dcorStruct(mod_shuffle), unscramble_block, unshuffle = unshuffle)
+    var_shuff <- lapply(dV_dvarStruct(mod_shuffle), unscramble_block, unshuffle = unshuffle)
+    sigma_sq_shuff <- unscramble_block(dV_dsigmasq(mod_shuffle)[[1]], unshuffle)
 
-
-  if (!is.null(mod$modelStruct$varStruct)) {
-    dsd_dvar <- dsd_dvarStruct(mod$modelStruct$varStruct)
-    dsd_dvar_shuff <- dsd_dvarStruct(mod_shuffle$modelStruct$varStruct)
+    testthat::expect_equal(Tau_params, Tau_shuff, check.attributes = FALSE)
+    testthat::expect_equal(cor_params, cor_shuff, check.attributes = FALSE)
+    testthat::expect_equal(var_params, var_shuff, check.attributes = FALSE)
+    testthat::expect_equal(sigma_sq[[1]], sigma_sq_shuff, check.attributes = FALSE)
   }
 
 }
@@ -196,44 +233,12 @@ check_name_order <- function(x_list, group_levels = NULL) {
   testthat::expect_identical(names(x_list), group_levels)
 }
 
-build_block_matrices <- function(mod) {
-
-  R_list <- build_corr_mats(mod)
-
-  check_name_order(R_list)
-
-  all_groups <- rev(mod$groups)
-
-  if (!is.null(mod$modelStruct$varStruct)) {
-    sd_vec <- mod$sigma / nlme::varWeights(mod$modelStruct$varStruct)[order(do.call(order, all_groups))]
-    sd_list <- split(sd_vec, attr(R_list, "groups"))
-
-    check_name_order(sd_list, group_levels = levels(attr(R_list, "groups")))
-  }
-
-  V_list <- build_var_cor_mats(mod, sigma_scale = TRUE)
-
-  check_name_order(V_list)
-
-  ZDZ_list <- build_RE_mats(mod, sigma_scale = TRUE)
-  check_name_order(ZDZ_list)
-
-  Tau_params <- dV_dreStruct(mod)
-  sapply(Tau_params, check_name_order)
-
-  cor_params <- dV_dcorStruct(mod)
-  sapply(cor_params, check_name_order)
-
-  var_params <- dV_dvarStruct(mod)
-  sapply(var_params, check_name_order)
-
-}
-
 #--------------------------------------------------------------------
 # Checks using REML2
 #--------------------------------------------------------------------
 
 check_REML2 <- function(mod, print = FALSE) {
+  mod$data <- nlme::getData(mod)
   mod2 <- mod
   mod2$method <- "REML2"
 
@@ -259,7 +264,7 @@ check_REML2 <- function(mod, print = FALSE) {
 
 check_against_scdhlm <- function(mod, p_lmeInfo, r_lmeInfo, p_scdhlm = p_lmeInfo, r_scdhlm, infotype = "expected") {
 
-  g_lmeInfo <- lmeInfo::g_mlm(mod, p_lmeInfo, r_lmeInfo)
+  g_lmeInfo <- g_mlm(mod, p_lmeInfo, r_lmeInfo)
 
   g_scdhlm <- scdhlm::g_REML(mod, p_scdhlm, r_scdhlm)
 

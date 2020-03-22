@@ -11,17 +11,24 @@ CI_g(g, cover = 0.95, bound = 35, symmetric = TRUE)
 
 \item{cover}{confidence level}
 
-\item{bound}{numerical tolerance for non-centrality parameter in \code{\link{qt}}.}
+\item{bound}{numerical tolerance for non-centrality parameter in
+\code{\link[stats]{qt}}.}
+
+\item{symmetric}{If \code{TRUE} (the default), use a symmetric confidence
+interval. If \code{FALSE}, use a non-central t approximation to obtain an
+asymmetric confidence interval.}
 }
 \value{
 A vector of lower and upper confidence bounds.
 }
 \description{
-Calculates a symmetric confidence interval given a \code{g_mlm} object,
-based on a central t distribution; and calculates an approximate confidence interval
-given a \code{g_mlm} object, based on a non-central t approximation.
+Calculates a confidence interval for a \code{g_mlm} object,
+  using either a central t distribution (for a symmetric interval) or a
+  non-central t distribution (for an asymmetric interval).
 }
 \examples{
+
+library(nlme)
 data(Laski, package = "scdhlm")
 Laski_RML <- lme(fixed = outcome ~ treatment,
                  random = ~ 1 | case,
