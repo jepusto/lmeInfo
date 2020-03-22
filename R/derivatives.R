@@ -8,18 +8,22 @@ dV_dTau_index <- function(tau_index, Z_blocks, block) {
   return(dV_dTau)
 }
 
-dV_dTau_unstruct <- function(block, Z_design) {
+dV_dTau_unstruct <- function(block, pdMat_class, Z_design) {
   Tau_q <- dim(Z_design)[2]
   Z_blocks <- by(Z_design, block, as.matrix)
-  tau_index <- cbind(unlist(sapply(1:Tau_q, function(x) seq(1,x))),
-                     unlist(sapply(1:Tau_q, function(x) rep(x,x))))
+  if (pdMat_class == "pdDiag") {
+    tau_index <- cbind(seq(1,Tau_q), seq(1,Tau_q))
+  } else {
+    tau_index <- cbind(unlist(sapply(1:Tau_q, function(x) seq(1,x))),
+                       unlist(sapply(1:Tau_q, function(x) rep(x,x))))
+  }
   apply(tau_index, 1, function(t) dV_dTau_index(unique(t), Z_blocks = Z_blocks, block = block))
 }
 
 dV_dreStruct <- function(mod) {
-
   blocks <- mod$groups
-  #blocks <- blocks[, !grepl("([.])", names(blocks))] # delete case.1 from the blocks?
+  blocks_names <- names(blocks)
+  pdMat_classes <- lapply(blocks_names, function(x) class(mod$modelStruct$reStruct[[x]])[1])
   Z_design <- model.matrix(mod$modelStruct$reStruct, data = mod$data)
 
   if (length(blocks) == 1L) {
@@ -32,7 +36,7 @@ dV_dreStruct <- function(mod) {
   }
 
   mapply(dV_dTau_unstruct,
-         block = blocks, Z_design = Z_list,
+         block = blocks, pdMat_class = pdMat_classes, Z_design = Z_list,
          SIMPLIFY = FALSE)
 }
 
