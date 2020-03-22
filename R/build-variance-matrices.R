@@ -89,11 +89,9 @@ build_RE_mats <- function(mod, sigma_scale = FALSE) {
     }
     Z_mat <- model.matrix(mod$modelStruct$reStruc, nlme::getData(mod))
     Z_names <- sapply(strsplit(colnames(Z_mat), ".", fixed=TRUE), function(x) x[1])
-    #Z_names <- colnames(all_groups) # change the Z_names so that Z_levels would have the right structure
     row.names(Z_mat) <- NULL
     Z_levels <- lapply(names(all_groups), function(x) Z_mat[,x==Z_names,drop=FALSE])
     Z_levels <- Map(matrix_list, x = Z_levels, fac = all_groups, dim = "row")
-
     ZDZ_lists <- Map(ZDZt, D = D_list, Z_list = Z_levels)
     # ZDZ_lists <- Map(function(x,fac) x[order(fac)], x = ZDZ_lists, fac = all_groups)
 
