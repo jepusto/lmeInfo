@@ -56,7 +56,7 @@ dV_dTau_unstruct <- function(block, pdMat_class, Z_design) {
 dV_dreStruct <- function(mod) {
   blocks <- mod$groups
   blocks_names <- names(blocks)
-  pdMat_classes <- lapply(blocks_names, function(x) class(mod$modelStruct$reStruct[[x]])[1])
+  b <- lapply(blocks_names, function(x) class(mod$modelStruct$reStruct[[x]])[1])
   Z_design <- model.matrix(mod$modelStruct$reStruct, data = mod$data)
 
   if (length(blocks) == 1L) {

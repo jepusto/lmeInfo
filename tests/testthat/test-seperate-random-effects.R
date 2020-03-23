@@ -39,7 +39,6 @@ test_that("mod1_1 and mod1_2 returns the same results.", {
 mod2_1 <- suppressWarnings(lme(fixed = outcome ~ session_c + treatment + session_trt,
               random = list( ~ 1 | school, ~ 1 | case, ~ 0 + session_c | case),
               correlation = corAR1(0, ~ session_c | school/case),
-              # correlation = corAR1(0, ~ session_c | school/case/case)
               data = Bryant2018))
 # warning: cannot use smaller level of grouping for 'correlation' than for 'random'. Replacing the former with the latter.
 #VarCorr(mod2_1) # pdLogChol(1) parametrization
