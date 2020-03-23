@@ -44,19 +44,23 @@ dV_dTau_index <- function(tau_index, Z_blocks, block) {
 dV_dTau_unstruct <- function(block, pdMat_class, Z_design) {
   Tau_q <- dim(Z_design)[2]
   Z_blocks <- by(Z_design, block, as.matrix)
-  if (pdMat_class == "pdDiag") {
+
+  if ("pdDiag" %in% pdMat_class) {
     tau_index <- cbind(seq(1,Tau_q), seq(1,Tau_q))
-  } else {
+  } else if ("pdSymm" %in% pdMat_class) {
     tau_index <- cbind(unlist(sapply(1:Tau_q, function(x) seq(1,x))),
                        unlist(sapply(1:Tau_q, function(x) rep(x,x))))
+  } else {
+    stop("Tau_index only available for pdMat structures of class pdDiag and pdSymm.")
   }
+
   apply(tau_index, 1, function(t) dV_dTau_index(unique(t), Z_blocks = Z_blocks, block = block))
 }
 
 dV_dreStruct <- function(mod) {
   blocks <- mod$groups
   blocks_names <- names(blocks)
-  b <- lapply(blocks_names, function(x) class(mod$modelStruct$reStruct[[x]])[1])
+  b <- lapply(blocks_names, function(x) class(mod$modelStruct$reStruct[[x]])) # pdClass
   Z_design <- model.matrix(mod$modelStruct$reStruct, data = mod$data)
 
   if (length(blocks) == 1L) {
@@ -69,7 +73,7 @@ dV_dreStruct <- function(mod) {
   }
 
   mapply(dV_dTau_unstruct,
-         block = blocks, pdMat_class = pdMat_classes, Z_design = Z_list,
+         block = blocks, pdMat_class = b, Z_design = Z_list,
          SIMPLIFY = FALSE)
 }
 
