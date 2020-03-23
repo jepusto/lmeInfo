@@ -26,7 +26,13 @@ extract_varcomp.gls <- function(mod) {
 extract_varcomp.lme <- function(mod) {
 
   sigma_sq <- mod$sigma^2                                           # sigma^2
-  Tau_params <- coef(mod$modelStruct$reStruct, FALSE) * sigma_sq    # unique coefficients in Tau
+  # Tau_params <- coef(mod$modelStruct$reStruct, FALSE) * sigma_sq    # unique coefficients in Tau
+
+  # Calculate Tau_params while taking care of the pdDiag
+  RE_params <- coef(mod$modelStruct$reStruct, FALSE)
+  Tau_params <- RE_params * RE_params^(as.numeric(grepl("sd", attr(RE_params, "names")))) * sigma_sq
+  names(Tau_params) <- mapply(gsub, ".sd", ".var", names(Tau_params), USE.NAMES = FALSE)
+
   cor_params <- as.double(coef(mod$modelStruct$corStruct, FALSE))   # correlation structure
   var_params <- as.double(coef(mod$modelStruct$varStruct, FALSE))   # variance structure
 

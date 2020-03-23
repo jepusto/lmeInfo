@@ -137,7 +137,6 @@ build_RE_mats <- function(mod, sigma_scale = FALSE) {
     row.names(Z_mat) <- NULL
     Z_levels <- lapply(names(all_groups), function(x) Z_mat[,x==Z_names,drop=FALSE])
     Z_levels <- Map(matrix_list, x = Z_levels, fac = all_groups, dim = "row")
-
     ZDZ_lists <- Map(ZDZt, D = D_list, Z_list = Z_levels)
     # ZDZ_lists <- Map(function(x,fac) x[order(fac)], x = ZDZ_lists, fac = all_groups)
 
