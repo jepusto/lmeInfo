@@ -13,10 +13,11 @@ Authors@R: c(
            email = "amandachen@utexas.edu",
            role = c("aut")))
 Maintainer: James Pustejovsky <jepusto@gmail.com>
-Description: Provides analytic derivatives and information matrices for fitted lmeStruct models from nlme::lme(). 
-    The package includes functions for estimating the inverse of the expected or average Fisher information matrix of the 
-    full maximum or restricted maximum likelihood. It entails estimating the sampling variance of variance parameters, 
-    including the parameters of the random effects structure, variance structure and correlation structure.
+Description: Provides analytic derivatives and information matrices for fitted lmeStruct models from nlme::lme().
+    The package includes functions for estimating the sampling variance-covariance of variance component parameters using 
+    the inverse Fisher information for fitted LME models. The variance component paramters include the parameters of the 
+    random effects structure, the variance structure and the correlation structure. The package entails the calculation of 
+    the inverse of expected or average Fisher information matrix of the full maximum or restricted maximum likelihood.
 URL: https://github.com/jepusto/lmeInfo
 BugReports: https://github.com/jepusto/lmeInfo/issues
 License: GPL-3
