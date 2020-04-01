@@ -1,6 +1,7 @@
 Package: lmeInfo
+Type: Package
 Title: Information Matrices for lmeStruct Objects
-Version: 0.1.0.9000
+Version: 0.1.0
 Authors@R: c(
     person(given = "James", 
            family = "Pustejovsky", 
@@ -11,7 +12,11 @@ Authors@R: c(
            family = "Chen",
            email = "amandachen@utexas.edu",
            role = c("aut")))
-Description: Provides analytic derivatives and information matrices for fitted lmeStruct models from nlme::lme().
+Maintainer: James Pustejovsky <jepusto@gmail.com>
+Description: Provides analytic derivatives and information matrices for fitted lmeStruct models from nlme::lme(). 
+    The package includes functions for estimating the inverse of the expected or average Fisher information matrix of the 
+    full maximum or restricted maximum likelihood. It entails estimating the sampling variance of variance parameters, 
+    including the parameters of the random effects structure, variance structure and correlation structure.
 URL: https://github.com/jepusto/lmeInfo
 BugReports: https://github.com/jepusto/lmeInfo/issues
 License: GPL-3
@@ -36,3 +41,4 @@ Imports:
     stats
 VignetteBuilder: knitr
 RoxygenNote: 7.0.2
+Language: en-US
