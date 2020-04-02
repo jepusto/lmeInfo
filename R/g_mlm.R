@@ -43,25 +43,24 @@
 #' @examples
 #'
 #' library(nlme)
-#' data(Laski, package = "scdhlm")
-#' Laski_RML <- lme(fixed = outcome ~ treatment,
-#'                  random = ~ 1 | case,
-#'                  correlation = corAR1(0, ~ time | case),
-#'                  data = Laski)
-#' summary(Laski_RML)
-#' g_mlm(Laski_RML, p_const = c(0,1), r_const = c(1,0,1), returnModel = FALSE)
+#' data(Bryant2016, package = "lmeInfo")
+#' Bryant2016_RML1 <- lme(fixed = outcome ~ treatment,
+#'                        random = ~ 1 | school/case,
+#'                        correlation = corAR1(0, ~ session | school/case),
+#'                        data = Bryant2016)
+#' summary(Bryant2016_RML1)
+#' Bryant2016_g1 <- g_mlm(Bryant2016_RML1, p_const = c(0,1), r_const = c(1,1,0,1),
+#'                        infotype = "expected", returnModel = TRUE)
+#' summary(Bryant2016_g1)
+#' print(Bryant2016_g1)
 #'
-#' data(Schutte, package = "scdhlm")
-#' Schutte$trt.week <- with(Schutte, unlist(tapply((treatment=="treatment") * week,
-#'          list(treatment,case), function(x) x - min(x))) + (treatment=="treatment"))
-#' Schutte$week <- Schutte$week - 9
-#' Schutte_RML <- lme(fixed = fatigue ~ week + treatment + trt.week,
-#'                    random = ~ week | case,
-#'                    correlation = corAR1(0.2, ~ week | case),
-#'                    data = subset(Schutte, case != 4))
-#' summary(Schutte_RML)
-#' Schutte_g <- g_mlm(Schutte_RML, p_const = c(0,0,1,7), r_const = c(1,0,0,0,1))
-#' summary(Schutte_g)
+#' Bryant2016_RML4 <- lme(fixed = outcome ~ session_c + treatment + trt_time,
+#'                        random = list(~ 1 | school, ~ session_c | case),
+#'                        correlation = corAR1(0, ~ session_c | school/case),
+#'                        data = Bryant2016)
+#' Bryant2016_g4 <- g_mlm(Bryant2016_RML4, p_const = c(0,0,1,5), r_const = c(1,1,0,0,0,1))
+#' summary(Bryant2016_g4)
+#' print(Bryant2016_g4)
 
 g_mlm <- function(mod, p_const, r_const, infotype = "expected", returnModel = TRUE) {
 

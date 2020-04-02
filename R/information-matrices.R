@@ -93,6 +93,7 @@ Q_matrix <- function(mod) {
 #'                  random = ~ 1 | case,
 #'                  correlation = corAR1(0, ~ time | case),
 #'                  data = Laski)
+#' Fisher_info(Laski_RML)
 #'
 #' @importFrom stats coef
 #' @importFrom stats dist
@@ -174,7 +175,7 @@ Fisher_info <- function(mod, type = "expected") {
 
     }
 
-  } else if (type == "averaged") {
+  } else if (type == "average") {
 
     rhat <- as.matrix(stats::residuals(mod, level = 0)) # fixed residuals
     Vinv_rhat <- prod_blockmatrix(A = V_inv, B = rhat)
