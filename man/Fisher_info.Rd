@@ -23,10 +23,12 @@ Calculates the expected, observed, or average information matrix
 \examples{
 
 library(nlme)
-data(Laski, package = "scdhlm")
-Laski_RML <- lme(fixed = outcome ~ treatment,
-                 random = ~ 1 | case,
-                 correlation = corAR1(0, ~ time | case),
-                 data = Laski)
+data(Bryant2016)
+Bryant2016_RML <- lme(fixed = outcome ~ treatment,
+                      random = ~ 1 | school/case,
+                      correlation = corAR1(0, ~ session | school/case),
+                      data = Bryant2016)
+Fisher_info(Bryant2016_RML, type = "expected")
+Fisher_info(Bryant2016_RML, type = "average")
 
 }

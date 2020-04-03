@@ -25,12 +25,11 @@ Estimate the sampling variance-covariance of variance component
 \examples{
 
 library(nlme)
-data(Laski, package = "scdhlm")
-Laski_RML <- lme(fixed = outcome ~ treatment,
-                 random = ~ 1 | case,
-                 correlation = corAR1(0, ~ time | case),
-                 data = Laski)
-
-varcomp_vcov(Laski_RML, type = "expected")
+data(Bryant2016)
+Bryant2016_RML <- lme(fixed = outcome ~ treatment,
+                      random = ~ 1 | school/case,
+                      correlation = corAR1(0, ~ session | school/case),
+                      data = Bryant2016)
+varcomp_vcov(Bryant2016_RML, type = "expected")
 
 }

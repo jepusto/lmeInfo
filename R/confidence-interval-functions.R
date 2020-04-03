@@ -16,7 +16,7 @@ CI_SMD_single <- function(delta, kappa, nu, V_delta, cover, bound) {
 
 ## symmetric and approximate non-central t confidence interval ####
 
-#' @title Calculates confidence interval for BC-SMD effect size estimates
+#' @title Calculates a confidence interval for a standardized mean difference effect size
 #'
 #' @description Calculates a confidence interval for a \code{g_mlm} object,
 #'   using either a central t distribution (for a symmetric interval) or a
