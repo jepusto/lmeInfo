@@ -2,12 +2,40 @@
 # extract variance components in natural parameterization
 #------------------------------------------------------------------------------
 
+#' @title Extract estimated variance components
+#'
+#' @description Extracts the estimated variance components from fitted
+#'
+#' @param mod Fitted model of class lmeStruct or glsStruct
+#'
+#' @export
+#'
+#' @return Object of class \code{varcomp} consisting of a list of estimated
+#'   variance components. Models that do not include correlation structure
+#'   parameters or variance structure parameters will have empty lists for those
+#'   components.
+#'
+#' @examples
+#'
+#' library(nlme)
+#' data(Bryant2016)
+#' Bryant2016_RML <- lme(fixed = outcome ~ treatment,
+#'                       random = ~ 1 | school/case,
+#'                       correlation = corAR1(0, ~ session | school/case),
+#'                       data = Bryant2016)
+#' extract_varcomp(Bryant2016_RML)
+#'
+
 extract_varcomp <- function(mod) UseMethod("extract_varcomp")
+
+#' @export
 
 extract_varcomp.default <- function(mod) {
   mod_class <- paste(class(mod), collapse = "-")
   stop(paste0("Variance components not available for models of class ", mod_class, "."))
 }
+
+#' @export
 
 extract_varcomp.gls <- function(mod) {
 
@@ -22,6 +50,8 @@ extract_varcomp.gls <- function(mod) {
   return(varcomp)
 
 }
+
+#' @export
 
 extract_varcomp.lme <- function(mod) {
 
@@ -88,12 +118,13 @@ Q_matrix <- function(mod) {
 #' @examples
 #'
 #' library(nlme)
-#' data(Laski, package = "scdhlm")
-#' Laski_RML <- lme(fixed = outcome ~ treatment,
-#'                  random = ~ 1 | case,
-#'                  correlation = corAR1(0, ~ time | case),
-#'                  data = Laski)
-#' Fisher_info(Laski_RML)
+#' data(Bryant2016)
+#' Bryant2016_RML <- lme(fixed = outcome ~ treatment,
+#'                       random = ~ 1 | school/case,
+#'                       correlation = corAR1(0, ~ session | school/case),
+#'                       data = Bryant2016)
+#' Fisher_info(Bryant2016_RML, type = "expected")
+#' Fisher_info(Bryant2016_RML, type = "average")
 #'
 #' @importFrom stats coef
 #' @importFrom stats dist
@@ -232,13 +263,12 @@ Fisher_info <- function(mod, type = "expected") {
 #' @examples
 #'
 #' library(nlme)
-#' data(Laski, package = "scdhlm")
-#' Laski_RML <- lme(fixed = outcome ~ treatment,
-#'                  random = ~ 1 | case,
-#'                  correlation = corAR1(0, ~ time | case),
-#'                  data = Laski)
-#'
-#' varcomp_vcov(Laski_RML, type = "expected")
+#' data(Bryant2016)
+#' Bryant2016_RML <- lme(fixed = outcome ~ treatment,
+#'                       random = ~ 1 | school/case,
+#'                       correlation = corAR1(0, ~ session | school/case),
+#'                       data = Bryant2016)
+#' varcomp_vcov(Bryant2016_RML, type = "expected")
 #'
 
 varcomp_vcov <- function(mod, type = "expected") {
