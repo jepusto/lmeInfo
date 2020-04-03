@@ -81,7 +81,7 @@ test_deriv_dims.gls <- function(mod) {
   expect_correct_block_dims(d_sigma, m = m, ni = ni, is_list = FALSE)
 
   info_E <- Fisher_info(mod, type = "expected")
-  info_A <- Fisher_info(mod, type = "averaged")
+  info_A <- Fisher_info(mod, type = "average")
   r_dim <- rep(length(unlist(vc_est)), 2)
 
   testthat::expect_identical(dim(info_E), r_dim)
@@ -113,7 +113,7 @@ test_deriv_dims.lme <- function(mod) {
   expect_correct_block_dims(d_sigma, m = m[[G]], ni = ni[[G]], is_list = FALSE)
 
   info_E <- Fisher_info(mod, type = "expected")
-  info_A <- Fisher_info(mod, type = "averaged")
+  info_A <- Fisher_info(mod, type = "average")
   r_dim <- rep(length(unlist(vc_est)), 2)
 
   testthat::expect_identical(dim(info_E), r_dim)
@@ -129,7 +129,7 @@ test_with_FIML <- function(mod) {
   mod_FIML$data <- dat
 
   info_E <- Fisher_info(mod_FIML, type = "expected")
-  info_A <- Fisher_info(mod_FIML, type = "averaged")
+  info_A <- Fisher_info(mod_FIML, type = "average")
 
   testthat::expect_identical(dim(info_E), r_dim)
   testthat::expect_identical(dim(info_A), r_dim)
@@ -163,7 +163,7 @@ test_after_shuffling <- function(mod, by_var = NULL,
   p <- length(unlist(varcomp_orig))
   One <- matrix(1, p, p)
   expected_info_ratio <- Fisher_info(mod, type = "expected") / Fisher_info(mod_shuffle, type = "expected")
-  averaged_info_ratio <- Fisher_info(mod, type = "averaged") / Fisher_info(mod_shuffle, type = "averaged")
+  averaged_info_ratio <- Fisher_info(mod, type = "average") / Fisher_info(mod_shuffle, type = "average")
 
   if (test == "diag-info") {
     testthat::expect_equal(diag(expected_info_ratio), diag(One), tolerance = tol_info, check.attributes = FALSE)
@@ -244,8 +244,8 @@ check_REML2 <- function(mod, print = FALSE) {
 
   I_E1 <- Fisher_info(mod, type = "expected")
   I_E2 <- Fisher_info(mod2, type = "expected")
-  I_A1 <- Fisher_info(mod, type = "averaged")
-  I_A2 <- Fisher_info(mod2, type = "averaged")
+  I_A1 <- Fisher_info(mod, type = "average")
+  I_A2 <- Fisher_info(mod2, type = "average")
 
   if (print) {
     rownames(I_E1) <- rownames(I_E2) <- colnames(I_E1) <- colnames(I_E2) <- NULL
