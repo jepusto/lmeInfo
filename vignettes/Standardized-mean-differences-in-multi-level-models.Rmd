@@ -1,0 +1,80 @@
+---
+title: "Standardized mean differences for fitted `lme` and `gls` models"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    number_sections: true
+    toc: true
+bibliography: references.bib
+csl: apa.csl
+vignette: >
+  %\VignetteIndexEntry{Standardized-mean-differences-for-fitted-lme-models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Standardized mean difference effect sizes in linear mixed effects models
+
+The `lmeInfo` package includes a function, `g_mlm()`, for estimating a standardized mean difference effect size from a multi-level model fitted using `lme()` or `gls()` from the `nlme` package. The estimation methods follow Pustejovsky, Hedges, and Shadish (2014). Let $\boldsymbol{\beta}$ denote the fixed effect parameters and $\boldsymbol{\theta}$ denote the variance components (in the natural, variance-covariance parameterization) from a multi-level model. A standardized mean difference effect size can then be defined as 
+$$
+\delta = \frac{\mathbf{p}'\boldsymbol\beta}{\sqrt{\mathbf{r}'\boldsymbol\theta}},
+$$
+for some fixed vectors $\mathbf{p}$ and $\mathbf{r}$. 
+
+The `g_mlm()` function takes as inputs a fitted `lme()` model and the vectors $\mathbf{p}$ and $\mathbf{r}$. It computes an estimate of $\delta$ as 
+$$
+d = \left(1 - \frac{3}{4 \nu - 1}\right) \frac{\mathbf{p}'\boldsymbol{\hat\beta}}{\sqrt{\mathbf{r}'\boldsymbol{\hat\theta}}},
+$$
+where $\boldsymbol{\hat\beta}$ and $\boldsymbol{\hat\theta}$ are maximum likelihood or restricted maximum likelihood estimates of the fixed effects and variance components, respectively. Here, $\nu$ is the Satterthwaite degrees of freedom given by 
+$$
+\nu = \frac{2 \left(\mathbf{r}'\boldsymbol{\hat\theta}\right)^2}{\text{Var}\left(\mathbf{r}'\boldsymbol{\hat\theta}\right)},
+$$
+and the variance of $\mathbf{r}'\boldsymbol{\hat\theta}$ is calculated using the inverse of the Fisher information matrix. An approximate standard error for the standardized mean difference estimate is 
+$$
+\text{SE}(d) \approx \sqrt{\frac{\text{Var}\left(\mathbf{p}'\boldsymbol{\hat\beta}\right)}{\mathbf{r}'\boldsymbol{\hat\theta}} + \frac{d^2}{2 \nu}}
+$$
+(Pustejovsky, Hedges, & Shadish, 2014). 
+
+# Demonstration 
+
+We use a dataset from a multiple baseline study conducted by Bryant and colleagues (2016) to demonstrate how to calculate a design-comparable standardized mean difference effect size based on the fitted model.
+
+The study by Bryant and colleagues (2016) involved collecting repeated measures of math performance on multiple students, in each of several classrooms. After an initial baseline period in each classroom, an intervention was introduced and its effects on student math performance were observed over time. For sake of illustration, we use a very simple model for these data, consisting of a simple change in levels coinciding with the introduction of treatment. We include random effects for each classroom and each student. Here we fit the model using `nlme::lme()`:
+
+```{r example}
+library(lmeInfo)
+library(nlme)
+data(Bryant2016)
+
+Bryant2016_RML <- lme(fixed = outcome ~ treatment,
+                      random = ~ 1 | school/case,
+                      data = Bryant2016)
+
+summary(Bryant2016_RML)
+```
+
+The estimated variance components from the fitted model can be obtained using `extract_varcomp()`:
+```{r extract}
+extract_varcomp(Bryant2016_RML)
+```
+
+In our model for the Bryant data, we use the treatment effect in the numerator of the effect size and the sum of the classroom-level, student-level, and within-student variance components in the denominator of the effect size. The constants are therefore given by $\mathbf{p} = (0, 1)'$ and $\mathbf{r} = (1, 1, 1)'$. The effect size estimate can be calculated as:
+
+```{r bc-smd}
+Bryant2016_g <- g_mlm(Bryant2016_RML, p_const = c(0,1), r_const = c(1,1,1), infotype = "expected")
+```
+
+```{r}
+Bryant2016_g
+```
+
+A `summary()` method is also included, which includes more detail about the model parameter estimates and effect size estimate:
+```{r}
+summary(Bryant2016_g)
+```
+
+# References {-}
+
+Bryant, B. R., Bryant, D. P., Porterfield, J., Dennis, M. S., Falcomata, T., Valentine, C., ... & Bell, K. (2016). The effects of a Tier 3 intervention on the mathematics performance of second grade students with severe mathematics difficulties. _Journal of Learning Disabilities, 49_(2), 176-188. doi:10.1177/0022219414538516
+
+Pustejovsky, J. E., Hedges, L. V., & Shadish, W. R. (2014). Design-comparable effect sizes in multiple baseline designs: A general modeling framework. _Journal of Educational and Behavioral Statistics, 39_(5), 368–393. doi:10.3102/1076998614547577

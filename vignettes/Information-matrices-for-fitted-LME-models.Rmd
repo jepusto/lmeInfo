@@ -1,5 +1,5 @@
 ---
-title: "Information matrices for fitted LME models"
+title: "Information matrices for fitted `lme()` and `gls()` models"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
@@ -8,7 +8,7 @@ output:
 bibliography: references.bib
 csl: apa.csl
 vignette: >
-  %\VignetteIndexEntry{Information-matrices-for-fitted-LME-models}
+  %\VignetteIndexEntry{Information-matrices-for-fitted-lme-models}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

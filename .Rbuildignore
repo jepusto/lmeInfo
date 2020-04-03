@@ -5,3 +5,4 @@ auxiliary
 ^\.Rproj\.user$
 ^README\.Rmd$
 cran-comments.md
+vignettes/Standardized-mean-differences-in-multi-level-models.Rmd
