@@ -7,7 +7,7 @@
 extract_varcomp(mod)
 }
 \arguments{
-\item{mod}{Fitted model of class lmeStruct or glsStruct}
+\item{mod}{Fitted model of class lmeStruct or glsStruct.}
 }
 \value{
 Object of class \code{varcomp} consisting of a list of estimated
@@ -16,7 +16,9 @@ Object of class \code{varcomp} consisting of a list of estimated
   components.
 }
 \description{
-Extracts the estimated variance components from fitted
+Extracts the estimated variance components
+  from a fitted linear mixed effects model (lmeStruct object)
+  or generalized least squares model (glsStruct object).
 }
 \examples{
 

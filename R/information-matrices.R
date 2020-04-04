@@ -4,9 +4,11 @@
 
 #' @title Extract estimated variance components
 #'
-#' @description Extracts the estimated variance components from fitted
+#' @description Extracts the estimated variance components
+#'   from a fitted linear mixed effects model (lmeStruct object)
+#'   or generalized least squares model (glsStruct object).
 #'
-#' @param mod Fitted model of class lmeStruct or glsStruct
+#' @param mod Fitted model of class lmeStruct or glsStruct.
 #'
 #' @export
 #'
@@ -101,12 +103,13 @@ Q_matrix <- function(mod) {
 # Information Matrices
 #------------------------------------------------------------------------------
 
-#' @title Calculate expected, observed, or average information matrix
+#' @title Calculate expected, observed, or average Fisher information matrix
 #'
-#' @description Calculates the expected, observed, or average information matrix
+#' @description Calculates the expected, observed, or average Fisher information matrix
 #'   from a fitted linear mixed effects model (lmeStruct object)
+#'   or generalized least squares model (glsStruct object).
 #'
-#' @param mod Fitted model of class lmeStruct
+#' @param mod Fitted model of class lmeStruct or glsStruct.
 #' @param type Type of information matrix. One of \code{"expected"} (the default),
 #'   \code{"observed"}, or \code{"average"}.
 #'
@@ -251,6 +254,7 @@ Fisher_info <- function(mod, type = "expected") {
 #'
 #' @description Estimate the sampling variance-covariance of variance component
 #'   parameters from a fitted linear mixed effects model (lmeStruct object)
+#'   or generalized least squares model (glsStruct object)
 #'   using the inverse Fisher information.
 #'
 #' @inheritParams Fisher_info

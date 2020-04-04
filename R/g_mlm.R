@@ -6,11 +6,12 @@
 
 #' @title Calculates adjusted mlm effect size
 #'
-#' @description Estimates a design-comparable standardized mean difference effect size based on data
-#' from a multiple baseline design, using adjusted mlm method as described in Pustejovsky, Hedges,
-#' & Shadish (2014). Note that the data must contain one row per measurement occasion per case.
+#' @description Estimates a standardized mean difference effect size
+#' from a fitted multi-level model, using adjusted mlm method as described in Pustejovsky, Hedges,
+#' & Shadish (2014).
 #'
 #' @param mod Fitted model of class lmeStruct (estimated using \code{nlme::lme()})
+#'   or of class glsStruct (estimated using \code{nlme::gls()}).
 #' @param p_const Vector of constants for calculating numerator of effect size.
 #' Must be the same length as fixed effects in \code{mod}.
 #' @param r_const Vector of constants for calculating denominator of effect size.
@@ -48,7 +49,6 @@
 #'                        random = ~ 1 | school/case,
 #'                        correlation = corAR1(0, ~ session | school/case),
 #'                        data = Bryant2016)
-#' summary(Bryant2016_RML1)
 #' Bryant2016_g1 <- g_mlm(Bryant2016_RML1, p_const = c(0,1), r_const = c(1,1,0,1),
 #'                        infotype = "expected", returnModel = TRUE)
 #' summary(Bryant2016_g1)

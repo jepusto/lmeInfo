@@ -8,7 +8,7 @@
 varcomp_vcov(mod, type = "expected")
 }
 \arguments{
-\item{mod}{Fitted model of class lmeStruct}
+\item{mod}{Fitted model of class lmeStruct or glsStruct.}
 
 \item{type}{Type of information matrix. One of \code{"expected"} (the default),
 \code{"observed"}, or \code{"average"}.}
@@ -20,6 +20,7 @@ Sampling variance-covariance matrix corresponding to variance
 \description{
 Estimate the sampling variance-covariance of variance component
   parameters from a fitted linear mixed effects model (lmeStruct object)
+  or generalized least squares model (glsStruct object)
   using the inverse Fisher information.
 }
 \examples{

@@ -2,12 +2,12 @@
 % Please edit documentation in R/information-matrices.R
 \name{Fisher_info}
 \alias{Fisher_info}
-\title{Calculate expected, observed, or average information matrix}
+\title{Calculate expected, observed, or average Fisher information matrix}
 \usage{
 Fisher_info(mod, type = "expected")
 }
 \arguments{
-\item{mod}{Fitted model of class lmeStruct}
+\item{mod}{Fitted model of class lmeStruct or glsStruct.}
 
 \item{type}{Type of information matrix. One of \code{"expected"} (the default),
 \code{"observed"}, or \code{"average"}.}
@@ -17,8 +17,9 @@ Information matrix corresponding to variance component parameters of
   \code{mod}.
 }
 \description{
-Calculates the expected, observed, or average information matrix
+Calculates the expected, observed, or average Fisher information matrix
   from a fitted linear mixed effects model (lmeStruct object)
+  or generalized least squares model (glsStruct object).
 }
 \examples{
 
