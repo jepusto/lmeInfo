@@ -143,16 +143,11 @@ the inverse of the average Fisher information matrix (Gilmour, Thompson,
 
 ``` r
 varcomp_vcov(Bryant2016_RML, type = "expected")
+#>                             Tau.school.var((Intercept)) Tau.case.var((Intercept))     sigma_sq
+#> Tau.school.var((Intercept))                5.695541e+04               -4547.41772   0.06132317
+#> Tau.case.var((Intercept))                 -4.547418e+03               16045.57184 -32.27967543
+#> sigma_sq                                   6.132317e-02                 -32.27968 801.20973947
 ```
-
-    #>                             Tau.school.var((Intercept))
-    #> Tau.school.var((Intercept))                    5.70e+04
-    #> Tau.case.var((Intercept))                     -4.55e+03
-    #> sigma_sq                                       6.13e-02
-    #>                             Tau.case.var((Intercept)) sigma_sq
-    #> Tau.school.var((Intercept))                   -4547.4   0.0613
-    #> Tau.case.var((Intercept))                     16045.6 -32.2797
-    #> sigma_sq                                        -32.3 801.2097
 
 ### Estimating a standardized mean difference effect size
 
@@ -160,7 +155,7 @@ The package also includes a function, `g_mlm()`, for estimating a
 standardized mean difference effect size from a fitted multi-level
 model. The estimation methods follow Pustejovsky, Hedges, and Shadish
 (2014). A standardized mean difference effect size parameter can be
-defined the ratio of a linear combination of the model’s fixed effect
+defined as the ratio of a linear combination of the model’s fixed effect
 parameters over the square root of a linear combination of the model’s
 variance components. The `g_mlm()` function takes as inputs a fitted
 multi-level model and the vectors `p_const` and `r_const`, which define
@@ -173,7 +168,9 @@ error are based on approximating the distribution of the estimator by a
 t distribution, with degrees of freedom given by a Satterthwaite
 approximation (Pustejovsky, Hedges, & Shadish, 2014). The `g_mlm()`
 function includes an option allowing use of the expected or average form
-of the Fisher information matrix in the calculations.
+of the Fisher information matrix in the calculations. The `g_mlm()`
+function also includes an option allowing returning the fitted model
+parameters in addition to effect size estimate.
 
 In our model for the Bryant data, we use the treatment effect in the
 numerator of the effect size and the sum of the classroom-level,
@@ -195,7 +192,8 @@ Bryant2016_g
 ```
 
 A `summary()` method is also included, which includes more detail about
-the model parameter estimates and effect size estimate:
+the model parameter estimates and effect size estimate when setting
+`returnModel = TRUE` (the default) in `g_mlm()`:
 
 ``` r
 summary(Bryant2016_g)
@@ -227,7 +225,7 @@ components, not all of which are supported in `lmeInfo`. The package can
 handle the following classes of variance components:
 
   - Random effects structure
-      - `pdSymm` matrices, including in the `pdLogChol` and `pdfNatural`
+      - `pdSymm` matrices, including in the `pdLogChol` and `pdNatural`
         parameterizations
       - `pdDiag` matrices
   - Correlation structure

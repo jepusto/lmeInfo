@@ -68,14 +68,18 @@ The sampling variance-covariance of variance component parameters of model `Brya
 
 ```{r vcov-expected, eval = FALSE}
 varcomp_vcov(Bryant2016_RML, type = "expected")
+#>                             Tau.school.var((Intercept)) Tau.case.var((Intercept))     sigma_sq
+#> Tau.school.var((Intercept))                5.695541e+04               -4547.41772   0.06132317
+#> Tau.case.var((Intercept))                 -4.547418e+03               16045.57184 -32.27967543
+#> sigma_sq                                   6.132317e-02                 -32.27968 801.20973947
 ```
-```{r, echo = FALSE}
+```{r, echo = FALSE, eval = FALSE}
 print(varcomp_vcov(Bryant2016_RML, type = "expected"), digits = 3)
 ```
 
 ### Estimating a standardized mean difference effect size
 
-The package also includes a function, `g_mlm()`, for estimating a standardized mean difference effect size from a fitted multi-level model. The estimation methods follow Pustejovsky, Hedges, and Shadish (2014). A standardized mean difference effect size parameter can be defined the ratio of a linear combination of the model's fixed effect parameters over the square root of a linear combination of the model's variance components. The `g_mlm()` function takes as inputs a fitted multi-level model and the vectors `p_const` and `r_const`, which define the linear combinations of fixed effects and variance components, respectively. The function calculates an effect size estimate by first substituting maximum likelihood or restricted maximum likelihood estimates in place of the corresponding parameters, then applying a small-sample correction. The small-sample correction and the standard error are based on approximating the distribution of the estimator by a t distribution, with degrees of freedom given by a Satterthwaite approximation (Pustejovsky, Hedges, & Shadish, 2014). The `g_mlm()` function includes an option allowing use of the expected or average form of the Fisher information matrix in the calculations. 
+The package also includes a function, `g_mlm()`, for estimating a standardized mean difference effect size from a fitted multi-level model. The estimation methods follow Pustejovsky, Hedges, and Shadish (2014). A standardized mean difference effect size parameter can be defined as the ratio of a linear combination of the model's fixed effect parameters over the square root of a linear combination of the model's variance components. The `g_mlm()` function takes as inputs a fitted multi-level model and the vectors `p_const` and `r_const`, which define the linear combinations of fixed effects and variance components, respectively. The function calculates an effect size estimate by first substituting maximum likelihood or restricted maximum likelihood estimates in place of the corresponding parameters, then applying a small-sample correction. The small-sample correction and the standard error are based on approximating the distribution of the estimator by a t distribution, with degrees of freedom given by a Satterthwaite approximation (Pustejovsky, Hedges, & Shadish, 2014). The `g_mlm()` function includes an option allowing use of the expected or average form of the Fisher information matrix in the calculations. The `g_mlm()` function also includes an option allowing returning the fitted model parameters in addition to effect size estimate. 
 
 In our model for the Bryant data, we use the treatment effect in the numerator of the effect size and the sum of the classroom-level, student-level, and within-student variance components in the denominator of the effect size. The constants are therefore given by `p_const = c(0, 1)` and `r_const = c(1, 1, 1)`. The effect size estimate can be calculated as:
 
@@ -87,7 +91,8 @@ Bryant2016_g <- g_mlm(Bryant2016_RML, p_const = c(0,1), r_const = c(1,1,1), info
 Bryant2016_g
 ```
 
-A `summary()` method is also included, which includes more detail about the model parameter estimates and effect size estimate:
+A `summary()` method is also included, which includes more detail about the model parameter estimates and effect size estimate when setting `returnModel = TRUE` (the default) in `g_mlm()`:
+
 ```{r}
 summary(Bryant2016_g)
 ```
@@ -97,7 +102,7 @@ summary(Bryant2016_g)
 The `Fisher_info()` and `varcomp_vcov()` functions operate on fitted `lme()` and `gls()` models. Models fitted using `lme()` can include three types of variance component parameters: random effects variances and covariances, correlation structure parameters, and variance structure parameters. Models fitted using `gls()` can include correlation structure parameters and variance structure parameters. The `nlme` package provides many different forms for each of these components, not all of which are supported in `lmeInfo`. The package can handle the following classes of variance components:
 
 - Random effects structure
-    - `pdSymm` matrices, including in the `pdLogChol` and `pdfNatural` parameterizations
+    - `pdSymm` matrices, including in the `pdLogChol` and `pdNatural` parameterizations
     - `pdDiag` matrices
 - Correlation structure
     - `corAR1`
