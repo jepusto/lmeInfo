@@ -22,8 +22,8 @@ CI_SMD_single <- function(delta, kappa, nu, V_delta, cover, bound) {
 #'   using either a central t distribution (for a symmetric interval) or a
 #'   non-central t distribution (for an asymmetric interval).
 #'
-#' @param g an estimated effect size object of class \code{g_mlm}
-#' @param cover confidence level
+#' @param g an estimated effect size object of class \code{g_mlm}.
+#' @param cover confidence level.
 #' @param bound numerical tolerance for non-centrality parameter in
 #'   \code{\link[stats]{qt}}.
 #' @param symmetric If \code{TRUE} (the default), use a symmetric confidence
@@ -42,8 +42,7 @@ CI_SMD_single <- function(delta, kappa, nu, V_delta, cover, bound) {
 #'                  random = ~ 1 | case,
 #'                  correlation = corAR1(0, ~ time | case),
 #'                  data = Laski)
-#' Laski_g <- g_mlm(Laski_RML, p_const = c(0,1),
-#'                   r_const = c(1,0,1), returnModel = FALSE)
+#' Laski_g <- g_mlm(Laski_RML, p_const = c(0,1), r_const = c(1,0,1))
 #' CI_g(Laski_g, symmetric = TRUE)
 #' CI_g(Laski_g, symmetric = FALSE)
 #'

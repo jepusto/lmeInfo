@@ -7,9 +7,9 @@
 CI_g(g, cover = 0.95, bound = 35, symmetric = TRUE)
 }
 \arguments{
-\item{g}{an estimated effect size object of class \code{g_mlm}}
+\item{g}{an estimated effect size object of class \code{g_mlm}.}
 
-\item{cover}{confidence level}
+\item{cover}{confidence level.}
 
 \item{bound}{numerical tolerance for non-centrality parameter in
 \code{\link[stats]{qt}}.}
@@ -34,8 +34,7 @@ Laski_RML <- lme(fixed = outcome ~ treatment,
                  random = ~ 1 | case,
                  correlation = corAR1(0, ~ time | case),
                  data = Laski)
-Laski_g <- g_mlm(Laski_RML, p_const = c(0,1),
-                  r_const = c(1,0,1), returnModel = FALSE)
+Laski_g <- g_mlm(Laski_RML, p_const = c(0,1), r_const = c(1,0,1))
 CI_g(Laski_g, symmetric = TRUE)
 CI_g(Laski_g, symmetric = FALSE)
 

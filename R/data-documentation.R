@@ -83,7 +83,7 @@ NULL
 
 #' Bryant et al. (2016)
 #'
-#' Data from a multiple baseline across clusters design conducted by
+#' Data from a multi-level multiple baseline design conducted by
 #' Bryant et al. (2016). The variables are as follows:
 #' \itemize{
 #'   \item \code{Study_ID}. Study identifier.
@@ -93,7 +93,7 @@ NULL
 #'   \item \code{treatment}. Indicator for treatment phase.
 #'   \item \code{outcome}. Texas Early Mathematics Inventory (TEMI-Aim Check) scores.
 #'   \item \code{trt_time}. Measurement occasion times treatment phase.
-#'   \item \code{session_c}. Measurement occasion centered at the follow-up time.
+#'   \item \code{session_c}. Measurement occasion centered at the follow-up time (Measurement occasion 9).
 #' }
 #'
 #' @docType data
@@ -105,6 +105,7 @@ NULL
 #' The effects of a Tier 3 intervention on the mathematics performance of second grade
 #' students with severe mathematics difficulties.
 #' \emph{Journal of Learning Disabilities, 49}(2), 176-188.
+#' doi:\href{https://doi.org/10.1177/0022219414538516}{10.1177/0022219414538516}
 #'
 
 NULL
