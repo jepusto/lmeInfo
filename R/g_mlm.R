@@ -71,9 +71,9 @@ g_mlm <- function(mod, p_const, r_const, infotype = "expected", returnModel = TR
 
   # basic model estimates
 
-  if (class(mod) == "gls") {
+  if (inherits(mod, "gls")) {
     p_beta <- sum(coef(mod) * p_const)
-  } else if (class(mod) == "lme") {
+  } else if (inherits(mod, "lme")) {
     p_beta <- sum(nlme::fixed.effects(mod) * p_const)
   } else {
     stop("g_mlm() only available for lme or gls models.")
@@ -117,7 +117,7 @@ g_mlm <- function(mod, p_const, r_const, infotype = "expected", returnModel = TR
 summary.g_mlm <- function(object, digits = 3, ...) {
   varcomp <- with(object, cbind(est = c(unlist(theta), "total variance" = r_theta),
                                 se = c(unlist(SE_theta), r_theta * sqrt(2 / nu))))
-  if (attr(object$modelStruct, "class")[1] == "glsStruct") {
+  if (inherits(object$modelStruct, "glsStruct")) {
     betas <- with(object, cbind(est = c(coefficients, "treatment effect at a specified time" = p_beta),
                                 se = c(sqrt(diag(varBeta)), kappa * sqrt(r_theta))))
   } else {
