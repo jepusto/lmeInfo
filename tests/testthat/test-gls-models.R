@@ -190,4 +190,19 @@ test_that("g_mlm() works for gls models.", {
                        infotype = "expected", returnModel = TRUE)
   expect_output(summary(Laski_AR1_g))
   expect_output(print(Laski_AR1_g))
+
+  # model that has independent errors
+  Laski_hom <- gls(outcome ~ treatment, data = Laski)
+  Laski_hom_g <- g_mlm(Laski_hom, p_const = c(0,1), r_const = 1, infotype = "average")
+  expect_equal(as.numeric(Laski_hom_g$nu), (nrow(Laski) - length(Laski_hom_g$p_const)))
+
+  # treatment-by-case interaction, es for case 1
+  Laski2_AR1 <- gls(outcome ~ 0 + case + case:treatment,
+                    correlation = corAR1(0.2, ~ time | case),
+                    data = Laski)
+
+  Laski2_AR1_g <- g_mlm(Laski2_AR1, p_const = c(0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0), r_const = c(0,1))
+  expect_output(summary(Laski2_AR1_g))
+  expect_output(print(Laski2_AR1_g))
+
 })
