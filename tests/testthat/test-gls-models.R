@@ -181,3 +181,13 @@ test_that("New REML calculations work.", {
   check_REML2(Laski_hetAR1)
   check_REML2(Laski_CAR1)
 })
+
+test_that("g_mlm() works for gls models.", {
+  Laski_AR1 <- gls(outcome ~ treatment,
+                   correlation = corAR1(0.2, ~ time | case),
+                   data = Laski)
+  Laski_AR1_g <- g_mlm(Laski_AR1, p_const = c(0,1), r_const = c(0,1),
+                       infotype = "expected", returnModel = TRUE)
+  expect_output(summary(Laski_AR1_g))
+  expect_output(print(Laski_AR1_g))
+})
