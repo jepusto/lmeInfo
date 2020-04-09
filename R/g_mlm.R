@@ -6,40 +6,44 @@
 
 #' @title Calculates adjusted mlm effect size
 #'
-#' @description Estimates a standardized mean difference effect size
-#' from a fitted multi-level model, using adjusted mlm method as described in Pustejovsky, Hedges,
-#' & Shadish (2014).
+#' @description Estimates a standardized mean difference effect size from a
+#'   fitted multi-level model, using adjusted mlm method as described in
+#'   Pustejovsky, Hedges, & Shadish (2014).
 #'
-#' @param mod Fitted model of class lmeStruct (estimated using \code{nlme::lme()})
-#'   or of class glsStruct (estimated using \code{nlme::gls()}).
+#' @param mod Fitted model of class lmeStruct (estimated using
+#'   \code{nlme::lme()}) or of class glsStruct (estimated using
+#'   \code{nlme::gls()}).
 #' @param p_const Vector of constants for calculating numerator of effect size.
-#' Must be the same length as fixed effects in \code{mod}.
-#' @param r_const Vector of constants for calculating denominator of effect size.
-#' Must be the same length as the number of variance component parameters in \code{mod}.
-#' @param infotype Type of information matrix. One of \code{"expected"} (the default),
-#'   \code{"observed"}, or \code{"average"}.
-#' @param returnModel (Optional) If true, the fitted input model is included in the return.
+#'   Must be the same length as fixed effects in \code{mod}.
+#' @param r_const Vector of constants for calculating denominator of effect
+#'   size. Must be the same length as the number of variance component
+#'   parameters in \code{mod}.
+#' @param infotype Type of information matrix. One of \code{"expected"} (the
+#'   default), \code{"observed"}, or \code{"average"}.
+#' @param returnModel (Optional) If true, the fitted input model is included in
+#'   the return. Defaults to TRUE so that summary() method returns more detail
+#'   about the model parameters for an object of class g_mlm.
 #'
 #' @export
 #'
-#' @return A list with the following components
-#' \tabular{ll}{
-#' \code{p_beta} \tab Numerator of effect size \cr
-#' \code{r_theta} \tab Squared denominator of effect size \cr
-#' \code{delta_AB} \tab Unadjusted (mlm) effect size estimate \cr
-#' \code{nu} \tab Estimated denominator degrees of freedom \cr
-#' \code{J_nu} \tab Biased correction factor for effect size estimate \cr
-#' \code{kappa} \tab Scaled standard error of numerator \cr
-#' \code{g_AB} \tab Corrected effect size estimate \cr
-#' \code{SE_g_AB} \tab Approximate standard error estimate \cr
-#' \code{cnvg_warn} \tab Indicator that model did not converge \cr
-#' \code{theta} \tab Estimated variance component parameters \cr
-#' \code{info_inv} \tab Inversed information matrix \cr
-#' }
+#' @return A list with the following components \tabular{ll}{ \code{p_beta} \tab
+#'   Numerator of effect size \cr \code{r_theta} \tab Squared denominator of
+#'   effect size \cr \code{delta_AB} \tab Unadjusted (mlm) effect size estimate
+#'   \cr \code{nu} \tab Estimated denominator degrees of freedom \cr \code{J_nu}
+#'   \tab Biased correction factor for effect size estimate \cr \code{kappa}
+#'   \tab Scaled standard error of numerator \cr \code{g_AB} \tab Corrected
+#'   effect size estimate \cr \code{SE_g_AB} \tab Approximate standard error
+#'   estimate \cr \code{cnvg_warn} \tab Indicator that model did not converge
+#'   \cr \code{theta} \tab Estimated variance component parameters \cr
+#'   \code{info_inv} \tab Inversed information matrix \cr }
 #'
 #' @references Pustejovsky, J. E., Hedges, L. V., & Shadish, W. R. (2014).
-#' Design-comparable effect sizes in multiple baseline designs: A general modeling framework.
-#' \emph{Journal of Educational and Behavioral Statistics, 39}(4), 211-227. doi:\href{http://doi.org/10.3102/1076998614547577}{10.3102/1076998614547577}
+#'   Design-comparable effect sizes in multiple baseline designs: A general
+#'   modeling framework. \emph{Journal of Educational and Behavioral Statistics,
+#'   39}(4), 211-227.
+#'   doi:\href{http://doi.org/10.3102/1076998614547577}{10.3102/1076998614547577}
+#'
+#'
 #'
 #' @examples
 #'
@@ -54,18 +58,27 @@
 #' summary(Bryant2016_g1)
 #' print(Bryant2016_g1)
 #'
-#' Bryant2016_RML4 <- lme(fixed = outcome ~ session_c + treatment + trt_time,
-#'                        random = list(~ 1 | school, ~ session_c | case),
-#'                        correlation = corAR1(0, ~ session_c | school/case),
-#'                        data = Bryant2016)
-#' Bryant2016_g4 <- g_mlm(Bryant2016_RML4, p_const = c(0,0,1,5), r_const = c(1,1,0,0,0,1))
-#' summary(Bryant2016_g4)
-#' print(Bryant2016_g4)
+#' data(Laski, package = "scdhlm")
+#' Laski_AR1 <- gls(outcome ~ treatment,
+#'                  correlation = corAR1(0.2, ~ time | case),
+#'                  data = Laski)
+#' Laski_AR1_g <- g_mlm(Laski_AR1, p_const = c(0,1), r_const = c(0,1),
+#'                      infotype = "expected", returnModel = TRUE)
+#' summary(Laski_AR1_g)
+#' print(Laski_AR1_g)
 
 g_mlm <- function(mod, p_const, r_const, infotype = "expected", returnModel = TRUE) {
 
   # basic model estimates
-  p_beta <- sum(nlme::fixed.effects(mod) * p_const)               # p'Beta
+
+  if (inherits(mod, "gls")) {
+    p_beta <- sum(coef(mod) * p_const)
+  } else if (inherits(mod, "lme")) {
+    p_beta <- sum(nlme::fixed.effects(mod) * p_const)
+  } else {
+    stop("g_mlm() only available for lme or gls models.")
+  }
+
   theta <- extract_varcomp(mod)                                   # full theta vector
   r_theta <- sum(unlist(theta) * r_const)                         # r'theta (sum of var comp)
   delta_AB <- p_beta / sqrt(r_theta)                              # delta_AB
@@ -104,8 +117,14 @@ g_mlm <- function(mod, p_const, r_const, infotype = "expected", returnModel = TR
 summary.g_mlm <- function(object, digits = 3, ...) {
   varcomp <- with(object, cbind(est = c(unlist(theta), "total variance" = r_theta),
                                 se = c(unlist(SE_theta), r_theta * sqrt(2 / nu))))
-  betas <- with(object, cbind(est = c(coefficients$fixed, "treatment effect at a specified time" = p_beta),
-                              se = c(sqrt(diag(varFix)), kappa * sqrt(r_theta))))
+  if (inherits(object$modelStruct, "glsStruct")) {
+    betas <- with(object, cbind(est = c(coefficients, "treatment effect at a specified time" = p_beta),
+                                se = c(sqrt(diag(varBeta)), kappa * sqrt(r_theta))))
+  } else {
+    betas <- with(object, cbind(est = c(coefficients$fixed, "treatment effect at a specified time" = p_beta),
+                                se = c(sqrt(diag(varFix)), kappa * sqrt(r_theta))))
+  }
+
   ES <- with(object, cbind(est = c("unadjusted effect size" = delta_AB, "adjusted effect size" = g_AB,
                                    "degree of freedom" = nu, "constant kappa" = kappa, logLik = logLik),
                            se = c(SE_g_AB / J_nu, SE_g_AB, NA, NA, NA)))

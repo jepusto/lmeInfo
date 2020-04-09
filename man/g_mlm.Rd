@@ -7,40 +7,40 @@
 g_mlm(mod, p_const, r_const, infotype = "expected", returnModel = TRUE)
 }
 \arguments{
-\item{mod}{Fitted model of class lmeStruct (estimated using \code{nlme::lme()})
-or of class glsStruct (estimated using \code{nlme::gls()}).}
+\item{mod}{Fitted model of class lmeStruct (estimated using
+\code{nlme::lme()}) or of class glsStruct (estimated using
+\code{nlme::gls()}).}
 
 \item{p_const}{Vector of constants for calculating numerator of effect size.
 Must be the same length as fixed effects in \code{mod}.}
 
-\item{r_const}{Vector of constants for calculating denominator of effect size.
-Must be the same length as the number of variance component parameters in \code{mod}.}
+\item{r_const}{Vector of constants for calculating denominator of effect
+size. Must be the same length as the number of variance component
+parameters in \code{mod}.}
 
-\item{infotype}{Type of information matrix. One of \code{"expected"} (the default),
-\code{"observed"}, or \code{"average"}.}
+\item{infotype}{Type of information matrix. One of \code{"expected"} (the
+default), \code{"observed"}, or \code{"average"}.}
 
-\item{returnModel}{(Optional) If true, the fitted input model is included in the return.}
+\item{returnModel}{(Optional) If true, the fitted input model is included in
+the return. Defaults to TRUE so that summary() method returns more detail
+about the model parameters for an object of class g_mlm.}
 }
 \value{
-A list with the following components
-\tabular{ll}{
-\code{p_beta} \tab Numerator of effect size \cr
-\code{r_theta} \tab Squared denominator of effect size \cr
-\code{delta_AB} \tab Unadjusted (mlm) effect size estimate \cr
-\code{nu} \tab Estimated denominator degrees of freedom \cr
-\code{J_nu} \tab Biased correction factor for effect size estimate \cr
-\code{kappa} \tab Scaled standard error of numerator \cr
-\code{g_AB} \tab Corrected effect size estimate \cr
-\code{SE_g_AB} \tab Approximate standard error estimate \cr
-\code{cnvg_warn} \tab Indicator that model did not converge \cr
-\code{theta} \tab Estimated variance component parameters \cr
-\code{info_inv} \tab Inversed information matrix \cr
-}
+A list with the following components \tabular{ll}{ \code{p_beta} \tab
+  Numerator of effect size \cr \code{r_theta} \tab Squared denominator of
+  effect size \cr \code{delta_AB} \tab Unadjusted (mlm) effect size estimate
+  \cr \code{nu} \tab Estimated denominator degrees of freedom \cr \code{J_nu}
+  \tab Biased correction factor for effect size estimate \cr \code{kappa}
+  \tab Scaled standard error of numerator \cr \code{g_AB} \tab Corrected
+  effect size estimate \cr \code{SE_g_AB} \tab Approximate standard error
+  estimate \cr \code{cnvg_warn} \tab Indicator that model did not converge
+  \cr \code{theta} \tab Estimated variance component parameters \cr
+  \code{info_inv} \tab Inversed information matrix \cr }
 }
 \description{
-Estimates a standardized mean difference effect size
-from a fitted multi-level model, using adjusted mlm method as described in Pustejovsky, Hedges,
-& Shadish (2014).
+Estimates a standardized mean difference effect size from a
+  fitted multi-level model, using adjusted mlm method as described in
+  Pustejovsky, Hedges, & Shadish (2014).
 }
 \examples{
 
@@ -55,16 +55,19 @@ Bryant2016_g1 <- g_mlm(Bryant2016_RML1, p_const = c(0,1), r_const = c(1,1,0,1),
 summary(Bryant2016_g1)
 print(Bryant2016_g1)
 
-Bryant2016_RML4 <- lme(fixed = outcome ~ session_c + treatment + trt_time,
-                       random = list(~ 1 | school, ~ session_c | case),
-                       correlation = corAR1(0, ~ session_c | school/case),
-                       data = Bryant2016)
-Bryant2016_g4 <- g_mlm(Bryant2016_RML4, p_const = c(0,0,1,5), r_const = c(1,1,0,0,0,1))
-summary(Bryant2016_g4)
-print(Bryant2016_g4)
+data(Laski, package = "scdhlm")
+Laski_AR1 <- gls(outcome ~ treatment,
+                 correlation = corAR1(0.2, ~ time | case),
+                 data = Laski)
+Laski_AR1_g <- g_mlm(Laski_AR1, p_const = c(0,1), r_const = c(0,1),
+                     infotype = "expected", returnModel = TRUE)
+summary(Laski_AR1_g)
+print(Laski_AR1_g)
 }
 \references{
 Pustejovsky, J. E., Hedges, L. V., & Shadish, W. R. (2014).
-Design-comparable effect sizes in multiple baseline designs: A general modeling framework.
-\emph{Journal of Educational and Behavioral Statistics, 39}(4), 211-227. doi:\href{http://doi.org/10.3102/1076998614547577}{10.3102/1076998614547577}
+  Design-comparable effect sizes in multiple baseline designs: A general
+  modeling framework. \emph{Journal of Educational and Behavioral Statistics,
+  39}(4), 211-227.
+  doi:\href{http://doi.org/10.3102/1076998614547577}{10.3102/1076998614547577}
 }
