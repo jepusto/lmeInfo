@@ -10,9 +10,9 @@ Authors@R: c(
            comment = c(ORCID = "0000-0003-0591-9465")),
     person(given = "Man",
            family = "Chen",
-           email = "amandachen@utexas.edu",
+           email = "manchen9005@gmail.com",
            role = c("aut")))
-Maintainer: James Pustejovsky <jepusto@gmail.com>
+Maintainer: Man Chen <manchen9005@gmail.com>
 Description: Provides analytic derivatives and information matrices for fitted linear mixed effects models 
     and generalized least squares models estimated using nlme::lme() and nlme::gls(), respectively.
     The package includes functions for estimating the sampling variance-covariance of variance component parameters using 
