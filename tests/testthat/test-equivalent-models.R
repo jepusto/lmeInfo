@@ -1,5 +1,5 @@
 library(nlme)
-data(Thiemann2001)
+data(Thiemann2001, package = "scdhlm")
 
 Thiemann2001 <- Thiemann2001[sample(nrow(Thiemann2001)),]
 

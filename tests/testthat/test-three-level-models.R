@@ -2,7 +2,7 @@ library(nlme)
 
 # Thiemann 2001
 
-data(Thiemann2001)
+data(Thiemann2001, package = "scdhlm")
 
 Thiemann2001_RML1 <- lme(fixed = outcome ~ treatment,
                      random = ~ 1 | case/series,
@@ -30,7 +30,7 @@ Thiemann2001_RML4 <- lme(fixed = outcome ~ time_c + treatment + trt_time,
 
 # Thiemann 2004
 
-data(Thiemann2004)
+data(Thiemann2004, package = "scdhlm")
 
 Thiemann2004_RML1 <- lme(fixed = outcome ~ treatment,
                      random = ~ 1 | case/series,
@@ -82,7 +82,7 @@ Bryant2016_RML4 <- lme(fixed = outcome ~ session_c + treatment + trt_time,
                        control=lmeControl(msMaxIter = 50, apVar=FALSE, returnObject=TRUE))
 
 # Bryant 2018
-data(Bryant2018)
+data(Bryant2018, package = "scdhlm")
 
 Bryant2018_RML1 <- lme(fixed = outcome ~ treatment,
                      random = ~ 1 | school/case,

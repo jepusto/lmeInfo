@@ -1,8 +1,8 @@
 library(nlme)
-data(Laski)
-data(Thiemann2001)
 
 # Two-level model
+data(Laski, package = "scdhlm")
+
 Laski_fx_sigma <- lme(fixed = outcome ~ treatment,
                       random = ~ treatment | case,
                       control = lmeControl(sigma = 2),
@@ -12,6 +12,8 @@ Laski_fx_sigma <- lme(fixed = outcome ~ treatment,
 # Fisher_info(Laski_fx_sigma, type = "averaged")
 
 # Three-level model
+data(Thiemann2001, package = "scdhlm")
+
 Thiemann2001_fx_sigma <- lme(fixed = outcome ~ treatment,
                              random = ~ 1 | case/series,
                              correlation = corAR1(0, ~ time | case/series),

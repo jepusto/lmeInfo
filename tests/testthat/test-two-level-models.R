@@ -1,5 +1,5 @@
 library(nlme)
-data(Laski)
+data(Laski, package = "scdhlm")
 
 Laski_iid <- lme(fixed = outcome ~ treatment,
                  random = ~ treatment | case,

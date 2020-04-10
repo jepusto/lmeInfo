@@ -1,6 +1,6 @@
 library(nlme)
 
-data(Bryant2018)
+data(Bryant2018, package = "scdhlm")
 
 #------------------------------------------------------------------------------
 # varying intercept at level 3, ALLOW intercept & trend covariance at level 2
