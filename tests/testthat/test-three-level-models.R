@@ -120,18 +120,10 @@ test_that("targetVariance() works with 3-level models.", {
   test_Sigma_mats(Bryant2016_RML2, Bryant2016$school)
   test_Sigma_mats(Bryant2016_RML3, Bryant2016$school)
   test_Sigma_mats(Bryant2016_RML4, Bryant2016$school)
-  test_Sigma_mats(Bryant2018_RML1, Bryant2018$school)
-  test_Sigma_mats(Bryant2018_RML2, Bryant2018$school)
-  test_Sigma_mats(Bryant2018_RML3, Bryant2018$school)
-  test_Sigma_mats(Bryant2018_RML4, Bryant2018$school)
 
   expect_error(test_Sigma_mats(Bryant2016_RML1, Thiemann2001$case))
   expect_error(test_Sigma_mats(Bryant2016_RML1, Bryant2016$case))
   expect_error(test_Sigma_mats(Bryant2016_RML1, Bryant2018$school))
-
-  expect_error(test_Sigma_mats(Bryant2018_RML1, Thiemann2001$case))
-  expect_error(test_Sigma_mats(Bryant2018_RML1, Bryant2018$case))
-  expect_error(test_Sigma_mats(Bryant2018_RML1, Bryant2016$school))
 
 })
 
@@ -152,11 +144,6 @@ test_that("Derivative matrices are of correct dimension with 3-level models.", {
   test_deriv_dims(Bryant2016_RML3)
   test_deriv_dims(Bryant2016_RML4)
 
-  test_deriv_dims(Bryant2018_RML1)
-  test_deriv_dims(Bryant2018_RML2)
-  test_deriv_dims(Bryant2018_RML3)
-  test_deriv_dims(Bryant2018_RML4)
-
 })
 
 test_that("Information matrices work with FIML too.", {
@@ -176,10 +163,6 @@ test_that("Information matrices work with FIML too.", {
   test_with_FIML(Bryant2016_RML3)
   test_with_FIML(Bryant2016_RML4)
 
-  test_with_FIML(Bryant2018_RML1)
-  test_with_FIML(Bryant2018_RML2)
-  test_with_FIML(Bryant2018_RML3)
-  test_with_FIML(Bryant2018_RML4)
 })
 
 test_that("Results do not depend on order of data.", {
@@ -198,11 +181,6 @@ test_that("Results do not depend on order of data.", {
   test_after_shuffling(Bryant2016_RML2, seed = 20)
   test_after_shuffling(Bryant2016_RML3, seed = 20)
   test_after_shuffling(Bryant2016_RML4, seed = 20)
-
-  test_after_shuffling(Bryant2018_RML1, seed = 20)
-  test_after_shuffling(Bryant2018_RML2, seed = 20)
-  test_after_shuffling(Bryant2018_RML3, seed = 20)
-  test_after_shuffling(Bryant2018_RML4, tol_param = 5 * 10^-2, seed = 20)
 
 })
 
@@ -223,11 +201,39 @@ test_that("New REML calculations work.", {
   check_REML2(Bryant2016_RML3)
   check_REML2(Bryant2016_RML4)
 
+})
+
+test_that("Three-level models for Bryant2018 pass the checking functions.", {
+  skip("Trim down the unit tests for three level models.")
+
+  test_Sigma_mats(Bryant2018_RML1, Bryant2018$school)
+  test_Sigma_mats(Bryant2018_RML2, Bryant2018$school)
+  test_Sigma_mats(Bryant2018_RML3, Bryant2018$school)
+  test_Sigma_mats(Bryant2018_RML4, Bryant2018$school)
+
+  expect_error(test_Sigma_mats(Bryant2018_RML1, Thiemann2001$case))
+  expect_error(test_Sigma_mats(Bryant2018_RML1, Bryant2018$case))
+  expect_error(test_Sigma_mats(Bryant2018_RML1, Bryant2016$school))
+
+  test_deriv_dims(Bryant2018_RML1)
+  test_deriv_dims(Bryant2018_RML2)
+  test_deriv_dims(Bryant2018_RML3)
+  test_deriv_dims(Bryant2018_RML4)
+
+  test_with_FIML(Bryant2018_RML1)
+  test_with_FIML(Bryant2018_RML2)
+  test_with_FIML(Bryant2018_RML3)
+  test_with_FIML(Bryant2018_RML4)
+
+  test_after_shuffling(Bryant2018_RML1, seed = 20)
+  test_after_shuffling(Bryant2018_RML2, seed = 20)
+  test_after_shuffling(Bryant2018_RML3, seed = 20)
+  test_after_shuffling(Bryant2018_RML4, tol_param = 5 * 10^-2, seed = 20)
+
   check_REML2(Bryant2018_RML1)
   check_REML2(Bryant2018_RML2)
   check_REML2(Bryant2018_RML3)
   check_REML2(Bryant2018_RML4)
+
 })
-
-
 
