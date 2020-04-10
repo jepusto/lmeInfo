@@ -37,15 +37,15 @@ CI_SMD_single <- function(delta, kappa, nu, V_delta, cover, bound) {
 #' @examples
 #'
 #' library(nlme)
-#' data(Laski, package = "scdhlm")
-#' Laski_RML <- lme(fixed = outcome ~ treatment,
-#'                  random = ~ 1 | case,
-#'                  correlation = corAR1(0, ~ time | case),
-#'                  data = Laski)
-#' Laski_g <- g_mlm(Laski_RML, p_const = c(0,1), r_const = c(1,0,1))
-#' CI_g(Laski_g, symmetric = TRUE)
-#' CI_g(Laski_g, symmetric = FALSE)
-#'
+#' data(Bryant2016, package = "lmeInfo")
+#' Bryant2016_RML1 <- lme(fixed = outcome ~ treatment,
+#'                        random = ~ 1 | school/case,
+#'                        correlation = corAR1(0, ~ session | school/case),
+#'                        data = Bryant2016)
+#' Bryant2016_g1 <- g_mlm(Bryant2016_RML1, p_const = c(0,1), r_const = c(1,1,0,1),
+#'                        infotype = "expected", returnModel = TRUE)
+#' CI_g(Bryant2016_g1, symmetric = TRUE)
+#' CI_g(Bryant2016_g1, symmetric = FALSE)
 #'
 
 CI_g <- function(g, cover = 0.95, bound = 35, symmetric = TRUE) UseMethod("CI_g")
