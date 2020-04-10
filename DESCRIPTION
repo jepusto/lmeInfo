@@ -20,7 +20,8 @@ Description: Provides analytic derivatives and information matrices for fitted l
     (for lme models), the variance structure, and the correlation structure. The expected and average forms of the 
     Fisher information matrix are used in the calculations, and models estimated by full maximum likelihood or 
     restricted maximum likelihood are supported. The package also includes a function for estimating standardized 
-    mean difference effect sizes (Pustejovsky et al., 2014) based on fitted lme() or gls() models.
+    mean difference effect sizes (Pustejovsky, Hedges, and Shadish, 2014) <DOI: 10.3102/1076998614547577> 
+    based on fitted lme() or gls() models.
 URL: https://github.com/jepusto/lmeInfo
 BugReports: https://github.com/jepusto/lmeInfo/issues
 License: GPL-3
