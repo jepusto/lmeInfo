@@ -157,8 +157,8 @@ test_that("Results do not depend on order of data.", {
   test_after_shuffling(Ortho_CAR1, seed = 20)
   test_after_shuffling(Ortho_CAR1_power, seed = 20)
   test_after_shuffling(Laski_AR1, seed = 20)
-  test_after_shuffling(Laski_het, seed = 21)
-  test_after_shuffling(Laski_hetAR1, seed = 20)
+  test_after_shuffling(Laski_het, seed = 26) # 21
+  test_after_shuffling(Laski_hetAR1, seed = 17) # 20
   test_after_shuffling(Laski_CAR1, seed = 20)
 })
 

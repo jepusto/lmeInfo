@@ -168,7 +168,7 @@ test_that("Information matrices work with FIML too.", {
 test_that("Results do not depend on order of data.", {
 
   test_after_shuffling(Thiemann2001_RML1, seed = 20)
-  test_after_shuffling(Thiemann2001_RML2, test = "diag-info", seed = 20)
+  test_after_shuffling(Thiemann2001_RML2, test = "diag-info", seed = 16) # 20
   test_after_shuffling(Thiemann2001_RML3, seed = 21)
   test_after_shuffling(Thiemann2001_RML4, seed = 20)
 
