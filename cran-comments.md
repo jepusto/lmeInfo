@@ -6,17 +6,7 @@
 ## R CMD check results
 There were no ERRORs or WARNINGs.
 
-There were four NOTEs:
-
-* checking CRAN incoming feasibility ... NOTE
-  Maintainer: 'Man Chen <manchen9005@gmail.com>'
-
-* checking DESCRIPTION meta-information ... NOTE
-  Maintainer field differs from that derived from Authors@R
-  Maintainer: 'Man Chen <manchen9005@gmail.com>'
-  Authors@R: 'James Pustejovsky <manchen9005@gmail.com>'
-  
-  The Maintainer field provides the correct information of the maintainer.
+There were two NOTEs:
   
 * Possibly mis-spelled words in DESCRIPTION: Pustejovsky (23:35) Shadish (23:60) lme (20:10) lmeStruct (3:33)
   
