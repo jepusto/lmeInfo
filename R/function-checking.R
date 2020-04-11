@@ -139,7 +139,9 @@ test_with_FIML <- function(mod) {
 
 test_after_shuffling <- function(mod, by_var = NULL,
                                  tol_param = 10^-3, tol_info = 10^-3,
-                                 test = "info", seed = NULL) {
+                                 test = "info", seed = NULL, CRAN_skip = TRUE) {
+
+  if (CRAN_skip) testthat::skip_on_cran()
 
   if (!is.null(seed)) set.seed(seed)
 
