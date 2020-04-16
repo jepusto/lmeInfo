@@ -1,3 +1,6 @@
+## Resubmission
+This is a resubmission. This resubmission addes undirected single quotes for non-English usage and package names in title and description in the DESCRIPTION file. The resubmission also updates abbreviations in description in the DESCRIPTION file.
+
 ## Test environments
 * local Windows 10 Pro, R 3.6.3
 * Ubuntu 16.04.6 LTS (on travis-ci), R 3.6.2
