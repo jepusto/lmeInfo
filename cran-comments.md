@@ -11,7 +11,7 @@ There were no ERRORs or WARNINGs.
 
 There were two NOTEs:
   
-* Possibly mis-spelled words in DESCRIPTION: Pustejovsky (23:35) Shadish (23:60) lme (20:10) lmeStruct (3:33)
+* Possibly mis-spelled words in DESCRIPTION: Pustejovsky (22:35) Shadish (22:60) gls (16:36, 23:28) lme (15:102, 19:10, 23:21)
   
   All of the identified words are spelled correctly.
 
