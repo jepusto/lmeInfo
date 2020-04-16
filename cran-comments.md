@@ -1,5 +1,5 @@
 ## Resubmission
-This is a resubmission. This resubmission adds undirected single quotes for non-English usage and package names in title and description in the DESCRIPTION file. The resubmission also updates abbreviations in description in the DESCRIPTION file.
+This is a resubmission. This resubmission adds undirected single quotes for non-English usage and package names in title and description in the DESCRIPTION file. The resubmission also fixes the abbreviations and extra spaces between words in description in the DESCRIPTION file.
 
 ## Test environments
 * local Windows 10 Pro, R 3.6.3
