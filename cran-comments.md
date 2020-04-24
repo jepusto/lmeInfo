@@ -1,3 +1,6 @@
+## Resubmission 2
+This resubmission omits the space within the doi specification in Description.
+
 ## Resubmission
 This is a resubmission. This resubmission adds undirected single quotes for non-English usage and package names in title and description in the DESCRIPTION file. The resubmission also fixes the abbreviations and extra spaces between words in description in the DESCRIPTION file.
 
@@ -11,7 +14,7 @@ There were no ERRORs or WARNINGs.
 
 There were two NOTEs:
   
-* Possibly mis-spelled words in DESCRIPTION: Pustejovsky (22:35) Shadish (22:60) gls (16:36, 23:28) lme (15:102, 19:10, 23:21)
+* Possibly mis-spelled words in DESCRIPTION: Pustejovsky (24:48) Shadish (24:73) gls (16:77, 25:28) lme (16:34, 20:57, 25:21)
   
   All of the identified words are spelled correctly.
 
