@@ -7,3 +7,6 @@ auxiliary
 cran-comments.md
 vignettes/Standardized-mean-differences-in-multi-level-models.Rmd
 ^CRAN-RELEASE$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
