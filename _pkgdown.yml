@@ -1,0 +1,36 @@
+destination: docs
+
+template:
+  params:
+    bootswatch: cosmo
+    docsearch:
+    api_key:
+    index_name: lmeInfo
+
+url: https://jepusto.github.io/lmeInfo/index.html
+
+navbar:
+  right:
+   - icon: fa-github
+     href: https://github.com/jepusto/lmeInfo
+
+authors:
+  James Pustejovsky:
+    href: https://www.jepusto.com/
+
+reference:
+  - title: "Information matrices"
+    desc: "Functions for calculating Fisher information matrix"
+    contents:
+      - extract_varcomp
+      - Fisher_info
+      - varcomp_vcov
+  - title: "Standardized mean difference effect size"
+    desc: "Functions for calculating standardized mean difference effect size and confidence intervals"
+    contents:
+      - g_mlm
+      - CI_g
+  - title: "Example datasets"
+    desc: "Empirical datasets"
+    contents:
+      - Bryant2016
