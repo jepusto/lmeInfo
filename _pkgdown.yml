@@ -4,8 +4,8 @@ template:
   params:
     bootswatch: cosmo
     docsearch:
-    api_key:
-    index_name: lmeInfo
+      api_key: ab49bdeb500af0e2e09f15c826d29f1f
+      index_name: lmeInfo
 
 url: https://jepusto.github.io/lmeInfo/index.html
 
