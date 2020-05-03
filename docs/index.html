@@ -43,7 +43,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">lmeInfo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -110,7 +110,7 @@
 <div id="information-matrices-for-fitted-lme-and-gls-models" class="section level2">
 <h2 class="hasAnchor">
 <a href="#information-matrices-for-fitted-lme-and-gls-models" class="anchor"></a>Information matrices for fitted <code>lme</code> and <code>gls</code> models</h2>
-<p><code>lmeInfo</code> provides analytic derivatives and information matrices for fitted linear mixed effects models and generalized least squares models estimated using <code><a href="https://rdrr.io/pkg/nlme/man/lme.html">nlme::lme()</a></code> and <code><a href="https://rdrr.io/pkg/nlme/man/gls.html">nlme::gls()</a></code>, respectively. The package includes functions for estimating the sampling variance-covariance of variance component parameters using the inverse Fisher information. The variance components include the parameters of the random effects structure (for lme models), the variance structure, and the correlation structure. The expected and average forms of the Fisher information matrix are used in the calculations, and models estimated by full maximum likelihood or restricted maximum likelihood are supported. The package also includes a function for estimating standardized mean difference effect sizes (Pustejovsky et al., 2014) based on fitted <code>lme</code> or <code>gls</code> models.</p>
+<p><code>lmeInfo</code> provides analytic derivatives and information matrices for fitted linear mixed effects (lme) models and generalized least squares (gls) models estimated using <code><a href="https://rdrr.io/pkg/nlme/man/lme.html">nlme::lme()</a></code> and <code><a href="https://rdrr.io/pkg/nlme/man/gls.html">nlme::gls()</a></code>, respectively. The package includes functions for estimating the sampling variance-covariance of variance component parameters using the inverse Fisher information. The variance components include the parameters of the random effects structure (for lme models), the variance structure, and the correlation structure. The expected and average forms of the Fisher information matrix are used in the calculations, and models estimated by full maximum likelihood or restricted maximum likelihood are supported. The package also includes a function for estimating standardized mean difference effect sizes (Pustejovsky et al., 2014) based on fitted <code>lme</code> or <code>gls</code> models.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -125,7 +125,7 @@
 <h2 class="hasAnchor">
 <a href="#demonstration" class="anchor"></a>Demonstration</h2>
 <p>We use a dataset from a multiple baseline study conducted by Bryant and colleagues (2016) to demonstrate how <code>lmeInfo</code> estimates the sampling variance-covariance of variance component parameters of fitted LME models. We also show how to calculate a design-comparable standardized mean difference effect size based on the fitted model.</p>
-<p>The study by Bryant and colleagues (2016) involved collecting repeated measures of math performance on multiple students, in each of several classrooms. After an initial baseline period in each classroom, an intervention was introduced and its effects on student math performance were observed over time. For sake of illustration, we use a very simple model for these data, consisting of a simple change in levels coinciding with the introduction of treatment. We include random effects for each classroom and each student. Here we fit the model using <code><a href="https://rdrr.io/pkg/nlme/man/lme.html">nlme::lme()</a></code>:</p>
+<p>The study by Bryant and colleagues (2016) involved collecting repeated measures of math performance on multiple students, in each of three schools. After an initial baseline period in each school, an intervention was introduced and its effects on student math performance were observed over time. For sake of illustration, we use a very simple model for these data, consisting of a simple change in levels coinciding with the introduction of treatment. We include random effects for each school and each student. Here we fit the model using <code><a href="https://rdrr.io/pkg/nlme/man/lme.html">nlme::lme()</a></code>:</p>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">lmeInfo</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">nlme</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">Bryant2016</span>)
@@ -202,7 +202,7 @@
 <h3 class="hasAnchor">
 <a href="#estimating-a-standardized-mean-difference-effect-size" class="anchor"></a>Estimating a standardized mean difference effect size</h3>
 <p>The package also includes a function, <code><a href="reference/g_mlm.html">g_mlm()</a></code>, for estimating a standardized mean difference effect size from a fitted multi-level model. The estimation methods follow Pustejovsky, Hedges, and Shadish (2014). A standardized mean difference effect size parameter can be defined as the ratio of a linear combination of the model’s fixed effect parameters over the square root of a linear combination of the model’s variance components. The <code><a href="reference/g_mlm.html">g_mlm()</a></code> function takes as inputs a fitted multi-level model and the vectors <code>p_const</code> and <code>r_const</code>, which define the linear combinations of fixed effects and variance components, respectively. The function calculates an effect size estimate by first substituting maximum likelihood or restricted maximum likelihood estimates in place of the corresponding parameters, then applying a small-sample correction. The small-sample correction and the standard error are based on approximating the distribution of the estimator by a t distribution, with degrees of freedom given by a Satterthwaite approximation (Pustejovsky, Hedges, &amp; Shadish, 2014). The <code><a href="reference/g_mlm.html">g_mlm()</a></code> function includes an option allowing use of the expected or average form of the Fisher information matrix in the calculations. The <code><a href="reference/g_mlm.html">g_mlm()</a></code> function also includes an option allowing returning the fitted model parameters in addition to effect size estimate.</p>
-<p>In our model for the Bryant data, we use the treatment effect in the numerator of the effect size and the sum of the classroom-level, student-level, and within-student variance components in the denominator of the effect size. The constants are therefore given by <code>p_const = c(0, 1)</code> and <code>r_const = c(1, 1, 1)</code>. The effect size estimate can be calculated as:</p>
+<p>In our model for the Bryant data, we use the treatment effect in the numerator of the effect size and the sum of the school-level, student-level, and within-student variance components in the denominator of the effect size. The constants are therefore given by <code>p_const = c(0, 1)</code> and <code>r_const = c(1, 1, 1)</code>. The effect size estimate can be calculated as:</p>
 <div class="sourceCode" id="cb6"><pre class="r"><span class="no">Bryant2016_g</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/g_mlm.html">g_mlm</a></span>(<span class="no">Bryant2016_RML</span>, <span class="kw">p_const</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">1</span>), <span class="kw">r_const</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>), <span class="kw">infotype</span> <span class="kw">=</span> <span class="st">"expected"</span>)</pre></div>
 <div class="sourceCode" id="cb7"><pre class="r"><span class="no">Bryant2016_g</span>
 <span class="co">#&gt;                           est    se</span>
@@ -282,7 +282,7 @@
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=lmeInfo">https://​cloud.r-project.org/​package=lmeInfo</a>
 </li>
-<li>Browse source code at <br><a href="https://github.com/jepusto/lmeInfo/">https://​github.com/​jepusto/​lmeInfo/​</a>
+<li>Browse source code at <br><a href="https://github.com/jepusto/lmeInfo">https://​github.com/​jepusto/​lmeInfo</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/jepusto/lmeInfo/issues">https://​github.com/​jepusto/​lmeInfo/​issues</a>
 </li>

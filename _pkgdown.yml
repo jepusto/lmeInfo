@@ -7,7 +7,7 @@ template:
       api_key: ab49bdeb500af0e2e09f15c826d29f1f
       index_name: lmeInfo
 
-url: https://jepusto.github.io/lmeInfo/index.html
+url: https://jepusto.github.io/lmeInfo
 
 navbar:
   right:
@@ -34,3 +34,8 @@ reference:
     desc: "Empirical datasets"
     contents:
       - Bryant2016
+
+repo:
+  url:
+    home: https://github.com/jepusto/lmeInfo
+    source:
