@@ -1,16 +1,17 @@
 #' Bryant et al. (2016)
 #'
-#' Data from a multi-level multiple baseline design conducted by
-#' Bryant et al. (2016). The variables are as follows:
+#' Data from a multi-level multiple baseline design conducted by Bryant et al. (2016).
+#' The study involved collecting repeated measures of math performance on twelve students
+#' nested in three schools. The variables are as follows:
 #' \itemize{
-#'   \item \code{Study_ID}. Study identifier.
-#'   \item \code{school}. School identifier.
-#'   \item \code{case}. Student identifier.
-#'   \item \code{session}. Measurement occasion.
-#'   \item \code{treatment}. Indicator for treatment phase.
-#'   \item \code{outcome}. Texas Early Mathematics Inventory (TEMI-Aim Check) scores.
-#'   \item \code{trt_time}. Measurement occasion times treatment phase.
-#'   \item \code{session_c}. Measurement occasion centered at the follow-up time (Measurement occasion 9).
+#'   \item \code{Study_ID} Study identifier.
+#'   \item \code{school} School identifier.
+#'   \item \code{case} Student identifier.
+#'   \item \code{session} Measurement occasion.
+#'   \item \code{treatment} Indicator for treatment phase.
+#'   \item \code{outcome} Texas Early Mathematics Inventory (TEMI-Aim Check) scores.
+#'   \item \code{trt_time} Measurement occasion times treatment phase.
+#'   \item \code{session_c} Measurement occasion centered at the follow-up time (Measurement occasion 9).
 #' }
 #'
 #' @docType data

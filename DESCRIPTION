@@ -1,7 +1,7 @@
 Package: lmeInfo
 Type: Package
 Title: Information Matrices for 'lmeStruct' and 'glsStruct' Objects
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     c(person(given = "James",
              family = "Pustejovsky",
@@ -23,7 +23,7 @@ Description: Provides analytic derivatives and information matrices for
     restricted maximum likelihood are supported. The package also includes a function for estimating
     standardized mean difference effect sizes (Pustejovsky, Hedges, and Shadish (2014) <DOI:10.3102/1076998614547577>)
     based on fitted lme or gls models.
-URL: https://github.com/jepusto/lmeInfo
+URL: https://jepusto.github.io/lmeInfo
 BugReports: https://github.com/jepusto/lmeInfo/issues
 License: GPL-3
 Encoding: UTF-8

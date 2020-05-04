@@ -15,9 +15,9 @@ coverage](https://codecov.io/gh/jepusto/lmeInfo/branch/master/graph/badge.svg)](
 ## Information matrices for fitted `lme` and `gls` models
 
 `lmeInfo` provides analytic derivatives and information matrices for
-fitted linear mixed effects models and generalized least squares models
-estimated using `nlme::lme()` and `nlme::gls()`, respectively. The
-package includes functions for estimating the sampling
+fitted linear mixed effects (lme) models and generalized least squares
+(gls) models estimated using `nlme::lme()` and `nlme::gls()`,
+respectively. The package includes functions for estimating the sampling
 variance-covariance of variance component parameters using the inverse
 Fisher information. The variance components include the parameters of
 the random effects structure (for lme models), the variance structure,
@@ -54,13 +54,13 @@ models. We also show how to calculate a design-comparable standardized
 mean difference effect size based on the fitted model.
 
 The study by Bryant and colleagues (2016) involved collecting repeated
-measures of math performance on multiple students, in each of several
-classrooms. After an initial baseline period in each classroom, an
+measures of math performance on multiple students, in each of three
+schools. After an initial baseline period in each school, an
 intervention was introduced and its effects on student math performance
 were observed over time. For sake of illustration, we use a very simple
 model for these data, consisting of a simple change in levels coinciding
 with the introduction of treatment. We include random effects for each
-classroom and each student. Here we fit the model using `nlme::lme()`:
+school and each student. Here we fit the model using `nlme::lme()`:
 
 ``` r
 library(lmeInfo)
@@ -174,7 +174,7 @@ function also includes an option allowing returning the fitted model
 parameters in addition to effect size estimate.
 
 In our model for the Bryant data, we use the treatment effect in the
-numerator of the effect size and the sum of the classroom-level,
+numerator of the effect size and the sum of the school-level,
 student-level, and within-student variance components in the denominator
 of the effect size. The constants are therefore given by `p_const =
 c(0, 1)` and `r_const = c(1, 1, 1)`. The effect size estimate can be

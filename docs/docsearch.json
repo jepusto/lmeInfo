@@ -2,21 +2,21 @@
   "index_name": "lmeInfo",
   "start_urls": [
     {
-      "url": "https://jepusto.github.io/lmeInfo/index.html/index.html",
+      "url": "https://jepusto.github.io/lmeInfo/index.html",
       "selectors_key": "homepage",
       "tags": [
         "homepage"
       ]
     },
     {
-      "url": "https://jepusto.github.io/lmeInfo/index.html/reference",
+      "url": "https://jepusto.github.io/lmeInfo/reference",
       "selectors_key": "reference",
       "tags": [
         "reference"
       ]
     },
     {
-      "url": "https://jepusto.github.io/lmeInfo/index.html/articles",
+      "url": "https://jepusto.github.io/lmeInfo/articles",
       "selectors_key": "articles",
       "tags": [
         "articles"
@@ -30,7 +30,7 @@
     "/articles/index.html"
   ],
   "sitemap_urls": [
-    "https://jepusto.github.io/lmeInfo/index.html/sitemap.xml"
+    "https://jepusto.github.io/lmeInfo/sitemap.xml"
   ],
   "selectors": {
     "homepage": {
