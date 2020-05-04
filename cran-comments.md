@@ -1,5 +1,5 @@
 ## Resubmission
-This is a resubmission. This resubmission adds the package website and updates the URL in DESCRIPTION with the website URL. This resubmission also fixes the additional issues (ATLAS, MKL) in CRAN package checks.
+This is a resubmission. This resubmission fixes the "Additional issues" in the unit tests identified by the CRAN package checks.
 
 ## Test environments
 * local Windows 10 Pro, R 3.6.3
