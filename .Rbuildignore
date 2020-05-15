@@ -10,3 +10,4 @@ vignettes/Standardized-mean-differences-in-multi-level-models.Rmd
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^\.github$
