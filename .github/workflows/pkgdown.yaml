@@ -1,6 +1,6 @@
 on:
   push:
-    branches: master
+    branches: pkgdown-GA
 
 name: pkgdown
 
@@ -12,9 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: r-lib/actions/setup-r@master
+      - uses: r-lib/actions/setup-r@pkgdown-GA
 
-      - uses: r-lib/actions/setup-pandoc@master
+      - uses: r-lib/actions/setup-pandoc@pkgdown-GA
 
       - name: Query dependencies
         run: |
