@@ -1,0 +1,11 @@
+pandoc: 2.7.3
+pkgdown: 1.5.1.9000
+pkgdown_sha: 3b74d8860686ed6d63e536d7ec4971fbbde5faff
+articles:
+  Information-matrices-for-fitted-LME-models: Information-matrices-for-fitted-LME-models.html
+  Standardized-mean-differences-in-multi-level-models: Standardized-mean-differences-in-multi-level-models.html
+last_built: 2020-05-18T04:18Z
+urls:
+  reference: https://jepusto.github.io/lmeInfo/reference
+  article: https://jepusto.github.io/lmeInfo/articles
+
