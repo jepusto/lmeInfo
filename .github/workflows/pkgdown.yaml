@@ -18,7 +18,7 @@ jobs:
 
       - name: Query dependencies
         run: |
-          install.packages('remotes')
+          install.packages('remotes', repos = "http://cran.us.r-project.org")
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
         shell: Rscript {0}
 
@@ -31,7 +31,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages("remotes")
+          install.packages("remotes", repos = "http://cran.us.r-project.org")
           remotes::install_cran("devtools")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_dev("pkgdown")
