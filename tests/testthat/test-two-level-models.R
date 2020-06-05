@@ -182,6 +182,20 @@ test_that("Results do not depend on order of data.", {
 })
 
 
+test_that("Info matrices work with dropped observations.", {
+  test_after_deleting(Laski_iid)
+  test_after_deleting(Laski_het)
+  test_after_deleting(Laski_AR1)
+  test_after_deleting(Laski_hetAR1)
+  test_after_deleting(Laski_CAR1)
+  test_after_deleting(Laski_MA1)
+  test_after_deleting(Lambert_RML)
+  test_after_deleting(Anglesea_RML)
+  test_after_deleting(Saddler_quality_RML)
+  test_after_deleting(Schutte_RML3)
+  test_after_deleting(Schutte_RML4)
+})
+
 test_that("New REML calculations work.", {
 
   check_REML2(Laski_iid)

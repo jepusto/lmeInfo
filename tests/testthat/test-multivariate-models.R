@@ -64,6 +64,7 @@ bdf_wm_id <- lme(score ~ 0 + measure,
                   data = bdf_long_shuff,
                   control=lmeControl(msMaxIter = 100, apVar = FALSE, returnObject = TRUE))
 
+mod <- bdf_wm
 
 test_that("targetVariance() works with multivariate models.", {
   test_Sigma_mats(bdf_MVML, bdf_long$schoolNR)
@@ -91,4 +92,11 @@ test_that("New REML calculations work.", {
   check_REML2(bdf_wm)
   check_REML2(bdf_wm_id)
   check_REML2(bdf_wm_shuff)
+})
+
+test_that("Info matrices work with dropped observations.", {
+  test_after_deleting(bdf_MVML)
+  test_after_deleting(bdf_wm)
+  test_after_deleting(bdf_wm_id)
+  test_after_deleting(bdf_wm_shuff)
 })
