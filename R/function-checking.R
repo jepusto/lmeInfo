@@ -136,7 +136,7 @@ test_with_FIML <- function(mod) {
 
 }
 
-compare_omit_exclude_complete <- function(mod, dat) {
+compare_omit_exclude_complete <- function(mod, dat, NA_vals) {
 
   dat_complete <- dat[!NA_vals,]
 
@@ -161,6 +161,7 @@ compare_omit_exclude_complete <- function(mod, dat) {
   testthat::expect_identical(EI_exclude, EI_comp)
   testthat::expect_identical(AI_omit, AI_comp)
   testthat::expect_identical(AI_exclude, AI_comp)
+
 }
 
 test_after_deleting <- function(mod, seed = NULL, CRAN_skip = TRUE) {
@@ -178,19 +179,21 @@ test_after_deleting <- function(mod, seed = NULL, CRAN_skip = TRUE) {
   NA_vals <- as.logical(rbinom(nrow(dat), size = 1, prob = 0.2))
   dat[[y_var]][NA_vals] <- NA
 
-  compare_omit_exclude_complete(mod, dat)
+  compare_omit_exclude_complete(mod, dat, NA_vals)
 
 
   # NA values in predictors too
 
   x_vars <- attr(terms(formula(mod)), "term.labels")
+  NA_all <- NA_vals
 
   for (x in x_vars) {
     NA_vals <- as.logical(rbinom(nrow(dat), size = 1, prob = 0.2 / length(x_vars)))
     dat[[x]][NA_vals] <- NA
+    NA_all <- NA_all | NA_vals
   }
 
-  compare_omit_exclude_complete(mod, dat)
+  compare_omit_exclude_complete(mod, dat, NA_all)
 
 }
 
