@@ -99,3 +99,9 @@ test_that("Information matrices work with FIML with separate random effects mode
   test_with_FIML(mod1_2)
   test_with_FIML(mod2_2)
 })
+
+test_that("Info matrices work with dropped observations.", {
+  test_after_deleting(mod1_1)
+  test_after_deleting(mod1_2)
+  test_after_deleting(mod2_2)
+})

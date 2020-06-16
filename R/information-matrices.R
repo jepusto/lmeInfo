@@ -212,6 +212,8 @@ Fisher_info <- function(mod, type = "expected") {
   } else if (type == "average") {
 
     rhat <- as.matrix(stats::residuals(mod, level = 0)) # fixed residuals
+    if (inherits(na.action(mod), "exclude")) rhat <- rhat[-as.integer(na.action(mod)),,drop=FALSE]
+
     Vinv_rhat <- prod_blockmatrix(A = V_inv, B = rhat)
 
     dVr <- sapply(dV_list, prod_blockmatrix, B = Vinv_rhat, simplify = TRUE) # dV*Vinv*rhat (N * r matrix)

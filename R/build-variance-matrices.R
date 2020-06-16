@@ -8,11 +8,13 @@ get_cor_grouping <- function(mod, levels = NULL) {
     grps <- apply(grps, 1, paste, collapse = "/")
     if (is.null(levels)) levels <- unique(grps)
     grps <- factor(grps, levels = levels)
+    if (inherits(na.action(mod), "exclude")) grps <- grps[-as.integer(na.action(mod))]
   } else if (!is.null(mod$modelStruct$corStruct)) {
     grps <- factor(rep("A",mod$dims$N))
   } else {
     grps <- factor(1:mod$dims$N)
   }
+
   grps
 }
 

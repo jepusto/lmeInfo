@@ -136,6 +136,66 @@ test_with_FIML <- function(mod) {
 
 }
 
+compare_omit_exclude_complete <- function(mod, dat, NA_vals) {
+
+  dat <- dat
+  dat_complete <- dat[!NA_vals,]
+
+  mod_omit <- suppressWarnings(stats::update(mod, data = dat, na.action = "na.omit"))
+  mod_exclude <- suppressWarnings(stats::update(mod, data = dat, na.action = "na.exclude"))
+  mod_comp <- suppressWarnings(stats::update(mod, data = dat_complete))
+
+  varcomp_omit <- extract_varcomp(mod_omit)
+  varcomp_exclude <- extract_varcomp(mod_exclude)
+  varcomp_comp <- extract_varcomp(mod_comp)
+  testthat::expect_identical(varcomp_omit, varcomp_comp)
+  testthat::expect_identical(varcomp_exclude, varcomp_comp)
+
+  EI_omit <- Fisher_info(mod_omit, type = "expected")
+  EI_exclude <- Fisher_info(mod_exclude, type = "expected")
+  EI_comp <- Fisher_info(mod_comp, type = "expected")
+  AI_omit <- Fisher_info(mod_omit, type = "average")
+  AI_exclude <- Fisher_info(mod_exclude, type = "average")
+  AI_comp <- Fisher_info(mod_comp, type = "average")
+
+  testthat::expect_identical(EI_omit, EI_comp)
+  testthat::expect_identical(EI_exclude, EI_comp)
+  testthat::expect_identical(AI_omit, AI_comp)
+  testthat::expect_identical(AI_exclude, AI_comp)
+
+}
+
+test_after_deleting <- function(mod, seed = NULL, CRAN_skip = TRUE) {
+
+  if (CRAN_skip) testthat::skip_on_cran()
+
+  if (!is.null(seed)) set.seed(seed)
+
+
+  # NA values in response
+
+  dat <- nlme::getData(mod)
+  y_var <- attr(getResponse(mod), "label")
+
+  NA_vals <- as.logical(rbinom(nrow(dat), size = 1, prob = 0.2))
+  dat[[y_var]][NA_vals] <- NA
+
+  compare_omit_exclude_complete(mod, dat, NA_vals)
+
+  # NA values in predictors too
+
+  x_vars <- attr(terms(formula(mod)), "term.labels")
+  NA_all <- NA_vals
+
+  for (x in x_vars) {
+    NA_vals <- as.logical(rbinom(nrow(dat), size = 1, prob = 0.2 / length(x_vars)))
+    dat[[x]][NA_vals] <- NA
+    NA_all <- NA_all | NA_vals
+  }
+
+  compare_omit_exclude_complete(mod, dat, NA_all)
+
+}
 
 test_after_shuffling <- function(mod, by_var = NULL,
                                  tol_param = 10^-3, tol_info = 10^-3,

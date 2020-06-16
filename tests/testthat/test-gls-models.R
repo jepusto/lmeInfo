@@ -66,11 +66,11 @@ Laski_CAR1 <- gls(outcome ~ 0 + case + case:treatment,
                   correlation = corCAR1(0.2, ~ time | case),
                   data = Laski)
 
-# mod <- Ortho_AR1
-# grps <- Orthodont$Subject
-# invert <- TRUE
-# sigma_scale <- TRUE
-# R_list <- build_corr_mats(mod)
+mod <- Laski_AR1
+invert <- TRUE
+sigma_scale <- TRUE
+R_list <- build_corr_mats(mod)
+test_after_deleting(mod, CRAN_skip = FALSE)
 
 test_that("targetVariance() works with gls models.", {
   test_Sigma_mats(Hart_AR, rep("A", nrow(Hartnagel)))
@@ -160,6 +160,22 @@ test_that("Results do not depend on order of data.", {
   test_after_shuffling(Laski_het, seed = 26) # 21
   test_after_shuffling(Laski_hetAR1, seed = 17) # 20
   test_after_shuffling(Laski_CAR1, seed = 20)
+})
+
+test_that("Info matrices work with dropped observations.", {
+  test_after_deleting(Hart_AR1)
+  test_after_deleting(Hart_CAR1)
+  test_after_deleting(Hart_MA1)
+  test_after_deleting(Ortho_hom)
+  test_after_deleting(Ortho_power)
+  test_after_deleting(Ortho_AR1)
+  test_after_deleting(Ortho_AR1_power)
+  test_after_deleting(Ortho_CAR1)
+  test_after_deleting(Ortho_CAR1_power)
+  test_after_deleting(Laski_AR1)
+  test_after_deleting(Laski_het)
+  test_after_deleting(Laski_hetAR1)
+
 })
 
 

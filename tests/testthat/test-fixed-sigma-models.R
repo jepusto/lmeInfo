@@ -43,6 +43,11 @@ test_that("Results do not depend on order of data.", {
   test_after_shuffling(Thiemann2001_fx_sigma, seed = 20)
 })
 
+test_that("Info matrices work with dropped observations.", {
+  test_after_deleting(Laski_fx_sigma, seed = 30)
+  test_after_deleting(Thiemann2001_fx_sigma, seed = 30)
+})
+
 test_that("New REML calculations work.", {
 
   check_REML2(Laski_fx_sigma)
