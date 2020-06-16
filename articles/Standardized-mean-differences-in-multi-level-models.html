@@ -95,7 +95,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Standardized mean differences for fitted <code>lme</code> and <code>gls</code> models</h1>
             
-            <h4 class="date">2020-06-07</h4>
+            <h4 class="date">2020-06-16</h4>
       
       
       <div class="hidden name"><code>Standardized-mean-differences-in-multi-level-models.Rmd</code></div>
@@ -123,15 +123,17 @@ d = \left(1 - \frac{3}{4 \nu - 1}\right) \frac{\mathbf{p}'\boldsymbol{\hat\beta}
 <a href="#demonstration" class="anchor"></a>Demonstration</h1>
 <p>We use a dataset from a multiple baseline study conducted by Bryant and colleagues (2016) to demonstrate how to calculate a design-comparable standardized mean difference effect size based on the fitted model.</p>
 <p>The study by Bryant and colleagues (2016) involved collecting repeated measures of math performance on multiple students, in each of several classrooms. After an initial baseline period in each classroom, an intervention was introduced and its effects on student math performance were observed over time. For sake of illustration, we use a very simple model for these data, consisting of a simple change in levels coinciding with the introduction of treatment. We include random effects for each classroom and each student. Here we fit the model using <code><a href="https://rdrr.io/pkg/nlme/man/lme.html">nlme::lme()</a></code>:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">lmeInfo</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">nlme</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">Bryant2016</span>)
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://jepusto.github.io/lmeInfo">lmeInfo</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://svn.r-project.org/R-packages/trunk/nlme">nlme</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="kw">Bryant2016</span>)
 
-<span class="no">Bryant2016_RML</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html">lme</a></span>(<span class="kw">fixed</span> <span class="kw">=</span> <span class="no">outcome</span> ~ <span class="no">treatment</span>,
-                      <span class="kw">random</span> <span class="kw">=</span> ~ <span class="fl">1</span> <span class="kw">|</span> <span class="no">school</span>/<span class="no">case</span>,
-                      <span class="kw">data</span> <span class="kw">=</span> <span class="no">Bryant2016</span>)
+<span class="kw">Bryant2016_RML</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html">lme</a></span>(fixed = <span class="kw">outcome</span> <span class="op">~</span> <span class="kw">treatment</span>,
+                      random = <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="kw">school</span><span class="op">/</span><span class="kw">case</span>,
+                      data = <span class="kw">Bryant2016</span>)
 
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">Bryant2016_RML</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="kw">Bryant2016_RML</span>)
+</pre></div>
 <pre><code>## Linear mixed-effects model fit by REML
 ##  Data: Bryant2016 
 ##        AIC      BIC    logLik
@@ -163,7 +165,9 @@ d = \left(1 - \frac{3}{4 \nu - 1}\right) \frac{\mathbf{p}'\boldsymbol{\hat\beta}
 ##           school case %in% school 
 ##                3               12</code></pre>
 <p>The estimated variance components from the fitted model can be obtained using <code><a href="../reference/extract_varcomp.html">extract_varcomp()</a></code>:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/extract_varcomp.html">extract_varcomp</a></span>(<span class="no">Bryant2016_RML</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="fu"><a href="../reference/extract_varcomp.html">extract_varcomp</a></span>(<span class="kw">Bryant2016_RML</span>)
+</pre></div>
 <pre><code>## $Tau
 ## $Tau$school
 ## school.var((Intercept)) 
@@ -186,14 +190,20 @@ d = \left(1 - \frac{3}{4 \nu - 1}\right) \frac{\mathbf{p}'\boldsymbol{\hat\beta}
 ## attr(,"class")
 ## [1] "varcomp"</code></pre>
 <p>In our model for the Bryant data, we use the treatment effect in the numerator of the effect size and the sum of the classroom-level, student-level, and within-student variance components in the denominator of the effect size. The constants are therefore given by <span class="math inline">\(\mathbf{p} = (0, 1)'\)</span> and <span class="math inline">\(\mathbf{r} = (1, 1, 1)'\)</span>. The effect size estimate can be calculated as:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">Bryant2016_g</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/g_mlm.html">g_mlm</a></span>(<span class="no">Bryant2016_RML</span>, <span class="kw">p_const</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">1</span>), <span class="kw">r_const</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>), <span class="kw">infotype</span> <span class="kw">=</span> <span class="st">"expected"</span>)</pre></body></html></div>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">Bryant2016_g</span></pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="kw">Bryant2016_g</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/g_mlm.html">g_mlm</a></span>(<span class="kw">Bryant2016_RML</span>, p_const = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">1</span>), r_const = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>), infotype = <span class="st">"expected"</span>)
+</pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="kw">Bryant2016_g</span>
+</pre></div>
 <pre><code>##                           est    se
 ## unadjusted effect size  1.799 0.340
 ## adjusted effect size    1.721 0.325
 ## degree of freedom      17.504</code></pre>
 <p>A <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> method is also included, which includes more detail about the model parameter estimates and effect size estimate:</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">Bryant2016_g</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="kw">Bryant2016_g</span>)
+</pre></div>
 <pre><code>##                                            est      se
 ## Tau.school.school.var((Intercept))     158.240 238.653
 ## Tau.case.case.var((Intercept))         255.430 126.671

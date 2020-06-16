@@ -151,7 +151,7 @@
   or generalized least squares model (glsStruct object).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>extract_varcomp</span>(<span class='no'>mod</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://jepusto.github.io/lmeInfo/reference/extract_varcomp.html'>extract_varcomp</a></span>(<span class='kw'>mod</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,13 +171,13 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>nlme</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>Bryant2016</span>)
-<span class='no'>Bryant2016_RML</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/nlme/man/lme.html'>lme</a></span>(<span class='kw'>fixed</span> <span class='kw'>=</span> <span class='no'>outcome</span> ~ <span class='no'>treatment</span>,
-                      <span class='kw'>random</span> <span class='kw'>=</span> ~ <span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>school</span>/<span class='no'>case</span>,
-                      <span class='kw'>correlation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/nlme/man/corAR1.html'>corAR1</a></span>(<span class='fl'>0</span>, ~ <span class='no'>session</span> <span class='kw'>|</span> <span class='no'>school</span>/<span class='no'>case</span>),
-                      <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Bryant2016</span>)
-<span class='fu'>extract_varcomp</span>(<span class='no'>Bryant2016_RML</span>)</div><div class='output co'>#&gt; $Tau
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://svn.r-project.org/R-packages/trunk/nlme'>nlme</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>Bryant2016</span>)
+<span class='kw'>Bryant2016_RML</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/nlme/man/lme.html'>lme</a></span>(fixed = <span class='kw'>outcome</span> <span class='op'>~</span> <span class='kw'>treatment</span>,
+                      random = <span class='op'>~</span> <span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>school</span><span class='op'>/</span><span class='kw'>case</span>,
+                      correlation = <span class='fu'><a href='https://rdrr.io/pkg/nlme/man/corAR1.html'>corAR1</a></span>(<span class='fl'>0</span>, <span class='op'>~</span> <span class='kw'>session</span> <span class='op'>|</span> <span class='kw'>school</span><span class='op'>/</span><span class='kw'>case</span>),
+                      data = <span class='kw'>Bryant2016</span>)
+<span class='fu'><a href='https://jepusto.github.io/lmeInfo/reference/extract_varcomp.html'>extract_varcomp</a></span>(<span class='kw'>Bryant2016_RML</span>)</div><div class='output co'>#&gt; $Tau
 #&gt; $Tau$school
 #&gt; school.var((Intercept)) 
 #&gt;                105.6189 
@@ -197,8 +197,7 @@
 #&gt; [1] 1058.303
 #&gt; 
 #&gt; attr(,"class")
-#&gt; [1] "varcomp"</div><div class='input'>
-</div></pre>
+#&gt; [1] "varcomp"</div><div class='input'></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

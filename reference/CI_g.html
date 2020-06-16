@@ -151,7 +151,7 @@
   non-central t distribution (for an asymmetric interval).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>CI_g</span>(<span class='no'>g</span>, <span class='kw'>cover</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>bound</span> <span class='kw'>=</span> <span class='fl'>35</span>, <span class='kw'>symmetric</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://jepusto.github.io/lmeInfo/reference/CI_g.html'>CI_g</a></span>(<span class='kw'>g</span>, cover = <span class='fl'>0.95</span>, bound = <span class='fl'>35</span>, symmetric = <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -183,16 +183,15 @@ asymmetric confidence interval.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>nlme</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>Bryant2016</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"lmeInfo"</span>)
-<span class='no'>Bryant2016_RML1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/nlme/man/lme.html'>lme</a></span>(<span class='kw'>fixed</span> <span class='kw'>=</span> <span class='no'>outcome</span> ~ <span class='no'>treatment</span>,
-                       <span class='kw'>random</span> <span class='kw'>=</span> ~ <span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>school</span>/<span class='no'>case</span>,
-                       <span class='kw'>correlation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/nlme/man/corAR1.html'>corAR1</a></span>(<span class='fl'>0</span>, ~ <span class='no'>session</span> <span class='kw'>|</span> <span class='no'>school</span>/<span class='no'>case</span>),
-                       <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Bryant2016</span>)
-<span class='no'>Bryant2016_g1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='g_mlm.html'>g_mlm</a></span>(<span class='no'>Bryant2016_RML1</span>, <span class='kw'>p_const</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>), <span class='kw'>r_const</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>1</span>),
-                       <span class='kw'>infotype</span> <span class='kw'>=</span> <span class='st'>"expected"</span>, <span class='kw'>returnModel</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'>CI_g</span>(<span class='no'>Bryant2016_g1</span>, <span class='kw'>symmetric</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] 0.2180581 0.7085557</div><div class='input'><span class='fu'>CI_g</span>(<span class='no'>Bryant2016_g1</span>, <span class='kw'>symmetric</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] 0.2521979 0.7037761</div><div class='input'>
-</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://svn.r-project.org/R-packages/trunk/nlme'>nlme</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>Bryant2016</span>, package = <span class='st'>"lmeInfo"</span>)
+<span class='kw'>Bryant2016_RML1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/nlme/man/lme.html'>lme</a></span>(fixed = <span class='kw'>outcome</span> <span class='op'>~</span> <span class='kw'>treatment</span>,
+                       random = <span class='op'>~</span> <span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>school</span><span class='op'>/</span><span class='kw'>case</span>,
+                       correlation = <span class='fu'><a href='https://rdrr.io/pkg/nlme/man/corAR1.html'>corAR1</a></span>(<span class='fl'>0</span>, <span class='op'>~</span> <span class='kw'>session</span> <span class='op'>|</span> <span class='kw'>school</span><span class='op'>/</span><span class='kw'>case</span>),
+                       data = <span class='kw'>Bryant2016</span>)
+<span class='kw'>Bryant2016_g1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://jepusto.github.io/lmeInfo/reference/g_mlm.html'>g_mlm</a></span>(<span class='kw'>Bryant2016_RML1</span>, p_const = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>), r_const = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>1</span>),
+                       infotype = <span class='st'>"expected"</span>, returnModel = <span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://jepusto.github.io/lmeInfo/reference/CI_g.html'>CI_g</a></span>(<span class='kw'>Bryant2016_g1</span>, symmetric = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] 0.2180581 0.7085557</div><div class='input'><span class='fu'><a href='https://jepusto.github.io/lmeInfo/reference/CI_g.html'>CI_g</a></span>(<span class='kw'>Bryant2016_g1</span>, symmetric = <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] 0.2521979 0.7037761</div><div class='input'></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

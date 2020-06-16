@@ -156,7 +156,7 @@
   using the inverse Fisher information.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>varcomp_vcov</span>(<span class='no'>mod</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"expected"</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://jepusto.github.io/lmeInfo/reference/varcomp_vcov.html'>varcomp_vcov</a></span>(<span class='kw'>mod</span>, type = <span class='st'>"expected"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -179,13 +179,13 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>nlme</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>Bryant2016</span>)
-<span class='no'>Bryant2016_RML</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/nlme/man/lme.html'>lme</a></span>(<span class='kw'>fixed</span> <span class='kw'>=</span> <span class='no'>outcome</span> ~ <span class='no'>treatment</span>,
-                      <span class='kw'>random</span> <span class='kw'>=</span> ~ <span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>school</span>/<span class='no'>case</span>,
-                      <span class='kw'>correlation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/nlme/man/corAR1.html'>corAR1</a></span>(<span class='fl'>0</span>, ~ <span class='no'>session</span> <span class='kw'>|</span> <span class='no'>school</span>/<span class='no'>case</span>),
-                      <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Bryant2016</span>)
-<span class='fu'>varcomp_vcov</span>(<span class='no'>Bryant2016_RML</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"expected"</span>)</div><div class='output co'>#&gt;                             Tau.school.var((Intercept))
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://svn.r-project.org/R-packages/trunk/nlme'>nlme</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>Bryant2016</span>)
+<span class='kw'>Bryant2016_RML</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/nlme/man/lme.html'>lme</a></span>(fixed = <span class='kw'>outcome</span> <span class='op'>~</span> <span class='kw'>treatment</span>,
+                      random = <span class='op'>~</span> <span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>school</span><span class='op'>/</span><span class='kw'>case</span>,
+                      correlation = <span class='fu'><a href='https://rdrr.io/pkg/nlme/man/corAR1.html'>corAR1</a></span>(<span class='fl'>0</span>, <span class='op'>~</span> <span class='kw'>session</span> <span class='op'>|</span> <span class='kw'>school</span><span class='op'>/</span><span class='kw'>case</span>),
+                      data = <span class='kw'>Bryant2016</span>)
+<span class='fu'><a href='https://jepusto.github.io/lmeInfo/reference/varcomp_vcov.html'>varcomp_vcov</a></span>(<span class='kw'>Bryant2016_RML</span>, type = <span class='st'>"expected"</span>)</div><div class='output co'>#&gt;                             Tau.school.var((Intercept))
 #&gt; Tau.school.var((Intercept))                8.133900e+04
 #&gt; Tau.case.var((Intercept))                 -2.140289e+04
 #&gt; cor_params                                -1.004342e-02
@@ -199,8 +199,7 @@
 #&gt; Tau.school.var((Intercept)) -4.701744e+02
 #&gt; Tau.case.var((Intercept))   -3.815479e+05
 #&gt; cor_params                   9.872975e+00
-#&gt; sigma_sq                     4.602107e+05</div><div class='input'>
-</div></pre>
+#&gt; sigma_sq                     4.602107e+05</div><div class='input'></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

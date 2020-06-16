@@ -95,7 +95,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Information matrices for fitted <code>lme()</code> and <code>gls()</code> models</h1>
             
-            <h4 class="date">2020-06-07</h4>
+            <h4 class="date">2020-06-16</h4>
       
       
       <div class="hidden name"><code>Information-matrices-for-fitted-LME-models.Rmd</code></div>
@@ -114,7 +114,9 @@
 \def\Info{{\mathcal{I}}}
 \def\Jnfo{{\mathcal{J}}}
 \]</span></p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="co">#library(lmeInfo)</span></pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="co">#library(lmeInfo)</span>
+</pre></div>
 <div id="notation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#notation" class="anchor"></a>Notation</h1>
@@ -139,7 +141,7 @@ a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B} \\
 <div id="hierarchical-linear-models" class="section level1">
 <h1 class="hasAnchor">
 <a href="#hierarchical-linear-models" class="anchor"></a>Hierarchical linear models</h1>
-<p>We shall be concerned with hierarchical linear models fitted by full maximum likelihood (FML) or restricted maximum likelihood (RML) using the <code>lme()</code> function from R package <code>nlme</code>. Consider a set of observations from each of <span class="math inline">\(m\)</span> groups, where group <span class="math inline">\(i\)</span> has <span class="math inline">\(n_i\)</span> observations for <span class="math inline">\(i = 1,...,m\)</span> and <span class="math inline">\(N = \sum_{i=1}^m n_i\)</span>. Let <span class="math inline">\(y_{hi}\)</span> denote the outcome measure and <span class="math inline">\(\bmat{x}_{hi}\)</span> denote a <span class="math inline">\(p \times 1\)</span> row vector of fixed predictor variables, both for observation <span class="math inline">\(h\)</span> from group <span class="math inline">\(i\)</span>. Let <span class="math inline">\(\bmat{y}_i = (y_{1i} \cdots y_{n_i i})'\)</span> be the <span class="math inline">\(n_i \times 1\)</span> vector of outcomes and <span class="math inline">\(\bmat{X}_i = \left(\bmat{x}_{1i}' \cdots \bmat{x}_{n_ii}'\right)'\)</span> be the <span class="math inline">\(n_i \times p\)</span> design matrix of predictors for group <span class="math inline">\(i\)</span>. Hierarchical <code>lme</code> models have the form <span class="math display">\[
+<p>We shall be concerned with hierarchical linear models fitted by full maximum likelihood (FML) or restricted maximum likelihood (RML) using the <code><a href="https://rdrr.io/pkg/nlme/man/lme.html">lme()</a></code> function from R package <code>nlme</code>. Consider a set of observations from each of <span class="math inline">\(m\)</span> groups, where group <span class="math inline">\(i\)</span> has <span class="math inline">\(n_i\)</span> observations for <span class="math inline">\(i = 1,...,m\)</span> and <span class="math inline">\(N = \sum_{i=1}^m n_i\)</span>. Let <span class="math inline">\(y_{hi}\)</span> denote the outcome measure and <span class="math inline">\(\bmat{x}_{hi}\)</span> denote a <span class="math inline">\(p \times 1\)</span> row vector of fixed predictor variables, both for observation <span class="math inline">\(h\)</span> from group <span class="math inline">\(i\)</span>. Let <span class="math inline">\(\bmat{y}_i = (y_{1i} \cdots y_{n_i i})'\)</span> be the <span class="math inline">\(n_i \times 1\)</span> vector of outcomes and <span class="math inline">\(\bmat{X}_i = \left(\bmat{x}_{1i}' \cdots \bmat{x}_{n_ii}'\right)'\)</span> be the <span class="math inline">\(n_i \times p\)</span> design matrix of predictors for group <span class="math inline">\(i\)</span>. Hierarchical <code>lme</code> models have the form <span class="math display">\[
 \bmat{y}_i = \bmat{X}_i \bs\beta + \bmat{Z}_i \bs\eta_i + \bs\epsilon_i
 \]</span> where <span class="math inline">\(\bmat{Z}_i\)</span> is a <span class="math inline">\(n_i \times q_i\)</span> design matrix describing random effects for group <span class="math inline">\(i\)</span>, <span class="math inline">\(\bs\beta\)</span> is a <span class="math inline">\(p \times 1\)</span> vector of regression coefficients, <span class="math inline">\(\bs\eta_i\)</span> is a <span class="math inline">\(q_i \times 1\)</span> vector of random effects, and <span class="math inline">\(\bs\epsilon_i\)</span> is a <span class="math inline">\(n_i \times 1\)</span> vector of observation-specific errors. We assume that <span class="math display">\[
 \bs\eta_i \sim N\left(\bmat{0}, \ \bmat{T}_{i}\right)
