@@ -133,6 +133,11 @@ Q_matrix <- function(mod) {
 #' @importFrom stats dist
 #' @importFrom stats model.matrix
 #' @importFrom stats vcov
+#' @importFrom stats complete.cases
+#' @importFrom stats formula
+#' @importFrom stats na.action
+#' @importFrom stats rbinom
+#' @importFrom stats terms
 #'
 
 Fisher_info <- function(mod, type = "expected") {

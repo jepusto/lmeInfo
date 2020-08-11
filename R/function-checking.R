@@ -165,12 +165,9 @@ compare_omit_exclude_complete <- function(mod, dat, NA_vals) {
 
 }
 
-test_after_deleting <- function(mod, seed = NULL, CRAN_skip = TRUE) {
-
-  if (CRAN_skip) testthat::skip_on_cran()
+test_after_deleting <- function(mod, seed = NULL) {
 
   if (!is.null(seed)) set.seed(seed)
-
 
   # NA values in response
 
@@ -200,9 +197,7 @@ test_after_deleting <- function(mod, seed = NULL, CRAN_skip = TRUE) {
 
 test_after_shuffling <- function(mod, by_var = NULL,
                                  tol_param = 10^-3, tol_info = 10^-3,
-                                 test = "info", seed = NULL, CRAN_skip = TRUE) {
-
-  if (CRAN_skip) testthat::skip_on_cran()
+                                 test = "info", seed = NULL) {
 
   if (!is.null(seed)) set.seed(seed)
 

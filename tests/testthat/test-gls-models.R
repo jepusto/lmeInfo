@@ -70,7 +70,7 @@ mod <- Laski_AR1
 invert <- TRUE
 sigma_scale <- TRUE
 R_list <- build_corr_mats(mod)
-test_after_deleting(mod, CRAN_skip = FALSE)
+# test_after_deleting(mod)
 
 test_that("targetVariance() works with gls models.", {
   test_Sigma_mats(Hart_AR, rep("A", nrow(Hartnagel)))
