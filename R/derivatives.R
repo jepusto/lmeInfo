@@ -61,7 +61,8 @@ dV_dreStruct <- function(mod) {
   blocks <- mod$groups
   blocks_names <- names(blocks)
   b <- lapply(blocks_names, function(x) class(mod$modelStruct$reStruct[[x]])) # pdClass
-  Z_design <- model.matrix(mod$modelStruct$reStruct, data = mod$data)
+  data <- mod$data
+  Z_design <- model.matrix(mod$modelStruct$reStruct, data = data[complete.cases(data), ])
 
   if (length(blocks) == 1L) {
     Z_list <- list(Z_design)

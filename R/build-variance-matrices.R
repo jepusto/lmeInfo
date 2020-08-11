@@ -121,7 +121,8 @@ build_RE_mats <- function(mod, sigma_scale = FALSE) {
 
     D_mat <- as.matrix(mod$modelStruct$reStruct[[1]])
     if (sigma_scale) D_mat <- mod$sigma^2 * D_mat
-    Z_mat <- model.matrix(mod$modelStruct$reStruc, nlme::getData(mod))
+    data <- nlme::getData(mod)
+    Z_mat <- model.matrix(mod$modelStruct$reStruc, data[complete.cases(data), ])
     row.names(Z_mat) <- NULL
     Z_list <- matrix_list(Z_mat, all_groups[[1]], "row")
     ZDZ_list <- ZDZt(D_mat, Z_list)
@@ -134,7 +135,8 @@ build_RE_mats <- function(mod, sigma_scale = FALSE) {
     } else {
       D_list <- lapply(mod$modelStruct$reStruct, as.matrix)
     }
-    Z_mat <- model.matrix(mod$modelStruct$reStruc, nlme::getData(mod))
+    data <- nlme::getData(mod)
+    Z_mat <- model.matrix(mod$modelStruct$reStruc, data[complete.cases(data), ])
     Z_names <- sapply(strsplit(colnames(Z_mat), ".", fixed=TRUE), function(x) x[1])
     row.names(Z_mat) <- NULL
     Z_levels <- lapply(names(all_groups), function(x) Z_mat[,x==Z_names,drop=FALSE])

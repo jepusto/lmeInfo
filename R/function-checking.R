@@ -175,7 +175,8 @@ test_after_deleting <- function(mod, seed = NULL, CRAN_skip = TRUE) {
   # NA values in response
 
   dat <- nlme::getData(mod)
-  y_var <- attr(getResponse(mod), "label")
+  # y_var <- attr(getResponse(mod), "label")
+  y_var <- as.character(formula(mod)[[2]])
 
   NA_vals <- as.logical(rbinom(nrow(dat), size = 1, prob = 0.2))
   dat[[y_var]][NA_vals] <- NA
