@@ -50,12 +50,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -117,13 +111,11 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the released version of lmeInfo from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"lmeInfo"</span>)
-</pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"lmeInfo"</span><span class="op">)</span></pre></div>
 <p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="co"># install.packages("devtools")</span>
-<span class="kw">devtools</span>::<span class="fu">install_github</span>(<span class="st">"jepusto/lmeInfo"</span>)
-</pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"jepusto/lmeInfo"</span><span class="op">)</span></pre></div>
 </div>
 <div id="demonstration" class="section level2">
 <h2 class="hasAnchor">
@@ -131,15 +123,15 @@
 <p>We use a dataset from a multiple baseline study conducted by Bryant and colleagues (2016) to demonstrate how <code>lmeInfo</code> estimates the sampling variance-covariance of variance component parameters of fitted LME models. We also show how to calculate a design-comparable standardized mean difference effect size based on the fitted model.</p>
 <p>The study by Bryant and colleagues (2016) involved collecting repeated measures of math performance on multiple students, in each of three schools. After an initial baseline period in each school, an intervention was introduced and its effects on student math performance were observed over time. For sake of illustration, we use a very simple model for these data, consisting of a simple change in levels coinciding with the introduction of treatment. We include random effects for each school and each student. Here we fit the model using <code><a href="https://rdrr.io/pkg/nlme/man/lme.html">nlme::lme()</a></code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://jepusto.github.io/lmeInfo">lmeInfo</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://svn.r-project.org/R-packages/trunk/nlme">nlme</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="kw">Bryant2016</span>)
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://jepusto.github.io/lmeInfo">lmeInfo</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://svn.r-project.org/R-packages/trunk/nlme">nlme</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">Bryant2016</span><span class="op">)</span>
 
-<span class="kw">Bryant2016_RML</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html">lme</a></span>(fixed = <span class="kw">outcome</span> <span class="op">~</span> <span class="kw">treatment</span>,
-                      random = <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="kw">school</span><span class="op">/</span><span class="kw">case</span>,
-                      data = <span class="kw">Bryant2016</span>)
+<span class="va">Bryant2016_RML</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html">lme</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">outcome</span> <span class="op">~</span> <span class="va">treatment</span>,
+                      random <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">school</span><span class="op">/</span><span class="va">case</span>,
+                      data <span class="op">=</span> <span class="va">Bryant2016</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="kw">Bryant2016_RML</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">Bryant2016_RML</span><span class="op">)</span>
 <span class="co">#&gt; Linear mixed-effects model fit by REML</span>
 <span class="co">#&gt;  Data: Bryant2016 </span>
 <span class="co">#&gt;        AIC      BIC    logLik</span>
@@ -169,11 +161,10 @@
 <span class="co">#&gt; Number of Observations: 299</span>
 <span class="co">#&gt; Number of Groups: </span>
 <span class="co">#&gt;           school case %in% school </span>
-<span class="co">#&gt;                3               12</span>
-</pre></div>
+<span class="co">#&gt;                3               12</span></pre></div>
 <p>The estimated variance components from the fitted model can be obtained using <code><a href="reference/extract_varcomp.html">extract_varcomp()</a></code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="reference/extract_varcomp.html">extract_varcomp</a></span>(<span class="kw">Bryant2016_RML</span>)
+<span class="fu"><a href="reference/extract_varcomp.html">extract_varcomp</a></span><span class="op">(</span><span class="va">Bryant2016_RML</span><span class="op">)</span>
 <span class="co">#&gt; $Tau</span>
 <span class="co">#&gt; $Tau$school</span>
 <span class="co">#&gt; school.var((Intercept)) </span>
@@ -194,19 +185,17 @@
 <span class="co">#&gt; [1] 338.4864</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; attr(,"class")</span>
-<span class="co">#&gt; [1] "varcomp"</span>
-</pre></div>
+<span class="co">#&gt; [1] "varcomp"</span></pre></div>
 <div id="sampling-variance-covariance-of-variance-component-parameters" class="section level3">
 <h3 class="hasAnchor">
 <a href="#sampling-variance-covariance-of-variance-component-parameters" class="anchor"></a>Sampling variance-covariance of variance component parameters</h3>
 <p>The sampling variance-covariance of variance component parameters of model <code>Bryant2016_RML</code> can be estimated using <code><a href="reference/varcomp_vcov.html">varcomp_vcov()</a></code> in <code>lmeInfo</code>. Setting <code>type = "expected"</code> will calculate the sampling variance-covariance of variance component parameters using the inverse expected Fisher information. Setting <code>type = "average"</code> will calculate the inverse of the average Fisher information matrix (Gilmour, Thompson, &amp; Cullis, 1995).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu"><a href="reference/varcomp_vcov.html">varcomp_vcov</a></span>(<span class="kw">Bryant2016_RML</span>, type = <span class="st">"expected"</span>)
+<span class="fu"><a href="reference/varcomp_vcov.html">varcomp_vcov</a></span><span class="op">(</span><span class="va">Bryant2016_RML</span>, type <span class="op">=</span> <span class="st">"expected"</span><span class="op">)</span>
 <span class="co">#&gt;                             Tau.school.var((Intercept)) Tau.case.var((Intercept))     sigma_sq</span>
 <span class="co">#&gt; Tau.school.var((Intercept))                5.695541e+04               -4547.41772   0.06132317</span>
 <span class="co">#&gt; Tau.case.var((Intercept))                 -4.547418e+03               16045.57184 -32.27967543</span>
-<span class="co">#&gt; sigma_sq                                   6.132317e-02                 -32.27968 801.20973947</span>
-</pre></div>
+<span class="co">#&gt; sigma_sq                                   6.132317e-02                 -32.27968 801.20973947</span></pre></div>
 </div>
 <div id="estimating-a-standardized-mean-difference-effect-size" class="section level3">
 <h3 class="hasAnchor">
@@ -214,18 +203,16 @@
 <p>The package also includes a function, <code><a href="reference/g_mlm.html">g_mlm()</a></code>, for estimating a standardized mean difference effect size from a fitted multi-level model. The estimation methods follow Pustejovsky, Hedges, and Shadish (2014). A standardized mean difference effect size parameter can be defined as the ratio of a linear combination of the model’s fixed effect parameters over the square root of a linear combination of the model’s variance components. The <code><a href="reference/g_mlm.html">g_mlm()</a></code> function takes as inputs a fitted multi-level model and the vectors <code>p_const</code> and <code>r_const</code>, which define the linear combinations of fixed effects and variance components, respectively. The function calculates an effect size estimate by first substituting maximum likelihood or restricted maximum likelihood estimates in place of the corresponding parameters, then applying a small-sample correction. The small-sample correction and the standard error are based on approximating the distribution of the estimator by a t distribution, with degrees of freedom given by a Satterthwaite approximation (Pustejovsky, Hedges, &amp; Shadish, 2014). The <code><a href="reference/g_mlm.html">g_mlm()</a></code> function includes an option allowing use of the expected or average form of the Fisher information matrix in the calculations. The <code><a href="reference/g_mlm.html">g_mlm()</a></code> function also includes an option allowing returning the fitted model parameters in addition to effect size estimate.</p>
 <p>In our model for the Bryant data, we use the treatment effect in the numerator of the effect size and the sum of the school-level, student-level, and within-student variance components in the denominator of the effect size. The constants are therefore given by <code>p_const = c(0, 1)</code> and <code>r_const = c(1, 1, 1)</code>. The effect size estimate can be calculated as:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="kw">Bryant2016_g</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/g_mlm.html">g_mlm</a></span>(<span class="kw">Bryant2016_RML</span>, p_const = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">1</span>), r_const = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>), infotype = <span class="st">"expected"</span>)
-</pre></div>
+<span class="va">Bryant2016_g</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/g_mlm.html">g_mlm</a></span><span class="op">(</span><span class="va">Bryant2016_RML</span>, p_const <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>, r_const <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, infotype <span class="op">=</span> <span class="st">"expected"</span><span class="op">)</span></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="kw">Bryant2016_g</span>
+<span class="va">Bryant2016_g</span>
 <span class="co">#&gt;                           est    se</span>
 <span class="co">#&gt; unadjusted effect size  1.799 0.340</span>
 <span class="co">#&gt; adjusted effect size    1.721 0.325</span>
-<span class="co">#&gt; degree of freedom      17.504</span>
-</pre></div>
+<span class="co">#&gt; degree of freedom      17.504</span></pre></div>
 <p>A <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> method is also included, which includes more detail about the model parameter estimates and effect size estimate when setting <code>returnModel = TRUE</code> (the default) in <code><a href="reference/g_mlm.html">g_mlm()</a></code>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="kw">Bryant2016_g</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">Bryant2016_g</span><span class="op">)</span>
 <span class="co">#&gt;                                            est      se</span>
 <span class="co">#&gt; Tau.school.school.var((Intercept))     158.240 238.653</span>
 <span class="co">#&gt; Tau.case.case.var((Intercept))         255.430 126.671</span>
@@ -238,8 +225,7 @@
 <span class="co">#&gt; adjusted effect size                     1.721   0.325</span>
 <span class="co">#&gt; degree of freedom                       17.504        </span>
 <span class="co">#&gt; constant kappa                           0.087        </span>
-<span class="co">#&gt; logLik                               -1308.786</span>
-</pre></div>
+<span class="co">#&gt; logLik                               -1308.786</span></pre></div>
 </div>
 </div>
 <div id="supported-model-components" class="section level2">
@@ -325,6 +311,8 @@
 <li><a href="https://travis-ci.org/jepusto/lmeInfo"><img src="https://travis-ci.org/jepusto/lmeInfo.svg?branch=master" alt="Travis build status"></a></li>
 <li><a href="https://codecov.io/gh/jepusto/lmeInfo?branch=master"><img src="https://codecov.io/gh/jepusto/lmeInfo/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://CRAN.R-project.org/package=lmeInfo"><img src="http://www.r-pkg.org/badges/version/lmeInfo"></a></li>
+<li><a href="https://CRAN.R-project.org/package=lmeInfo"><img src="http://cranlogs.r-pkg.org/badges/grand-total/lmeInfo"></a></li>
+<li><a href="https://CRAN.R-project.org/package=lmeInfo"><img src="http://cranlogs.r-pkg.org/badges/last-month/lmeInfo"></a></li>
 </ul>
 </div>
 </div>
@@ -336,7 +324,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
