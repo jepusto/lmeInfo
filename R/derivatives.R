@@ -61,7 +61,10 @@ dV_dreStruct <- function(mod) {
   blocks <- mod$groups
   blocks_names <- names(blocks)
   b <- lapply(blocks_names, function(x) class(mod$modelStruct$reStruct[[x]])) # pdClass
+
+  # This is a problem when model has missing data in the response
   Z_design <- model.matrix(mod$modelStruct$reStruct, data = mod$data)
+
 
   if (length(blocks) == 1L) {
     Z_list <- list(Z_design)
