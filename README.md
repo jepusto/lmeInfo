@@ -10,6 +10,8 @@ status](https://travis-ci.org/jepusto/lmeInfo.svg?branch=master)](https://travis
 [![Codecov test
 coverage](https://codecov.io/gh/jepusto/lmeInfo/branch/master/graph/badge.svg)](https://codecov.io/gh/jepusto/lmeInfo?branch=master)
 [![](http://www.r-pkg.org/badges/version/lmeInfo)](https://CRAN.R-project.org/package=lmeInfo)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/lmeInfo)](https://CRAN.R-project.org/package=lmeInfo)
+[![](http://cranlogs.r-pkg.org/badges/last-month/lmeInfo)](https://CRAN.R-project.org/package=lmeInfo)
 <!-- badges: end -->
 
 ## Information matrices for fitted `lme` and `gls` models

@@ -128,14 +128,14 @@ prod_blockblock <- function(A, B, crosswalk = NULL) {
     block_list <- split(B_groups, A_groups)
     B_map <- tapply(levels(A_groups)[A_groups], B_groups, unique)[names(B)]
     B_list <- split(B, B_map)[names(A)]
-    res <- mapply(prod_matrixblock, A = A, B = B_list, block = block_list)
+    res <- mapply(prod_matrixblock, A = A, B = B_list, block = block_list, SIMPLIFY = FALSE)
   } else if (A_in_B) {
     # A is nested in B
     if (is.null(names(B))) names(B) <- levels(B_groups)
     block_list <- split(A_groups, B_groups)
     A_map <- tapply(levels(B_groups)[B_groups], A_groups, unique)[names(A)]
     A_list <- split(A, A_map)[names(B)]
-    res <- mapply(prod_blockmatrix, A = A_list, B = B, block = block_list)
+    res <- mapply(prod_blockmatrix, A = A_list, B = B, block = block_list, SIMPLIFY = FALSE)
   } else {
     stop("The A and B matrices are not nested.")
   }
