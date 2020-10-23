@@ -1,7 +1,7 @@
 Package: lmeInfo
 Type: Package
 Title: Information Matrices for 'lmeStruct' and 'glsStruct' Objects
-Version: 0.1.1
+Version: 0.1.1.9999
 Authors@R: 
     c(person(given = "James",
              family = "Pustejovsky",
@@ -46,5 +46,5 @@ Imports:
     nlme,
     stats
 VignetteBuilder: knitr
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Language: en-US
