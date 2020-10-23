@@ -324,7 +324,7 @@ check_against_scdhlm <- function(mod, p_lmeInfo, r_lmeInfo, p_scdhlm = p_lmeInfo
 
   g_lmeInfo <- g_mlm(mod, p_lmeInfo, r_lmeInfo)
 
-  g_scdhlm <- scdhlm::g_REML(mod, p_scdhlm, r_scdhlm)
+  g_scdhlm <- suppressWarnings(scdhlm::g_REML(mod, p_scdhlm, r_scdhlm))
 
   testthat::expect_equal(g_lmeInfo$p_beta, g_scdhlm$p_beta) # numerator of effect size
   testthat::expect_equal(g_lmeInfo$r_beta, g_scdhlm$r_beta) # squared denominator of effect size

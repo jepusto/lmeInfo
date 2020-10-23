@@ -109,9 +109,9 @@ test_that("lmeInfo::g_mlm returns the same result as scdhlm::g_REML.", {
 test_that("lmeInfo::CI_g returns the correct CIs for Schutte examples.", {
 
   g_RML4 <- g_mlm(Schutte_RML4, p_const = c(0,0,1,7), r_const = c(1,0,0,0,1))
-  g_RML4_scdhlm <- scdhlm::g_REML(Schutte_RML4, p_const = c(0,0,1,7), r_const = c(1,0,1,0,0))
+  g_RML4_scdhlm <- suppressWarnings(scdhlm::g_REML(Schutte_RML4, p_const = c(0,0,1,7), r_const = c(1,0,1,0,0)))
   g_RML5 <- g_mlm(Schutte_RML5, p_const = c(0,0,1,7), r_const = c(1,0,0,0,0,0,0,1))
-  g_RML5_scdhlm <- scdhlm::g_REML(Schutte_RML5, p_const = c(0,0,1,7), r_const = c(1,0,1,0,0,0,0,0))
+  g_RML5_scdhlm <- suppressWarnings(scdhlm::g_REML(Schutte_RML5, p_const = c(0,0,1,7), r_const = c(1,0,1,0,0,0,0,0)))
 
   # symmetric CIs
 
