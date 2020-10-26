@@ -138,12 +138,14 @@ test_with_FIML <- function(mod) {
 
 compare_omit_exclude_complete <- function(mod, dat, NA_vals) {
 
-  dat <- dat
   dat_complete <- dat[!NA_vals,]
 
   mod_omit <- suppressWarnings(stats::update(mod, data = dat, na.action = "na.omit"))
+  # mod_omit$data <- dat
   mod_exclude <- suppressWarnings(stats::update(mod, data = dat, na.action = "na.exclude"))
+  # mod_exclude$data <- dat
   mod_comp <- suppressWarnings(stats::update(mod, data = dat_complete))
+  mod_comp$data <- dat_complete
 
   varcomp_omit <- extract_varcomp(mod_omit)
   varcomp_exclude <- extract_varcomp(mod_exclude)
@@ -165,6 +167,7 @@ compare_omit_exclude_complete <- function(mod, dat, NA_vals) {
 
 }
 
+
 test_after_deleting <- function(mod, seed = NULL) {
 
   if (!is.null(seed)) set.seed(seed)
@@ -179,6 +182,8 @@ test_after_deleting <- function(mod, seed = NULL) {
   dat[[y_var]][NA_vals] <- NA
 
   compare_omit_exclude_complete(mod, dat, NA_vals)
+
+
 
   # NA values in predictors too
 
