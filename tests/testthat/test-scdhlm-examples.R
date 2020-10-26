@@ -127,8 +127,8 @@ test_that("lmeInfo::CI_g returns the correct CIs for Schutte examples.", {
   appro_CI4_lmeInfo <- CI_g(g_RML4, symmetric = FALSE)
   appro_CI5_lmeInfo <- CI_g(g_RML5, symmetric = FALSE)
 
-  appro_CI4_scdhlm <- suppressWarnings(scdhlm::CI_g(g_RML4_scdhlm))
-  appro_CI5_scdhlm <- suppressWarnings(scdhlm::CI_g(g_RML5_scdhlm))
+  appro_CI4_scdhlm <- suppressWarnings(scdhlm::CI_g(g_RML4_scdhlm, symmetric = FALSE))
+  appro_CI5_scdhlm <- suppressWarnings(scdhlm::CI_g(g_RML5_scdhlm, symmetric = FALSE))
 
   expect_equal(appro_CI4_lmeInfo, appro_CI4_scdhlm)
   expect_equal(appro_CI5_lmeInfo, appro_CI5_scdhlm)
