@@ -66,9 +66,9 @@ Laski_CAR1 <- gls(outcome ~ 0 + case + case:treatment,
                   correlation = corCAR1(0.2, ~ time | case),
                   data = Laski)
 
-mod <- Hart_AR1
-Fisher_info(mod, type = "expected")
-test_after_deleting(mod)
+# mod <- Hart_AR1
+# Fisher_info(mod, type = "expected")
+# test_after_deleting(mod)
 
 
 test_that("targetVariance() works with gls models.", {
