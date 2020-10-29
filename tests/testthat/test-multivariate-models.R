@@ -18,7 +18,8 @@ bdf_MVML <- lme(score ~ 0 + measure,
                 random = ~ 1| schoolNR / pupilNR,
                 corr = corSymm(form = ~ 1 | schoolNR / pupilNR),
                 weights = varIdent(form = ~ 1 | measure),
-                data = bdf_long)
+                data = bdf_long,
+                control = lmeControl(msMaxIter = 100, apVar = FALSE, returnObject = TRUE))
 
 # mod <- bdf_MVML
 # struct <- mod$modelStruct$corStruct
