@@ -188,6 +188,8 @@ test_after_deleting <- function(mod, seed = NULL) {
   # NA values in predictors too
 
   x_vars <- attr(terms(formula(mod)), "term.labels")
+  x_vars <- unlist(lapply(x_vars, function(x) strsplit(x, ":")))
+  x_vars <- unique(x_vars)
   NA_all <- NA_vals
 
   for (x in x_vars) {
