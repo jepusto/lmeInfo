@@ -4,11 +4,12 @@ get_cor_grouping <- function(mod, levels = NULL) {
     struct <- mod$modelStruct$corStruct
     if (is.null(struct)) struct <- mod
     mod_formula <- nlme::getGroupsFormula(struct)
-    grps <- stats::model.frame(mod_formula, data = nlme::getData(mod))
+    dat <- nlme::getData(mod)
+    if (inherits(na.action(mod), "exclude")) dat <- dat[-as.integer(na.action(mod)),,drop=FALSE]
+    grps <- stats::model.frame(mod_formula, data = dat)
     grps <- apply(grps, 1, paste, collapse = "/")
     if (is.null(levels)) levels <- unique(grps)
     grps <- factor(grps, levels = levels)
-    if (inherits(na.action(mod), "exclude")) grps <- grps[-as.integer(na.action(mod))]
   } else if (!is.null(mod$modelStruct$corStruct)) {
     grps <- factor(rep("A",mod$dims$N))
   } else {
