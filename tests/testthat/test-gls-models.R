@@ -66,9 +66,10 @@ Laski_CAR1 <- gls(outcome ~ 0 + case + case:treatment,
                   correlation = corCAR1(0.2, ~ time | case),
                   data = Laski)
 
-# mod <- Hart_AR1
-# Fisher_info(mod, type = "expected")
-# test_after_deleting(mod)
+mod <- Hart_AR1
+Fisher_info(mod, type = "expected")
+seed <- 30
+test_after_deleting(Hart_AR1, seed = seed)
 
 
 test_that("targetVariance() works with gls models.", {
@@ -162,17 +163,18 @@ test_that("Results do not depend on order of data.", {
 })
 
 test_that("Info matrices work with dropped observations.", {
-  # test_after_deleting(Hart_AR1)
-  # test_after_deleting(Hart_CAR1)
-  # test_after_deleting(Hart_MA1)
-  # test_after_deleting(Ortho_hom)
-  # test_after_deleting(Ortho_power)
-  # test_after_deleting(Ortho_AR1)
-  # test_after_deleting(Ortho_AR1_power)
-  # test_after_deleting(Ortho_CAR1)
-  # test_after_deleting(Ortho_CAR1_power)
+
+  test_after_deleting(Hart_AR1)
+  test_after_deleting(Hart_CAR1)
+  test_after_deleting(Hart_MA1)
+  test_after_deleting(Ortho_hom)
+  test_after_deleting(Ortho_power)
+  test_after_deleting(Ortho_AR1)
+  test_after_deleting(Ortho_AR1_power)
+  test_after_deleting(Ortho_CAR1)
+  test_after_deleting(Ortho_CAR1_power)
   test_after_deleting(Laski_AR1)
-  # test_after_deleting(Laski_het)
+  test_after_deleting(Laski_het)
   test_after_deleting(Laski_hetAR1)
   test_after_deleting(Laski_CAR1)
 

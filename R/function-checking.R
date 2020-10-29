@@ -138,12 +138,10 @@ test_with_FIML <- function(mod) {
 
 compare_omit_exclude_complete <- function(mod, dat, NA_vals) {
 
-  dat_complete <- dat[!NA_vals,]
+  dat_complete <- dat[!NA_vals,,drop=FALSE]
 
   mod_omit <- suppressWarnings(stats::update(mod, data = dat, na.action = "na.omit"))
-  # mod_omit$data <- dat
   mod_exclude <- suppressWarnings(stats::update(mod, data = dat, na.action = "na.exclude"))
-  # mod_exclude$data <- dat
   mod_comp <- suppressWarnings(stats::update(mod, data = dat_complete))
   mod_comp$data <- dat_complete
 
@@ -160,10 +158,10 @@ compare_omit_exclude_complete <- function(mod, dat, NA_vals) {
   AI_exclude <- Fisher_info(mod_exclude, type = "average")
   AI_comp <- Fisher_info(mod_comp, type = "average")
 
-  testthat::expect_identical(EI_omit, EI_comp)
-  testthat::expect_identical(EI_exclude, EI_comp)
-  testthat::expect_identical(AI_omit, AI_comp)
-  testthat::expect_identical(AI_exclude, AI_comp)
+  testthat::expect_equal(EI_omit, EI_comp)
+  testthat::expect_equal(EI_exclude, EI_comp)
+  testthat::expect_equal(AI_omit, AI_comp)
+  testthat::expect_equal(AI_exclude, AI_comp)
 
 }
 
@@ -175,7 +173,7 @@ test_after_deleting <- function(mod, seed = NULL) {
   # NA values in response
 
   dat <- nlme::getData(mod)
-  # y_var <- attr(getResponse(mod), "label")
+  if (inherits(mod, "gls")) dat <<- dat
   y_var <- as.character(formula(mod)[[2]])
 
   NA_vals <- as.logical(rbinom(nrow(dat), size = 1, prob = 0.2))
@@ -197,6 +195,7 @@ test_after_deleting <- function(mod, seed = NULL) {
     dat[[x]][NA_vals] <- NA
     NA_all <- NA_all | NA_vals
   }
+  if (inherits(mod, "gls")) dat <<- dat
 
   compare_omit_exclude_complete(mod, dat, NA_all)
 
