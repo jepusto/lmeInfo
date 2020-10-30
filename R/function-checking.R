@@ -173,12 +173,12 @@ test_after_deleting <- function(mod, seed = NULL) {
   # NA values in response
 
   dat <- nlme::getData(mod)
-  if (inherits(mod, "gls")) dat <<- dat
   y_var <- as.character(formula(mod)[[2]])
 
   NA_vals <- as.logical(rbinom(nrow(dat), size = 1, prob = 0.2))
   dat[[y_var]][NA_vals] <- NA
 
+  if (inherits(mod, "gls")) dat <<- dat
   compare_omit_exclude_complete(mod, dat, NA_vals)
 
 
@@ -195,8 +195,8 @@ test_after_deleting <- function(mod, seed = NULL) {
     dat[[x]][NA_vals] <- NA
     NA_all <- NA_all | NA_vals
   }
-  if (inherits(mod, "gls")) dat <<- dat
 
+  if (inherits(mod, "gls")) dat <<- dat
   compare_omit_exclude_complete(mod, dat, NA_all)
 
 }
