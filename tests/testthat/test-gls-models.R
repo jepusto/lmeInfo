@@ -164,19 +164,19 @@ test_that("Results do not depend on order of data.", {
 
 test_that("Info matrices work with dropped observations.", {
 
-  test_after_deleting(Hart_AR1)
-  test_after_deleting(Hart_CAR1)
-  test_after_deleting(Hart_MA1)
-  test_after_deleting(Ortho_hom)
-  test_after_deleting(Ortho_power)
-  test_after_deleting(Ortho_AR1)
-  test_after_deleting(Ortho_AR1_power)
-  test_after_deleting(Ortho_CAR1)
-  test_after_deleting(Ortho_CAR1_power)
-  test_after_deleting(Laski_AR1)
-  test_after_deleting(Laski_het)
-  test_after_deleting(Laski_hetAR1)
-  test_after_deleting(Laski_CAR1)
+  test_after_deleting(Hart_AR1, seed = 10)
+  test_after_deleting(Hart_CAR1, seed = 20)
+  test_after_deleting(Hart_MA1, seed = 30)
+  test_after_deleting(Ortho_hom, seed = 40)
+  test_after_deleting(Ortho_power, seed = 50)
+  test_after_deleting(Ortho_AR1, seed = 60)
+  test_after_deleting(Ortho_AR1_power, seed = 70)
+  test_after_deleting(Ortho_CAR1, seed = 80)
+  test_after_deleting(Ortho_CAR1_power, seed = 90)
+  test_after_deleting(Laski_AR1, seed = 100)
+  test_after_deleting(Laski_het, seed = 110)
+  test_after_deleting(Laski_hetAR1, seed = 120)
+  test_after_deleting(Laski_CAR1, seed = 130)
 
 })
 
