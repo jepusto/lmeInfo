@@ -74,15 +74,15 @@ test_that("Results do not depend on order of data.", {
 })
 
 test_that("Info matrices work with dropped observations.", {
-  test_after_deleting(Ortho_A)
-  test_after_deleting(Ortho_B_Power)
-  test_after_deleting(Ortho_C_Power)
-  test_after_deleting(Ortho_D_Power)
-  test_after_deleting(Ortho_B_Exp)
-  test_after_deleting(Ortho_C_Exp)
-  test_after_deleting(Ortho_D_Exp)
-  test_after_deleting(Ortho_B_Const)
-  test_after_deleting(Ortho_D_Const)
+  test_after_deleting(Ortho_A, seed = 30)
+  test_after_deleting(Ortho_B_Power, seed = 30)
+  test_after_deleting(Ortho_C_Power, seed = 30)
+  test_after_deleting(Ortho_D_Power, seed = 30)
+  test_after_deleting(Ortho_B_Exp, seed = 30)
+  test_after_deleting(Ortho_C_Exp, seed = 30)
+  test_after_deleting(Ortho_D_Exp, seed = 30)
+  test_after_deleting(Ortho_B_Const, seed = 30)
+  test_after_deleting(Ortho_D_Const, seed = 30)
 })
 
 # Dialyzer

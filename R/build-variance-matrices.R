@@ -80,7 +80,7 @@ build_var_cor_mats <- function(mod, R_list = build_corr_mats(mod), sigma_scale =
       } else {
         sort_order <- get_sort_order(mod)
         sd_vec <- sigma / as.numeric(nlme::varWeights(mod$modelStruct$varStruct))[sort_order]
-        V_list <- tapply(sd_vec^2, mod$groups[[1]], diag)
+        V_list <- tapply(sd_vec^2, mod$groups[[1]], function(x) diag(x, nrow = length(x)))
       }
       attr(V_list, "groups") <- mod$groups[[1]]
     }
