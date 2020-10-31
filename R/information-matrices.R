@@ -160,6 +160,18 @@ Fisher_info <- function(mod, type = "expected") {
 
   est_method <- mod$method
 
+  # For REML, need X and M matrices
+  if (est_method == "REML") {
+    X <- model.matrix(mod, data = nlme::getData(mod))
+
+    # check for columns dropped from model
+    col_names <- names(coef(mod))
+    if (ncol(X) != length(col_names)) X <- X[,col_names,drop=FALSE]
+
+    Vinv_X <- prod_blockmatrix(V_inv, X, block = attr(V_inv, "groups"))
+    M <- chol2inv(chol(t(X) %*% Vinv_X))
+  }
+
   if (type == "expected") {
 
     if (est_method == "ML") {
@@ -174,9 +186,6 @@ Fisher_info <- function(mod, type = "expected") {
 
     } else if (est_method == "REML") {
 
-      X <- model.matrix(mod, data = nlme::getData(mod))
-      Vinv_X <- prod_blockmatrix(V_inv, X, block = attr(V_inv, "groups"))
-      M <- chol2inv(chol(t(X) %*% Vinv_X))
       Vinv_X_M <- Vinv_X %*% M
 
       # create lists with Xt v^-1 dV entries
@@ -228,10 +237,6 @@ Fisher_info <- function(mod, type = "expected") {
       info <- (t(dVr) %*% prod_blockmatrix(V_inv, dVr)) / 2
 
     } else if (est_method == "REML") {
-
-      X <- model.matrix(mod, data = nlme::getData(mod))
-      Vinv_X <- prod_blockmatrix(V_inv, X, block = attr(V_inv, "groups"))
-      M <- chol2inv(chol(t(X) %*% Vinv_X))
 
       Xt_Vinv_dV_Vinv_rhat <- t(Vinv_X) %*% dVr
 
