@@ -165,7 +165,7 @@ Fisher_info <- function(mod, type = "expected") {
     X <- model.matrix(mod, data = nlme::getData(mod))
 
     # check for columns dropped from model
-    col_names <- names(coef(mod))
+    col_names <- names(if (inherits(mod, "gls")) coef(mod) else fixef(mod))
     if (ncol(X) != length(col_names)) X <- X[,col_names,drop=FALSE]
 
     Vinv_X <- prod_blockmatrix(V_inv, X, block = attr(V_inv, "groups"))

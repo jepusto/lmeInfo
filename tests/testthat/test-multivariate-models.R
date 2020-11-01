@@ -1,4 +1,4 @@
-library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
+suppressWarnings(library(dplyr, warn.conflicts = FALSE, quietly = TRUE))
 library(tidyr, quietly = TRUE)
 library(nlme)
 
@@ -65,7 +65,7 @@ bdf_wm_id <- lme(score ~ 0 + measure,
                   data = bdf_long_shuff,
                   control=lmeControl(msMaxIter = 100, apVar = FALSE, returnObject = TRUE))
 
-mod <- bdf_wm
+# mod <- bdf_wm
 
 test_that("targetVariance() works with multivariate models.", {
   test_Sigma_mats(bdf_MVML, bdf_long$schoolNR)
@@ -96,8 +96,8 @@ test_that("New REML calculations work.", {
 })
 
 test_that("Info matrices work with dropped observations.", {
-  test_after_deleting(bdf_MVML)
-  test_after_deleting(bdf_wm)
-  test_after_deleting(bdf_wm_id)
-  test_after_deleting(bdf_wm_shuff)
+  test_after_deleting(bdf_MVML, seed = 10)
+  test_after_deleting(bdf_wm, seed = 20)
+  test_after_deleting(bdf_wm_id, seed = 30)
+  test_after_deleting(bdf_wm_shuff, seed = 40)
 })
