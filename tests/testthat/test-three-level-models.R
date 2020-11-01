@@ -204,7 +204,7 @@ test_that("New REML calculations work.", {
 })
 
 test_that("Three-level models for Bryant2018 pass the checking functions.", {
-  skip("Trim down the unit tests for three level models.")
+  skip_on_cran()
 
   test_Sigma_mats(Bryant2018_RML1, Bryant2018$school)
   test_Sigma_mats(Bryant2018_RML2, Bryant2018$school)
