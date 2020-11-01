@@ -1,6 +1,6 @@
 library(lme4)
 library(nlme)
-library(merDeriv)
+suppressWarnings(library(merDeriv))
 
 vcov_params <- function(x, sigma_sq) {
   d <- sqrt(2 * length(x) + 1/4) - 1/2
@@ -120,7 +120,7 @@ test_that("lmeInfo results comparable to merDeriv for bdf data, estimated by FML
 })
 
 test_that("lmeInfo results comparable to merDeriv for bdf data, estimated by REML.", {
-  skip("Must be some bug in merDeriv?")
+  skip("Can't get the model parameter estimates to agree")
 
   bdf_lme4_REML <- lmer(langPOST ~ sex + Minority + aritPRET + (sex + aritPRET | schoolNR),
                         data = bdf, REML = TRUE)
