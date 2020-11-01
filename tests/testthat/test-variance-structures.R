@@ -74,14 +74,14 @@ test_that("Results do not depend on order of data.", {
 })
 
 test_that("Info matrices work with dropped observations.", {
-  test_after_deleting(Ortho_A, seed = 30)
-  test_after_deleting(Ortho_B_Power, seed = 30)
-  test_after_deleting(Ortho_C_Power, seed = 30)
-  test_after_deleting(Ortho_D_Power, seed = 30)
-  test_after_deleting(Ortho_B_Exp, seed = 30)
-  test_after_deleting(Ortho_C_Exp, seed = 30)
-  test_after_deleting(Ortho_D_Exp, seed = 30)
-  test_after_deleting(Ortho_B_Const, seed = 30)
+  test_after_deleting(Ortho_A, seed = 40)
+  test_after_deleting(Ortho_B_Power, seed = 50)
+  test_after_deleting(Ortho_C_Power, seed = 63)
+  test_after_deleting(Ortho_D_Power, seed = 71)
+  test_after_deleting(Ortho_B_Exp, seed = 80)
+  test_after_deleting(Ortho_C_Exp, seed = 90)
+  test_after_deleting(Ortho_D_Exp, seed = 11)
+  test_after_deleting(Ortho_B_Const, seed = 21)
   test_after_deleting(Ortho_D_Const, seed = 30)
 })
 
