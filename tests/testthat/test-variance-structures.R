@@ -61,6 +61,9 @@ test_that("Information matrices work with FIML with Orthodont models.", {
 })
 
 test_that("Results do not depend on order of data.", {
+
+  skip_on_cran()
+
   test_after_shuffling(Ortho_A, seed = 20)
   test_after_shuffling(Ortho_B_Power, seed = 21)
   test_after_shuffling(Ortho_C_Power, seed = 20)
@@ -74,6 +77,9 @@ test_that("Results do not depend on order of data.", {
 })
 
 test_that("Info matrices work with dropped observations.", {
+
+  skip_on_cran()
+
   test_after_deleting(Ortho_A, seed = 40)
   test_after_deleting(Ortho_B_Power, seed = 50)
   test_after_deleting(Ortho_C_Power, seed = 63)

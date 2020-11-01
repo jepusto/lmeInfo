@@ -96,8 +96,22 @@ test_that("New REML calculations work.", {
 })
 
 test_that("Info matrices work with dropped observations.", {
+
+  skip_on_cran()
+
   test_after_deleting(bdf_MVML, seed = 10)
   test_after_deleting(bdf_wm, seed = 20)
   test_after_deleting(bdf_wm_id, seed = 30)
   test_after_deleting(bdf_wm_shuff, seed = 40)
+})
+
+test_that("Results do not depend on order of data.", {
+
+  skip("For now.")
+
+  test_after_shuffling(bdf_MVML, seed = 20)
+  test_after_shuffling(bdf_wm, seed = 17)
+  test_after_shuffling(bdf_wm_id, seed = 20)
+  test_after_shuffling(bdf_wm_shuff, seed = 17)
+
 })

@@ -2,7 +2,7 @@ library(nlme)
 
 test_that("scdhlm Works with Narozanic and Blair.", {
 
-  skip()
+  skip("Don't worry about this user example.")
 
   # Naro <- read.csv("auxiliary/Narozanic and Blair_datasets_long_academic.csv", stringsAsFactors = FALSE)
   Naro <- read.csv("../auxiliary/Narozanic and Blair_datasets_long_academic.csv", stringsAsFactors = FALSE)
