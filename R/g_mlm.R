@@ -82,14 +82,14 @@ g_mlm <- function(mod, p_const, r_const, infotype = "expected", returnModel = TR
   theta <- extract_varcomp(mod)                                   # full theta vector
   r_theta <- sum(unlist(theta) * r_const)                         # r'theta (sum of var comp)
   delta_AB <- p_beta / sqrt(r_theta)                              # delta_AB
-  kappa_sq <- (t(p_const) %*% vcov(mod) %*% p_const) / r_theta    # kappa^2
+  kappa_sq <- sum(tcrossprod(p_const) * vcov(mod)) / r_theta    # kappa^2
   cnvg_warn <- !is.null(attr(mod,"warning"))                      # indicator that RML estimation has not converged
 
   # calculate inverse Fisher information
   info_inv <- varcomp_vcov(mod, type = infotype)
   SE_theta <- sqrt(diag(info_inv))                                # SE of theta
 
-  nu <- 2 * r_theta^2 / (t(r_const) %*% info_inv %*% r_const)      # df
+  nu <- 2 * r_theta^2 / sum(tcrossprod(r_const) * info_inv)      # df
   J_nu <- 1 - 3 / (4 * nu - 1)                                    # bias-correction factor
   g_AB <- J_nu * delta_AB                                         # bias-corrected effect size
 

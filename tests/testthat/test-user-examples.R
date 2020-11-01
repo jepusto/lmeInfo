@@ -2,10 +2,10 @@ library(nlme)
 
 test_that("scdhlm Works with Narozanic and Blair.", {
 
-  skip_on_cran()
+  skip("Don't worry about this user example.")
 
   # Naro <- read.csv("auxiliary/Narozanic and Blair_datasets_long_academic.csv", stringsAsFactors = FALSE)
-  Naro <- read.csv("../../auxiliary/Narozanic and Blair_datasets_long_academic.csv", stringsAsFactors = FALSE)
+  Naro <- read.csv("../auxiliary/Narozanic and Blair_datasets_long_academic.csv", stringsAsFactors = FALSE)
   Naro$Session_int <- round(Naro$Session)
 
   Naro_dbl <- lme(Outcome ~ Phase,

@@ -4,11 +4,12 @@ get_cor_grouping <- function(mod, levels = NULL) {
     struct <- mod$modelStruct$corStruct
     if (is.null(struct)) struct <- mod
     mod_formula <- nlme::getGroupsFormula(struct)
-    grps <- stats::model.frame(mod_formula, data = nlme::getData(mod))
+    dat <- nlme::getData(mod)
+    if (inherits(na.action(mod), "exclude")) dat <- dat[-as.integer(na.action(mod)),,drop=FALSE]
+    grps <- stats::model.frame(mod_formula, data = dat)
     grps <- apply(grps, 1, paste, collapse = "/")
     if (is.null(levels)) levels <- unique(grps)
     grps <- factor(grps, levels = levels)
-    if (inherits(na.action(mod), "exclude")) grps <- grps[-as.integer(na.action(mod))]
   } else if (!is.null(mod$modelStruct$corStruct)) {
     grps <- factor(rep("A",mod$dims$N))
   } else {
@@ -75,11 +76,11 @@ build_var_cor_mats <- function(mod, R_list = build_corr_mats(mod), sigma_scale =
 
       if (is.null(mod$modelStruct$varStruct)) {
         grps <- mod$groups[[1]]
-        V_list <- tapply(rep(sigma^2, length(grps)),  grps, diag)
+        V_list <- tapply(rep(sigma^2, length(grps)),  grps, function(x) diag(x, nrow = length(x)))
       } else {
         sort_order <- get_sort_order(mod)
         sd_vec <- sigma / as.numeric(nlme::varWeights(mod$modelStruct$varStruct))[sort_order]
-        V_list <- tapply(sd_vec^2, mod$groups[[1]], diag)
+        V_list <- tapply(sd_vec^2, mod$groups[[1]], function(x) diag(x, nrow = length(x)))
       }
       attr(V_list, "groups") <- mod$groups[[1]]
     }
@@ -121,7 +122,8 @@ build_RE_mats <- function(mod, sigma_scale = FALSE) {
 
     D_mat <- as.matrix(mod$modelStruct$reStruct[[1]])
     if (sigma_scale) D_mat <- mod$sigma^2 * D_mat
-    Z_mat <- model.matrix(mod$modelStruct$reStruc, nlme::getData(mod))
+    data <- nlme::getData(mod)
+    Z_mat <- model.matrix(mod$modelStruct$reStruc, data[complete.cases(data), ])
     row.names(Z_mat) <- NULL
     Z_list <- matrix_list(Z_mat, all_groups[[1]], "row")
     ZDZ_list <- ZDZt(D_mat, Z_list)
@@ -134,7 +136,8 @@ build_RE_mats <- function(mod, sigma_scale = FALSE) {
     } else {
       D_list <- lapply(mod$modelStruct$reStruct, as.matrix)
     }
-    Z_mat <- model.matrix(mod$modelStruct$reStruc, nlme::getData(mod))
+    data <- nlme::getData(mod)
+    Z_mat <- model.matrix(mod$modelStruct$reStruc, data[complete.cases(data), ])
     Z_names <- sapply(strsplit(colnames(Z_mat), ".", fixed=TRUE), function(x) x[1])
     row.names(Z_mat) <- NULL
     Z_levels <- lapply(names(all_groups), function(x) Z_mat[,x==Z_names,drop=FALSE])
