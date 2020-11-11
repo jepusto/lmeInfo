@@ -80,6 +80,9 @@ test_that("lmeInfo::g_mlm returns the same result as scdhlm::g_REML.", {
 
   skip_if_not_installed("scdhlm", minimum_version = "0.4.2")
 
+  g_Lambert_RML <- g_mlm(Lambert_RML, c(0,1),c(1,0,1), returnModel = FALSE)
+  expect_error(summary(g_Lambert_RML))
+
   check_against_scdhlm(Lambert_RML,
                        p_lmeInfo = c(0,1), r_lmeInfo = c(1,0,1), r_scdhlm = c(1,0,1))
 

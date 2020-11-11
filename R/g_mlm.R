@@ -41,7 +41,7 @@
 #'   Design-comparable effect sizes in multiple baseline designs: A general
 #'   modeling framework. \emph{Journal of Educational and Behavioral Statistics,
 #'   39}(4), 211-227.
-#'   doi:\href{http://doi.org/10.3102/1076998614547577}{10.3102/1076998614547577}
+#'   doi:\href{https://doi.org/10.3102/1076998614547577}{10.3102/1076998614547577}
 #'
 #'
 #'
@@ -115,6 +115,13 @@ g_mlm <- function(mod, p_const, r_const, infotype = "expected", returnModel = TR
 #' @export
 
 summary.g_mlm <- function(object, digits = 3, ...) {
+
+  if (is.null(object$modelStruct)) {
+
+    stop("'summary()' method only available when setting 'returnModel = TRUE` in `g_mlm()`.")
+
+  }
+
   varcomp <- with(object, cbind(est = c(unlist(theta), "total variance" = r_theta),
                                 se = c(unlist(SE_theta), r_theta * sqrt(2 / nu))))
   if (inherits(object$modelStruct, "glsStruct")) {
