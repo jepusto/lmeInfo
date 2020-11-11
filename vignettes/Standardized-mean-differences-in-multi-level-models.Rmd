@@ -31,7 +31,7 @@ $$
 $$
 and the variance of $\mathbf{r}'\boldsymbol{\hat\theta}$ is calculated using the inverse of the Fisher information matrix. An approximate standard error for the standardized mean difference estimate is 
 $$
-\text{SE}(d) \approx \left(1 - \frac{3}{4 \nu - 1}\right) \sqrt{\frac{\text{Var}\left(\mathbf{p}'\boldsymbol{\hat\beta}\right)}{\mathbf{r}'\boldsymbol{\hat\theta}} + \frac{d^2}{2 \nu}}
+\text{SE}(d) \approx \left(1 - \frac{3}{4 \nu - 1}\right) \sqrt{\frac{\nu}{\nu - 2} \times \frac{\text{Var}\left(\mathbf{p}'\boldsymbol{\hat\beta}\right)}{\mathbf{r}'\boldsymbol{\hat\theta}} + d^2 \times \frac{8 \nu^2 - \nu + 2}{16 (\nu - 2) (\nu - 1)^2}}
 $$
 (Pustejovsky, Hedges, & Shadish, 2014). 
 
