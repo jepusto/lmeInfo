@@ -1,24 +1,22 @@
 ## Resubmission
-This is a resubmission. This resubmission fixes the "Additional issues" in the unit tests identified by the CRAN package checks.
+This is a resubmission. This resubmission corrects the errors shown on CRAN package checks. We fix a bug leading to errors in `Fisher_info()` with models that have more than two levels. We add tests for handling models with missing outcome and/or covariate values.
 
 ## Test environments
-* local Windows 10 Pro, R 3.6.3
-* Ubuntu 16.04.6 LTS (on travis-ci), R 4.0.0
+* local Windows 10 Pro, R 4.0.2
+* ubuntu 16.04.6 LTS (on travis-ci), R-release, R-devel
 * win-builder (devel, release, oldrelease)
+* r-hub:
+  * Debian Linux, R-devel, clang, ISO-8859-15 locale
+  * Debian Linux, R-devel, GCC
+  * Debian Linux, R-patched, GCC
+  * Debian Linux, R-release, GCC
+  * Fedora Linux, R-devel, clang, gfortran
+  * Fedora Linux, R-devel, GCC
+  * macOS 10.13.6 High Sierra, R-release, CRAN's setup
+  * Windows Server 2008 R2 SP1, R-devel, 32/64 bit
+  * Windows Server 2008 R2 SP1, R-oldrel, 32/64 bit
+  * Windows Server 2008 R2 SP1, R-release, 32/64 bit
 
 ## R CMD check results
-There were no ERRORs or WARNINGs.
+There were no ERRORs, WARNINGs or NOTEs.
 
-There were two NOTEs:
-  
-* Possibly mis-spelled words in DESCRIPTION: Pustejovsky (24:48) Shadish (24:73) gls (16:77, 25:28) lme (16:34, 20:57, 25:21)
-  
-  All of the identified words are spelled correctly.
-
-* Found the following (possibly) invalid URLs: URL: https://doi.org/10.2307/2533274 
-  (moved to https://www.jstor.org/stable/2533274) 
-  From: inst/doc/Information-matrices-for-fitted-LME-models.html README.md 
-  Status: 403 Message: Forbidden
-  
-  The flagged URL is correct.
-  

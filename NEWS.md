@@ -1,4 +1,4 @@
-# lmeInfo 0.1.1.9999
+# lmeInfo 0.1.2
 
 * Corrected a bug leading to errors in `Fisher_info()` with models that have more than two levels.
 
