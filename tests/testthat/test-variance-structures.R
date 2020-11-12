@@ -1,5 +1,7 @@
 # fit some example models for varPower, varExp and varConstPower
 
+skip_on_cran()
+
 library(nlme)
 data(Orthodont)
 data(Dialyzer)
@@ -22,6 +24,9 @@ Ortho_D_Const <- update(Ortho_A, weights = varConstPower(form = ~ age | Sex))
 Ortho_D_Comb <- update(Ortho_A, weights = varComb(varIdent(form = ~1|Sex), varPower()))
 
 test_that("targetVariance() works with Orthodont models.", {
+
+  skip_on_cran()
+
   test_Sigma_mats(Ortho_A, Orthodont$Subject)
   test_Sigma_mats(Ortho_B_Power, Orthodont$Subject)
   test_Sigma_mats(Ortho_C_Power, Orthodont$Subject)
@@ -35,6 +40,9 @@ test_that("targetVariance() works with Orthodont models.", {
 })
 
 test_that("Derivative matrices are of correct dimension with Orthodont models.", {
+
+  skip_on_cran()
+
   test_deriv_dims(Ortho_A)
   test_deriv_dims(Ortho_B_Power)
   test_deriv_dims(Ortho_C_Power)
@@ -48,6 +56,9 @@ test_that("Derivative matrices are of correct dimension with Orthodont models.",
 })
 
 test_that("Information matrices work with FIML with Orthodont models.", {
+
+  skip_on_cran()
+
   test_with_FIML(Ortho_A)
   test_with_FIML(Ortho_B_Power)
   test_with_FIML(Ortho_C_Power)
@@ -135,7 +146,7 @@ test_that("Information matrices work with FIML with Dialyzer models.", {
 BodyWeight_A <- lme(weight ~ Time * Diet,
                     data = BodyWeight,
                     random = ~ Time | Rat)
-Bodyweight_B_Power <- update(BodyWeight_A, weights = varPower()) # fitted(.) is used by default
+Bodyweight_B_Power <- update(BodyWeight_A, weights = varPower())
 Bodyweight_C_Power <- update(BodyWeight_A, weights = varPower(form = ~ Time))
 Bodyweight_D_Power <- update(BodyWeight_A, weights = varPower(form = ~ Time | Diet))
 
