@@ -122,8 +122,9 @@ test_that("lmeInfo results comparable to merDeriv for bdf data, estimated by FML
 test_that("lmeInfo results comparable to merDeriv for bdf data, estimated by REML.", {
   skip("Can't get the model parameter estimates to agree")
 
-  bdf_lme4_REML <- lmer(langPOST ~ sex + Minority + aritPRET + (sex + aritPRET | schoolNR),
-                        data = bdf, REML = TRUE)
+  bdf_lme4_REML <- suppressWarnings(
+    lmer(langPOST ~ sex + Minority + aritPRET + (sex + aritPRET | schoolNR),
+                        data = bdf, REML = TRUE))
 
   bdf_nlme_REML <- lme(langPOST ~ sex + Minority + aritPRET,
                        random = ~ sex + aritPRET | schoolNR,

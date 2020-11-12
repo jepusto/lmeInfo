@@ -68,6 +68,9 @@ bdf_wm_id <- lme(score ~ 0 + measure,
 # mod <- bdf_wm
 
 test_that("targetVariance() works with multivariate models.", {
+
+  skip_on_cran()
+
   test_Sigma_mats(bdf_MVML, bdf_long$schoolNR)
   test_Sigma_mats(bdf_wm, bdf_long_wm$schoolNR)
   test_Sigma_mats(bdf_wm_id, bdf_long_shuff$school_id)
@@ -75,6 +78,9 @@ test_that("targetVariance() works with multivariate models.", {
 })
 
 test_that("Derivative matrices are of correct dimension with multivariate models.", {
+
+  skip_on_cran()
+
   test_deriv_dims(bdf_MVML)
   test_deriv_dims(bdf_wm)
   test_deriv_dims(bdf_wm_id)
@@ -89,6 +95,9 @@ test_that("Information matrices work with FIML too.", {
 })
 
 test_that("New REML calculations work.", {
+
+  skip_on_cran()
+
   check_REML2(bdf_MVML)
   check_REML2(bdf_wm)
   check_REML2(bdf_wm_id)

@@ -9,13 +9,11 @@ Thiemann2001_RML1 <- lme(fixed = outcome ~ treatment,
                      correlation = corAR1(0, ~ time | case/series),
                      data = Thiemann2001)
 
-suppressWarnings(
-  Thiemann2001_RML2 <- lme(fixed = outcome ~ treatment,
+Thiemann2001_RML2 <- suppressWarnings(lme(fixed = outcome ~ treatment,
                            random = ~ treatment | case/series,
                            correlation = corAR1(0, ~ time | case/series),
                            data = Thiemann2001,
-                           control=lmeControl(msMaxIter = 400, apVar=FALSE, returnObject=TRUE))
-)
+                           control=lmeControl(msMaxIter = 400, apVar=FALSE, returnObject=TRUE)))
 
 Thiemann2001_RML3 <- lme(fixed = outcome ~ time_c + treatment + trt_time,
                       random = ~ 1 | case/series,
@@ -110,6 +108,8 @@ Bryant2018_RML4 <- lme(fixed = outcome ~ session_c + treatment + session_trt,
 
 test_that("targetVariance() works with 3-level models.", {
 
+  skip_on_cran()
+
   test_Sigma_mats(Thiemann2001_RML1, Thiemann2001$case)
   test_Sigma_mats(Thiemann2001_RML2, Thiemann2001$case)
   test_Sigma_mats(Thiemann2001_RML3, Thiemann2001$case)
@@ -130,6 +130,8 @@ test_that("targetVariance() works with 3-level models.", {
 })
 
 test_that("Derivative matrices are of correct dimension with 3-level models.", {
+
+  skip_on_cran()
 
   test_deriv_dims(Thiemann2001_RML1)
   test_deriv_dims(Thiemann2001_RML2)

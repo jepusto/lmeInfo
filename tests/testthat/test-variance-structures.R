@@ -101,6 +101,9 @@ Dialyzer_C_Power <- update(Dialyzer_A, weights = varPower(form = ~ pressure))
 Dialyzer_D_Power <- update(Dialyzer_A, weights = varPower(form = ~ pressure | QB))
 
 test_that("targetVariance() works with Dialyzer models.", {
+
+  skip_on_cran()
+
   test_Sigma_mats(Dialyzer_A, Dialyzer$Subject)
   test_Sigma_mats(Dialyzer_B_Power, Dialyzer$Subject)
   test_Sigma_mats(Dialyzer_C_Power, Dialyzer$Subject)
@@ -108,6 +111,9 @@ test_that("targetVariance() works with Dialyzer models.", {
 })
 
 test_that("Derivative matrices are of correct dimension with Dialyzer models.", {
+
+  skip_on_cran()
+
   test_deriv_dims(Dialyzer_A)
   test_deriv_dims(Dialyzer_B_Power)
   test_deriv_dims(Dialyzer_C_Power)
@@ -115,6 +121,9 @@ test_that("Derivative matrices are of correct dimension with Dialyzer models.", 
 })
 
 test_that("Information matrices work with FIML with Dialyzer models.", {
+
+  skip_on_cran()
+
   test_with_FIML(Dialyzer_A)
   test_with_FIML(Dialyzer_B_Power)
   test_with_FIML(Dialyzer_C_Power)
@@ -131,6 +140,9 @@ Bodyweight_C_Power <- update(BodyWeight_A, weights = varPower(form = ~ Time))
 Bodyweight_D_Power <- update(BodyWeight_A, weights = varPower(form = ~ Time | Diet))
 
 test_that("targetVariance() works with BodyWeight models.", {
+
+  skip_on_cran()
+
   test_Sigma_mats(BodyWeight_A, BodyWeight$Rat)
   test_Sigma_mats(Bodyweight_B_Power, BodyWeight$Rat)
   test_Sigma_mats(Bodyweight_C_Power, BodyWeight$Rat)
@@ -138,6 +150,9 @@ test_that("targetVariance() works with BodyWeight models.", {
 })
 
 test_that("Derivative matrices are of correct dimension with BodyWeight models.", {
+
+  skip_on_cran()
+
   test_deriv_dims(BodyWeight_A)
   test_deriv_dims(Bodyweight_B_Power)
   test_deriv_dims(Bodyweight_C_Power)
@@ -145,6 +160,9 @@ test_that("Derivative matrices are of correct dimension with BodyWeight models."
 })
 
 test_that("Information matrices work with FIML with Dialyzer models.", {
+
+  skip_on_cran()
+
   test_with_FIML(BodyWeight_A)
   test_with_FIML(Bodyweight_B_Power)
   test_with_FIML(Bodyweight_C_Power)
