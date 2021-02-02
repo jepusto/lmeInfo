@@ -1,5 +1,5 @@
 ## Resubmission
-This is a resubmission. This resubmission corrects the errors shown on CRAN package checks. We fix a bug leading to errors in `Fisher_info()` with models that have more than two levels. We add tests for handling models with missing outcome and/or covariate values.
+This is a resubmission. This resubmission corrects the errors shown on CRAN package checks. We also revised the .Rd files by replacing hand-coded URLs with \doi markup.
 
 ## Test environments
 * local Windows 10 Pro, R 4.0.2
@@ -19,4 +19,3 @@ This is a resubmission. This resubmission corrects the errors shown on CRAN pack
 
 ## R CMD check results
 There were no ERRORs, WARNINGs or NOTEs.
-
