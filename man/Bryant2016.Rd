@@ -12,8 +12,7 @@ Bryant, B. R., Bryant, D. P., Porterfield, J., Dennis, M. S., Falcomata, T.,
 Valentine, C., Brewer, C., & Bell, K. (2016).
 The effects of a Tier 3 intervention on the mathematics performance of second grade
 students with severe mathematics difficulties.
-\emph{Journal of Learning Disabilities, 49}(2), 176-188.
-doi:\href{https://doi.org/10.1177/0022219414538516}{10.1177/0022219414538516}
+\emph{Journal of Learning Disabilities, 49}(2), 176-188. \doi{10.1177/0022219414538516}
 }
 \description{
 Data from a multi-level multiple baseline design conducted by Bryant et al. (2016).

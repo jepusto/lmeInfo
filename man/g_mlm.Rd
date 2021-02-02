@@ -68,6 +68,5 @@ print(Laski_AR1_g)
 Pustejovsky, J. E., Hedges, L. V., & Shadish, W. R. (2014).
   Design-comparable effect sizes in multiple baseline designs: A general
   modeling framework. \emph{Journal of Educational and Behavioral Statistics,
-  39}(4), 211-227.
-  doi:\href{https://doi.org/10.3102/1076998614547577}{10.3102/1076998614547577}
+  39}(4), 211-227. \doi{10.3102/1076998614547577}
 }
