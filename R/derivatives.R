@@ -43,7 +43,7 @@ dV_dTau_index <- function(tau_index, Z_blocks, block) {
 
 dV_dTau_unstruct <- function(block, pdMat_class, Z_design) {
   Tau_q <- dim(Z_design)[2]
-  Z_blocks <- by(Z_design, block, as.matrix)
+  Z_blocks <- by(Z_design, block, as.matrix, simplify = FALSE)
 
   if ("pdDiag" %in% pdMat_class) {
     tau_index <- cbind(seq(1,Tau_q), seq(1,Tau_q))
