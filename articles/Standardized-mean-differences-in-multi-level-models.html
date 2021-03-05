@@ -21,6 +21,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -63,7 +65,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/jepusto/lmeInfo">
+  <a href="https://github.com/jepusto/lmeInfo" class="external-link">
     <span class="fas fa-github"></span>
      
   </a>
@@ -89,7 +91,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Standardized mean differences for fitted <code>lme</code> and <code>gls</code> models</h1>
             
-            <h4 class="date">2021-02-02</h4>
+            <h4 data-toc-skip class="date">2021-03-05</h4>
       
       
       <div class="hidden name"><code>Standardized-mean-differences-in-multi-level-models.Rmd</code></div>
@@ -101,10 +103,10 @@
 <div id="standardized-mean-difference-effect-sizes-in-linear-mixed-effects-models" class="section level1">
 <h1 class="hasAnchor">
 <a href="#standardized-mean-difference-effect-sizes-in-linear-mixed-effects-models" class="anchor"></a>Standardized mean difference effect sizes in linear mixed effects models</h1>
-<p>The <code>lmeInfo</code> package includes a function, <code><a href="../reference/g_mlm.html">g_mlm()</a></code>, for estimating a standardized mean difference effect size from a multi-level model fitted using <code><a href="https://rdrr.io/pkg/nlme/man/lme.html">lme()</a></code> or <code><a href="https://rdrr.io/pkg/nlme/man/gls.html">gls()</a></code> from the <code>nlme</code> package. The estimation methods follow Pustejovsky, Hedges, and Shadish (2014). Let <span class="math inline">\(\boldsymbol{\beta}\)</span> denote the fixed effect parameters and <span class="math inline">\(\boldsymbol{\theta}\)</span> denote the variance components (in the natural, variance-covariance parameterization) from a multi-level model. A standardized mean difference effect size can then be defined as <span class="math display">\[
+<p>The <code>lmeInfo</code> package includes a function, <code><a href="../reference/g_mlm.html">g_mlm()</a></code>, for estimating a standardized mean difference effect size from a multi-level model fitted using <code><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme()</a></code> or <code><a href="https://rdrr.io/pkg/nlme/man/gls.html" class="external-link">gls()</a></code> from the <code>nlme</code> package. The estimation methods follow Pustejovsky, Hedges, and Shadish (2014). Let <span class="math inline">\(\boldsymbol{\beta}\)</span> denote the fixed effect parameters and <span class="math inline">\(\boldsymbol{\theta}\)</span> denote the variance components (in the natural, variance-covariance parameterization) from a multi-level model. A standardized mean difference effect size can then be defined as <span class="math display">\[
 \delta = \frac{\mathbf{p}'\boldsymbol\beta}{\sqrt{\mathbf{r}'\boldsymbol\theta}},
 \]</span> for some fixed vectors <span class="math inline">\(\mathbf{p}\)</span> and <span class="math inline">\(\mathbf{r}\)</span>.</p>
-<p>The <code><a href="../reference/g_mlm.html">g_mlm()</a></code> function takes as inputs a fitted <code><a href="https://rdrr.io/pkg/nlme/man/lme.html">lme()</a></code> model and the vectors <span class="math inline">\(\mathbf{p}\)</span> and <span class="math inline">\(\mathbf{r}\)</span>. It computes an estimate of <span class="math inline">\(\delta\)</span> as <span class="math display">\[
+<p>The <code><a href="../reference/g_mlm.html">g_mlm()</a></code> function takes as inputs a fitted <code><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme()</a></code> model and the vectors <span class="math inline">\(\mathbf{p}\)</span> and <span class="math inline">\(\mathbf{r}\)</span>. It computes an estimate of <span class="math inline">\(\delta\)</span> as <span class="math display">\[
 d = \left(1 - \frac{3}{4 \nu - 1}\right) \frac{\mathbf{p}'\boldsymbol{\hat\beta}}{\sqrt{\mathbf{r}'\boldsymbol{\hat\theta}}},
 \]</span> where <span class="math inline">\(\boldsymbol{\hat\beta}\)</span> and <span class="math inline">\(\boldsymbol{\hat\theta}\)</span> are maximum likelihood or restricted maximum likelihood estimates of the fixed effects and variance components, respectively. Here, <span class="math inline">\(\nu\)</span> is the Satterthwaite degrees of freedom given by <span class="math display">\[
 \nu = \frac{2 \left(\mathbf{r}'\boldsymbol{\hat\theta}\right)^2}{\text{Var}\left(\mathbf{r}'\boldsymbol{\hat\theta}\right)},
@@ -116,19 +118,19 @@ d = \left(1 - \frac{3}{4 \nu - 1}\right) \frac{\mathbf{p}'\boldsymbol{\hat\beta}
 <h1 class="hasAnchor">
 <a href="#demonstration" class="anchor"></a>Demonstration</h1>
 <p>We use a dataset from a multiple baseline study conducted by Bryant and colleagues (2016) to demonstrate how to calculate a design-comparable standardized mean difference effect size based on the fitted model.</p>
-<p>The study by Bryant and colleagues (2016) involved collecting repeated measures of math performance on multiple students, in each of several classrooms. After an initial baseline period in each classroom, an intervention was introduced and its effects on student math performance were observed over time. For sake of illustration, we use a very simple model for these data, consisting of a simple change in levels coinciding with the introduction of treatment. We include random effects for each classroom and each student. Here we fit the model using <code><a href="https://rdrr.io/pkg/nlme/man/lme.html">nlme::lme()</a></code>:</p>
+<p>The study by Bryant and colleagues (2016) involved collecting repeated measures of math performance on multiple students, in each of several classrooms. After an initial baseline period in each classroom, an intervention was introduced and its effects on student math performance were observed over time. For sake of illustration, we use a very simple model for these data, consisting of a simple change in levels coinciding with the introduction of treatment. We include random effects for each classroom and each student. Here we fit the model using <code><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">nlme::lme()</a></code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://jepusto.github.io/lmeInfo/">lmeInfo</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://svn.r-project.org/R-packages/trunk/nlme/">nlme</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">Bryant2016</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jepusto.github.io/lmeInfo/">lmeInfo</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://svn.r-project.org/R-packages/trunk/nlme/" class="external-link">nlme</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Bryant2016</span><span class="op">)</span>
 
-<span class="va">Bryant2016_RML</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html">lme</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">outcome</span> <span class="op">~</span> <span class="va">treatment</span>,
+<span class="va">Bryant2016_RML</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">outcome</span> <span class="op">~</span> <span class="va">treatment</span>,
                       random <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">school</span><span class="op">/</span><span class="va">case</span>,
                       data <span class="op">=</span> <span class="va">Bryant2016</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">Bryant2016_RML</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">Bryant2016_RML</span><span class="op">)</span></code></pre></div>
 <pre><code>## Linear mixed-effects model fit by REML
-##  Data: Bryant2016 
+##   Data: Bryant2016 
 ##        AIC      BIC    logLik
 ##   2627.572 2646.041 -1308.786
 ## 
@@ -141,7 +143,7 @@ d = \left(1 - \frac{3}{4 \nu - 1}\right) \frac{\mathbf{p}'\boldsymbol{\hat\beta}
 ##         (Intercept) Residual
 ## StdDev:    15.98217   18.398
 ## 
-## Fixed effects: outcome ~ treatment 
+## Fixed effects:  outcome ~ treatment 
 ##                       Value Std.Error  DF   t-value p-value
 ## (Intercept)        56.14333  9.019268 286  6.224821       0
 ## treatmenttreatment 49.33454  2.399065 286 20.564070       0
@@ -183,16 +185,16 @@ d = \left(1 - \frac{3}{4 \nu - 1}\right) \frac{\mathbf{p}'\boldsymbol{\hat\beta}
 ## [1] "varcomp"</code></pre>
 <p>In our model for the Bryant data, we use the treatment effect in the numerator of the effect size and the sum of the classroom-level, student-level, and within-student variance components in the denominator of the effect size. The constants are therefore given by <span class="math inline">\(\mathbf{p} = (0, 1)'\)</span> and <span class="math inline">\(\mathbf{r} = (1, 1, 1)'\)</span>. The effect size estimate can be calculated as:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Bryant2016_g</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/g_mlm.html">g_mlm</a></span><span class="op">(</span><span class="va">Bryant2016_RML</span>, p_const <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>, r_const <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, infotype <span class="op">=</span> <span class="st">"expected"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">Bryant2016_g</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/g_mlm.html">g_mlm</a></span><span class="op">(</span><span class="va">Bryant2016_RML</span>, p_const <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>, r_const <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, infotype <span class="op">=</span> <span class="st">"expected"</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Bryant2016_g</span></code></pre></div>
 <pre><code>##                           est    se
 ## unadjusted effect size  1.799 0.340
 ## adjusted effect size    1.721 0.325
 ## degree of freedom      17.504</code></pre>
-<p>A <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> method is also included, which includes more detail about the model parameter estimates and effect size estimate:</p>
+<p>A <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> method is also included, which includes more detail about the model parameter estimates and effect size estimate:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">Bryant2016_g</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">Bryant2016_g</span><span class="op">)</span></code></pre></div>
 <pre><code>##                                            est      se
 ## Tau.school.school.var((Intercept))     158.240 238.653
 ## Tau.case.case.var((Intercept))         255.430 126.671
@@ -226,11 +228,13 @@ d = \left(1 - \frac{3}{4 \nu - 1}\right) \frac{\mathbf{p}'\boldsymbol{\hat\beta}
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://www.jepusto.com/">James Pustejovsky</a>, Man Chen.</p>
+  <p></p>
+<p>Developed by <a href="https://www.jepusto.com/" class="external-link external-link">James Pustejovsky</a>, Man Chen.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
