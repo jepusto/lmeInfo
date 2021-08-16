@@ -4,26 +4,29 @@
 \alias{g_mlm}
 \title{Calculates adjusted mlm effect size}
 \usage{
-g_mlm(mod, p_const, r_const, infotype = "expected", returnModel = TRUE)
+g_mlm(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "expected")
 }
 \arguments{
 \item{mod}{Fitted model of class lmeStruct (estimated using
 \code{nlme::lme()}) or of class glsStruct (estimated using
-\code{nlme::gls()}).}
+\code{nlme::gls()}), from which to estimate the numerator of the effect
+size.}
 
 \item{p_const}{Vector of constants for calculating numerator of effect size.
 Must be the same length as fixed effects in \code{mod}.}
 
+\item{mod_denom}{Fitted model of class lmeStruct (estimated using
+\code{nlme::lme()}) or of class glsStruct (estimated using
+\code{nlme::gls()}), from which to estimate the denominator of the effect
+size. If not otherwise specified, the same model will be used for the
+numerator and the denominator calculations.}
+
 \item{r_const}{Vector of constants for calculating denominator of effect
 size. Must be the same length as the number of variance component
-parameters in \code{mod}.}
+parameters in \code{mod_denom}.}
 
 \item{infotype}{Type of information matrix. One of \code{"expected"} (the
 default), \code{"observed"}, or \code{"average"}.}
-
-\item{returnModel}{(Optional) If true, the fitted input model is included in
-the return. Defaults to TRUE so that summary() method returns more detail
-about the model parameters for an object of class g_mlm.}
 }
 \value{
 A list with the following components \tabular{ll}{ \code{p_beta} \tab
@@ -39,8 +42,9 @@ A list with the following components \tabular{ll}{ \code{p_beta} \tab
 }
 \description{
 Estimates a standardized mean difference effect size from a
-  fitted multi-level model, using adjusted mlm method as described in
-  Pustejovsky, Hedges, & Shadish (2014).
+  fitted multi-level model, using restricted or full maximum likelihood
+  methods with small-sample correction, as described in Pustejovsky, Hedges,
+  & Shadish (2014).
 }
 \examples{
 
@@ -51,18 +55,19 @@ Bryant2016_RML1 <- lme(fixed = outcome ~ treatment,
                        correlation = corAR1(0, ~ session | school/case),
                        data = Bryant2016)
 Bryant2016_g1 <- g_mlm(Bryant2016_RML1, p_const = c(0,1), r_const = c(1,1,0,1),
-                       infotype = "expected", returnModel = TRUE)
-summary(Bryant2016_g1)
+                       infotype = "expected")
 print(Bryant2016_g1)
+summary(Bryant2016_g1)
 
 data(Laski, package = "scdhlm")
 Laski_AR1 <- gls(outcome ~ treatment,
                  correlation = corAR1(0.2, ~ time | case),
                  data = Laski)
 Laski_AR1_g <- g_mlm(Laski_AR1, p_const = c(0,1), r_const = c(0,1),
-                     infotype = "expected", returnModel = TRUE)
-summary(Laski_AR1_g)
+                     infotype = "expected")
 print(Laski_AR1_g)
+summary(Laski_AR1_g)
+
 }
 \references{
 Pustejovsky, J. E., Hedges, L. V., & Shadish, W. R. (2014).

@@ -328,7 +328,7 @@ check_REML2 <- function(mod, print = FALSE) {
 
 check_against_scdhlm <- function(mod, p_lmeInfo, r_lmeInfo, p_scdhlm = p_lmeInfo, r_scdhlm, infotype = "expected") {
 
-  g_lmeInfo <- g_mlm(mod, p_lmeInfo, r_lmeInfo)
+  g_lmeInfo <- g_mlm(mod, p_const = p_lmeInfo, r_const = r_lmeInfo)
 
   g_scdhlm <- suppressWarnings(scdhlm::g_REML(mod, p_scdhlm, r_scdhlm))
 
@@ -346,3 +346,7 @@ check_against_scdhlm <- function(mod, p_lmeInfo, r_lmeInfo, p_scdhlm = p_lmeInfo
 
 }
 
+check_info_dim <- function(mod, dim, type = "expected") {
+  Imat <- Fisher_info(mod, type = type)
+  testthat::expect_identical(dim(Imat), rep(dim, 2))
+}

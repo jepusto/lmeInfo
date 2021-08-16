@@ -4,18 +4,21 @@
 
 #' @title Extract estimated variance components
 #'
-#' @description Extracts the estimated variance components
-#'   from a fitted linear mixed effects model (lmeStruct object)
-#'   or generalized least squares model (glsStruct object).
+#' @description Extracts the estimated variance components from a fitted linear
+#'   mixed effects model (lmeStruct object) or generalized least squares model
+#'   (glsStruct object).
 #'
 #' @param mod Fitted model of class lmeStruct or glsStruct.
+#' @param vector Logical indicating whether to return the variance components as
+#'   a numeric vector. Default is \code{FALSE}.
 #'
 #' @export
 #'
-#' @return Object of class \code{varcomp} consisting of a list of estimated
-#'   variance components. Models that do not include correlation structure
-#'   parameters or variance structure parameters will have empty lists for those
-#'   components.
+#' @return If \code{vector = FALSE}, an object of class \code{varcomp}
+#'   consisting of a list of estimated variance components. Models that do not
+#'   include correlation structure parameters or variance structure parameters
+#'   will have empty lists for those components. If \code{vector = TRUE}, a
+#'   numeric vector of estimated variance components.
 #'
 #' @examples
 #'
@@ -26,20 +29,21 @@
 #'                       correlation = corAR1(0, ~ session | school/case),
 #'                       data = Bryant2016)
 #' extract_varcomp(Bryant2016_RML)
+#' extract_varcomp(Bryant2016_RML, vector = TRUE)
 #'
 
-extract_varcomp <- function(mod) UseMethod("extract_varcomp")
+extract_varcomp <- function(mod, vector) UseMethod("extract_varcomp")
 
 #' @export
 
-extract_varcomp.default <- function(mod) {
+extract_varcomp.default <- function(mod, vector = FALSE) {
   mod_class <- paste(class(mod), collapse = "-")
   stop(paste0("Variance components not available for models of class ", mod_class, "."))
 }
 
 #' @export
 
-extract_varcomp.gls <- function(mod) {
+extract_varcomp.gls <- function(mod, vector = FALSE) {
 
   fixed_sigma <- attr(mod$modelStruct, "fixedSigma")
   sigma_sq <- if (fixed_sigma) NULL else mod$sigma^2                # sigma^2
@@ -48,14 +52,18 @@ extract_varcomp.gls <- function(mod) {
 
   varcomp <- list(cor_params = cor_params, var_params = var_params, sigma_sq = sigma_sq)
 
-  class(varcomp) <- "varcomp"
-  return(varcomp)
+  if (vector) {
+    return(unlist(varcomp))
+  } else {
+    class(varcomp) <- "varcomp"
+    return(varcomp)
+  }
 
 }
 
 #' @export
 
-extract_varcomp.lme <- function(mod) {
+extract_varcomp.lme <- function(mod, vector = FALSE) {
 
   sigma_sq <- mod$sigma^2                                           # sigma^2
   # Tau_params <- coef(mod$modelStruct$reStruct, FALSE) * sigma_sq    # unique coefficients in Tau
@@ -80,8 +88,12 @@ extract_varcomp.lme <- function(mod) {
 
   varcomp <- list(Tau = Tau_param_list, cor_params = cor_params, var_params = var_params, sigma_sq = sigma_sq)
 
-  class(varcomp) <- "varcomp"
-  return(varcomp)
+  if (vector) {
+    return(unlist(varcomp))
+  } else {
+    class(varcomp) <- "varcomp"
+    return(varcomp)
+  }
 
 }
 

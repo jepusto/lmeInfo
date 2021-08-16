@@ -4,21 +4,25 @@
 \alias{extract_varcomp}
 \title{Extract estimated variance components}
 \usage{
-extract_varcomp(mod)
+extract_varcomp(mod, vector)
 }
 \arguments{
 \item{mod}{Fitted model of class lmeStruct or glsStruct.}
+
+\item{vector}{Logical indicating whether to return the variance components as
+a numeric vector. Default is \code{FALSE}.}
 }
 \value{
-Object of class \code{varcomp} consisting of a list of estimated
-  variance components. Models that do not include correlation structure
-  parameters or variance structure parameters will have empty lists for those
-  components.
+If \code{vector = FALSE}, an object of class \code{varcomp}
+  consisting of a list of estimated variance components. Models that do not
+  include correlation structure parameters or variance structure parameters
+  will have empty lists for those components. If \code{vector = TRUE}, a
+  numeric vector of estimated variance components.
 }
 \description{
-Extracts the estimated variance components
-  from a fitted linear mixed effects model (lmeStruct object)
-  or generalized least squares model (glsStruct object).
+Extracts the estimated variance components from a fitted linear
+  mixed effects model (lmeStruct object) or generalized least squares model
+  (glsStruct object).
 }
 \examples{
 
@@ -29,5 +33,6 @@ Bryant2016_RML <- lme(fixed = outcome ~ treatment,
                       correlation = corAR1(0, ~ session | school/case),
                       data = Bryant2016)
 extract_varcomp(Bryant2016_RML)
+extract_varcomp(Bryant2016_RML, vector = TRUE)
 
 }

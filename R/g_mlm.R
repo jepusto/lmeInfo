@@ -7,22 +7,26 @@
 #' @title Calculates adjusted mlm effect size
 #'
 #' @description Estimates a standardized mean difference effect size from a
-#'   fitted multi-level model, using adjusted mlm method as described in
-#'   Pustejovsky, Hedges, & Shadish (2014).
+#'   fitted multi-level model, using restricted or full maximum likelihood
+#'   methods with small-sample correction, as described in Pustejovsky, Hedges,
+#'   & Shadish (2014).
 #'
 #' @param mod Fitted model of class lmeStruct (estimated using
 #'   \code{nlme::lme()}) or of class glsStruct (estimated using
-#'   \code{nlme::gls()}).
+#'   \code{nlme::gls()}), from which to estimate the numerator of the effect
+#'   size.
 #' @param p_const Vector of constants for calculating numerator of effect size.
 #'   Must be the same length as fixed effects in \code{mod}.
 #' @param r_const Vector of constants for calculating denominator of effect
 #'   size. Must be the same length as the number of variance component
-#'   parameters in \code{mod}.
+#'   parameters in \code{mod_denom}.
+#' @param mod_denom Fitted model of class lmeStruct (estimated using
+#'   \code{nlme::lme()}) or of class glsStruct (estimated using
+#'   \code{nlme::gls()}), from which to estimate the denominator of the effect
+#'   size. If not otherwise specified, the same model will be used for the
+#'   numerator and the denominator calculations.
 #' @param infotype Type of information matrix. One of \code{"expected"} (the
 #'   default), \code{"observed"}, or \code{"average"}.
-#' @param returnModel (Optional) If true, the fitted input model is included in
-#'   the return. Defaults to TRUE so that summary() method returns more detail
-#'   about the model parameters for an object of class g_mlm.
 #'
 #' @export
 #'
@@ -53,39 +57,57 @@
 #'                        correlation = corAR1(0, ~ session | school/case),
 #'                        data = Bryant2016)
 #' Bryant2016_g1 <- g_mlm(Bryant2016_RML1, p_const = c(0,1), r_const = c(1,1,0,1),
-#'                        infotype = "expected", returnModel = TRUE)
-#' summary(Bryant2016_g1)
+#'                        infotype = "expected")
 #' print(Bryant2016_g1)
+#' summary(Bryant2016_g1)
 #'
 #' data(Laski, package = "scdhlm")
 #' Laski_AR1 <- gls(outcome ~ treatment,
 #'                  correlation = corAR1(0.2, ~ time | case),
 #'                  data = Laski)
 #' Laski_AR1_g <- g_mlm(Laski_AR1, p_const = c(0,1), r_const = c(0,1),
-#'                      infotype = "expected", returnModel = TRUE)
-#' summary(Laski_AR1_g)
+#'                      infotype = "expected")
 #' print(Laski_AR1_g)
+#' summary(Laski_AR1_g)
+#'
 
-g_mlm <- function(mod, p_const, r_const, infotype = "expected", returnModel = TRUE) {
+g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "expected") {
 
   # basic model estimates
 
   if (inherits(mod, "gls")) {
-    p_beta <- sum(coef(mod) * p_const)
+    beta_coef <- coef(mod)
   } else if (inherits(mod, "lme")) {
-    p_beta <- sum(nlme::fixed.effects(mod) * p_const)
+    beta_coef <- nlme::fixed.effects(mod)
   } else {
-    stop("g_mlm() only available for lme or gls models.")
+    stop("g_mlm() only available for lme or gls models. Please specify such a model in the 'mod' argument.")
   }
 
-  theta <- extract_varcomp(mod)                                   # full theta vector
-  r_theta <- sum(unlist(theta) * r_const)                         # r'theta (sum of var comp)
+  if (length(beta_coef) != length(p_const)) {
+    stop("The p_const vector must have an entry for every fixed effect coefficient in 'mod'.")
+  }
+
+  p_beta <- sum(beta_coef * p_const)
+  SE_beta <- sqrt(diag(vcov(mod)))
+
+  if (!inherits(mod_denom, c("gls","lme"))) {
+    stop("g_mlm() only available for lme or gls models. Please specify such a model in the 'mod_denom' argument.")
+  }
+
+  theta <- extract_varcomp(mod_denom)              # full theta vector
+
+  if (is.null(r_const)) {
+    warning("The r_const argument was not specified. Defaulting to r_const equal to all 1's. Are you sure this is right?")
+    r_const <- rep(1L, length(unlist(theta)))
+  }
+
+  r_theta <- sum(unlist(theta) * r_const)                                 # r'theta (sum of var comp)
   delta_AB <- p_beta / sqrt(r_theta)                              # delta_AB
-  kappa_sq <- sum(tcrossprod(p_const) * vcov(mod)) / r_theta    # kappa^2
-  cnvg_warn <- !is.null(attr(mod,"warning"))                      # indicator that RML estimation has not converged
+  kappa_sq <- sum(tcrossprod(p_const) * vcov(mod)) / r_theta      # kappa^2
+  cnvg_warn <- !is.null(attr(mod_denom,"warning"))                # indicator that RML estimation has not converged
 
   # calculate inverse Fisher information
-  info_inv <- varcomp_vcov(mod, type = infotype)
+  info_inv <- varcomp_vcov(mod_denom, type = infotype)
   SE_theta <- sqrt(diag(info_inv))                                # SE of theta
 
   nu <- 2 * r_theta^2 / sum(tcrossprod(r_const) * info_inv)      # df
@@ -99,12 +121,9 @@ g_mlm <- function(mod, p_const, r_const, infotype = "expected", returnModel = TR
 
   res <- c(list(p_beta = p_beta, r_theta = r_theta, delta_AB = delta_AB, nu = nu, J_nu = J_nu,
                 kappa = sqrt(kappa_sq), g_AB = g_AB, SE_g_AB = SE_g_AB, cnvg_warn=cnvg_warn),
+           list(beta = beta_coef, SE_beta = SE_beta),
            list(theta = theta, SE_theta = SE_theta),
-           list(info_inv = info_inv, p_const = p_const, r_const = r_const))
-
-  if (returnModel) {
-    res <- c(res, mod)
-  }
+           list(info_inv = info_inv, p_const = p_const, r_const = r_const, logLik = mod$logLik))
 
   class(res) <- "g_mlm"
 
@@ -115,27 +134,18 @@ g_mlm <- function(mod, p_const, r_const, infotype = "expected", returnModel = TR
 
 summary.g_mlm <- function(object, digits = 3, ...) {
 
-  if (is.null(object$modelStruct)) {
-
-    stop("'summary()' method only available when setting 'returnModel = TRUE` in `g_mlm()`.")
-
-  }
-
   varcomp <- with(object, cbind(est = c(unlist(theta), "total variance" = r_theta),
                                 se = c(unlist(SE_theta), r_theta * sqrt(2 / nu))))
-  if (inherits(object$modelStruct, "glsStruct")) {
-    betas <- with(object, cbind(est = c(coefficients, "treatment effect at a specified time" = p_beta),
-                                se = c(sqrt(diag(varBeta)), kappa * sqrt(r_theta))))
-  } else {
-    betas <- with(object, cbind(est = c(coefficients$fixed, "treatment effect at a specified time" = p_beta),
-                                se = c(sqrt(diag(varFix)), kappa * sqrt(r_theta))))
-  }
+
+  betas <- with(object, cbind(est = c(beta, "treatment effect at a specified time" = p_beta),
+                              se = c(SE_beta, kappa * sqrt(r_theta))))
 
   ES <- with(object, cbind(est = c("unadjusted effect size" = delta_AB, "adjusted effect size" = g_AB,
                                    "degree of freedom" = nu, "constant kappa" = kappa, logLik = logLik),
                            se = c(SE_g_AB / J_nu, SE_g_AB, NA, NA, NA)))
 
   print(round(rbind(varcomp, betas, ES), digits), na.print = "")
+
 }
 
 #' @export

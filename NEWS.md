@@ -1,3 +1,8 @@
+# lmeInfo 0.1.3.9999
+
+* Generalized the `g_mlm()` function to allow use of separate models for the numerator and denominator of the effect size.
+* Modified the stored results of `g_mlm()` so that the `returnModel` argument is no longer necessary.
+
 # lmeInfo 0.1.2
 
 * Corrected a bug leading to errors in `Fisher_info()` with models that have more than two levels.
