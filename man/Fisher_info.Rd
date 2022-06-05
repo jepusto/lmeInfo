@@ -4,22 +4,27 @@
 \alias{Fisher_info}
 \title{Calculate expected, observed, or average Fisher information matrix}
 \usage{
-Fisher_info(mod, type = "expected")
+Fisher_info(mod, type = "expected", separate_variances = FALSE)
 }
 \arguments{
 \item{mod}{Fitted model of class lmeStruct or glsStruct.}
 
-\item{type}{Type of information matrix. One of \code{"expected"} (the default),
-\code{"observed"}, or \code{"average"}.}
+\item{type}{Type of information matrix. One of \code{"expected"} (the
+default), \code{"observed"}, or \code{"average"}.}
+
+\item{separate_variances}{Logical indicating whether to return the Fisher
+information matrix for separate level-1 variance components if using
+\code{varIdent} function to allow for different variances per stratum.
+Default is \code{FALSE}.}
 }
 \value{
 Information matrix corresponding to variance component parameters of
   \code{mod}.
 }
 \description{
-Calculates the expected, observed, or average Fisher information matrix
-  from a fitted linear mixed effects model (lmeStruct object)
-  or generalized least squares model (glsStruct object).
+Calculates the expected, observed, or average Fisher information
+  matrix from a fitted linear mixed effects model (lmeStruct object) or
+  generalized least squares model (glsStruct object).
 }
 \examples{
 
@@ -31,5 +36,12 @@ Bryant2016_RML <- lme(fixed = outcome ~ treatment,
                       data = Bryant2016)
 Fisher_info(Bryant2016_RML, type = "expected")
 Fisher_info(Bryant2016_RML, type = "average")
+
+Bryant2016_RML2 <- lme(fixed = outcome ~ treatment,
+                      random = ~ 1 | school/case,
+                      correlation = corAR1(0, ~ session | school/case),
+                      weights = varIdent(form = ~ 1 | treatment),
+                      data = Bryant2016)
+Fisher_info(Bryant2016_RML2, separate_variances = TRUE)
 
 }
