@@ -9,16 +9,26 @@
 #'   (glsStruct object).
 #'
 #' @param mod Fitted model of class lmeStruct or glsStruct.
+#' @param separate_variances Logical indicating whether to return the separate
+#'   level-1 variance components for each stratum if using \code{varIdent}
+#'   function to allow for different variances per stratum. Default is
+#'   \code{FALSE}.
 #' @param vector Logical indicating whether to return the variance components as
 #'   a numeric vector. Default is \code{FALSE}.
 #'
 #' @export
 #'
-#' @return If \code{vector = FALSE}, an object of class \code{varcomp}
-#'   consisting of a list of estimated variance components. Models that do not
-#'   include correlation structure parameters or variance structure parameters
-#'   will have empty lists for those components. If \code{vector = TRUE}, a
-#'   numeric vector of estimated variance components.
+#' @return If \code{separate_variances = TRUE} and if \code{weights =
+#'   varIdent(form = ~ 1 | Stratum)} is specified in the model fitting, separate
+#'   level-1 variance estimates will be returned for each stratum. If
+#'   \code{separate_variances = TRUE} but if the weighting structure is not
+#'   specified with \code{varIdent}, or if \code{separate_variances = FALSE},
+#'   then no separate level-1 variance estimates will be returned. If
+#'   \code{vector = FALSE}, an object of class \code{varcomp} consisting of a
+#'   list of estimated variance components. Models that do not include
+#'   correlation structure parameters or variance structure parameters will have
+#'   empty lists for those components. If \code{vector = TRUE}, a numeric vector
+#'   of estimated variance components.
 #'
 #' @examples
 #'
@@ -27,23 +37,25 @@
 #' Bryant2016_RML <- lme(fixed = outcome ~ treatment,
 #'                       random = ~ 1 | school/case,
 #'                       correlation = corAR1(0, ~ session | school/case),
+#'                       weights = varIdent(form = ~ 1 | treatment),
 #'                       data = Bryant2016)
-#' extract_varcomp(Bryant2016_RML)
+#' extract_varcomp(Bryant2016_RML, separate_variances = FALSE)
+#' extract_varcomp(Bryant2016_RML, separate_variances = TRUE)
 #' extract_varcomp(Bryant2016_RML, vector = TRUE)
 #'
 
-extract_varcomp <- function(mod, vector) UseMethod("extract_varcomp")
+extract_varcomp <- function(mod, separate_variances, vector) UseMethod("extract_varcomp")
 
 #' @export
 
-extract_varcomp.default <- function(mod, vector = FALSE) {
+extract_varcomp.default <- function(mod, separate_variances = FALSE, vector = FALSE) {
   mod_class <- paste(class(mod), collapse = "-")
   stop(paste0("Variance components not available for models of class ", mod_class, "."))
 }
 
 #' @export
 
-extract_varcomp.gls <- function(mod, vector = FALSE) {
+extract_varcomp.gls <- function(mod, separate_variances = FALSE, vector = FALSE) {
 
   fixed_sigma <- attr(mod$modelStruct, "fixedSigma")
   sigma_sq <- if (fixed_sigma) NULL else mod$sigma^2                # sigma^2
@@ -51,6 +63,25 @@ extract_varcomp.gls <- function(mod, vector = FALSE) {
   var_params <- as.double(coef(mod$modelStruct$varStruct, FALSE))   # variance structure
 
   varcomp <- list(cor_params = cor_params, var_params = var_params, sigma_sq = sigma_sq)
+
+  # get separate variances when relevant
+  if (!is.null(mod$call$weights) & separate_variances) {
+    varFunc <- sub("\\(.*", "", mod$call$weights)[1]
+    if (varFunc == "varIdent") {
+      varStruct <- mod$modelStruct$varStruct
+      var_formula <- nlme::getGroupsFormula(varStruct)
+      dat <- nlme::getData(mod)
+      grps <- stats::model.frame(var_formula, data = dat)
+      levels <- levels(grps[,1])
+      sigma_sq_grps <- sigma_sq * c(1, var_params^2)
+      names(sigma_sq_grps) <- levels
+      varcomp <- list(cor_params = cor_params, sigma_sq = sigma_sq_grps)
+    } else {
+      warning("The `extract_varcomp()` only returns separate level-1 variances when the variance structure is specified with `varIdent()`.")
+    }
+  } else if (is.null(mod$call$weights) & separate_variances) {
+    warning("The separate_variance option is only relevant when the variance structure is specified with `varIdent()`.")
+  }
 
   if (vector) {
     return(unlist(varcomp))
@@ -63,7 +94,7 @@ extract_varcomp.gls <- function(mod, vector = FALSE) {
 
 #' @export
 
-extract_varcomp.lme <- function(mod, vector = FALSE) {
+extract_varcomp.lme <- function(mod, separate_variances = FALSE, vector = FALSE) {
 
   sigma_sq <- mod$sigma^2                                           # sigma^2
   # Tau_params <- coef(mod$modelStruct$reStruct, FALSE) * sigma_sq    # unique coefficients in Tau
@@ -73,20 +104,39 @@ extract_varcomp.lme <- function(mod, vector = FALSE) {
   Tau_params <- RE_params * RE_params^(as.numeric(grepl("sd", attr(RE_params, "names")))) * sigma_sq
   names(Tau_params) <- mapply(gsub, ".sd", ".var", names(Tau_params), USE.NAMES = FALSE)
 
-  cor_params <- as.double(coef(mod$modelStruct$corStruct, FALSE))   # correlation structure
-  var_params <- as.double(coef(mod$modelStruct$varStruct, FALSE))   # variance structure
-
   # split Tau by grouping variables
   group_names <- names(mod$groups)
   Tau_param_list <- sapply(group_names,
                            function(x) Tau_params[grep(x, names(Tau_params))],
                            simplify = FALSE, USE.NAMES = TRUE)
 
+  cor_params <- as.double(coef(mod$modelStruct$corStruct, FALSE))   # correlation structure
+  var_params <- as.double(coef(mod$modelStruct$varStruct, FALSE))   # variance structure
+
   fixed_sigma <- attr(mod$modelStruct, "fixedSigma")
 
   sigma_sq <- if (fixed_sigma) NULL else sigma_sq
 
   varcomp <- list(Tau = Tau_param_list, cor_params = cor_params, var_params = var_params, sigma_sq = sigma_sq)
+
+  # get separate variances when relevant
+  if (!is.null(mod$call$weights) & separate_variances) {
+    varFunc <- sub("\\(.*", "", mod$call$weights)[1]
+    if (varFunc == "varIdent") {
+      varStruct <- mod$modelStruct$varStruct
+      var_formula <- nlme::getGroupsFormula(varStruct)
+      dat <- nlme::getData(mod)
+      grps <- stats::model.frame(var_formula, data = dat)
+      levels <- unique(grps[,1])
+      sigma_sq_grps <- sigma_sq * c(1, var_params^2)
+      names(sigma_sq_grps) <- levels
+      varcomp <- list(Tau = Tau_param_list, cor_params = cor_params, sigma_sq = sigma_sq_grps)
+    } else {
+      warning("The `extract_varcomp()` only returns separate level-1 variances when the variance structure is specified with `varIdent()`")
+    }
+  } else if (is.null(mod$call$weights) & separate_variances) {
+    warning("The separate_variance option is only relevant when the variance structure is specified with `varIdent()`.")
+  }
 
   if (vector) {
     return(unlist(varcomp))
@@ -117,13 +167,17 @@ Q_matrix <- function(mod) {
 
 #' @title Calculate expected, observed, or average Fisher information matrix
 #'
-#' @description Calculates the expected, observed, or average Fisher information matrix
-#'   from a fitted linear mixed effects model (lmeStruct object)
-#'   or generalized least squares model (glsStruct object).
+#' @description Calculates the expected, observed, or average Fisher information
+#'   matrix from a fitted linear mixed effects model (lmeStruct object) or
+#'   generalized least squares model (glsStruct object).
 #'
 #' @param mod Fitted model of class lmeStruct or glsStruct.
-#' @param type Type of information matrix. One of \code{"expected"} (the default),
-#'   \code{"observed"}, or \code{"average"}.
+#' @param type Type of information matrix. One of \code{"expected"} (the
+#'   default), \code{"observed"}, or \code{"average"}.
+#' @param separate_variances Logical indicating whether to return the Fisher
+#'   information matrix for separate level-1 variance components if using
+#'   \code{varIdent} function to allow for different variances per stratum.
+#'   Default is \code{FALSE}.
 #'
 #' @export
 #'
@@ -141,6 +195,13 @@ Q_matrix <- function(mod) {
 #' Fisher_info(Bryant2016_RML, type = "expected")
 #' Fisher_info(Bryant2016_RML, type = "average")
 #'
+#' Bryant2016_RML2 <- lme(fixed = outcome ~ treatment,
+#'                       random = ~ 1 | school/case,
+#'                       correlation = corAR1(0, ~ session | school/case),
+#'                       weights = varIdent(form = ~ 1 | treatment),
+#'                       data = Bryant2016)
+#' Fisher_info(Bryant2016_RML2, separate_variances = TRUE)
+#'
 #' @importFrom stats coef
 #' @importFrom stats dist
 #' @importFrom stats model.matrix
@@ -152,7 +213,7 @@ Q_matrix <- function(mod) {
 #' @importFrom stats terms
 #'
 
-Fisher_info <- function(mod, type = "expected") {
+Fisher_info <- function(mod, type = "expected", separate_variances = FALSE) {
 
   theta <- extract_varcomp(mod)
   theta_names <- vapply(strsplit(names(unlist(theta)), split = "[.]"),
@@ -265,6 +326,35 @@ Fisher_info <- function(mod, type = "expected") {
   }
 
   rownames(info) <- colnames(info) <- theta_names
+
+  # info mat for seperate variances
+  if (!is.null(mod$call$weights) & separate_variances) {
+    varFunc <- sub("\\(.*", "", mod$call$weights)[1]
+    if (varFunc == "varIdent") {
+      theta_reparam <- extract_varcomp(mod, separate_variances = TRUE)
+      theta_reparam_names <- vapply(strsplit(names(unlist(theta_reparam)), split = "[.]"),
+                            function(x) paste(unique(x), collapse = "."), character(1L))
+      r12 <- length(unlist(theta[c(1,2)]))
+      r34 <- length(unlist(theta[c(3,4)]))
+      r <- length(unlist(theta))
+      Jac_1 <- diag(1, r12)
+      Jac_2 <- matrix(0, nrow = r12, ncol = r34)
+      Jac_3 <- t(Jac_2)
+      Jac_41 <- rep(0, length(unlist(theta[3])))
+      Jac_42 <- 1
+      Jac_43 <- diag(as.numeric(theta[4])*2*(unlist(theta[3])), length(unlist(theta[3])))
+      Jac_44 <- as.numeric(unlist(theta[3])^2)
+      Jac_4 <- matrix(rbind(c(Jac_41,Jac_42), cbind(Jac_43, Jac_44)), nrow = r34)
+      Jac_mat <- matrix(rbind(cbind(Jac_1,Jac_2), cbind(Jac_3, Jac_4)), nrow = r)
+      info <- solve(t(Jac_mat)) %*% info %*% solve(Jac_mat)
+      rownames(info) <- colnames(info) <- theta_reparam_names
+    } else {
+      warning("The `Fisher_info()` returns information matrix for the variance components that includes the separate level-1 variances only when the variance structure is specified with `varIdent()` in the model.")
+    }
+  } else if (is.null(mod$call$weights) & separate_variances) {
+    warning("The separate_variance option is only relevant when the variance structure is specified with `varIdent()`.")
+  }
+
   return(info)
 
 }
@@ -298,10 +388,21 @@ Fisher_info <- function(mod, type = "expected") {
 #'                       data = Bryant2016)
 #' varcomp_vcov(Bryant2016_RML, type = "expected")
 #'
+#' Bryant2016_RML2 <- lme(fixed = outcome ~ treatment,
+#'                       random = ~ 1 | school/case,
+#'                       correlation = corAR1(0, ~ session | school/case),
+#'                       weights = varIdent(form = ~ 1 | treatment),
+#'                       data = Bryant2016)
+#' varcomp_vcov(Bryant2016_RML, separate_variances = TRUE)
+#'
 
-varcomp_vcov <- function(mod, type = "expected") {
+varcomp_vcov <- function(mod, type = "expected", separate_variances = FALSE) {
 
-  info_mat <- Fisher_info(mod, type = type)
+  if (separate_variances) {
+    info_mat <- Fisher_info(mod, type = type, separate_variances = TRUE)
+  } else {
+    info_mat <- Fisher_info(mod, type = type, separate_variances = FALSE)
+  }
 
   res <- chol2inv(chol(info_mat))
   dimnames(res) <- dimnames(info_mat)

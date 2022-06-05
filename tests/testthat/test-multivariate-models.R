@@ -124,3 +124,16 @@ test_that("Results do not depend on order of data.", {
   test_after_shuffling(bdf_wm_shuff, seed = 17)
 
 })
+
+test_that("The separate_variances option works with multivariate models.", {
+
+  bdf_MVML_no_sep <- extract_varcomp(bdf_MVML, separate_variances = FALSE)
+  bdf_MVML_sep <- extract_varcomp(bdf_MVML, separate_variances = TRUE)
+  expect_equal(names(bdf_MVML_no_sep), c("Tau", "cor_params", "var_params", "sigma_sq"))
+  expect_equal(names(bdf_MVML_sep), c("Tau", "cor_params", "sigma_sq"))
+
+  expect_equal(names(bdf_MVML_sep$sigma_sq), unique(bdf_long$measure))
+
+})
+
+
