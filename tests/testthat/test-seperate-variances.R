@@ -1,8 +1,7 @@
 library(nlme)
 data(Laski, package = "scdhlm")
 
-Laski$trt_rev <- ifelse(Laski$treatment == "treatment", "a_treatment","b_baseline")
-
+Laski$trt_rev <- factor(ifelse(Laski$treatment == "treatment", "a_treatment","b_baseline"), levels = c("a_treatment","b_baseline"))
 
 test_that("The separate_variances option works for gls() models.", {
 
@@ -29,6 +28,11 @@ test_that("The separate_variances option works for gls() models.", {
   expect_equal(names(het_gls_sep), c("cor_params", "sigma_sq"))
   expect_equal(het_gls_no_sep$cor_params, het_gls_sep$cor_params)
 
+  hte_gls_no_sep_rev <- extract_varcomp(Laski_rev_gls, separate_variances = FALSE)
+  hte_gls_sep_rev <- extract_varcomp(Laski_rev_gls, separate_variances = TRUE)
+  expect_equivalent(rev(het_gls_sep$sigma_sq), hte_gls_sep_rev$sigma_sq)
+  expect_equal(hte_gls_no_sep_rev$sigma_sq, het_gls_sep$sigma_sq[["treatment"]])
+
   data(Orthodont)
   Ortho_power <- gls(distance ~ Subject:age + Sex,
                      weights = varPower(),
@@ -40,8 +44,6 @@ test_that("The separate_variances option works for gls() models.", {
 
 test_that("The separate_variances option works for two-level lme() models.", {
 
-  # lme
-
   Laski_AR1_lme <- lme(fixed = outcome ~ treatment,
                        random = ~ treatment | case,
                        correlation = corAR1(0.2, ~ time | case),
@@ -52,10 +54,10 @@ test_that("The separate_variances option works for two-level lme() models.", {
                        weights = varIdent(form = ~ 1 | treatment),
                        data = Laski)
 
-  Laski_rev_lme <- lme(fixed = outcome ~ treatment,
-                       random = ~ treatment | case,
+  Laski_rev_lme <- lme(fixed = outcome ~ trt_rev,
+                       random = ~ trt_rev | case,
                        weights = varIdent(form = ~ 1 | trt_rev),
-                       data = Laski)
+                       data = Laski[order(Laski$case, Laski$trt_rev),])
 
   AR1_lme_no_sep <- extract_varcomp(Laski_AR1_lme, separate_variances = FALSE)
   expect_warning(AR1_lme_sep <- extract_varcomp(Laski_AR1_lme, separate_variances = TRUE))
@@ -63,7 +65,6 @@ test_that("The separate_variances option works for two-level lme() models.", {
 
   het_lme_no_sep <- extract_varcomp(Laski_het_lme, separate_variances = FALSE)
   het_lme_sep <- extract_varcomp(Laski_het_lme, separate_variances = TRUE)
-  het_lme_rev <- extract_varcomp(Laski_rev_lme, separate_variances = FALSE)
 
   expect_equal(names(het_lme_no_sep), c("Tau", "cor_params", "var_params", "sigma_sq"))
   expect_equal(names(het_lme_sep), c("Tau", "cor_params", "sigma_sq"))
@@ -74,12 +75,18 @@ test_that("The separate_variances option works for two-level lme() models.", {
     as.numeric(het_lme_sep$sigma_sq)
   )
 
+  hte_lme_no_sep_rev <- extract_varcomp(Laski_rev_lme, separate_variances = FALSE)
+  hte_lme_sep_rev <- extract_varcomp(Laski_rev_lme, separate_variances = TRUE)
+  expect_equivalent(rev(het_lme_sep$sigma_sq), hte_lme_sep_rev$sigma_sq, tolerance = 1e-5)
+  expect_equal(hte_lme_no_sep_rev$sigma_sq, het_lme_sep$sigma_sq[["treatment"]], tolerance = 1e-5)
+
 
 })
 
 test_that("The separate_variances option works for three-level models with multiple level-1 variance estimates.", {
 
   data(Thiemann2001, package = "scdhlm")
+
   Thiemann <- lme(fixed = outcome ~ time_c + treatment + trt_time,
                   random = ~ 1 | case/series,
                   correlation = corAR1(0, ~ time_c | case/series),
