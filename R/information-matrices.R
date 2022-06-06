@@ -71,7 +71,7 @@ extract_varcomp.gls <- function(mod, separate_variances = FALSE, vector = FALSE)
     var_formula <- nlme::getGroupsFormula(varStruct)
     dat <- nlme::getData(mod)
     grps <- stats::model.frame(var_formula, data = dat)
-    levels <- levels(grps[,1])
+    levels <- unique(grps[,1])
     sigma_sq_grps <- sigma_sq * c(1, var_params^2)
     names(sigma_sq_grps) <- levels
     varcomp$var_params <- NULL
@@ -176,6 +176,15 @@ Q_matrix <- function(mod) {
 #'
 #' @return Information matrix corresponding to variance component parameters of
 #'   \code{mod}.
+#'
+#'   If \code{separate_variances = TRUE} and if \code{weights = varIdent(form =
+#'   ~ 1 | Stratum)} is specified in the model fitting, the Fisher information
+#'   matrix for separate level-1 variance estimates will be returned. If
+#'   \code{separate_variances = TRUE} but if the weighting structure is not
+#'   specified with \code{varIdent}, or if \code{separate_variances = FALSE},
+#'   then the Fisher information matrix for the default variance components will
+#'   be returned.
+#'
 #'
 #' @examples
 #'
@@ -320,32 +329,27 @@ Fisher_info <- function(mod, type = "expected", separate_variances = FALSE) {
 
   rownames(info) <- colnames(info) <- theta_names
 
-  # info mat for seperate variances
-  if (!is.null(mod$call$weights) & separate_variances) {
-    varFunc <- sub("\\(.*", "", mod$call$weights)[1]
-    if (varFunc == "varIdent") {
-      theta_reparam <- extract_varcomp(mod, separate_variances = TRUE)
-      theta_reparam_names <- vapply(strsplit(names(unlist(theta_reparam)), split = "[.]"),
-                            function(x) paste(unique(x), collapse = "."), character(1L))
-      r12 <- length(unlist(theta[c(1,2)]))
-      r34 <- length(unlist(theta[c(3,4)]))
-      r <- length(unlist(theta))
-      Jac_1 <- diag(1, r12)
-      Jac_2 <- matrix(0, nrow = r12, ncol = r34)
-      Jac_3 <- t(Jac_2)
-      Jac_41 <- rep(0, length(unlist(theta[3])))
-      Jac_42 <- 1
-      Jac_43 <- diag(as.numeric(theta[4])*2*(unlist(theta[3])), length(unlist(theta[3])))
-      Jac_44 <- as.numeric(unlist(theta[3])^2)
-      Jac_4 <- matrix(rbind(c(Jac_41,Jac_42), cbind(Jac_43, Jac_44)), nrow = r34)
-      Jac_mat <- matrix(rbind(cbind(Jac_1,Jac_2), cbind(Jac_3, Jac_4)), nrow = r)
-      info <- solve(t(Jac_mat)) %*% info %*% solve(Jac_mat)
-      rownames(info) <- colnames(info) <- theta_reparam_names
-    } else {
-      warning("The `Fisher_info()` returns information matrix for the variance components that includes the separate level-1 variances only when the variance structure is specified with `varIdent()` in the model.")
-    }
-  } else if (is.null(mod$call$weights) & separate_variances) {
-    warning("The separate_variance option is only relevant when the variance structure is specified with `varIdent()`.")
+  # info mat for separate variances
+  if (!is.null(mod$call$weights) && inherits(mod$modelStruct$varStruct, "varIdent") && separate_variances) {
+    theta_reparam <- extract_varcomp(mod, separate_variances = TRUE)
+    theta_reparam_names <- vapply(strsplit(names(unlist(theta_reparam)), split = "[.]"),
+                                  function(x) paste(unique(x), collapse = "."), character(1L))
+    r12 <- length(unlist(theta[c(1,2)]))
+    r34 <- length(unlist(theta[c(3,4)]))
+    r <- length(unlist(theta))
+    Jac_inv_1 <- diag(1, r12)
+    Jac_inv_2 <- matrix(0, nrow = r12, ncol = r34)
+    Jac_inv_3 <- t(Jac_inv_2)
+    Jac_inv_41 <- -as.numeric(unlist(theta[3]))/(2*as.numeric(theta[4]))
+    Jac_inv_42 <- diag(1/(2*unlist(theta[3])*as.numeric(theta[4])), length(unlist(theta[3])))
+    Jac_inv_43 <- 1
+    Jac_inv_44 <- rep(0, length(unlist(theta[3])))
+    Jac_inv_4 <- matrix(rbind(cbind(Jac_inv_41, Jac_inv_42), c(Jac_inv_43, Jac_inv_44)), nrow = r34)
+    Jac_inv_mat <- matrix(rbind(cbind(Jac_inv_1, Jac_inv_2), cbind(Jac_inv_3, Jac_inv_4)), nrow = r)
+    info <- t(Jac_inv_mat) %*% info %*% Jac_inv_mat
+    rownames(info) <- colnames(info) <- theta_reparam_names
+  } else if (separate_variances) {
+    warning("The separate_variance option is only relevant for models with a `varIdent()` variance structure.")
   }
 
   return(info)

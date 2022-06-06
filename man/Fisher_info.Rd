@@ -20,6 +20,14 @@ Default is \code{FALSE}.}
 \value{
 Information matrix corresponding to variance component parameters of
   \code{mod}.
+
+  If \code{separate_variances = TRUE} and if \code{weights = varIdent(form =
+  ~ 1 | Stratum)} is specified in the model fitting, the Fisher information
+  matrix for separate level-1 variance estimates will be returned. If
+  \code{separate_variances = TRUE} but if the weighting structure is not
+  specified with \code{varIdent}, or if \code{separate_variances = FALSE},
+  then the Fisher information matrix for the default variance components will
+  be returned.
 }
 \description{
 Calculates the expected, observed, or average Fisher information
