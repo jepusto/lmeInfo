@@ -18,17 +18,18 @@
 #'
 #' @export
 #'
-#' @return If \code{separate_variances = TRUE} and if \code{weights =
-#'   varIdent(form = ~ 1 | Stratum)} is specified in the model fitting, separate
-#'   level-1 variance estimates will be returned for each stratum. If
-#'   \code{separate_variances = TRUE} but if the weighting structure is not
-#'   specified with \code{varIdent}, or if \code{separate_variances = FALSE},
-#'   then no separate level-1 variance estimates will be returned. If
-#'   \code{vector = FALSE}, an object of class \code{varcomp} consisting of a
+#' @return If \code{vector = FALSE}, an object of class \code{varcomp} consisting of a
 #'   list of estimated variance components. Models that do not include
 #'   correlation structure parameters or variance structure parameters will have
 #'   empty lists for those components. If \code{vector = TRUE}, a numeric vector
 #'   of estimated variance components.
+#'
+#'   If \code{separate_variances = TRUE} and if \code{weights =
+#'   varIdent(form = ~ 1 | Stratum)} is specified in the model fitting, separate
+#'   level-1 variance estimates will be returned for each stratum. If
+#'   \code{separate_variances = TRUE} but if the weighting structure is not
+#'   specified with \code{varIdent}, or if \code{separate_variances = FALSE},
+#'   then no separate level-1 variance estimates will be returned.
 #'
 #' @examples
 #'
@@ -65,22 +66,18 @@ extract_varcomp.gls <- function(mod, separate_variances = FALSE, vector = FALSE)
   varcomp <- list(cor_params = cor_params, var_params = var_params, sigma_sq = sigma_sq)
 
   # get separate variances when relevant
-  if (!is.null(mod$call$weights) & separate_variances) {
-    varFunc <- sub("\\(.*", "", mod$call$weights)[1]
-    if (varFunc == "varIdent") {
-      varStruct <- mod$modelStruct$varStruct
-      var_formula <- nlme::getGroupsFormula(varStruct)
-      dat <- nlme::getData(mod)
-      grps <- stats::model.frame(var_formula, data = dat)
-      levels <- levels(grps[,1])
-      sigma_sq_grps <- sigma_sq * c(1, var_params^2)
-      names(sigma_sq_grps) <- levels
-      varcomp <- list(cor_params = cor_params, sigma_sq = sigma_sq_grps)
-    } else {
-      warning("The `extract_varcomp()` only returns separate level-1 variances when the variance structure is specified with `varIdent()`.")
-    }
-  } else if (is.null(mod$call$weights) & separate_variances) {
-    warning("The separate_variance option is only relevant when the variance structure is specified with `varIdent()`.")
+  if (!is.null(mod$call$weights) && inherits(mod$modelStruct$varStruct, "varIdent") && separate_variances) {
+    varStruct <- mod$modelStruct$varStruct
+    var_formula <- nlme::getGroupsFormula(varStruct)
+    dat <- nlme::getData(mod)
+    grps <- stats::model.frame(var_formula, data = dat)
+    levels <- levels(grps[,1])
+    sigma_sq_grps <- sigma_sq * c(1, var_params^2)
+    names(sigma_sq_grps) <- levels
+    varcomp$var_params <- NULL
+    varcomp$sigma_sq <- sigma_sq_grps
+  } else if (separate_variances) {
+    warning("The separate_variance option is only relevant for models with a `varIdent()` variance structure.")
   }
 
   if (vector) {
@@ -120,22 +117,18 @@ extract_varcomp.lme <- function(mod, separate_variances = FALSE, vector = FALSE)
   varcomp <- list(Tau = Tau_param_list, cor_params = cor_params, var_params = var_params, sigma_sq = sigma_sq)
 
   # get separate variances when relevant
-  if (!is.null(mod$call$weights) & separate_variances) {
-    varFunc <- sub("\\(.*", "", mod$call$weights)[1]
-    if (varFunc == "varIdent") {
-      varStruct <- mod$modelStruct$varStruct
-      var_formula <- nlme::getGroupsFormula(varStruct)
-      dat <- nlme::getData(mod)
-      grps <- stats::model.frame(var_formula, data = dat)
-      levels <- unique(grps[,1])
-      sigma_sq_grps <- sigma_sq * c(1, var_params^2)
-      names(sigma_sq_grps) <- levels
-      varcomp <- list(Tau = Tau_param_list, cor_params = cor_params, sigma_sq = sigma_sq_grps)
-    } else {
-      warning("The `extract_varcomp()` only returns separate level-1 variances when the variance structure is specified with `varIdent()`")
-    }
-  } else if (is.null(mod$call$weights) & separate_variances) {
-    warning("The separate_variance option is only relevant when the variance structure is specified with `varIdent()`.")
+  if (!is.null(mod$call$weights) && inherits(mod$modelStruct$varStruct, "varIdent") && separate_variances) {
+    varStruct <- mod$modelStruct$varStruct
+    var_formula <- nlme::getGroupsFormula(varStruct)
+    dat <- nlme::getData(mod)
+    grps <- stats::model.frame(var_formula, data = dat)
+    levels <- unique(grps[,1])
+    sigma_sq_grps <- sigma_sq * c(1, var_params^2)
+    names(sigma_sq_grps) <- levels
+    varcomp$var_params <- NULL
+    varcomp$sigma_sq <- sigma_sq_grps
+  } else if (separate_variances) {
+    warning("The separate_variance option is only relevant for models with a `varIdent()` variance structure.")
   }
 
   if (vector) {

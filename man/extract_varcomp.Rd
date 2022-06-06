@@ -18,17 +18,18 @@ function to allow for different variances per stratum. Default is
 a numeric vector. Default is \code{FALSE}.}
 }
 \value{
-If \code{separate_variances = TRUE} and if \code{weights =
-  varIdent(form = ~ 1 | Stratum)} is specified in the model fitting, separate
-  level-1 variance estimates will be returned for each stratum. If
-  \code{separate_variances = TRUE} but if the weighting structure is not
-  specified with \code{varIdent}, or if \code{separate_variances = FALSE},
-  then no separate level-1 variance estimates will be returned. If
-  \code{vector = FALSE}, an object of class \code{varcomp} consisting of a
+If \code{vector = FALSE}, an object of class \code{varcomp} consisting of a
   list of estimated variance components. Models that do not include
   correlation structure parameters or variance structure parameters will have
   empty lists for those components. If \code{vector = TRUE}, a numeric vector
   of estimated variance components.
+
+  If \code{separate_variances = TRUE} and if \code{weights =
+  varIdent(form = ~ 1 | Stratum)} is specified in the model fitting, separate
+  level-1 variance estimates will be returned for each stratum. If
+  \code{separate_variances = TRUE} but if the weighting structure is not
+  specified with \code{varIdent}, or if \code{separate_variances = FALSE},
+  then no separate level-1 variance estimates will be returned.
 }
 \description{
 Extracts the estimated variance components from a fitted linear
