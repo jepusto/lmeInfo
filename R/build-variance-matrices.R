@@ -105,6 +105,12 @@ build_var_cor_mats <- function(mod, R_list = build_corr_mats(mod), sigma_scale =
   return(V_list)
 }
 
+# Get names of random effects elements in a list
+get_RE_names <- function(reStruct) {
+  Z_names <- lapply(reStruct, function(x) attr(x, "Dimnames")[[1]])
+  mapply(function(x,y) paste(x, y, sep = "."), x = names(Z_names), y = Z_names, SIMPLIFY = FALSE)
+}
+
 # Create block-diagonal covariance structure from Z-design and Tau matrices
 
 ZDZt <- function(D, Z_list) {
@@ -118,13 +124,16 @@ build_RE_mats <- function(mod, sigma_scale = FALSE) {
   # Get random effects structure
   all_groups <- rev(mod$groups)
 
+  # Get the Z matrix data
+  data <- nlme::getData(mod)
+  Z_mat <- model.matrix(mod$modelStruct$reStruc, data)
+  Z_mat <- Z_mat[complete.cases(Z_mat),,drop=FALSE]
+  row.names(Z_mat) <- NULL
+
   if (length(all_groups) == 1) {
 
     D_mat <- as.matrix(mod$modelStruct$reStruct[[1]])
     if (sigma_scale) D_mat <- mod$sigma^2 * D_mat
-    data <- nlme::getData(mod)
-    Z_mat <- model.matrix(mod$modelStruct$reStruc, data[complete.cases(data), ])
-    row.names(Z_mat) <- NULL
     Z_list <- matrix_list(Z_mat, all_groups[[1]], "row")
     ZDZ_list <- ZDZt(D_mat, Z_list)
 
@@ -136,11 +145,9 @@ build_RE_mats <- function(mod, sigma_scale = FALSE) {
     } else {
       D_list <- lapply(mod$modelStruct$reStruct, as.matrix)
     }
-    data <- nlme::getData(mod)
-    Z_mat <- model.matrix(mod$modelStruct$reStruc, data[complete.cases(data), ])
-    Z_names <- sapply(strsplit(colnames(Z_mat), ".", fixed=TRUE), function(x) x[1])
-    row.names(Z_mat) <- NULL
-    Z_levels <- lapply(names(all_groups), function(x) Z_mat[,x==Z_names,drop=FALSE])
+    Z_names <- get_RE_names(mod$modelStruct$reStruct)
+
+    Z_levels <- lapply(Z_names, function(x) Z_mat[,x,drop=FALSE])
     Z_levels <- Map(matrix_list, x = Z_levels, fac = all_groups, dim = "row")
     ZDZ_lists <- Map(ZDZt, D = D_list, Z_list = Z_levels)
     # ZDZ_lists <- Map(function(x,fac) x[order(fac)], x = ZDZ_lists, fac = all_groups)

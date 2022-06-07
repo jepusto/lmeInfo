@@ -348,5 +348,7 @@ check_against_scdhlm <- function(mod, p_lmeInfo, r_lmeInfo, p_scdhlm = p_lmeInfo
 
 check_info_dim <- function(mod, dim, type = "expected") {
   Imat <- Fisher_info(mod, type = type)
+  Vmat <- varcomp_vcov(mod, type = type)
   testthat::expect_identical(dim(Imat), rep(dim, 2))
+  testthat::expect_identical(dim(Vmat), rep(dim, 2))
 }

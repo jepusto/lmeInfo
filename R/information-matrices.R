@@ -102,9 +102,12 @@ extract_varcomp.lme <- function(mod, separate_variances = FALSE, vector = FALSE)
   names(Tau_params) <- mapply(gsub, ".sd", ".var", names(Tau_params), USE.NAMES = FALSE)
 
   # split Tau by grouping variables
-  group_names <- names(mod$groups)
-  Tau_param_list <- sapply(group_names,
-                           function(x) Tau_params[grep(x, names(Tau_params))],
+  group_names <- lapply(mod$modelStruct$reStruct, function(x) attr(x, "Dimnames")[[1]])
+  group_regx <- paste0(names(group_names), ".+\\(",lapply(group_names, paste, collapse = "|"))
+  names(group_regx) <- names(group_names)
+
+  Tau_param_list <- sapply(group_regx,
+                           function(x) Tau_params[grepl(x, names(Tau_params))],
                            simplify = FALSE, USE.NAMES = TRUE)
 
   cor_params <- as.double(coef(mod$modelStruct$corStruct, FALSE))   # correlation structure

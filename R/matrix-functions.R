@@ -121,6 +121,8 @@ prod_blockblock <- function(A, B, crosswalk = NULL) {
   A_in_B <- all(tapply(B_groups, A_groups, function(x) length(unique(x)) == 1))
 
   if (B_in_A & A_in_B) {
+    b_of_a <- tapply(B_groups, A_groups, function(x) levels(B_groups)[unique(x)])
+    if (any(names(B) != as.vector(b_of_a))) B <- B[b_of_a]
     res <- mapply(function(a, b) a %*% b, a = A, b = B, SIMPLIFY = FALSE)
   } else if (B_in_A) {
     # B is nested in A
