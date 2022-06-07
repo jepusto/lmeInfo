@@ -38,8 +38,9 @@ default), \code{"observed"}, or \code{"average"}.}
 \item{separate_variances}{Logical indicating whether to incorporate separate
 level-1 variance components in the calculation of the effect size and
 standard error for models with a `varIdent()` variance structure. If
-\code{TRUE}, make sure the \code{r_const} matches the right combination of
-the variance components. Default is \code{FALSE}.}
+\code{TRUE}, make sure the \code{r_const} matches the parameterization of
+the variance component as returned by \code{extract_varcomp(mod,
+separate_variances = TRUE)}. Default is \code{FALSE}.}
 }
 \value{
 A list with the following components \tabular{ll}{ \code{p_beta} \tab

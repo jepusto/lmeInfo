@@ -30,8 +30,9 @@
 #' @param separate_variances Logical indicating whether to incorporate separate
 #'   level-1 variance components in the calculation of the effect size and
 #'   standard error for models with a `varIdent()` variance structure. If
-#'   \code{TRUE}, make sure the \code{r_const} matches the right combination of
-#'   the variance components. Default is \code{FALSE}.
+#'   \code{TRUE}, make sure the \code{r_const} matches the parameterization of
+#'   the variance component as returned by \code{extract_varcomp(mod,
+#'   separate_variances = TRUE)}. Default is \code{FALSE}.
 #'
 #' @export
 #'
@@ -113,10 +114,10 @@ g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "exp
     stop("g_mlm() only available for lme or gls models. Please specify such a model in the 'mod_denom' argument.")
   }
 
-  theta <- extract_varcomp(mod_denom)
-  if (!is.null(mod$call$weights) && inherits(mod$modelStruct$varStruct, "varIdent") && separate_variances) {
-    theta <- extract_varcomp(mod_denom, separate_variances = TRUE)
-  }
+  theta <- extract_varcomp(mod_denom, separate_variances = separate_variances)
+  # if (!is.null(mod$call$weights) && inherits(mod$modelStruct$varStruct, "varIdent") && separate_variances) {
+  #   theta <- extract_varcomp(mod_denom, separate_variances = TRUE)
+  # }
 
   if (is.null(r_const)) {
     warning("The r_const argument was not specified. Defaulting to r_const equal to all 1's. Are you sure this is right?")
@@ -129,10 +130,10 @@ g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "exp
   cnvg_warn <- !is.null(attr(mod_denom,"warning"))                # indicator that RML estimation has not converged
 
   # calculate inverse Fisher information
-  info_inv <- varcomp_vcov(mod_denom, type = infotype)
-  if (!is.null(mod$call$weights) && inherits(mod$modelStruct$varStruct, "varIdent") && separate_variances) {
-    info_inv <- varcomp_vcov(mod_denom, type = infotype, separate_variances = TRUE)
-  }
+  info_inv <- varcomp_vcov(mod_denom, type = infotype, separate_variances = separate_variances)
+  # if (!is.null(mod$call$weights) && inherits(mod$modelStruct$varStruct, "varIdent") && separate_variances) {
+  #   info_inv <- varcomp_vcov(mod_denom, type = infotype, separate_variances = TRUE)
+  # }
 
   SE_theta <- sqrt(diag(info_inv))                                # SE of theta
   nu <- 2 * r_theta^2 / sum(tcrossprod(r_const) * info_inv)       # df
