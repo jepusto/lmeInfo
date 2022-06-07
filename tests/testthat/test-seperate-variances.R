@@ -25,6 +25,10 @@ test_that("The separate_variances option works for gls() models.", {
   expect_equal(names(het_gls_sep), c("cor_params", "sigma_sq"))
   expect_equal(het_gls_no_sep$cor_params, het_gls_sep$cor_params)
 
+  vcov_gls_sep <- varcomp_vcov(Laski_het_gls, separate_variances = TRUE)
+  vcov_gls_nosep <- varcomp_vcov(Laski_het_gls, separate_variances = FALSE)
+  expect_equal(vcov_gls_sep[1,1], vcov_gls_nosep[2,2])
+
   # Laski_rev <- Laski[order(Laski$case, Laski$trt_rev),]
   #
   # Laski_rev_gls <- gls(outcome ~ 0 + case + case:trt_rev,
@@ -41,6 +45,7 @@ test_that("The separate_variances option works for gls() models.", {
                      weights = varPower(),
                      data = Orthodont)
   expect_warning(extract_varcomp(Ortho_power, separate_variances = TRUE))
+  expect_warning(varcomp_vcov(Ortho_power, separate_variances = TRUE))
 
 })
 
@@ -85,6 +90,14 @@ test_that("The separate_variances option works for two-level lme() models.", {
   expect_equivalent(rev(het_lme_sep$sigma_sq), hte_lme_sep_rev$sigma_sq, tolerance = 1e-5)
   expect_equal(hte_lme_no_sep_rev$sigma_sq, het_lme_sep$sigma_sq[["treatment"]], tolerance = 1e-5)
 
+  vcov_lme_sep <- varcomp_vcov(Laski_het_lme, separate_variances = TRUE)
+  vcov_lme_nosep <- varcomp_vcov(Laski_het_lme, separate_variances = FALSE)
+  expect_equal(vcov_lme_sep["sigma_sq.baseline","sigma_sq.baseline"], vcov_lme_nosep["sigma_sq","sigma_sq"])
+
+  vcov_lme_sep_rev <- varcomp_vcov(Laski_rev_lme, separate_variances = TRUE)
+  vcov_lme_nosep_rev <- varcomp_vcov(Laski_rev_lme, separate_variances = FALSE)
+  expect_equal(vcov_lme_sep["sigma_sq.treatment","sigma_sq.treatment"], vcov_lme_nosep_rev["sigma_sq","sigma_sq"], tolerance = 1e-5)
+  expect_equivalent(vcov_lme_sep[4:5,4:5], vcov_lme_sep_rev[5:4,5:4], tolerance = 1e-5)
 
 })
 
