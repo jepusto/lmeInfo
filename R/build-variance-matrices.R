@@ -127,7 +127,9 @@ build_RE_mats <- function(mod, sigma_scale = FALSE) {
   # Get the Z matrix data
   data <- nlme::getData(mod)
   Z_mat <- model.matrix(mod$modelStruct$reStruc, data)
-  Z_mat <- Z_mat[complete.cases(Z_mat),,drop=FALSE]
+  if (inherits(mod$na.action, "exclude")) {
+    Z_mat <- Z_mat[!(rownames(Z_mat) %in% names(mod$na.action)),,drop=FALSE]
+  }
   row.names(Z_mat) <- NULL
 
   if (length(all_groups) == 1) {

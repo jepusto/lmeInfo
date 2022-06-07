@@ -73,7 +73,7 @@ test_that("mod2_1 and mod2_2 return the same results.", {
 test_that("Fisher_info() of mod1_1 and mod2_2 return similar output.", {
   info1 <- Fisher_info(mod1_1)[-3, -3] # remove the row and col with the cor btw intercept and slope involved
   info2 <- Fisher_info(mod2_2)
-  expect_equal(info1 > 0, info2 > 0)
+  expect_equivalent(info1 > 0, info2 > 0)
   expect_equal(sum(diag(info1)), sum(diag(info2)), tol = 100)
   expect_equal(det(info1), det(info2), tol = 1e-3)
   # expect_equal(info1[, c(1:2, 5)], info2[, c(1:2, 5)], tolerance = 4e-2)
@@ -98,13 +98,6 @@ test_that("Information matrices work with FIML with separate random effects mode
   test_with_FIML(mod1_1)
   test_with_FIML(mod1_2)
   test_with_FIML(mod2_2)
-})
-
-test_that("Info matrices work with dropped observations.", {
-  skip_on_cran()
-  test_after_deleting(mod1_1)
-  test_after_deleting(mod1_2)
-  test_after_deleting(mod2_2)
 })
 
 test_that("Info matrices work with dropped observations.", {
