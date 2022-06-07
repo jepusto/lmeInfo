@@ -4,7 +4,14 @@
 \alias{g_mlm}
 \title{Calculates adjusted mlm effect size}
 \usage{
-g_mlm(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "expected")
+g_mlm(
+  mod,
+  p_const,
+  mod_denom = mod,
+  r_const = NULL,
+  infotype = "expected",
+  separate_variances = FALSE
+)
 }
 \arguments{
 \item{mod}{Fitted model of class lmeStruct (estimated using
@@ -27,6 +34,12 @@ parameters in \code{mod_denom}.}
 
 \item{infotype}{Type of information matrix. One of \code{"expected"} (the
 default), \code{"observed"}, or \code{"average"}.}
+
+\item{separate_variances}{Logical indicating whether to incorporate separate
+level-1 variance components in the calculation of the effect size and
+standard error for models with a `varIdent()` variance structure. If
+\code{TRUE}, make sure the \code{r_const} matches the right combination of
+the variance components. Default is \code{FALSE}.}
 }
 \value{
 A list with the following components \tabular{ll}{ \code{p_beta} \tab
@@ -58,6 +71,20 @@ Bryant2016_g1 <- g_mlm(Bryant2016_RML1, p_const = c(0,1), r_const = c(1,1,0,1),
                        infotype = "expected")
 print(Bryant2016_g1)
 summary(Bryant2016_g1)
+
+
+Bryant2016_RML2 <- lme(fixed = outcome ~ treatment,
+                      random = ~ 1 | school/case,
+                      correlation = corAR1(0, ~ session | school/case),
+                      weights = varIdent(form = ~ 1 | treatment),
+                      data = Bryant2016)
+Bryant_g <- g_mlm(Bryant2016_RML2, p_const = c(0,1), r_const = c(1,1,0,0,1))
+Bryant_g_baseline <- g_mlm(Bryant2016_RML2, p_const = c(0,1), r_const = c(1,1,0,1,0), separate_variances = TRUE)
+Bryant_g_treatment <- g_mlm(Bryant2016_RML2, p_const = c(0,1), r_const = c(1,1,0,0,1), separate_variances = TRUE)
+print(Bryant_g)
+print(Bryant_g_baseline)
+print(Bryant_g_treatment)
+
 
 data(Laski, package = "scdhlm")
 Laski_AR1 <- gls(outcome ~ treatment,

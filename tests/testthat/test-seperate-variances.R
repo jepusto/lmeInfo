@@ -98,9 +98,28 @@ test_that("The separate_variances option works for three-level models with multi
                   weights = varIdent(form = ~ 1 | treatment),
                   data = Thiemann2001)
 
+  # extract_varcomp()
   Thiemann_no_sep <- extract_varcomp(Thiemann, separate_variances = FALSE)
   Thiemann_sep <- extract_varcomp(Thiemann, separate_variances = TRUE)
   expect_equal(names(Thiemann_no_sep), c("Tau", "cor_params", "var_params", "sigma_sq"))
   expect_equal(names(Thiemann_sep), c("Tau", "cor_params", "sigma_sq"))
 
+  # g_mlm()
+  g_Thiemann <- g_mlm(Thiemann, p_const = c(0,0,1,22), r_const = c(1,1,0,0,1))
+  g_Thiemann_bs <- g_mlm(Thiemann, p_const = c(0,0,1,22), r_const = c(1,1,0,1,0), separate_variances = TRUE)
+  g_Thiemann_trt <- g_mlm(Thiemann, p_const = c(0,0,1,22), r_const = c(1,1,0,0,1), separate_variances = TRUE)
+
+  expect_equal(as.numeric(g_Thiemann$SE_theta[5]), as.numeric(g_Thiemann_bs$SE_theta[4]))
+  expect_equal(g_Thiemann_bs$SE_theta, g_Thiemann_trt$SE_theta)
+
+  expect_equal(g_Thiemann$delta_AB, g_Thiemann_bs$delta_AB)
+  expect_equal(g_Thiemann$g_AB, g_Thiemann_bs$g_AB)
+  expect_equal(g_Thiemann$SE_g_AB, g_Thiemann_bs$SE_g_AB)
+  expect_equal(g_Thiemann$nu, g_Thiemann_bs$nu)
+
+  expect_true(g_Thiemann_trt$delta_AB < g_Thiemann_bs$delta_AB)
+  expect_true(g_Thiemann_trt$g_AB < g_Thiemann_bs$g_AB)
+
+
 })
+
