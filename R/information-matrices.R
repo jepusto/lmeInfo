@@ -338,19 +338,22 @@ Fisher_info <- function(mod, type = "expected", separate_variances = FALSE) {
     theta_reparam_names <- vapply(strsplit(names(unlist(theta_reparam)), split = "[.]"),
                                   function(x) paste(unique(x), collapse = "."), character(1L))
     r12 <- length(unlist(theta[c("Tau","cor_params")]))
-    r34 <- length(unlist(theta[c("var_params","sigma_sq")]))
-    r <- length(unlist(theta))
+    r3 <- length(theta$var_params)
+    r4 <- length(theta$sigma_sq)
     Jac_inv_1 <- diag(1, r12)
-    Jac_inv_2 <- matrix(0, nrow = r12, ncol = r34)
+    Jac_inv_2 <- matrix(0, nrow = r12, ncol = r3 + r4)
     Jac_inv_3 <- t(Jac_inv_2)
-    Jac_inv_41 <- -as.numeric(unlist(theta["var_params"]))/(2*as.numeric(theta["sigma_sq"]))
-    Jac_inv_42 <- diag(1/(2*unlist(theta["var_params"])*as.numeric(theta["sigma_sq"])), length(unlist(theta["var_params"])))
+    Jac_inv_41 <- -theta$var_params / (2 * theta$sigma_sq)
+    Jac_inv_42 <- diag(1 / (2 * theta$var_params * theta$sigma_sq), nrow = r3)
     Jac_inv_43 <- 1
-    Jac_inv_44 <- rep(0, length(unlist(theta["var_params"])))
-    Jac_inv_4 <- matrix(rbind(cbind(Jac_inv_41, Jac_inv_42), c(Jac_inv_43, Jac_inv_44)), nrow = r34)
-    Jac_inv_mat <- matrix(rbind(cbind(Jac_inv_1, Jac_inv_2), cbind(Jac_inv_3, Jac_inv_4)), nrow = r)
+    Jac_inv_44 <- rep(0, r3)
+    Jac_inv_4 <- matrix(rbind(cbind(Jac_inv_41, Jac_inv_42), c(Jac_inv_43, Jac_inv_44)), nrow = r3 + r4)
+
+    Jac_inv_mat <- matrix(rbind(cbind(Jac_inv_1, Jac_inv_2), cbind(Jac_inv_3, Jac_inv_4)), nrow = r12 + r3 + r4)
+
     info <- t(Jac_inv_mat) %*% info %*% Jac_inv_mat
     rownames(info) <- colnames(info) <- theta_reparam_names
+
   } else if (separate_variances) {
     warning("The separate_variance option is only relevant for models with a `varIdent()` variance structure.")
   }
