@@ -74,8 +74,14 @@
 #'                       weights = varIdent(form = ~ 1 | treatment),
 #'                       data = Bryant2016)
 #' Bryant_g <- g_mlm(Bryant2016_RML2, p_const = c(0,1), r_const = c(1,1,0,0,1))
-#' Bryant_g_baseline <- g_mlm(Bryant2016_RML2, p_const = c(0,1), r_const = c(1,1,0,1,0), separate_variances = TRUE)
-#' Bryant_g_treatment <- g_mlm(Bryant2016_RML2, p_const = c(0,1), r_const = c(1,1,0,0,1), separate_variances = TRUE)
+#' Bryant_g_baseline <- g_mlm(Bryant2016_RML2,
+#'                            p_const = c(0,1),
+#'                            r_const = c(1,1,0,1,0),
+#'                            separate_variances = TRUE)
+#' Bryant_g_treatment <- g_mlm(Bryant2016_RML2,
+#'                             p_const = c(0,1),
+#'                             r_const = c(1,1,0,0,1),
+#'                             separate_variances = TRUE)
 #' print(Bryant_g)
 #' print(Bryant_g_baseline)
 #' print(Bryant_g_treatment)
