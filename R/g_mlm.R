@@ -100,7 +100,7 @@ g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "exp
   } else if (inherits(mod, "lme")) {
     beta_coef <- nlme::fixed.effects(mod)
   } else {
-    stop("g_mlm() only available for lme or gls models. Please specify such a model in the 'mod' argument.")
+    stop("g_mlm() is only available for lme or gls models. Please specify such a model in the 'mod' argument.")
   }
 
   if (length(beta_coef) != length(p_const)) {
@@ -111,7 +111,7 @@ g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "exp
   SE_beta <- sqrt(diag(vcov(mod)))
 
   if (!inherits(mod_denom, c("gls","lme"))) {
-    stop("g_mlm() only available for lme or gls models. Please specify such a model in the 'mod_denom' argument.")
+    stop("g_mlm() is only available for lme or gls models. Please specify such a model in the 'mod_denom' argument.")
   }
 
   theta <- extract_varcomp(mod_denom, separate_variances = separate_variances)

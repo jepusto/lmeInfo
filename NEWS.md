@@ -3,6 +3,7 @@
 * Added an option to return separate level-1 variance components for models that use `weights = varIdent(form = ~ 1 | Stratum)`.
 * Generalized the `g_mlm()` function to allow use of separate models for the numerator and denominator of the effect size.
 * Modified the stored results of `g_mlm()` so that the `returnModel` argument is no longer necessary.
+* Fixed a bug in handling of models with missing observations that have `na.action` of `na.exclude()`.
 
 # lmeInfo 0.1.2
 

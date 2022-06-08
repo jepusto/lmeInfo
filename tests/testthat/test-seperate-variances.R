@@ -92,7 +92,7 @@ test_that("The separate_variances option works for two-level lme() models.", {
 
   vcov_lme_sep <- varcomp_vcov(Laski_het_lme, separate_variances = TRUE)
   vcov_lme_nosep <- varcomp_vcov(Laski_het_lme, separate_variances = FALSE)
-  expect_equal(vcov_lme_sep["sigma_sq.baseline","sigma_sq.baseline"], vcov_lme_nosep["sigma_sq","sigma_sq"])
+  expect_equivalent(vcov_lme_sep[1:4,1:4], vcov_lme_nosep[c(1:3,5),c(1:3,5)])
 
   vcov_lme_sep_rev <- varcomp_vcov(Laski_rev_lme, separate_variances = TRUE)
   vcov_lme_nosep_rev <- varcomp_vcov(Laski_rev_lme, separate_variances = FALSE)
@@ -133,6 +133,7 @@ test_that("The separate_variances option works for three-level models with multi
   expect_true(g_Thiemann_trt$delta_AB < g_Thiemann_bs$delta_AB)
   expect_true(g_Thiemann_trt$g_AB < g_Thiemann_bs$g_AB)
 
+  expect_equivalent(g_Thiemann$info_inv[c(1:3,5),c(1:3,5)], g_Thiemann_bs$info_inv[1:4,1:4])
 
 })
 
