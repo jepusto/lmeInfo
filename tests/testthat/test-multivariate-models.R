@@ -140,7 +140,7 @@ test_that("The Fisher_info() works correctly for multivariate models with a `var
 
   info_sep <- Fisher_info(bdf_MVML, separate_variances = TRUE)
 
-  # hand calculation
+  # hand calculation by index
   info <- Fisher_info(bdf_MVML, separate_variances = FALSE)
   theta <- extract_varcomp(bdf_MVML, separate_variances = FALSE)
   theta_names <- vapply(strsplit(names(unlist(theta)), split = "[.]"),

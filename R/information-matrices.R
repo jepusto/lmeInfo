@@ -337,16 +337,16 @@ Fisher_info <- function(mod, type = "expected", separate_variances = FALSE) {
     theta_reparam <- extract_varcomp(mod, separate_variances = TRUE)
     theta_reparam_names <- vapply(strsplit(names(unlist(theta_reparam)), split = "[.]"),
                                   function(x) paste(unique(x), collapse = "."), character(1L))
-    r12 <- length(unlist(theta[c(1,2)]))
-    r34 <- length(unlist(theta[c(3,4)]))
+    r12 <- length(unlist(theta[c("Tau","cor_params")]))
+    r34 <- length(unlist(theta[c("var_params","sigma_sq")]))
     r <- length(unlist(theta))
     Jac_inv_1 <- diag(1, r12)
     Jac_inv_2 <- matrix(0, nrow = r12, ncol = r34)
     Jac_inv_3 <- t(Jac_inv_2)
-    Jac_inv_41 <- -as.numeric(unlist(theta[3]))/(2*as.numeric(theta[4]))
-    Jac_inv_42 <- diag(1/(2*unlist(theta[3])*as.numeric(theta[4])), length(unlist(theta[3])))
+    Jac_inv_41 <- -as.numeric(unlist(theta["var_params"]))/(2*as.numeric(theta["sigma_sq"]))
+    Jac_inv_42 <- diag(1/(2*unlist(theta["var_params"])*as.numeric(theta["sigma_sq"])), length(unlist(theta["var_params"])))
     Jac_inv_43 <- 1
-    Jac_inv_44 <- rep(0, length(unlist(theta[3])))
+    Jac_inv_44 <- rep(0, length(unlist(theta["var_params"])))
     Jac_inv_4 <- matrix(rbind(cbind(Jac_inv_41, Jac_inv_42), c(Jac_inv_43, Jac_inv_44)), nrow = r34)
     Jac_inv_mat <- matrix(rbind(cbind(Jac_inv_1, Jac_inv_2), cbind(Jac_inv_3, Jac_inv_4)), nrow = r)
     info <- t(Jac_inv_mat) %*% info %*% Jac_inv_mat
@@ -393,16 +393,12 @@ Fisher_info <- function(mod, type = "expected", separate_variances = FALSE) {
 #'                       correlation = corAR1(0, ~ session | school/case),
 #'                       weights = varIdent(form = ~ 1 | treatment),
 #'                       data = Bryant2016)
-#' varcomp_vcov(Bryant2016_RML, separate_variances = TRUE)
+#' varcomp_vcov(Bryant2016_RML2, separate_variances = TRUE)
 #'
 
 varcomp_vcov <- function(mod, type = "expected", separate_variances = FALSE) {
 
-  if (separate_variances) {
-    info_mat <- Fisher_info(mod, type = type, separate_variances = TRUE)
-  } else {
-    info_mat <- Fisher_info(mod, type = type, separate_variances = FALSE)
-  }
+  info_mat <- Fisher_info(mod, type = type, separate_variances = separate_variances)
 
   res <- chol2inv(chol(info_mat))
   dimnames(res) <- dimnames(info_mat)

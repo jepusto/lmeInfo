@@ -115,9 +115,6 @@ g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "exp
   }
 
   theta <- extract_varcomp(mod_denom, separate_variances = separate_variances)
-  # if (!is.null(mod$call$weights) && inherits(mod$modelStruct$varStruct, "varIdent") && separate_variances) {
-  #   theta <- extract_varcomp(mod_denom, separate_variances = TRUE)
-  # }
 
   if (is.null(r_const)) {
     warning("The r_const argument was not specified. Defaulting to r_const equal to all 1's. Are you sure this is right?")
@@ -131,10 +128,6 @@ g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "exp
 
   # calculate inverse Fisher information
   info_inv <- varcomp_vcov(mod_denom, type = infotype, separate_variances = separate_variances)
-  # if (!is.null(mod$call$weights) && inherits(mod$modelStruct$varStruct, "varIdent") && separate_variances) {
-  #   info_inv <- varcomp_vcov(mod_denom, type = infotype, separate_variances = TRUE)
-  # }
-
   SE_theta <- sqrt(diag(info_inv))                                # SE of theta
   nu <- 2 * r_theta^2 / sum(tcrossprod(r_const) * info_inv)       # df
   J_nu <- 1 - 3 / (4 * nu - 1)                                    # bias-correction factor

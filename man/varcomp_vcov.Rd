@@ -43,6 +43,6 @@ Bryant2016_RML2 <- lme(fixed = outcome ~ treatment,
                       correlation = corAR1(0, ~ session | school/case),
                       weights = varIdent(form = ~ 1 | treatment),
                       data = Bryant2016)
-varcomp_vcov(Bryant2016_RML, separate_variances = TRUE)
+varcomp_vcov(Bryant2016_RML2, separate_variances = TRUE)
 
 }
