@@ -27,6 +27,12 @@
 #'   numerator and the denominator calculations.
 #' @param infotype Type of information matrix. One of \code{"expected"} (the
 #'   default), \code{"observed"}, or \code{"average"}.
+#' @param separate_variances Logical indicating whether to incorporate separate
+#'   level-1 variance components in the calculation of the effect size and
+#'   standard error for models with a `varIdent()` variance structure. If
+#'   \code{TRUE}, make sure the \code{r_const} matches the parameterization of
+#'   the variance component as returned by \code{extract_varcomp(mod,
+#'   separate_variances = TRUE)}. Default is \code{FALSE}.
 #'
 #' @export
 #'
@@ -61,6 +67,26 @@
 #' print(Bryant2016_g1)
 #' summary(Bryant2016_g1)
 #'
+#'
+#' Bryant2016_RML2 <- lme(fixed = outcome ~ treatment,
+#'                       random = ~ 1 | school/case,
+#'                       correlation = corAR1(0, ~ session | school/case),
+#'                       weights = varIdent(form = ~ 1 | treatment),
+#'                       data = Bryant2016)
+#' Bryant_g <- g_mlm(Bryant2016_RML2, p_const = c(0,1), r_const = c(1,1,0,0,1))
+#' Bryant_g_baseline <- g_mlm(Bryant2016_RML2,
+#'                            p_const = c(0,1),
+#'                            r_const = c(1,1,0,1,0),
+#'                            separate_variances = TRUE)
+#' Bryant_g_treatment <- g_mlm(Bryant2016_RML2,
+#'                             p_const = c(0,1),
+#'                             r_const = c(1,1,0,0,1),
+#'                             separate_variances = TRUE)
+#' print(Bryant_g)
+#' print(Bryant_g_baseline)
+#' print(Bryant_g_treatment)
+#'
+#'
 #' data(Laski, package = "scdhlm")
 #' Laski_AR1 <- gls(outcome ~ treatment,
 #'                  correlation = corAR1(0.2, ~ time | case),
@@ -71,7 +97,7 @@
 #' summary(Laski_AR1_g)
 #'
 
-g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "expected") {
+g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "expected", separate_variances = FALSE) {
 
   # basic model estimates
 
@@ -80,7 +106,7 @@ g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "exp
   } else if (inherits(mod, "lme")) {
     beta_coef <- nlme::fixed.effects(mod)
   } else {
-    stop("g_mlm() only available for lme or gls models. Please specify such a model in the 'mod' argument.")
+    stop("g_mlm() is only available for lme or gls models. Please specify such a model in the 'mod' argument.")
   }
 
   if (length(beta_coef) != length(p_const)) {
@@ -91,26 +117,25 @@ g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "exp
   SE_beta <- sqrt(diag(vcov(mod)))
 
   if (!inherits(mod_denom, c("gls","lme"))) {
-    stop("g_mlm() only available for lme or gls models. Please specify such a model in the 'mod_denom' argument.")
+    stop("g_mlm() is only available for lme or gls models. Please specify such a model in the 'mod_denom' argument.")
   }
 
-  theta <- extract_varcomp(mod_denom)              # full theta vector
+  theta <- extract_varcomp(mod_denom, separate_variances = separate_variances)
 
   if (is.null(r_const)) {
     warning("The r_const argument was not specified. Defaulting to r_const equal to all 1's. Are you sure this is right?")
     r_const <- rep(1L, length(unlist(theta)))
   }
 
-  r_theta <- sum(unlist(theta) * r_const)                                 # r'theta (sum of var comp)
+  r_theta <- sum(unlist(theta) * r_const)                         # r'theta (sum of var comp)
   delta_AB <- p_beta / sqrt(r_theta)                              # delta_AB
   kappa_sq <- sum(tcrossprod(p_const) * vcov(mod)) / r_theta      # kappa^2
   cnvg_warn <- !is.null(attr(mod_denom,"warning"))                # indicator that RML estimation has not converged
 
   # calculate inverse Fisher information
-  info_inv <- varcomp_vcov(mod_denom, type = infotype)
+  info_inv <- varcomp_vcov(mod_denom, type = infotype, separate_variances = separate_variances)
   SE_theta <- sqrt(diag(info_inv))                                # SE of theta
-
-  nu <- 2 * r_theta^2 / sum(tcrossprod(r_const) * info_inv)      # df
+  nu <- 2 * r_theta^2 / sum(tcrossprod(r_const) * info_inv)       # df
   J_nu <- 1 - 3 / (4 * nu - 1)                                    # bias-correction factor
   g_AB <- J_nu * delta_AB                                         # bias-corrected effect size
 

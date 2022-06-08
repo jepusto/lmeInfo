@@ -33,6 +33,9 @@ star_3L_RE_control <- lme(math ~ small + schtype + ses + sx + eth,
                           random = list(~ 1 | sch, ~ 0 + small | sch, ~ 1 | tch),
                           data = star)
 
+star_3L_RE_IID <- lme(math ~ small + schtype + ses + sx + eth,
+                          random = list(~ 1 | sch, ~ 0 + small | sch, ~ 0 + sx | sch, ~ 1 | tch),
+                          data = star)
 
 test_that("Fisher information matrices can be computed for STAR models.", {
 
@@ -42,6 +45,7 @@ test_that("Fisher information matrices can be computed for STAR models.", {
   check_info_dim(star_3L_control, 3L)
   check_info_dim(star_3L_RE, 4L)
   check_info_dim(star_3L_RE_control, 4L)
+  check_info_dim(star_3L_RE_IID, 7L)
 
 })
 
@@ -57,7 +61,7 @@ test_that("g_mlm works for STAR models.", {
 
   expect_identical(g2_basic, g2_explicit)
   expect_gt(abs(g2_basic$g_AB - g2_control$g_AB), 0)
-  expect_gt(g2_control$g_AB, g2_conditional$g_AB)
+  expect_lt(g2_control$g_AB, g2_conditional$g_AB)
 
 
   g3_basic <- g_mlm(star_3L_basic, p_const = c(0, 1), r_const = c(1, 1, 1))
@@ -70,7 +74,7 @@ test_that("g_mlm works for STAR models.", {
 
   expect_identical(g3_basic, g3_explicit)
   expect_gt(abs(g3_basic$g_AB - g3_control$g_AB), 0)
-  expect_gt(g3_control$g_AB, g3_conditional$g_AB)
+  expect_lt(g3_control$g_AB, g3_conditional$g_AB)
 
   gRE_basic <- g_mlm(star_3L_RE, p_const = c(0, 1), r_const = c(0, 1, 1, 1))
   gRE_explicit <- g_mlm(star_3L_RE, p_const = c(0, 1),
@@ -82,6 +86,6 @@ test_that("g_mlm works for STAR models.", {
 
   expect_identical(gRE_basic, gRE_explicit)
   expect_gt(abs(gRE_basic$g_AB - gRE_control$g_AB), 0)
-  expect_gt(gRE_control$g_AB, gRE_conditional$g_AB)
+  expect_lt(gRE_control$g_AB, gRE_conditional$g_AB)
 
 })

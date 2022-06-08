@@ -43,7 +43,7 @@ CI_SMD_single <- function(delta, kappa, nu, V_delta, cover, bound) {
 #'                        correlation = corAR1(0, ~ session | school/case),
 #'                        data = Bryant2016)
 #' Bryant2016_g1 <- g_mlm(Bryant2016_RML1, p_const = c(0,1), r_const = c(1,1,0,1),
-#'                        infotype = "expected", returnModel = TRUE)
+#'                        infotype = "expected")
 #' CI_g(Bryant2016_g1, symmetric = TRUE)
 #' CI_g(Bryant2016_g1, symmetric = FALSE)
 #'

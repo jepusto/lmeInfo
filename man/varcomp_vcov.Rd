@@ -5,13 +5,18 @@
 \title{Estimated sampling variance-covariance of variance component
   parameters.}
 \usage{
-varcomp_vcov(mod, type = "expected")
+varcomp_vcov(mod, type = "expected", separate_variances = FALSE)
 }
 \arguments{
 \item{mod}{Fitted model of class lmeStruct or glsStruct.}
 
-\item{type}{Type of information matrix. One of \code{"expected"} (the default),
-\code{"observed"}, or \code{"average"}.}
+\item{type}{Type of information matrix. One of \code{"expected"} (the
+default), \code{"observed"}, or \code{"average"}.}
+
+\item{separate_variances}{Logical indicating whether to return the Fisher
+information matrix for separate level-1 variance components if using
+\code{varIdent} function to allow for different variances per stratum.
+Default is \code{FALSE}.}
 }
 \value{
 Sampling variance-covariance matrix corresponding to variance
@@ -32,5 +37,12 @@ Bryant2016_RML <- lme(fixed = outcome ~ treatment,
                       correlation = corAR1(0, ~ session | school/case),
                       data = Bryant2016)
 varcomp_vcov(Bryant2016_RML, type = "expected")
+
+Bryant2016_RML2 <- lme(fixed = outcome ~ treatment,
+                      random = ~ 1 | school/case,
+                      correlation = corAR1(0, ~ session | school/case),
+                      weights = varIdent(form = ~ 1 | treatment),
+                      data = Bryant2016)
+varcomp_vcov(Bryant2016_RML2, separate_variances = TRUE)
 
 }
