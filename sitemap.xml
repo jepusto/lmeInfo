@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jepusto.github.io/lmeInfo/404.html</loc>
+  </url>
+  <url>
+    <loc>https://jepusto.github.io/lmeInfo/articles/Information-matrices-for-fitted-LME-models.html</loc>
+  </url>
+  <url>
+    <loc>https://jepusto.github.io/lmeInfo/articles/Standardized-mean-differences-in-multi-level-models.html</loc>
+  </url>
+  <url>
+    <loc>https://jepusto.github.io/lmeInfo/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://jepusto.github.io/lmeInfo/authors.html</loc>
+  </url>
+  <url>
     <loc>https://jepusto.github.io/lmeInfo/index.html</loc>
+  </url>
+  <url>
+    <loc>https://jepusto.github.io/lmeInfo/news/index.html</loc>
   </url>
   <url>
     <loc>https://jepusto.github.io/lmeInfo/reference/Bryant2016.html</loc>
@@ -19,12 +37,9 @@
     <loc>https://jepusto.github.io/lmeInfo/reference/g_mlm.html</loc>
   </url>
   <url>
+    <loc>https://jepusto.github.io/lmeInfo/reference/index.html</loc>
+  </url>
+  <url>
     <loc>https://jepusto.github.io/lmeInfo/reference/varcomp_vcov.html</loc>
-  </url>
-  <url>
-    <loc>https://jepusto.github.io/lmeInfo/articles/Information-matrices-for-fitted-LME-models.html</loc>
-  </url>
-  <url>
-    <loc>https://jepusto.github.io/lmeInfo/articles/Standardized-mean-differences-in-multi-level-models.html</loc>
   </url>
 </urlset>

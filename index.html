@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">lmeInfo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3.9999</span>
       </span>
     </div>
 
@@ -55,7 +55,7 @@
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -75,8 +75,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/jepusto/lmeInfo">
-    <span class="fas fa-github"></span>
+  <a href="https://github.com/jepusto/lmeInfo" class="external-link">
+    <span class="fa fa-github"></span>
      
   </a>
 </li>
@@ -98,19 +98,18 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="lmeinfo" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#lmeinfo" class="anchor"></a>lmeInfo</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="lmeinfo">lmeInfo<a class="anchor" aria-label="anchor" href="#lmeinfo"></a>
+</h1></div>
 <!-- badges: start -->
-
-<div id="information-matrices-for-fitted-lme-and-gls-models" class="section level2">
-<h2 class="hasAnchor">
-<a href="#information-matrices-for-fitted-lme-and-gls-models" class="anchor"></a>Information matrices for fitted <code>lme</code> and <code>gls</code> models</h2>
+<div class="section level2">
+<h2 id="information-matrices-for-fitted-lme-and-gls-models">Information matrices for fitted <code>lme</code> and <code>gls</code> models<a class="anchor" aria-label="anchor" href="#information-matrices-for-fitted-lme-and-gls-models"></a>
+</h2>
 <p><code>lmeInfo</code> provides analytic derivatives and information matrices for fitted linear mixed effects (lme) models and generalized least squares (gls) models estimated using <code><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">nlme::lme()</a></code> and <code><a href="https://rdrr.io/pkg/nlme/man/gls.html" class="external-link">nlme::gls()</a></code>, respectively. The package includes functions for estimating the sampling variance-covariance of variance component parameters using the inverse Fisher information. The variance components include the parameters of the random effects structure (for lme models), the variance structure, and the correlation structure. The expected and average forms of the Fisher information matrix are used in the calculations, and models estimated by full maximum likelihood or restricted maximum likelihood are supported. The package also includes a function for estimating standardized mean difference effect sizes (Pustejovsky et al., 2014) based on fitted <code>lme</code> or <code>gls</code> models.</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>You can install the released version of lmeInfo from <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"lmeInfo"</span><span class="op">)</span></code></pre></div>
@@ -119,9 +118,9 @@
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"jepusto/lmeInfo"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="demonstration" class="section level2">
-<h2 class="hasAnchor">
-<a href="#demonstration" class="anchor"></a>Demonstration</h2>
+<div class="section level2">
+<h2 id="demonstration">Demonstration<a class="anchor" aria-label="anchor" href="#demonstration"></a>
+</h2>
 <p>We use a dataset from a multiple baseline study conducted by Bryant and colleagues (2016) to demonstrate how <code>lmeInfo</code> estimates the sampling variance-covariance of variance component parameters of fitted LME models. We also show how to calculate a design-comparable standardized mean difference effect size based on the fitted model.</p>
 <p>The study by Bryant and colleagues (2016) involved collecting repeated measures of math performance on multiple students, in each of three schools. After an initial baseline period in each school, an intervention was introduced and its effects on student math performance were observed over time. For sake of illustration, we use a very simple model for these data, consisting of a simple change in levels coinciding with the introduction of treatment. We include random effects for each school and each student. Here we fit the model using <code><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">nlme::lme()</a></code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -188,9 +187,9 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; attr(,"class")</span>
 <span class="co">#&gt; [1] "varcomp"</span></code></pre></div>
-<div id="sampling-variance-covariance-of-variance-component-parameters" class="section level3">
-<h3 class="hasAnchor">
-<a href="#sampling-variance-covariance-of-variance-component-parameters" class="anchor"></a>Sampling variance-covariance of variance component parameters</h3>
+<div class="section level3">
+<h3 id="sampling-variance-covariance-of-variance-component-parameters">Sampling variance-covariance of variance component parameters<a class="anchor" aria-label="anchor" href="#sampling-variance-covariance-of-variance-component-parameters"></a>
+</h3>
 <p>The sampling variance-covariance of variance component parameters of model <code>Bryant2016_RML</code> can be estimated using <code><a href="reference/varcomp_vcov.html">varcomp_vcov()</a></code> in <code>lmeInfo</code>. Setting <code>type = "expected"</code> will calculate the sampling variance-covariance of variance component parameters using the inverse expected Fisher information. Setting <code>type = "average"</code> will calculate the inverse of the average Fisher information matrix (Gilmour, Thompson, &amp; Cullis, 1995).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/varcomp_vcov.html">varcomp_vcov</a></span><span class="op">(</span><span class="va">Bryant2016_RML</span>, type <span class="op">=</span> <span class="st">"expected"</span><span class="op">)</span>
@@ -199,9 +198,9 @@
 <span class="co">#&gt; Tau.case.var((Intercept))                 -4.547418e+03               16045.57184 -32.27967543</span>
 <span class="co">#&gt; sigma_sq                                   6.132317e-02                 -32.27968 801.20973947</span></code></pre></div>
 </div>
-<div id="estimating-a-standardized-mean-difference-effect-size" class="section level3">
-<h3 class="hasAnchor">
-<a href="#estimating-a-standardized-mean-difference-effect-size" class="anchor"></a>Estimating a standardized mean difference effect size</h3>
+<div class="section level3">
+<h3 id="estimating-a-standardized-mean-difference-effect-size">Estimating a standardized mean difference effect size<a class="anchor" aria-label="anchor" href="#estimating-a-standardized-mean-difference-effect-size"></a>
+</h3>
 <p>The package also includes a function, <code><a href="reference/g_mlm.html">g_mlm()</a></code>, for estimating a standardized mean difference effect size from a fitted multi-level model. The estimation methods follow Pustejovsky, Hedges, and Shadish (2014). A standardized mean difference effect size parameter can be defined as the ratio of a linear combination of the model’s fixed effect parameters over the square root of a linear combination of the model’s variance components. The <code><a href="reference/g_mlm.html">g_mlm()</a></code> function takes as inputs a fitted multi-level model and the vectors <code>p_const</code> and <code>r_const</code>, which define the linear combinations of fixed effects and variance components, respectively. The function calculates an effect size estimate by first substituting maximum likelihood or restricted maximum likelihood estimates in place of the corresponding parameters, then applying a small-sample correction. The small-sample correction and the standard error are based on approximating the distribution of the estimator by a t distribution, with degrees of freedom given by a Satterthwaite approximation (Pustejovsky, Hedges, &amp; Shadish, 2014). The <code><a href="reference/g_mlm.html">g_mlm()</a></code> function includes an option allowing use of the expected or average form of the Fisher information matrix in the calculations. The <code><a href="reference/g_mlm.html">g_mlm()</a></code> function also includes an option allowing returning the fitted model parameters in addition to effect size estimate.</p>
 <p>In our model for the Bryant data, we use the treatment effect in the numerator of the effect size and the sum of the school-level, student-level, and within-student variance components in the denominator of the effect size. The constants are therefore given by <code>p_const = c(0, 1)</code> and <code>r_const = c(1, 1, 1)</code>. The effect size estimate can be calculated as:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -230,21 +229,19 @@
 <span class="co">#&gt; logLik                               -1308.786</span></code></pre></div>
 </div>
 </div>
-<div id="supported-model-components" class="section level2">
-<h2 class="hasAnchor">
-<a href="#supported-model-components" class="anchor"></a>Supported model components</h2>
+<div class="section level2">
+<h2 id="supported-model-components">Supported model components<a class="anchor" aria-label="anchor" href="#supported-model-components"></a>
+</h2>
 <p>The <code><a href="reference/Fisher_info.html">Fisher_info()</a></code> and <code><a href="reference/varcomp_vcov.html">varcomp_vcov()</a></code> functions operate on fitted <code><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme()</a></code> and <code><a href="https://rdrr.io/pkg/nlme/man/gls.html" class="external-link">gls()</a></code> models. Models fitted using <code><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme()</a></code> can include three types of variance component parameters: random effects variances and covariances, correlation structure parameters, and variance structure parameters. Models fitted using <code><a href="https://rdrr.io/pkg/nlme/man/gls.html" class="external-link">gls()</a></code> can include correlation structure parameters and variance structure parameters. The <code>nlme</code> package provides many different forms for each of these components, not all of which are supported in <code>lmeInfo</code>. The package can handle the following classes of variance components:</p>
 <ul>
-<li>Random effects structure
-<ul>
+<li>Random effects structure<ul>
 <li>
 <code>pdSymm</code> matrices, including in the <code>pdLogChol</code> and <code>pdNatural</code> parameterizations</li>
 <li>
 <code>pdDiag</code> matrices</li>
 </ul>
 </li>
-<li>Correlation structure
-<ul>
+<li>Correlation structure<ul>
 <li><code>corAR1</code></li>
 <li><code>corCAR1</code></li>
 <li>
@@ -253,8 +250,7 @@
 <li><code>corSymm</code></li>
 </ul>
 </li>
-<li>Variance structure
-<ul>
+<li>Variance structure<ul>
 <li><code>varIdent</code></li>
 <li><code>varExp</code></li>
 <li><code>varPower</code></li>
@@ -264,14 +260,14 @@
 </ul>
 <p>Calling <code><a href="reference/Fisher_info.html">Fisher_info()</a></code> or <code><a href="reference/varcomp_vcov.html">varcomp_vcov()</a></code> on a fitted model that includes variance component structures outside of the supported classes will trigger an informative error message.</p>
 </div>
-<div id="related-work" class="section level2">
-<h2 class="hasAnchor">
-<a href="#related-work" class="anchor"></a>Related work</h2>
+<div class="section level2">
+<h2 id="related-work">Related work<a class="anchor" aria-label="anchor" href="#related-work"></a>
+</h2>
 <p>The <code>lmeInfo</code> package enhances the functionality of the <a href="https://cran.r-project.org/package=nlme" class="external-link"><code>nlme</code> package</a>. However, it does not work on <code><a href="https://rdrr.io/pkg/nlme/man/nlme.html" class="external-link">nlme()</a></code> models. The <a href="https://CRAN.R-project.org/package=merDeriv" class="external-link"><code>merDeriv</code> package</a> (Wang &amp; Merkle, 2018) provides some related functionality for linear mixed effects models estimated with <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lme4::lmer()</a></code>, including variance-covariance matrices for estimaed variance components based on the inverse of the expected or observed Fisher information. Currently, the functionality in <code>merDeriv</code> is limited to models with only one level of random effects.</p>
 </div>
-<div id="references" class="section level2">
-<h2 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h2>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <p>Bryant, B. R., Bryant, D. P., Porterfield, J., Dennis, M. S., Falcomata, T., Valentine, C., … &amp; Bell, K. (2016). The effects of a Tier 3 intervention on the mathematics performance of second grade students with severe mathematics difficulties. <em>Journal of Learning Disabilities, 49</em>(2), 176-188. <a href="https://doi.org/10.1177/0022219414538516" class="external-link uri">https://doi.org/10.1177/0022219414538516</a></p>
 <p>Gilmour, A. R., Thompson, R., &amp; Cullis, B. R. (1995). Average information REML: An efficient algorithm for variance parameter estimation in linear mixed models. <em>Biometrics, 51</em>(4), 1440–1450. <a href="https://doi.org/10.2307/2533274" class="external-link uri">https://doi.org/10.2307/2533274</a></p>
 <p>Pustejovsky, J. E., Hedges, L. V., &amp; Shadish, W. R. (2014). Design-comparable effect sizes in multiple baseline designs: A general modeling framework. <em>Journal of Educational and Behavioral Statistics, 39</em>(5), 368–393. <a href="https://doi.org/10.3102/1076998614547577" class="external-link uri">https://doi.org/10.3102/1076998614547577</a></p>
@@ -284,28 +280,32 @@
     <div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=lmeInfo">https://​cloud.r-project.org/​package=lmeInfo</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/jepusto/lmeInfo">https://​github.com/​jepusto/​lmeInfo</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/jepusto/lmeInfo/issues">https://​github.com/​jepusto/​lmeInfo/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=lmeInfo" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/jepusto/lmeInfo" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/jepusto/lmeInfo/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
 <div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
 
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing lmeInfo</a></li>
+</ul>
+</div>
 
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://www.jepusto.com/">James Pustejovsky</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-0591-9465" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<a href="https://www.jepusto.com/" class="external-link">James Pustejovsky</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-0591-9465" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Man Chen <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
@@ -332,7 +332,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
 </div>
 
       </footer>

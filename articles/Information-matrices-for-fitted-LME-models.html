@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">lmeInfo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3.9999</span>
       </span>
     </div>
 
@@ -45,7 +45,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -66,7 +66,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/jepusto/lmeInfo" class="external-link">
-    <span class="fas fa-github"></span>
+    <span class="fa fa-github"></span>
      
   </a>
 </li>
@@ -91,7 +91,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Information matrices for fitted <code>lme()</code> and <code>gls()</code> models</h1>
             
-            <h4 data-toc-skip class="date">2021-03-05</h4>
+            <h4 data-toc-skip class="date">2022-06-10</h4>
       
       
       <div class="hidden name"><code>Information-matrices-for-fitted-LME-models.Rmd</code></div>
@@ -112,9 +112,9 @@
 \]</span></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#library(lmeInfo)</span></code></pre></div>
-<div id="notation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#notation" class="anchor"></a>Notation</h1>
+<div class="section level2">
+<h2 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a>
+</h2>
 <p>In what follows, we will use the following symbols for matrix operations. Let <span class="math inline">\(\bigoplus\)</span> denote the Kronecker sum, which creates a block-diagonal matrix from a sequence of sub-matrices. Thus, for matrices <span class="math inline">\(\bmat{A}_1,...,\bmat{A}_m\)</span>, <span class="math display">\[
 \bigoplus_{i=1}^m \bmat{A}_i = \left[\begin{array}{cccc}
 \bmat{A}_1 &amp; \bmat{0} &amp; \cdots &amp; \bmat{0} \\ 
@@ -133,9 +133,9 @@ a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B} \\
 \bmat{I}_m \bigotimes \bmat{B} = \bigoplus_{i=1}^m \bmat{B}.
 \]</span></p>
 </div>
-<div id="hierarchical-linear-models" class="section level1">
-<h1 class="hasAnchor">
-<a href="#hierarchical-linear-models" class="anchor"></a>Hierarchical linear models</h1>
+<div class="section level2">
+<h2 id="hierarchical-linear-models">Hierarchical linear models<a class="anchor" aria-label="anchor" href="#hierarchical-linear-models"></a>
+</h2>
 <p>We shall be concerned with hierarchical linear models fitted by full maximum likelihood (FML) or restricted maximum likelihood (RML) using the <code><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme()</a></code> function from R package <code>nlme</code>. Consider a set of observations from each of <span class="math inline">\(m\)</span> groups, where group <span class="math inline">\(i\)</span> has <span class="math inline">\(n_i\)</span> observations for <span class="math inline">\(i = 1,...,m\)</span> and <span class="math inline">\(N = \sum_{i=1}^m n_i\)</span>. Let <span class="math inline">\(y_{hi}\)</span> denote the outcome measure and <span class="math inline">\(\bmat{x}_{hi}\)</span> denote a <span class="math inline">\(p \times 1\)</span> row vector of fixed predictor variables, both for observation <span class="math inline">\(h\)</span> from group <span class="math inline">\(i\)</span>. Let <span class="math inline">\(\bmat{y}_i = (y_{1i} \cdots y_{n_i i})'\)</span> be the <span class="math inline">\(n_i \times 1\)</span> vector of outcomes and <span class="math inline">\(\bmat{X}_i = \left(\bmat{x}_{1i}' \cdots \bmat{x}_{n_ii}'\right)'\)</span> be the <span class="math inline">\(n_i \times p\)</span> design matrix of predictors for group <span class="math inline">\(i\)</span>. Hierarchical <code>lme</code> models have the form <span class="math display">\[
 \bmat{y}_i = \bmat{X}_i \bs\beta + \bmat{Z}_i \bs\eta_i + \bs\epsilon_i
 \]</span> where <span class="math inline">\(\bmat{Z}_i\)</span> is a <span class="math inline">\(n_i \times q_i\)</span> design matrix describing random effects for group <span class="math inline">\(i\)</span>, <span class="math inline">\(\bs\beta\)</span> is a <span class="math inline">\(p \times 1\)</span> vector of regression coefficients, <span class="math inline">\(\bs\eta_i\)</span> is a <span class="math inline">\(q_i \times 1\)</span> vector of random effects, and <span class="math inline">\(\bs\epsilon_i\)</span> is a <span class="math inline">\(n_i \times 1\)</span> vector of observation-specific errors. We assume that <span class="math display">\[
@@ -157,13 +157,13 @@ a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B} \\
 \bmat{V} = \bmat{Z} \bmat{T} \bmat{Z}' + \sigma^2 \bmat{S} \bmat{R} \bmat{S}
 \]</span></p>
 </div>
-<div id="estimation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#estimation" class="anchor"></a>Estimation</h1>
+<div class="section level2">
+<h2 id="estimation">Estimation<a class="anchor" aria-label="anchor" href="#estimation"></a>
+</h2>
 <p>Fitting hierarchical models by FML or RML entails estimating both the fixed effect coefficients <span class="math inline">\(\bs\beta\)</span> and the parameters of the random effects structure, variance structure, and correlation structure. Let <span class="math inline">\(\bs\theta = \left(\bs\tau', \bs\psi', \bs\phi',\sigma^2 \right)'\)</span> denote the vector collecting of all of the latter parameters, with a total of <span class="math inline">\(r\)</span> unique entries.</p>
-<div id="fixed-effect-estimation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#fixed-effect-estimation" class="anchor"></a>Fixed effect estimation</h2>
+<div class="section level3">
+<h3 id="fixed-effect-estimation">Fixed effect estimation<a class="anchor" aria-label="anchor" href="#fixed-effect-estimation"></a>
+</h3>
 <p>For explanatory purposes, it is helpful to begin by considering estimation of the fixed effects, supposing that <span class="math inline">\(\bs\theta\)</span> is known (and thus, that that the marginal variance-covariances <span class="math inline">\(\bmat{V}_i\)</span> are known). In this case, the only unknowns are the fixed effects <span class="math inline">\(\bs\beta\)</span>, which can be estimated efficiently using weighted least squares (WLS). The WLS estimator of <span class="math inline">\(\bs\beta\)</span> is given by <span class="math display">\[
 \hat{\bs\beta} = \bmat{M} \bmat{X}' \bmat{V}^{-1} \bmat{y}, \qquad \text{where} \qquad \bmat{M} = \left(\bmat{X}' \bmat{V}^{-1} \bmat{X}\right)^{-1}.
 \]</span> Assuming that the variance parameters are known, the sampling distribution of <span class="math inline">\(\hat{\bs\beta}\)</span> is multivariate normal with mean <span class="math inline">\(\bs\beta\)</span> and covariance matrix <span class="math display">\[
@@ -172,9 +172,9 @@ a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B} \\
 \hat{\bmat{M}} = \bmat{M}(\hat{\bs\theta}) = \left(\bmat{X}' \hat{\bmat{V}}^{-1} \bmat{X}\right)^{-1}.
 \]</span> It is known that <span class="math inline">\(\hat{\bmat{M}}\)</span> tends to underestimate the true covariance of <span class="math inline">\(\hat{\bs\beta}\)</span> when <span class="math inline">\(m\)</span> is small. Kenward and Roger <span class="citation">(1997, 2009)</span> proposed more elaborate covariance estimators and hypothesis testing procedures for use in small samples.</p>
 </div>
-<div id="variance-parameter-estimation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#variance-parameter-estimation" class="anchor"></a>Variance parameter estimation</h2>
+<div class="section level3">
+<h3 id="variance-parameter-estimation">Variance parameter estimation<a class="anchor" aria-label="anchor" href="#variance-parameter-estimation"></a>
+</h3>
 <p>The feasible WLS estimator is based on estimates of the variance parameters. In <code>lme</code>, FML and RML estimators for these parameters are obtained by maximizing the log likelihood or restricted log likelihood of the model via iterative numerical methods. Following <span class="citation">Lindstrom &amp; Bates (1988)</span>, -2 times the full log likelihood is given by <span class="math display">\[
 -2 l_F\left(\bs\beta, \bs\theta\right) = \log \left|\bmat{V}(\bs\theta)\right| + \bmat{r}' \bmat{V}^{-1}(\bs\theta)\bmat{r},
 \]</span> where <span class="math inline">\(\bmat{r} = \bmat{y} - \bmat{X} \bs\beta\)</span> and <span class="math inline">\(\left| \cdot \right|\)</span> denotes the norm of a matrix. Similarly, -2 times the restricted log likelihood (which is a function of <span class="math inline">\(\bs\theta\)</span> alone) is given by <span class="math display">\[
@@ -183,15 +183,15 @@ a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B} \\
 \bmat{Q}(\bs\theta) = \bmat{V}^{-1}(\bs\theta) - \bmat{V}^{-1}(\bs\theta) \bmat{X} \left(\bmat{X}' \bmat{V}^{-1}(\bs\theta) \bmat{X}\right)^{-1} \bmat{X}' \bmat{V}^{-1}(\bs\theta).
 \]</span> Let <span class="math inline">\(\hat{\bs\theta}_F\)</span> and <span class="math inline">\(\hat{\bs\theta}_R\)</span> denote the FML and RML estimators of the variance parameters, respectively. Let <span class="math inline">\(\hat{\bs\theta}\)</span> be a generic estimator of the variance parameters (i.e., either the FML or RML estimator).</p>
 </div>
-<div id="sampling-variance-of-variance-parameters" class="section level2">
-<h2 class="hasAnchor">
-<a href="#sampling-variance-of-variance-parameters" class="anchor"></a>Sampling variance of variance parameters</h2>
+<div class="section level3">
+<h3 id="sampling-variance-of-variance-parameters">Sampling variance of variance parameters<a class="anchor" aria-label="anchor" href="#sampling-variance-of-variance-parameters"></a>
+</h3>
 <p>The analyst might need to obtain estimates of the uncertainty in <span class="math inline">\(\hat{\bs\theta}\)</span>, either for purposes of inference or as a component of small-sample approximations for other statistics. For purposes of inference, a recommended approach to obtain a confidence interval for a single component of <span class="math inline">\(\bs\theta\)</span> is to use profile likelihood methods. Another approach is to use approximations based on the information matrix of the full or restricted likelihood. The inverse of the observed, expected, or average Fisher information provides an approximate estimate of <span class="math inline">\(\Var(\hat{\bs\theta})\)</span>, valid as the number of groups grows large. Thus, define <span class="math display">\[
 \bmat{C}(\hat{\bs\theta}) = \Info^{-1},
 \]</span> where <span class="math inline">\(\Info\)</span> is the observed, expected, or average information matrix. We now define these matrices in detail.</p>
-<div id="restricted-maximum-likelihood" class="section level3">
-<h3 class="hasAnchor">
-<a href="#restricted-maximum-likelihood" class="anchor"></a>Restricted maximum likelihood</h3>
+<div class="section level4">
+<h4 id="restricted-maximum-likelihood">Restricted maximum likelihood<a class="anchor" aria-label="anchor" href="#restricted-maximum-likelihood"></a>
+</h4>
 <p>The observed information is the negative Hessian matrix (-1 times the matrix of second derivatives) of the log likelihood, evaluated using the full or restricted maximum likelihood estimator of <span class="math inline">\(\theta\)</span>. For RML estimators, the observed information matrix has entries <span class="math display">\[
 \begin{aligned}
 \Info^{RO}_{st} &amp;= \left. -\frac{\partial^2 l_R(\bs\theta)}{\partial \theta_s \partial \theta_t} \right|_{\bs\theta = \hat{\bs\theta}} \\
@@ -211,9 +211,9 @@ a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B} \\
 \bmat{C}(\hat{\bs\theta}) = \left(\nabla_\xi h \right) \left[\Jnfo^{-1}\right] \left(\nabla_\xi h \right)',
 \]</span> where <span class="math inline">\(\nabla_\xi h\)</span> is evaluated at <span class="math inline">\(\hat{\bs\xi}\)</span>.</p>
 </div>
-<div id="full-maximum-likelihood" class="section level3">
-<h3 class="hasAnchor">
-<a href="#full-maximum-likelihood" class="anchor"></a>Full maximum likelihood</h3>
+<div class="section level4">
+<h4 id="full-maximum-likelihood">Full maximum likelihood<a class="anchor" aria-label="anchor" href="#full-maximum-likelihood"></a>
+</h4>
 <p>For FML estimators, the entries of the observed information matrix involve <span class="math inline">\(\bs\beta\)</span> in addition to <span class="math inline">\(\bs\theta\)</span>. The entries for <span class="math inline">\(\bs\theta\)</span> are <span class="math display">\[
 \begin{aligned}
 \Info^{FO}_{st} &amp;= \left. -\frac{\partial^2 l_F(\bs\beta, \bs\theta)}{\partial \theta_s \partial \theta_t} \right|_{\bs\theta = \hat{\bs\theta}} \\ 
@@ -230,9 +230,9 @@ a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B} \\
 </div>
 </div>
 </div>
-<div id="references" class="section level1 unnumbered">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <div id="refs" class="references">
 <div id="ref-Gilmour2009ASReml">
 <p>Gilmour, A. R., Gogel, B. J., Cullis, B. R., &amp; Thompson, R. (2009). <em>ASReml User Guide</em>.</p>
@@ -265,12 +265,12 @@ a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B} \\
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by <a href="https://www.jepusto.com/" class="external-link external-link">James Pustejovsky</a>, Man Chen.</p>
+<p>Developed by <a href="https://www.jepusto.com/" class="external-link">James Pustejovsky</a>, Man Chen.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
 </div>
 
       </footer>
