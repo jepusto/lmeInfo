@@ -93,9 +93,9 @@ build_var_cor_mats <- function(mod, R_list = build_corr_mats(mod), sigma_scale =
     if (is.null(mod$modelStruct$varStruct)) {
       V_list <- if (sigma_scale) lapply(R_list, function(x) x * mod$sigma^2) else R_list
     } else {
-      sort_order <- get_sort_order(mod)
-      sd_vec <- sigma / as.numeric(nlme::varWeights(mod$modelStruct$varStruct))[sort_order]
-      sd_list <- split(sd_vec, attr(R_list, "groups"))
+      cor_grps <- attr(mod$modelStruct$corStruct, "groups")
+      sd_vec <- sigma / as.numeric(nlme::varWeights(mod$modelStruct$varStruct))
+      sd_list <- split(sd_vec, cor_grps)
       V_list <- Map(function(R, s) tcrossprod(s) * R, R = R_list, s = sd_list)
     }
 

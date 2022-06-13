@@ -99,12 +99,18 @@ test_deriv_dims.lme <- function(mod) {
   vc_est <- extract_varcomp(mod)
   m <- mod$dims$ngrps[names(vc_est$Tau)]
   ni <- lapply(mod$groups[names(vc_est$Tau)], table)
-  G <- length(vc_est$Tau)
+  # G <- length(vc_est$Tau)
 
   if (!is.null(mod$modelStruct$reStruct)) {
     d_Tau <- dV_dreStruct(mod)[names(vc_est$Tau)]
     testthat::expect_identical(lengths(d_Tau), lengths(vc_est$Tau))
     mapply(expect_correct_block_dims, x = d_Tau, m = m, ni = ni)
+  }
+
+  if (!is.null(mod$modelStruct$corStruct)) {
+    cor_groups <- get_cor_grouping(mod)
+    m <- c(nlevels(cor_groups), m)
+    ni <- c(cor = list(table(cor_groups)), ni)
   }
 
   d_cor <- dV_dcorStruct(mod)
@@ -207,7 +213,7 @@ test_after_deleting <- function(mod, seed = NULL) {
 
 }
 
-test_after_shuffling <- function(mod, by_var = NULL,
+test_after_shuffling <- function(mod, keep_rows = NULL, by_var = NULL,
                                  tol_param = 10^-3, tol_info = 10^-3,
                                  test = "info", seed = NULL) {
 
@@ -215,10 +221,12 @@ test_after_shuffling <- function(mod, by_var = NULL,
 
   dat <- nlme::getData(mod)
 
-  if (is.null(by_var)) {
-    shuffle <- sample(nrow(dat))
-  } else {
+  if (!is.null(keep_rows)) {
+    shuffle <- c(1:keep_rows, sample((keep_rows + 1):nrow(dat)))
+  } else if (!is.null(by_var)) {
     shuffle <- unsplit(tapply(1:nrow(dat), by_var, sample), by_var)
+  } else {
+    shuffle <- sample(nrow(dat))
   }
   unshuffle <- order(shuffle)
   dat_shuffle <- dat[shuffle,]

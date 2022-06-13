@@ -243,19 +243,15 @@ dV_dvarStruct <- function(mod) {
   # No derivatives if there's no variance structure or only varFixed structure
   if (is.null(mod$modelStruct$varStruct) | inherits(mod$modelStruct$varStruct,"varFixed")) return(NULL)
 
-  # all_groups <- rev(mod$groups)
-  # sort_order <- order(do.call(order, all_groups))
-  sort_order <- get_sort_order(mod)
-
   dsd_dvar <- dsd_dvarStruct(mod$modelStruct$varStruct)
-
-  dsd_dvar <- lapply(dsd_dvar, function(x) x[sort_order]) # reorder based on input data
-
   R_list <- build_corr_mats(mod)
 
-  wts <- nlme::varWeights(mod$modelStruct$varStruct)[sort_order]
-
   if (is.null(R_list)) {
+    sort_order <- get_sort_order(mod)
+
+    dsd_dvar <- lapply(dsd_dvar, function(x) x[sort_order]) # reorder based on input data
+
+    wts <- nlme::varWeights(mod$modelStruct$varStruct)[sort_order]
 
     dV_dvar <- lapply(dsd_dvar, function(d) 2 * d * mod$sigma^2 / wts)
 
@@ -268,9 +264,10 @@ dV_dvarStruct <- function(mod) {
     })
 
   } else {
-    grps <- attr(R_list, "groups")
-    sigmasq_S_list <- split(mod$sigma^2 / wts, grps)
-    dsd_list <- lapply(dsd_dvar, split, f = grps)
+    cor_grps <- attr(mod$modelStruct$corStruct, "groups")
+    wts <- nlme::varWeights(mod$modelStruct$varStruct)
+    sigmasq_S_list <- split(mod$sigma^2 / wts, cor_grps)
+    dsd_list <- lapply(dsd_dvar, split, f = cor_grps)
     dV_list <- lapply(dsd_list, sdRds, sd_list = sigmasq_S_list, R_list = R_list)
 
   }
