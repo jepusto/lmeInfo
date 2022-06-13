@@ -1,4 +1,7 @@
 library(nlme)
+
+skip_if_not_installed("scdhlm")
+
 data(Laski, package = "scdhlm")
 
 Laski_iid <- lme(fixed = outcome ~ treatment,
