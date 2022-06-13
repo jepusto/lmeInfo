@@ -71,6 +71,7 @@
 <li>Generalized the <code><a href="../reference/g_mlm.html">g_mlm()</a></code> function to allow use of separate models for the numerator and denominator of the effect size.</li>
 <li>Modified the stored results of <code><a href="../reference/g_mlm.html">g_mlm()</a></code> so that the <code>returnModel</code> argument is no longer necessary.</li>
 <li>Fixed a bug in handling of models with missing observations that have <code>na.action</code> of <code><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.exclude()</a></code>.</li>
+<li>Fixed a bug in internal functions for constructing level-1 variance covariance structures in models with multi-variate structure (i.e., models with non-null <code>modelStruct$corStruct</code>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.2" id="lmeinfo-012">lmeInfo 0.1.2<small>2020-11-12</small><a class="anchor" aria-label="anchor" href="#lmeinfo-012"></a></h2>
