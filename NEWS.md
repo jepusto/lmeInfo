@@ -4,6 +4,7 @@
 * Generalized the `g_mlm()` function to allow use of separate models for the numerator and denominator of the effect size.
 * Modified the stored results of `g_mlm()` so that the `returnModel` argument is no longer necessary.
 * Fixed a bug in handling of models with missing observations that have `na.action` of `na.exclude()`.
+* Fixed a bug in internal functions for constructing level-1 variance covariance structures in models with multi-variate structure (i.e., models with non-null `modelStruct$corStruct`).
 
 # lmeInfo 0.1.2
 

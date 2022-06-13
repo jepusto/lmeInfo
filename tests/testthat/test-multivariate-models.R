@@ -16,39 +16,17 @@ bdf_long <-
 
 bdf_MV2L <- lme(score ~ 0 + measure,
                 random = ~ 1| schoolNR,
-                corr = corSymm(form = ~ 1 | schoolNR / pupilNR),
+                corr = corCompSymm(form = ~ 1 | schoolNR / pupilNR),
                 weights = varIdent(form = ~ 1 | measure),
                 data = bdf_long,
-                control = lmeControl(maxIter = 200, msMaxIter = 200, apVar = FALSE, returnObject = TRUE))
+                control = lmeControl(maxIter = 200, msMaxIter = 200, tolerance = 1e-8, opt = "optim", niterEM = 50))
 
 bdf_MV3L <- lme(score ~ 0 + measure,
                 random = ~ 1| schoolNR / pupilNR,
-                corr = corSymm(form = ~ 1 | schoolNR / pupilNR),
+                corr = corCompSymm(form = ~ 1 | schoolNR / pupilNR),
                 weights = varIdent(form = ~ 1 | measure),
                 data = bdf_long,
-                control = lmeControl(msMaxIter = 200, apVar = FALSE, returnObject = TRUE))
-
-mod <- bdf_MV3L
-keep_rows <- 72
-set.seed(20)
-dat <- nlme::getData(mod)
-shuffle <- c(1:keep_rows, sample((keep_rows + 1):nrow(dat)))
-dat_shuffle <- dat[shuffle,]
-
-mod_shuffle <- suppressWarnings(stats::update(mod, data = dat_shuffle))
-varcomp_orig <- extract_varcomp(mod)
-varcomp_shuf <- extract_varcomp(mod_shuffle)
-cbind(unlist(varcomp_orig), unlist(varcomp_shuf))
-testthat::expect_equal(varcomp_orig, varcomp_shuf, tolerance = 1e-3)
-
-test_after_shuffling(bdf_MV2L, seed = 25)
-test_after_shuffling(bdf_MV3L, seed = 20)
-test_after_shuffling(bdf_MV2L, by_var = bdf_long$pupilNR, seed = 25)
-test_after_shuffling(bdf_MV3L, by_var = bdf_long$pupilNR, seed = 20)
-test_after_shuffling(bdf_MV2L, by_var = bdf_long$schoolNR, seed = 25)
-test_after_shuffling(bdf_MV3L, by_var = bdf_long$schoolNR, seed = 20)
-test_after_shuffling(bdf_MV2L, keep_rows = 72, seed = 25)
-test_after_shuffling(bdf_MV3L, keep_rows = 72, seed = 20)
+                control = lmeControl(maxIter = 200, msMaxIter = 200, tolerance = 1e-8, opt = "optim", niterEM = 50))
 
 # introduce random missing to bdf_long
 set.seed(20200311)
