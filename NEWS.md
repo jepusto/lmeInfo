@@ -1,4 +1,4 @@
-# lmeInfo 0.1.3.9999
+# lmeInfo 0.2.0
 
 * Added an option to return separate level-1 variance components for models that use `weights = varIdent(form = ~ 1 | Stratum)`.
 * Generalized the `g_mlm()` function to allow use of separate models for the numerator and denominator of the effect size.
