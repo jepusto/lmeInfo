@@ -1,0 +1,67 @@
+
+R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 
+> if ( requireNamespace("tinytest", quietly=TRUE) ){
++   tinytest::test_package("merDeriv")
++ }
+Loading required package: lme4
+Loading required package: Matrix
+Loading required package: nonnest2
+This is nonnest2 0.5-5.
+nonnest2 has not been tested with all combinations of model classes.
+Loading required package: sandwich
+Loading required package: lavaan
+This is lavaan 0.6-11
+lavaan is FREE software! Please report any bugs.
+test_merDeriv.R...............    0 tests    test_merDeriv.R...............    0 tests    Loading required package: stats4
+Loading required package: lattice
+
+Attaching package: 'mirt'
+
+The following object is masked from 'package:lme4':
+
+    fixef
+
+test_merDeriv.R...............    0 tests    
+Attaching package: 'nlme'
+
+The following object is masked from 'package:mirt':
+
+    fixef
+
+The following object is masked from 'package:lme4':
+
+    lmList
+
+test_merDeriv.R...............    0 tests    test_merDeriv.R...............    0 tests    test_merDeriv.R...............    0 tests    test_merDeriv.R...............    1 tests [0;32mOK[0m test_merDeriv.R...............    1 tests [0;32mOK[0m test_merDeriv.R...............    2 tests [0;32mOK[0m test_merDeriv.R...............    2 tests [0;32mOK[0m test_merDeriv.R...............    2 tests [0;32mOK[0m test_merDeriv.R...............    2 tests [0;32mOK[0m test_merDeriv.R...............    3 tests [0;32mOK[0m test_merDeriv.R...............    4 tests [0;32mOK[0m test_merDeriv.R...............    4 tests [0;32mOK[0m test_merDeriv.R...............    4 tests [0;32mOK[0m test_merDeriv.R...............    4 tests [0;32mOK[0m test_merDeriv.R...............    4 tests [0;32mOK[0m test_merDeriv.R...............    4 tests [0;32mOK[0m test_merDeriv.R...............    4 tests [0;32mOK[0m test_merDeriv.R...............    4 tests [0;32mOK[0m test_merDeriv.R...............    5 tests [0;32mOK[0m test_merDeriv.R...............    6 tests [0;32mOK[0m test_merDeriv.R...............    7 tests [0;32mOK[0m test_merDeriv.R...............    8 tests [0;32mOK[0m test_merDeriv.R...............    8 tests [0;32mOK[0m test_merDeriv.R...............    9 tests [0;32mOK[0m test_merDeriv.R...............    9 tests [0;32mOK[0m test_merDeriv.R...............    9 tests [0;32mOK[0m test_merDeriv.R...............   10 tests [0;32mOK[0m test_merDeriv.R...............   11 tests [0;32mOK[0m test_merDeriv.R...............   11 tests [0;32mOK[0m test_merDeriv.R...............   12 tests [0;32mOK[0m test_merDeriv.R...............   12 tests [0;32mOK[0m test_merDeriv.R...............   12 tests [0;32mOK[0m test_merDeriv.R...............   13 tests [0;32mOK[0m test_merDeriv.R...............   14 tests [0;32mOK[0m test_merDeriv.R...............   14 tests [0;32mOK[0m test_merDeriv.R...............   14 tests [0;32mOK[0m test_merDeriv.R...............   14 tests [0;32mOK[0m test_merDeriv.R...............   14 tests [0;32mOK[0m test_merDeriv.R...............   14 tests [0;32mOK[0m test_merDeriv.R...............   14 tests [0;32mOK[0m test_merDeriv.R...............   14 tests [0;32mOK[0m test_merDeriv.R...............   14 tests [0;32mOK[0m test_merDeriv.R...............   14 tests [0;32mOK[0m test_merDeriv.R...............   15 tests [0;32mOK[0m test_merDeriv.R...............   15 tests [0;32mOK[0m test_merDeriv.R...............   15 tests [0;32mOK[0m test_merDeriv.R...............   16 tests [0;32mOK[0m test_merDeriv.R...............   17 tests [0;32mOK[0m test_merDeriv.R...............   17 tests [0;32mOK[0m test_merDeriv.R...............   17 tests [0;32mOK[0m test_merDeriv.R...............   17 tests [0;32mOK[0m test_merDeriv.R...............   17 tests [0;32mOK[0m test_merDeriv.R...............   17 tests [0;32mOK[0m test_merDeriv.R...............   18 tests [0;32mOK[0m test_merDeriv.R...............   19 tests [0;32mOK[0m test_merDeriv.R...............   19 tests [0;32mOK[0m test_merDeriv.R...............   19 tests [0;32mOK[0m test_merDeriv.R...............   19 tests [0;32mOK[0m test_merDeriv.R...............   19 tests [0;32mOK[0m test_merDeriv.R...............   20 tests [0;32mOK[0m test_merDeriv.R...............   20 tests [0;32mOK[0m test_merDeriv.R...............   20 tests [0;32mOK[0m test_merDeriv.R...............   20 tests [0;32mOK[0m test_merDeriv.R...............   21 tests [0;32mOK[0m test_merDeriv.R...............   22 tests [0;32mOK[0m test_merDeriv.R...............   23 tests [0;32mOK[0m [0;34m1.3s[0m
+All ok, 23 results (1m 16.6s)
+Warning messages:
+1: package 'lme4' was built under R version 4.1.3 
+2: package 'Matrix' was built under R version 4.1.3 
+3: package 'nonnest2' was built under R version 4.1.3 
+4: package 'sandwich' was built under R version 4.1.3 
+5: package 'lavaan' was built under R version 4.1.3 
+6: package 'mirt' was built under R version 4.1.3 
+7: package 'lattice' was built under R version 4.1.3 
+8: package 'nlme' was built under R version 4.1.3 
+9: package 'lmeInfo' was built under R version 4.1.3 
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  76.89    0.82   77.71 

@@ -1,0 +1,9 @@
+Bryant2016              Bryant et al. (2016)
+CI_g                    Calculates a confidence interval for a
+                        standardized mean difference effect size
+Fisher_info             Calculate expected, observed, or average Fisher
+                        information matrix
+extract_varcomp         Extract estimated variance components
+g_mlm                   Calculates adjusted mlm effect size
+varcomp_vcov            Estimated sampling variance-covariance of
+                        variance component parameters.

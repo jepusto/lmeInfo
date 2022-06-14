@@ -12,3 +12,5 @@ vignettes/Standardized-mean-differences-in-multi-level-models.Rmd
 ^docs$
 ^pkgdown$
 ^\.github$
+revdep
+^revdep$

@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Calculates adjusted mlm effect size</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for g_mlm {lmeInfo}"><tr><td>g_mlm {lmeInfo}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Calculates adjusted mlm effect size</h2>
+
+<h3>Description</h3>
+
+<p>Estimates a standardized mean difference effect size from a
+fitted multi-level model, using restricted or full maximum likelihood
+methods with small-sample correction, as described in Pustejovsky, Hedges,
+&amp; Shadish (2014).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+g_mlm(
+  mod,
+  p_const,
+  mod_denom = mod,
+  r_const = NULL,
+  infotype = "expected",
+  separate_variances = FALSE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mod</code></td>
+<td>
+<p>Fitted model of class lmeStruct (estimated using
+<code>nlme::lme()</code>) or of class glsStruct (estimated using
+<code>nlme::gls()</code>), from which to estimate the numerator of the effect
+size.</p>
+</td></tr>
+<tr valign="top"><td><code>p_const</code></td>
+<td>
+<p>Vector of constants for calculating numerator of effect size.
+Must be the same length as fixed effects in <code>mod</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>mod_denom</code></td>
+<td>
+<p>Fitted model of class lmeStruct (estimated using
+<code>nlme::lme()</code>) or of class glsStruct (estimated using
+<code>nlme::gls()</code>), from which to estimate the denominator of the effect
+size. If not otherwise specified, the same model will be used for the
+numerator and the denominator calculations.</p>
+</td></tr>
+<tr valign="top"><td><code>r_const</code></td>
+<td>
+<p>Vector of constants for calculating denominator of effect
+size. Must be the same length as the number of variance component
+parameters in <code>mod_denom</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>infotype</code></td>
+<td>
+<p>Type of information matrix. One of <code>"expected"</code> (the
+default), <code>"observed"</code>, or <code>"average"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>separate_variances</code></td>
+<td>
+<p>Logical indicating whether to incorporate separate
+level-1 variance components in the calculation of the effect size and
+standard error for models with a 'varIdent()' variance structure. If
+<code>TRUE</code>, make sure the <code>r_const</code> matches the parameterization of
+the variance component as returned by <code>extract_varcomp(mod,
+separate_variances = TRUE)</code>. Default is <code>FALSE</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A list with the following components </p>
+
+<table summary="Rd table">
+<tr>
+ <td style="text-align: left;"> <code>p_beta</code> </td><td style="text-align: left;">
+  Numerator of effect size </td>
+</tr>
+<tr>
+ <td style="text-align: left;"> <code>r_theta</code> </td><td style="text-align: left;"> Squared denominator of
+  effect size </td>
+</tr>
+<tr>
+ <td style="text-align: left;"> <code>delta_AB</code> </td><td style="text-align: left;"> Unadjusted (mlm) effect size estimate
+  </td>
+</tr>
+<tr>
+ <td style="text-align: left;"> <code>nu</code> </td><td style="text-align: left;"> Estimated denominator degrees of freedom </td>
+</tr>
+<tr>
+ <td style="text-align: left;"> <code>J_nu</code>
+  </td><td style="text-align: left;"> Biased correction factor for effect size estimate </td>
+</tr>
+<tr>
+ <td style="text-align: left;"> <code>kappa</code>
+  </td><td style="text-align: left;"> Scaled standard error of numerator </td>
+</tr>
+<tr>
+ <td style="text-align: left;"> <code>g_AB</code> </td><td style="text-align: left;"> Corrected
+  effect size estimate </td>
+</tr>
+<tr>
+ <td style="text-align: left;"> <code>SE_g_AB</code> </td><td style="text-align: left;"> Approximate standard error
+  estimate </td>
+</tr>
+<tr>
+ <td style="text-align: left;"> <code>cnvg_warn</code> </td><td style="text-align: left;"> Indicator that model did not converge
+  </td>
+</tr>
+<tr>
+ <td style="text-align: left;"> <code>theta</code> </td><td style="text-align: left;"> Estimated variance component parameters </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+  <code>info_inv</code> </td><td style="text-align: left;"> Inversed information matrix </td>
+</tr>
+<tr>
+ <td style="text-align: left;"> </td>
+</tr>
+
+</table>
+
+
+
+<h3>References</h3>
+
+<p>Pustejovsky, J. E., Hedges, L. V., &amp; Shadish, W. R. (2014).
+Design-comparable effect sizes in multiple baseline designs: A general
+modeling framework. <em>Journal of Educational and Behavioral Statistics,
+39</em>(4), 211-227. doi: <a href="https://doi.org/10.3102/1076998614547577">10.3102/1076998614547577</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+library(nlme)
+data(Bryant2016, package = "lmeInfo")
+Bryant2016_RML1 &lt;- lme(fixed = outcome ~ treatment,
+                       random = ~ 1 | school/case,
+                       correlation = corAR1(0, ~ session | school/case),
+                       data = Bryant2016)
+Bryant2016_g1 &lt;- g_mlm(Bryant2016_RML1, p_const = c(0,1), r_const = c(1,1,0,1),
+                       infotype = "expected")
+print(Bryant2016_g1)
+summary(Bryant2016_g1)
+
+
+Bryant2016_RML2 &lt;- lme(fixed = outcome ~ treatment,
+                      random = ~ 1 | school/case,
+                      correlation = corAR1(0, ~ session | school/case),
+                      weights = varIdent(form = ~ 1 | treatment),
+                      data = Bryant2016)
+Bryant_g &lt;- g_mlm(Bryant2016_RML2, p_const = c(0,1), r_const = c(1,1,0,0,1))
+Bryant_g_baseline &lt;- g_mlm(Bryant2016_RML2,
+                           p_const = c(0,1),
+                           r_const = c(1,1,0,1,0),
+                           separate_variances = TRUE)
+Bryant_g_treatment &lt;- g_mlm(Bryant2016_RML2,
+                            p_const = c(0,1),
+                            r_const = c(1,1,0,0,1),
+                            separate_variances = TRUE)
+print(Bryant_g)
+print(Bryant_g_baseline)
+print(Bryant_g_treatment)
+
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>lmeInfo</em> version 0.2.0 <a href="00Index.html">Index</a>]</div>
+</body></html>
