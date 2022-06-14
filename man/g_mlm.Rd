@@ -93,15 +93,6 @@ print(Bryant_g_baseline)
 print(Bryant_g_treatment)
 
 
-data(Laski, package = "scdhlm")
-Laski_AR1 <- gls(outcome ~ treatment,
-                 correlation = corAR1(0.2, ~ time | case),
-                 data = Laski)
-Laski_AR1_g <- g_mlm(Laski_AR1, p_const = c(0,1), r_const = c(0,1),
-                     infotype = "expected")
-print(Laski_AR1_g)
-summary(Laski_AR1_g)
-
 }
 \references{
 Pustejovsky, J. E., Hedges, L. V., & Shadish, W. R. (2014).
