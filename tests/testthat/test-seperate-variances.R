@@ -1,6 +1,7 @@
 library(nlme)
-data(Laski, package = "scdhlm")
+skip_if_not_installed("scdhlm")
 
+data(Laski, package = "scdhlm")
 
 Laski$trt_rev <- factor(ifelse(Laski$treatment == "treatment", "a_treatment","b_baseline"), levels = c("a_treatment","b_baseline"))
 

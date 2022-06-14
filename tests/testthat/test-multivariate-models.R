@@ -1,3 +1,7 @@
+skip_if_not_installed("dplyr")
+skip_if_not_installed("tidyr")
+skip_if_not_installed("mlmRev")
+
 suppressWarnings(library(dplyr, warn.conflicts = FALSE, quietly = TRUE))
 library(tidyr, quietly = TRUE)
 library(nlme)

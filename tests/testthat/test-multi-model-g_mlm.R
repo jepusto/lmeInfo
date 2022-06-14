@@ -1,5 +1,7 @@
 library(nlme, quietly=TRUE, warn.conflicts=FALSE)
 
+skip_if_not_installed("mlmRev")
+
 data(star, package = "mlmRev")
 
 star <- subset(star, gr == 3 & !is.na(math))

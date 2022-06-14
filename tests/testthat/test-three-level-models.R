@@ -1,5 +1,7 @@
 library(nlme)
 
+skip_if_not_installed("scdhlm")
+
 # Thiemann 2001
 
 data(Thiemann2001, package = "scdhlm")

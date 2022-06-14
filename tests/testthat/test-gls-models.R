@@ -1,5 +1,8 @@
 library(nlme, quietly=TRUE, warn.conflicts=FALSE)
 
+skip_if_not_installed("carData")
+skip_if_not_installed("scdhlm")
+
 data(Hartnagel, package = "carData")
 
 Hart_AR <- gls(fconvict ~ tfr + partic + degrees + mconvict,
