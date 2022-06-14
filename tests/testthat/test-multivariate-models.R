@@ -1,22 +1,27 @@
-skip_if_not_installed("dplyr")
-skip_if_not_installed("tidyr")
 skip_if_not_installed("mlmRev")
 
-suppressWarnings(library(dplyr, warn.conflicts = FALSE, quietly = TRUE))
-library(tidyr, quietly = TRUE)
 library(nlme)
 
 data(bdf, package = "mlmRev")
 
 bdf_long <-
-  bdf %>%
-  filter(schoolNR %in% levels(schoolNR)[1:12]) %>%
-  droplevels() %>%
-  pivot_longer(cols = c(IQ.verb, IQ.perf, aritPRET),
-               names_to = "measure",
-               values_to = "score") %>%
-  select(schoolNR, pupilNR, sex, Minority, measure, score) %>%
-  arrange(schoolNR, pupilNR, measure)
+  bdf |>
+  subset(
+    schoolNR %in% levels(schoolNR)[1:12],
+    select = c(schoolNR, pupilNR, sex, Minority, IQ.verb, IQ.perf, aritPRET)
+  ) |>
+  droplevels() |>
+  reshape(
+    direction = "long",
+    idvar = "pupilNR",
+    varying = c("IQ.verb","IQ.perf","aritPRET"),
+    v.names = "score",
+    timevar = "measure",
+    times = c("IQ.verb","IQ.perf","aritPRET")
+  )
+
+bdf_long_order <- with(bdf_long, order(schoolNR, pupilNR, measure))
+bdf_long <- bdf_long[bdf_long_order,]
 
 bdf_MV2L <- lme(score ~ 0 + measure,
                 random = ~ 1| schoolNR,
@@ -38,24 +43,28 @@ bdf_long$school_id <- bdf_long$schoolNR
 levels(bdf_long$school_id) <- LETTERS[1:nlevels(bdf_long$school_id)]
 
 bdf_long_wm <-
-  bdf_long %>%
-  mutate(
-    row_index = rbinom(n = n(), size = 1, prob = 0.9),
-    score = if_else(row_index == 1, score, as.numeric(NA)),
+  bdf_long |>
+  within({
+    row_index = rbinom(n = nrow(bdf_long), size = 1, prob = 0.9)
+    score = ifelse(row_index == 1, score, as.numeric(NA))
     measure_id = as.integer(factor(measure))
-  ) %>%
-  filter(!is.na(score)) %>%
-  select(-row_index) %>%
-  arrange(schoolNR, pupilNR, measure_id)
+  }) |>
+  subset(
+    !is.na(score),
+    select = -row_index
+  )
+
+row_numbers <- 1:nrow(bdf_long_wm)
 
 bdf_long_shuff <-
-  bdf_long_wm %>%
-  mutate(
-    index = if_else(schoolNR == 1, row_number(), sample(row_number())),
-    id = if_else(schoolNR == 1, "A","B")
-  ) %>%
-  arrange(id, index) %>%
-  mutate(row_number = row_number())
+  bdf_long_wm |>
+  within({
+    index = ifelse(schoolNR == 1, row_numbers, sample(row_numbers))
+    id = ifelse(schoolNR == 1, "A","B")
+  })
+
+bdf_shuff_order <- with(bdf_long_shuff, order(id, index))
+bdf_long_shuff <- bdf_long_shuff[bdf_shuff_order,]
 
 bdf_wm <- lme(score ~ 0 + measure,
               random = ~ 1| schoolNR / pupilNR,

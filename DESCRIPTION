@@ -29,15 +29,13 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Depends:
-    R (>= 3.5.0)
+    R (>= 4.1.0)
 Suggests: 
     covr,
     testthat (>= 2.1.0),
     knitr,
     rmarkdown,
     scdhlm,
-    dplyr,
-    tidyr,
     mlmRev,
     carData,
     lme4,
