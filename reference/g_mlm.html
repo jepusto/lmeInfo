@@ -20,7 +20,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">lmeInfo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3.9999</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -83,7 +83,8 @@
   mod_denom <span class="op">=</span> <span class="va">mod</span>,
   r_const <span class="op">=</span> <span class="cn">NULL</span>,
   infotype <span class="op">=</span> <span class="st">"expected"</span>,
-  separate_variances <span class="op">=</span> <span class="cn">FALSE</span>
+  separate_variances <span class="op">=</span> <span class="cn">FALSE</span>,
+  <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -127,6 +128,10 @@ standard error for models with a `varIdent()` variance structure. If
 <code>TRUE</code>, make sure the <code>r_const</code> matches the parameterization of
 the variance component as returned by <code>extract_varcomp(mod,
 separate_variances = TRUE)</code>. Default is <code>FALSE</code>.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>further arguments.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -208,31 +213,6 @@ separate_variances = TRUE)</code>. Default is <code>FALSE</code>.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> adjusted effect size    0.625 0.139</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> degree of freedom      20.109      </span>
 <span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Laski</span>, package <span class="op">=</span> <span class="st">"scdhlm"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">Laski_AR1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/gls.html" class="external-link">gls</a></span><span class="op">(</span><span class="va">outcome</span> <span class="op">~</span> <span class="va">treatment</span>,</span>
-<span class="r-in">                 correlation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/corAR1.html" class="external-link">corAR1</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="op">~</span> <span class="va">time</span> <span class="op">|</span> <span class="va">case</span><span class="op">)</span>,</span>
-<span class="r-in">                 data <span class="op">=</span> <span class="va">Laski</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">Laski_AR1_g</span> <span class="op">&lt;-</span> <span class="fu">g_mlm</span><span class="op">(</span><span class="va">Laski_AR1</span>, p_const <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>, r_const <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>,</span>
-<span class="r-in">                     infotype <span class="op">=</span> <span class="st">"expected"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Laski_AR1_g</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           est    se</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> unadjusted effect size  1.461 0.285</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> adjusted effect size    1.440 0.281</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> degree of freedom      52.836      </span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">Laski_AR1_g</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                           est     se</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cor_params                              0.646  0.070</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq                              414.141 80.575</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> total variance                        414.141 80.575</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)                            40.175  4.363</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> treatmenttreatment                     29.723  4.894</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> treatment effect at a specified time   29.723  4.894</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> unadjusted effect size                  1.461  0.285</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> adjusted effect size                    1.440  0.281</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> degree of freedom                      52.836       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> constant kappa                          0.240       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> logLik                               -529.156       </span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
