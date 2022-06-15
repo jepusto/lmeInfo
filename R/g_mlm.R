@@ -33,6 +33,7 @@
 #'   \code{TRUE}, make sure the \code{r_const} matches the parameterization of
 #'   the variance component as returned by \code{extract_varcomp(mod,
 #'   separate_variances = TRUE)}. Default is \code{FALSE}.
+#' @param ... further arguments.
 #'
 #' @export
 #'
@@ -88,7 +89,7 @@
 #'
 #'
 
-g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "expected", separate_variances = FALSE) {
+g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "expected", separate_variances = FALSE, ...) {
 
   # basic model estimates
 

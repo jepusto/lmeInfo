@@ -10,7 +10,8 @@ g_mlm(
   mod_denom = mod,
   r_const = NULL,
   infotype = "expected",
-  separate_variances = FALSE
+  separate_variances = FALSE,
+  ...
 )
 }
 \arguments{
@@ -41,6 +42,8 @@ standard error for models with a `varIdent()` variance structure. If
 \code{TRUE}, make sure the \code{r_const} matches the parameterization of
 the variance component as returned by \code{extract_varcomp(mod,
 separate_variances = TRUE)}. Default is \code{FALSE}.}
+
+\item{...}{further arguments.}
 }
 \value{
 A list with the following components \tabular{ll}{ \code{p_beta} \tab
