@@ -1,4 +1,3 @@
-skip_if(getRversion() < '4.1.0')
 skip_if_not_installed("mlmRev")
 
 library(nlme)
