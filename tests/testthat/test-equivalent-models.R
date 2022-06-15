@@ -1,4 +1,6 @@
 library(nlme)
+skip_if_not_installed("scdhlm")
+
 data(Thiemann2001, package = "scdhlm")
 
 Thiemann2001 <- Thiemann2001[sample(nrow(Thiemann2001)),]

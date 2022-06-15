@@ -1,0 +1,942 @@
+
+R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "scdhlm"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> library('scdhlm')
+Loading required package: nlme
+Warning: package 'nlme' was built under R version 4.1.3
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("CI_g")
+> ### * CI_g
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: CI_g
+> ### Title: Calculates a confidence interval for a standardized mean
+> ###   difference effect size
+> ### Aliases: CI_g
+> 
+> ### ** Examples
+> 
+> data(Laski)
+> Laski_RML <- lme(fixed = outcome ~ treatment,
++                  random = ~ 1 | case,
++                  correlation = corAR1(0, ~ time | case),
++                  data = Laski)
+> Laski_g_REML <- suppressWarnings(
++   g_REML(Laski_RML, p_const = c(0,1), 
++          r_const = c(1,0,1), returnModel = FALSE)
++ )
+> CI_g(Laski_g_REML, symmetric = TRUE)
+[1] 0.8046224 2.0051521
+> CI_g(Laski_g_REML, symmetric = FALSE)
+[1] 0.9143684 2.0046719
+> 
+> Laski_HPS <- with(Laski, effect_size_MB(outcome, treatment, case, time))
+> CI_g(Laski_HPS, symmetric = FALSE)
+[1] 0.8786207 2.0639828
+> 
+> Laski_g_mlm <- g_mlm(Laski_RML, p_const = c(0,1), r_const = c(1,0,1), returnModel = TRUE)
+> CI_g(Laski_g_mlm, symmetric = FALSE)
+[1] 0.9143684 2.0046719
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Info_Expected_lmeAR1")
+> ### * Info_Expected_lmeAR1
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Info_Expected_lmeAR1
+> ### Title: Calculate expected information matrix
+> ### Aliases: Info_Expected_lmeAR1
+> 
+> ### ** Examples
+> 
+> data(Laski)
+> Laski_RML <- lme(fixed = outcome ~ treatment, 
++                  random = ~ 1 | case, 
++                  correlation = corAR1(0, ~ time | case), 
++                  data = Laski)
+> Info_Expected_lmeAR1(Laski_RML)
+              [,1]          [,2]         [,3]
+[1,]  1.601686e-03  -0.210945594 5.092243e-06
+[2,] -2.109456e-01 127.633048124 1.874239e-03
+[3,]  5.092243e-06   0.001874239 4.954985e-05
+> 
+> 
+> 
+> cleanEx()
+> nameEx("compare_RML_HPS")
+> ### * compare_RML_HPS
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: compare_RML_HPS
+> ### Title: Run simulation comparing REML and HPS estimates
+> ### Aliases: compare_RML_HPS
+> 
+> ### ** Examples
+> 
+> compare_RML_HPS(iterations=10, beta = c(0,1,0,0), rho = 0.3, 
++                  phi = 0.5, design=design_matrix(m=3,n=8))
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+                          mean          var
+p_beta               0.9077489  0.158202584
+r_theta              0.9529089  0.234830850
+delta_AB             0.9985131  0.253532582
+nu                   8.4227680 21.274229415
+kappa                0.3839161  0.003612749
+g_AB                 0.8978772  0.237751092
+V_g_AB               0.2499170  0.006746447
+cnvg_warn            0.0000000  0.000000000
+sigma_sq             0.7623287  0.144869016
+phi                  0.4784752  0.076848861
+Tau.id.var(constant) 0.1905803  0.085392625
+rho                  0.1656703  0.050275401
+RML_coverage1        0.9000000  0.100000000
+RML_coverage2        0.9000000  0.100000000
+D_bar                0.8296460  0.113043417
+S_sq                 0.9484359  0.302966608
+delta_hat_unadj      0.9227701  0.196020628
+phi_hat              0.1732025  0.022875108
+rho_hat              0.4104146  0.069666948
+kappa_hat            0.3399752  0.008598349
+df                   7.3861443 15.884532809
+delta_hat            0.7989882  0.172329467
+V_delta_hat          0.2473801  0.005445195
+HPS_coverage1        0.9000000  0.100000000
+HPS_coverage2        1.0000000  0.000000000
+cov                         NA  0.194213159
+> 
+> 
+> 
+> cleanEx()
+> nameEx("design_matrix")
+> ### * design_matrix
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: design_matrix
+> ### Title: Create a design matrix for a single-case design
+> ### Aliases: design_matrix
+> 
+> ### ** Examples
+> 
+> design_matrix(3, 16, c(5,9,13))
+   id constant treatment trend interaction
+1   1        1         0     1           0
+2   1        1         0     2           0
+3   1        1         0     3           0
+4   1        1         0     4           0
+5   1        1         1     5           1
+6   1        1         1     6           2
+7   1        1         1     7           3
+8   1        1         1     8           4
+9   1        1         1     9           5
+10  1        1         1    10           6
+11  1        1         1    11           7
+12  1        1         1    12           8
+13  1        1         1    13           9
+14  1        1         1    14          10
+15  1        1         1    15          11
+16  1        1         1    16          12
+17  2        1         0     1           0
+18  2        1         0     2           0
+19  2        1         0     3           0
+20  2        1         0     4           0
+21  2        1         0     5           0
+22  2        1         0     6           0
+23  2        1         0     7           0
+24  2        1         0     8           0
+25  2        1         1     9           1
+26  2        1         1    10           2
+27  2        1         1    11           3
+28  2        1         1    12           4
+29  2        1         1    13           5
+30  2        1         1    14           6
+31  2        1         1    15           7
+32  2        1         1    16           8
+33  3        1         0     1           0
+34  3        1         0     2           0
+35  3        1         0     3           0
+36  3        1         0     4           0
+37  3        1         0     5           0
+38  3        1         0     6           0
+39  3        1         0     7           0
+40  3        1         0     8           0
+41  3        1         0     9           0
+42  3        1         0    10           0
+43  3        1         0    11           0
+44  3        1         0    12           0
+45  3        1         1    13           1
+46  3        1         1    14           2
+47  3        1         1    15           3
+48  3        1         1    16           4
+> 
+> 
+> 
+> cleanEx()
+> nameEx("effect_size_ABk")
+> ### * effect_size_ABk
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: effect_size_ABk
+> ### Title: Calculates HPS effect size
+> ### Aliases: effect_size_ABk
+> 
+> ### ** Examples
+> 
+> data(Lambert)
+> effect_size_ABk(outcome = outcome, treatment = treatment, id = case, 
++                 phase = phase, time = time, data = Lambert)
+                           est    se
+unadjusted effect size  -2.525 0.202
+adjusted effect size    -2.513 0.201
+degree of freedom      164.492      
+>    
+> data(Anglesea)
+> effect_size_ABk(outcome = outcome, treatment = condition, id = case, 
++                 phase = phase, time = session, data = Anglesea)
+                         est    se
+unadjusted effect size 1.793 2.436
+adjusted effect size   1.150 1.562
+degree of freedom      2.340      
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("effect_size_MB")
+> ### * effect_size_MB
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: effect_size_MB
+> ### Title: Calculates HPS effect size
+> ### Aliases: effect_size_MB
+> 
+> ### ** Examples
+> 
+> data(Saddler)
+> effect_size_MB(outcome = outcome, treatment = treatment, id = case, 
++                time = time, data = subset(Saddler, measure=="writing quality"))
+                         est    se
+unadjusted effect size 2.149 0.634
+adjusted effect size   1.963 0.579
+degree of freedom      8.918      
+> 
+> data(Laski)
+> effect_size_MB(outcome = outcome, treatment = treatment, id = case, 
++                time = time, data = Laski)
+                          est    se
+unadjusted effect size  1.474 0.337
+adjusted effect size    1.388 0.317
+degree of freedom      13.100      
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("g_REML")
+> ### * g_REML
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: g_REML
+> ### Title: Calculates adjusted REML effect size
+> ### Aliases: g_REML
+> 
+> ### ** Examples
+> 
+> data(Laski)
+> Laski_RML <- lme(fixed = outcome ~ treatment, 
++                  random = ~ 1 | case, 
++                  correlation = corAR1(0, ~ time | case), 
++                  data = Laski)
+> summary(Laski_RML)
+Linear mixed-effects model fit by REML
+  Data: Laski 
+       AIC      BIC    logLik
+  1048.285 1062.466 -519.1424
+
+Random effects:
+ Formula: ~1 | case
+        (Intercept) Residual
+StdDev:    15.68278  13.8842
+
+Correlation Structure: AR(1)
+ Formula: ~time | case 
+ Parameter estimate(s):
+     Phi 
+0.252769 
+Fixed effects:  outcome ~ treatment 
+                      Value Std.Error  DF   t-value p-value
+(Intercept)        39.07612  5.989138 119  6.524498       0
+treatmenttreatment 30.68366  2.995972 119 10.241637       0
+ Correlation: 
+                   (Intr)
+treatmenttreatment -0.272
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-2.72642154 -0.69387388  0.01454473  0.69861200  2.14528141 
+
+Number of Observations: 128
+Number of Groups: 8 
+> g_REML(Laski_RML, p_const = c(0,1), r_const = c(1,0,1), returnModel=FALSE)
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+$p_beta
+[1] 30.68366
+
+$r_theta
+[1] 438.7208
+
+$delta_AB
+[1] 1.464917
+
+$nu
+[1] 18.55241
+
+$kappa
+[1] 0.1430354
+
+$g_AB
+[1] 1.404887
+
+$V_g_AB
+[1] 0.08198192
+
+$cnvg_warn
+[1] FALSE
+
+$sigma_sq
+[1] 192.7711
+
+$phi
+[1] 0.252769
+
+$Tau
+case.var((Intercept)) 
+             245.9497 
+
+$I_E_inv
+            [,1]        [,2]          [,3]
+[1,]  798.919038  1.32235408  -132.1234582
+[2,]    1.322354  0.01002805    -0.5152126
+[3,] -132.123458 -0.51521261 20214.7623585
+
+$p_const
+[1] 0 1
+
+$r_const
+[1] 1 0 1
+
+attr(,"class")
+[1] "g_REML"
+> 
+> data(Schutte)
+> Schutte$trt.week <- with(Schutte, unlist(tapply((treatment=="treatment") * week, 
++          list(treatment,case), function(x) x - min(x))) + (treatment=="treatment"))
+> Schutte$week <- Schutte$week - 9
+> Schutte_RML <- lme(fixed = fatigue ~ week + treatment + trt.week, 
++                    random = ~ week | case, 
++                    correlation = corAR1(0, ~ week | case), 
++                    data = subset(Schutte, case != 4))
+> summary(Schutte_RML)
+Linear mixed-effects model fit by REML
+  Data: subset(Schutte, case != 4) 
+       AIC      BIC    logLik
+  875.9526 901.8978 -428.9763
+
+Random effects:
+ Formula: ~week | case
+ Structure: General positive-definite, Log-Cholesky parametrization
+            StdDev   Corr  
+(Intercept) 9.783287 (Intr)
+week        1.412030 0.811 
+Residual    5.421656       
+
+Correlation Structure: AR(1)
+ Formula: ~week | case 
+ Parameter estimate(s):
+      Phi 
+0.3985953 
+Fixed effects:  fatigue ~ week + treatment + trt.week 
+                      Value Std.Error  DF   t-value p-value
+(Intercept)        50.29150  4.073625 121 12.345637  0.0000
+week                0.20271  0.616194 121  0.328968  0.7427
+treatmenttreatment -0.54218  1.751668 121 -0.309520  0.7575
+trt.week           -1.63198  0.655256 121 -2.490607  0.0141
+ Correlation: 
+                   (Intr) week   trtmnt
+week                0.883              
+treatmenttreatment -0.258 -0.200       
+trt.week           -0.567 -0.596 -0.178
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-2.33194245 -0.46272153 -0.05348694  0.32878028  4.08749914 
+
+Number of Observations: 136
+Number of Groups: 12 
+> Schutte_g <- g_REML(Schutte_RML, p_const = c(0,0,1,7), r_const = c(1,0,1,0,0))
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+> summary(Schutte_g)
+             Length Class      Mode     
+p_beta         1    -none-     numeric  
+r_theta        1    -none-     numeric  
+delta_AB       1    -none-     numeric  
+nu             1    -none-     numeric  
+kappa          1    -none-     numeric  
+g_AB           1    -none-     numeric  
+V_g_AB         1    -none-     numeric  
+cnvg_warn      1    -none-     logical  
+sigma_sq       1    -none-     numeric  
+phi            1    -none-     numeric  
+Tau            3    -none-     numeric  
+I_E_inv       25    -none-     numeric  
+p_const        4    -none-     numeric  
+r_const        5    -none-     numeric  
+modelStruct    2    lmeStruct  list     
+dims           5    -none-     list     
+contrasts      1    -none-     list     
+coefficients   2    -none-     list     
+varFix        16    -none-     numeric  
+sigma          1    -none-     numeric  
+apVar         25    -none-     numeric  
+logLik         1    -none-     numeric  
+numIter        0    -none-     NULL     
+groups         1    data.frame list     
+call           5    -none-     call     
+terms          3    terms      call     
+method         1    -none-     character
+fitted       272    -none-     numeric  
+residuals    272    -none-     numeric  
+fixDF          2    -none-     list     
+na.action      0    -none-     NULL     
+data           5    data.frame list     
+> 
+> 
+> 
+> cleanEx()
+> nameEx("graph_SCD")
+> ### * graph_SCD
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: graph_SCD
+> ### Title: Graph Single Case Design Data
+> ### Aliases: graph_SCD
+> 
+> ### ** Examples
+> 
+> data(Anglesea)
+> graph_SCD(case=case, phase=condition, 
++           session=session, outcome=outcome, 
++           design="TR", treatment_name = "treatment", 
++           data=Anglesea)
+>           
+> data(BartonArwood)
+> graph_SCD(case=case, phase=condition, 
++           session=session, outcome=outcome, 
++           design="MB", treatment_name = "B",  
++           data=BartonArwood)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("phase_pairs")
+> ### * phase_pairs
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: phase_pairs
+> ### Title: Calculate phase-pairs for a unique case
+> ### Aliases: phase_pairs
+> 
+> ### ** Examples
+> 
+> 
+> phases <- rep(c("A","B","A","B"), each = 4)
+> sessions <- 1:length(phases)
+> 
+> phase_pairs(phases, sessions)
+ [1] 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
+> 
+> phases <- rep(c("A","B","C","A","B","C","D"), each = 4)
+> phase_pairs(phases)
+ [1] 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+> 
+> phases <- rep(c("B","A","C","B","A","B","C","A"), each = 4)
+> phase_pairs(phases)
+ [1] 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("preprocess_SCD")
+> ### * preprocess_SCD
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: preprocess_SCD
+> ### Title: Clean Single Case Design Data
+> ### Aliases: preprocess_SCD
+> 
+> ### ** Examples
+> 
+> data(Laski)
+> preprocess_SCD(case = case, phase = treatment,
++                session = time, outcome = outcome, 
++                design = "MB", center = 4, data = Laski)
+      case treatment time outcome trt time_trt
+1   Case 1  baseline   -3   27.60   0        0
+2   Case 1  baseline   -2   23.96   0        0
+3   Case 1  baseline   -1   23.83   0        0
+4   Case 1  baseline    0   47.26   0        0
+5   Case 1 treatment    1   52.70   1        1
+6   Case 1 treatment    2   60.99   1        2
+7   Case 1 treatment    3   66.60   1        3
+8   Case 1 treatment    4   52.50   1        4
+9   Case 1 treatment    5   85.88   1        5
+10  Case 1 treatment    6   47.05   1        6
+11  Case 1 treatment    7   66.28   1        7
+12  Case 1 treatment    8   54.05   1        8
+13  Case 1 treatment    9   51.23   1        9
+14  Case 2  baseline   -3   49.67   0        0
+15  Case 2  baseline   -2   23.57   0        0
+16  Case 2  baseline   -1   26.38   0        0
+17  Case 2  baseline    0   28.35   0        0
+18  Case 2  baseline    1   45.11   0        0
+19  Case 2 treatment    2   70.67   1        1
+20  Case 2 treatment    3   79.13   1        2
+21  Case 2 treatment    4   84.09   1        3
+22  Case 2 treatment    5   88.56   1        4
+23  Case 2 treatment    6   80.90   1        5
+24  Case 2 treatment    7   91.84   1        6
+25  Case 2 treatment    8   63.42   1        7
+26  Case 2 treatment    9   70.38   1        8
+27  Case 4  baseline   -3    0.00   0        0
+28  Case 4  baseline   -2    0.00   0        0
+29  Case 4  baseline   -1    0.00   0        0
+30  Case 4  baseline    0    0.00   0        0
+31  Case 4  baseline    1    0.00   0        0
+32  Case 4  baseline    2    0.00   0        0
+33  Case 4  baseline    3    0.00   0        0
+34  Case 4 treatment    4   28.07   1        1
+35  Case 4 treatment    5   28.20   1        2
+36  Case 4 treatment    6   57.15   1        3
+37  Case 4 treatment    7   72.37   1        4
+38  Case 4 treatment    8   45.56   1        5
+39  Case 4 treatment    9   52.30   1        6
+40  Case 4 treatment   10   28.37   1        7
+41  Case 4 treatment   11   60.37   1        8
+42  Case 4 treatment   12   57.46   1        9
+43  Case 5  baseline   -3   32.84   0        0
+44  Case 5  baseline   -2   14.26   0        0
+45  Case 5  baseline   -1    0.00   0        0
+46  Case 5  baseline    0    7.99   0        0
+47  Case 5  baseline    1   23.55   0        0
+48  Case 5  baseline    2   11.51   0        0
+49  Case 5  baseline    3   28.22   0        0
+50  Case 5  baseline    4   44.94   0        0
+51  Case 5  baseline    5   35.02   0        0
+52  Case 5  baseline    6    4.34   0        0
+53  Case 5 treatment    7   69.26   1        1
+54  Case 5 treatment    8   69.96   1        2
+55  Case 5 treatment    9   62.98   1        3
+56  Case 5 treatment   10   58.13   1        4
+57  Case 5 treatment   11   58.17   1        5
+58  Case 5 treatment   12   27.67   1        6
+59  Case 5 treatment   13   70.85   1        7
+60  Case 6  baseline   -3   46.70   0        0
+61  Case 6  baseline   -2   56.07   0        0
+62  Case 6  baseline   -1   32.28   0        0
+63  Case 6  baseline    0   36.70   0        0
+64  Case 6  baseline    1   59.93   0        0
+65  Case 6  baseline    2   12.05   0        0
+66  Case 6  baseline    3   34.95   0        0
+67  Case 6 treatment    4   75.18   1        1
+68  Case 6 treatment    5   92.15   1        2
+69  Case 6 treatment    6   85.84   1        3
+70  Case 6 treatment    7   83.33   1        4
+71  Case 6 treatment    8   81.16   1        5
+72  Case 6 treatment    9   74.86   1        6
+73  Case 6 treatment   10   86.54   1        7
+74  Case 6 treatment   11   74.96   1        8
+75  Case 6 treatment   12   87.13   1        9
+76  Case 7  baseline   -3   52.32   0        0
+77  Case 7  baseline   -2   51.99   0        0
+78  Case 7  baseline   -1   65.23   0        0
+79  Case 7  baseline    0   57.28   0        0
+80  Case 7  baseline    1   67.55   0        0
+81  Case 7  baseline    2   57.62   0        0
+82  Case 7  baseline    3   55.46   0        0
+83  Case 7 treatment    4   78.31   1        1
+84  Case 7 treatment    5   89.40   1        2
+85  Case 7 treatment    6   72.35   1        3
+86  Case 7 treatment    7   86.59   1        4
+87  Case 7 treatment    8   81.79   1        5
+88  Case 7 treatment    9   89.57   1        6
+89  Case 7 treatment   10   84.11   1        7
+90  Case 8  baseline   -3   58.06   0        0
+91  Case 8  baseline   -2   65.79   0        0
+92  Case 8  baseline   -1   52.63   0        0
+93  Case 8  baseline    0   72.37   0        0
+94  Case 8  baseline    1   81.91   0        0
+95  Case 8  baseline    2   71.38   0        0
+96  Case 8  baseline    3   73.52   0        0
+97  Case 8  baseline    4   70.56   0        0
+98  Case 8 treatment    5   45.39   1        1
+99  Case 8 treatment    6   77.14   1        2
+100 Case 8 treatment    7   71.88   1        3
+101 Case 8 treatment    8   77.14   1        4
+102 Case 8 treatment    9   87.01   1        5
+103 Case 8 treatment   10   84.70   1        6
+104 Case 8 treatment   11   74.18   1        7
+105 Case 8 treatment   12   54.11   1        8
+106 Case 8 treatment   13   74.67   1        9
+107 Case 8 treatment   14   76.15   1       10
+108 Case 8 treatment   15   83.39   1       11
+109 Case 9  baseline   -3   41.36   0        0
+110 Case 9  baseline   -2   73.04   0        0
+111 Case 9  baseline   -1   47.25   0        0
+112 Case 9  baseline    0   67.13   0        0
+113 Case 9  baseline    1   62.10   0        0
+114 Case 9  baseline    2   56.91   0        0
+115 Case 9  baseline    3   66.66   0        0
+116 Case 9  baseline    4   51.00   0        0
+117 Case 9  baseline    5   72.87   0        0
+118 Case 9  baseline    6   48.41   0        0
+119 Case 9  baseline    7   16.96   0        0
+120 Case 9 treatment    8   81.37   1        1
+121 Case 9 treatment    9   86.48   1        2
+122 Case 9 treatment   10   69.98   1        3
+123 Case 9 treatment   11   78.41   1        4
+124 Case 9 treatment   12   72.21   1        5
+125 Case 9 treatment   13   70.51   1        6
+126 Case 9 treatment   14   67.47   1        7
+127 Case 9 treatment   15   84.53   1        8
+128 Case 9 treatment   16   81.00   1        9
+> 
+>           
+> 
+> 
+> 
+> cleanEx()
+> nameEx("shine_scd")
+> ### * shine_scd
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: shine_scd
+> ### Title: A shiny interface for the scdhlm package
+> ### Aliases: shine_scd
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D shine_scd()
+> ##D data(Laski)
+> ##D shine_scd(dataset = Laski)
+> ##D shine_scd(dataset = "SCD_data.xlsx", sheet = "Laski")
+> ##D shine_scd(dataset = "Laski.csv") 
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("simulate.g_REML")
+> ### * simulate.g_REML
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simulate.g_REML
+> ### Title: Simulate data from a fitted 'g_REML' object
+> ### Aliases: simulate.g_REML
+> 
+> ### ** Examples
+> 
+> data(Laski)
+> Laski_RML <- lme(fixed = outcome ~ treatment,
++                  random = ~ 1 | case,
++                  correlation = corAR1(0, ~ time | case), 
++                  data = Laski)
+> Laski_g <- g_REML(Laski_RML, p_const = c(0,1), r_const = c(1,0,1))
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+> simulate(Laski_g, nsim = 20)
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+     p_beta  r_theta delta_AB       nu      kappa     g_AB     V_g_AB cnvg_warn
+1  35.58892 570.0390 1.490605 15.09648 0.12714736 1.415304 0.09530341         0
+2  32.08493 680.4680 1.229978 13.56207 0.13721674 1.160681 0.07965909         0
+3  27.86721 450.8521 1.312431 20.11123 0.16130405 1.262871 0.07164321         0
+4  30.04390 241.0451 1.935117 67.25398 0.21566512 1.913456 0.07508296         0
+5  23.08345 474.0000 1.060258 14.14793 0.11526072 1.003041 0.05643502         0
+6  30.82006 307.6880 1.757026 26.09544 0.14327323 1.706039 0.08225797         0
+7  33.86650 428.1113 1.636786 15.88209 0.12324002 1.558256 0.10540420         0
+8  29.04710 274.7743 1.752325 44.93426 0.20334648 1.722913 0.07669992         0
+9  28.80096 337.9338 1.566719 26.51212 0.15804478 1.521977 0.07343946         0
+10 28.89421 408.6516 1.429336 18.58822 0.12914114 1.370878 0.07504239         0
+11 34.90312 556.5654 1.479470 13.94038 0.13188787 1.398420 0.10239909         0
+12 37.54411 545.8522 1.606957 15.66408 0.12673244 1.528768 0.10436661         0
+13 30.94778 650.1088 1.213770 15.36637 0.12418913 1.153549 0.06708797         0
+14 31.64174 440.2831 1.507976 15.52906 0.11589993 1.433954 0.09189157         0
+15 31.40122 975.3605 1.005458 10.33671 0.09072602 0.930697 0.06277037         0
+16 32.72776 411.8895 1.612597 19.38686 0.14940257 1.549397 0.09341771         0
+17 30.96075 290.8842 1.815312 26.39273 0.15275737 1.763234 0.08848840         0
+18 28.04121 589.5972 1.154833 17.26115 0.14383432 1.103918 0.06222671         0
+19 29.76401 429.5467 1.436105 21.50855 0.15248362 1.385439 0.07395139         0
+20 26.86512 479.7575 1.226529 16.14139 0.12839773 1.168643 0.06656480         0
+   sigma_sq        phi Tau.case.var((Intercept))
+1  204.7593 0.22596018                 365.27968
+2  228.2080 0.42991246                 452.25999
+3  218.8938 0.37804147                 231.95823
+4  209.6796 0.38294763                  31.36543
+5  155.6159 0.14817429                 318.38415
+6  165.7783 0.10755151                 141.90977
+7  159.8225 0.15210451                 268.28878
+8  207.5327 0.40495664                  67.24164
+9  188.0791 0.22486707                 149.85472
+10 175.1068 0.12155432                 233.54472
+11 187.5660 0.34022307                 368.99939
+12 202.6417 0.19636722                 343.21051
+13 235.9233 0.18328906                 414.18547
+14 158.9481 0.09092174                 281.33509
+15 190.8744 0.17528960                 784.48613
+16 189.1649 0.28781972                 222.72464
+17 159.9951 0.18293454                 130.88907
+18 246.5277 0.30277350                 343.06951
+19 211.6811 0.26364489                 217.86556
+20 183.4935 0.19368837                 296.26408
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("simulate_MB2")
+> ### * simulate_MB2
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simulate_MB2
+> ### Title: Simulate Model MB2 from Pustejovsky, Hedges, & Shadish (2014)
+> ### Aliases: simulate_MB2
+> 
+> ### ** Examples
+> 
+> 
+> set.seed(8)
+> simulate_MB2(iterations = 5, beta = c(0,1,0,0), rho = 0.4, phi = 0.5, 
++              tau1_ratio = 0.5, tau_corr = -0.4, design = design_matrix(m=3, n=8))
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning in lme.formula(fixed = as.formula(paste("outcome ~ 0 + ", paste(fixed_terms,  :
+  nlminb problem, convergence error code = 1
+  message = iteration limit reached without convergence (10)
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning in lme.formula(fixed = as.formula(paste("outcome ~ 0 + ", paste(fixed_terms,  :
+  nlminb problem, convergence error code = 1
+  message = iteration limit reached without convergence (10)
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+                                     mean        var
+p_beta                          0.9388939 0.16476724
+r_theta                         1.6972216 1.32458579
+delta_AB                        0.7970305 0.13807271
+nu                              3.4958732 0.73279844
+kappa                           0.4161843 0.01666666
+g_AB                            0.6111387 0.10416475
+V_g_AB                          0.5168275 0.10672542
+cnvg_warn                       0.4000000 0.30000000
+sigma_sq                        0.4672358 0.01517143
+phi                             0.1993832 0.04850161
+Tau.id.var(constant)            1.2299858 1.35872571
+Tau.id.cov(treatment,constant) -0.8828665 1.18322061
+Tau.id.var(treatment)           0.8140806 1.06968655
+RML_coverage1                   1.0000000 0.00000000
+RML_coverage2                   1.0000000 0.00000000
+>              
+> set.seed(8)
+> simulate_MB2(iterations = 5, beta = c(0,1,0,0), rho = 0.4, phi = 0.5, 
++              tau1_ratio = 0.5, tau_corr = -0.4, m = 3, n = 8, MB = FALSE)
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning in lme.formula(fixed = as.formula(paste("outcome ~ 0 + ", paste(fixed_terms,  :
+  nlminb problem, convergence error code = 1
+  message = iteration limit reached without convergence (10)
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning in lme.formula(fixed = as.formula(paste("outcome ~ 0 + ", paste(fixed_terms,  :
+  nlminb problem, convergence error code = 1
+  message = iteration limit reached without convergence (10)
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+                                     mean        var
+p_beta                          0.9388939 0.16476724
+r_theta                         1.6972216 1.32458579
+delta_AB                        0.7970305 0.13807271
+nu                              3.4958732 0.73279844
+kappa                           0.4161843 0.01666666
+g_AB                            0.6111387 0.10416475
+V_g_AB                          0.5168275 0.10672542
+cnvg_warn                       0.4000000 0.30000000
+sigma_sq                        0.4672358 0.01517143
+phi                             0.1993832 0.04850161
+Tau.id.var(constant)            1.2299858 1.35872571
+Tau.id.cov(treatment,constant) -0.8828665 1.18322061
+Tau.id.var(treatment)           0.8140806 1.06968655
+RML_coverage1                   1.0000000 0.00000000
+RML_coverage2                   1.0000000 0.00000000
+>              
+> 
+> 
+> 
+> cleanEx()
+> nameEx("simulate_MB4")
+> ### * simulate_MB4
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simulate_MB4
+> ### Title: Simulate Model MB4 from Pustejovsky, Hedges, & Shadish (2014)
+> ### Aliases: simulate_MB4
+> 
+> ### ** Examples
+> 
+> 
+> simulate_MB4(iterations = 5, beta = c(0,1,0,0), rho = 0.8, phi = 0.5, 
++              tau2_ratio = 0.5, tau_corr = 0, 
++              p_const = c(0,1,0,7), r_const = c(1,0,1,0,0), 
++              design = design_matrix(3, 16, treat_times=c(5,9,13), center = 12))
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning in lme.formula(fixed = as.formula(paste("outcome ~ 0 + ", paste(fixed_terms,  :
+  nlminb problem, convergence error code = 1
+  message = iteration limit reached without convergence (10)
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning in lme.formula(fixed = as.formula(paste("outcome ~ 0 + ", paste(fixed_terms,  :
+  nlminb problem, convergence error code = 1
+  message = iteration limit reached without convergence (10)
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+                                 mean         var
+p_beta                     0.25217442 0.059133163
+r_theta                    1.07228958 0.197179414
+delta_AB                   0.23792286 0.054127348
+nu                         2.42492704 0.055290712
+kappa                      0.50626576 0.006355936
+g_AB                       0.15436282 0.022684158
+V_g_AB                     0.82723547 0.130603158
+cnvg_warn                  0.40000000 0.300000000
+sigma_sq                   0.21874322 0.005980601
+phi                        0.56174841 0.019050316
+Tau.id.var(constant)       0.85354636 0.167021519
+Tau.id.cov(trend,constant) 0.00521331 0.206401724
+Tau.id.var(trend)          0.37559966 0.143309806
+RML_coverage1              0.60000000 0.300000000
+RML_coverage2              1.00000000 0.000000000
+>              
+> simulate_MB4(iterations = 5, beta = c(0,1,0,0), rho = 0.8, phi = 0.5, 
++              tau2_ratio = 0.5, tau_corr = 0, m = 6, n = 8)
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning in lme.formula(fixed = as.formula(paste("outcome ~ 0 + ", paste(fixed_terms,  :
+  nlminb problem, convergence error code = 1
+  message = iteration limit reached without convergence (10)
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning in lme.formula(fixed = as.formula(paste("outcome ~ 0 + ", paste(fixed_terms,  :
+  nlminb problem, convergence error code = 1
+  message = iteration limit reached without convergence (10)
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+                                 mean         var
+p_beta                      1.1168679 0.116800021
+r_theta                     0.8138606 0.019954566
+delta_AB                    1.2350083 0.125019910
+nu                          6.9732165 0.301330076
+kappa                       0.3252018 0.003081513
+g_AB                        1.0970753 0.101321132
+V_g_AB                      0.2558763 0.006295546
+cnvg_warn                   0.4000000 0.300000000
+sigma_sq                    0.4037260 0.058783545
+phi                         0.6286119 0.069667330
+Tau.id.var(constant)        0.4101346 0.048018485
+Tau.id.cov(trend,constant) -0.1016869 0.034868784
+Tau.id.var(trend)           0.3181941 0.053064378
+RML_coverage1               1.0000000 0.000000000
+RML_coverage2               1.0000000 0.000000000
+>              
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  3.42 0.14 3.56 NA NA 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

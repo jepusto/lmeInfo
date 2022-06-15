@@ -1,0 +1,43 @@
+* installing *source* package 'merDeriv' ...
+** package 'merDeriv' successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+Warning messages:
+1: package 'lme4' was built under R version 4.1.3 
+2: package 'Matrix' was built under R version 4.1.3 
+3: package 'nonnest2' was built under R version 4.1.3 
+4: package 'sandwich' was built under R version 4.1.3 
+5: package 'lavaan' was built under R version 4.1.3 
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+*** arch - i386
+Warning: package 'lme4' was built under R version 4.1.3
+Warning: package 'Matrix' was built under R version 4.1.3
+Warning: package 'nonnest2' was built under R version 4.1.3
+Warning: package 'sandwich' was built under R version 4.1.3
+Warning: package 'lavaan' was built under R version 4.1.3
+*** arch - x64
+Warning: package 'lme4' was built under R version 4.1.3
+Warning: package 'Matrix' was built under R version 4.1.3
+Warning: package 'nonnest2' was built under R version 4.1.3
+Warning: package 'sandwich' was built under R version 4.1.3
+Warning: package 'lavaan' was built under R version 4.1.3
+** testing if installed package can be loaded from final location
+*** arch - i386
+Warning: package 'lme4' was built under R version 4.1.3
+Warning: package 'Matrix' was built under R version 4.1.3
+Warning: package 'nonnest2' was built under R version 4.1.3
+Warning: package 'sandwich' was built under R version 4.1.3
+Warning: package 'lavaan' was built under R version 4.1.3
+*** arch - x64
+Warning: package 'lme4' was built under R version 4.1.3
+Warning: package 'Matrix' was built under R version 4.1.3
+Warning: package 'nonnest2' was built under R version 4.1.3
+Warning: package 'sandwich' was built under R version 4.1.3
+Warning: package 'lavaan' was built under R version 4.1.3
+** testing if installed package keeps a record of temporary installation path
+* DONE (merDeriv)

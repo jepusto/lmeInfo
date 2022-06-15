@@ -1,5 +1,7 @@
 library(nlme)
 
+skip_if_not_installed("scdhlm")
+
 data(Bryant2018, package = "scdhlm")
 
 #------------------------------------------------------------------------------

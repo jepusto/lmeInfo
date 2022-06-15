@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Calculates a confidence interval for a standardized mean...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for CI_g {lmeInfo}"><tr><td>CI_g {lmeInfo}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Calculates a confidence interval for a standardized mean difference effect size</h2>
+
+<h3>Description</h3>
+
+<p>Calculates a confidence interval for a <code>g_mlm</code> object,
+using either a central t distribution (for a symmetric interval) or a
+non-central t distribution (for an asymmetric interval).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+CI_g(g, cover = 0.95, bound = 35, symmetric = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>g</code></td>
+<td>
+<p>an estimated effect size object of class <code>g_mlm</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>cover</code></td>
+<td>
+<p>confidence level.</p>
+</td></tr>
+<tr valign="top"><td><code>bound</code></td>
+<td>
+<p>numerical tolerance for non-centrality parameter in
+<code><a href="../../stats/help/qt.html">qt</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>symmetric</code></td>
+<td>
+<p>If <code>TRUE</code> (the default), use a symmetric confidence
+interval. If <code>FALSE</code>, use a non-central t approximation to obtain an
+asymmetric confidence interval.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A vector of lower and upper confidence bounds.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+library(nlme)
+data(Bryant2016, package = "lmeInfo")
+Bryant2016_RML1 &lt;- lme(fixed = outcome ~ treatment,
+                       random = ~ 1 | school/case,
+                       correlation = corAR1(0, ~ session | school/case),
+                       data = Bryant2016)
+Bryant2016_g1 &lt;- g_mlm(Bryant2016_RML1, p_const = c(0,1), r_const = c(1,1,0,1),
+                       infotype = "expected")
+CI_g(Bryant2016_g1, symmetric = TRUE)
+CI_g(Bryant2016_g1, symmetric = FALSE)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>lmeInfo</em> version 0.2.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

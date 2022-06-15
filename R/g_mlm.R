@@ -33,6 +33,7 @@
 #'   \code{TRUE}, make sure the \code{r_const} matches the parameterization of
 #'   the variance component as returned by \code{extract_varcomp(mod,
 #'   separate_variances = TRUE)}. Default is \code{FALSE}.
+#' @param ... further arguments.
 #'
 #' @export
 #'
@@ -87,17 +88,8 @@
 #' print(Bryant_g_treatment)
 #'
 #'
-#' data(Laski, package = "scdhlm")
-#' Laski_AR1 <- gls(outcome ~ treatment,
-#'                  correlation = corAR1(0.2, ~ time | case),
-#'                  data = Laski)
-#' Laski_AR1_g <- g_mlm(Laski_AR1, p_const = c(0,1), r_const = c(0,1),
-#'                      infotype = "expected")
-#' print(Laski_AR1_g)
-#' summary(Laski_AR1_g)
-#'
 
-g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "expected", separate_variances = FALSE) {
+g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "expected", separate_variances = FALSE, ...) {
 
   # basic model estimates
 

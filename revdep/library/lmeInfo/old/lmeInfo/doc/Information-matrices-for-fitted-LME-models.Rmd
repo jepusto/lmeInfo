@@ -1,0 +1,207 @@
+---
+title: "Information matrices for fitted `lme()` and `gls()` models"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    number_sections: true
+    toc: true
+bibliography: references.bib
+csl: apa.csl
+vignette: >
+  %\VignetteIndexEntry{Information-matrices-for-fitted-lme-models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+$$
+\def\bs#1{{\boldsymbol #1}}
+\def\bmat#1{{\mathbf #1}}
+\def\E{{\text{E}}}
+\def\Var{{\text{Var}}}
+\def\Cov{{\text{Cov}}}
+\def\trace{{\text{tr}}}
+\def\Info{{\mathcal{I}}}
+\def\Jnfo{{\mathcal{J}}}
+$$
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+#library(lmeInfo)
+```
+
+# Notation
+
+In what follows, we will use the following symbols for matrix operations. Let $\bigoplus$ denote the Kronecker sum, which creates a block-diagonal matrix from a sequence of sub-matrices. Thus, for matrices $\bmat{A}_1,...,\bmat{A}_m$,
+$$
+\bigoplus_{i=1}^m \bmat{A}_i = \left[\begin{array}{cccc}
+\bmat{A}_1 & \bmat{0} & \cdots & \bmat{0} \\ 
+\bmat{0} & \bmat{A}_2 &  & \bmat{0} \\
+\vdots & & \ddots &  \\
+\bmat{0} & \bmat{0} & & \bmat{A}_m \\
+\end{array}\right].
+$$
+Let $\bigotimes$ denote the Kronecker product, such that for $m \times n$ matrix $\bmat{A}$ and $f \times g$ matrix $\bmat{B}$,
+$\bmat{A} \bigotimes \bmat{B}$ is an $(mf) \times (ng)$ matrix:
+$$
+\bmat{A} \bigotimes \bmat{B} = \left[\begin{array}{cccc}
+a_{11} \bmat{B} & a_{12} \bmat{B} & \cdots & a_{1n} \bmat{B} \\ 
+a_{21} \bmat{B} & a_{22} \bmat{B} & \cdots & a_{2n} \bmat{B} \\
+\vdots & \vdots & \ddots &  \vdots \\
+a_{m1} \bmat{B} & a_{m2} \bmat{B} & \cdots & a_{mn} \bmat{B} \\
+\end{array}\right],
+$$
+where $a_{11},...,a_{mn}$ are the entries of $\bmat{A}$. In particular, note that the Kronecker product of an $m \times m$ identity matrix and an arbitrary matrix $\bmat{B}$ is the block-diagonal matrix with each of $m$ sub-matrices equal to $\bmat{B}$:
+$$
+\bmat{I}_m \bigotimes \bmat{B} = \bigoplus_{i=1}^m \bmat{B}.
+$$
+
+# Hierarchical linear models
+
+We shall be concerned with hierarchical linear models fitted by full maximum likelihood (FML) or restricted maximum likelihood (RML) using the `lme()` function from R package `nlme`. Consider a set of observations from each of $m$ groups, where group $i$ has $n_i$ observations for $i = 1,...,m$ and $N = \sum_{i=1}^m n_i$. Let $y_{hi}$ denote the outcome measure and $\bmat{x}_{hi}$ denote a $p \times 1$ row vector of fixed predictor variables, both for observation $h$ from group $i$. Let $\bmat{y}_i = (y_{1i} \cdots y_{n_i i})'$ be the $n_i \times 1$ vector of outcomes and $\bmat{X}_i = \left(\bmat{x}_{1i}' \cdots \bmat{x}_{n_ii}'\right)'$ be the $n_i \times p$ design matrix of predictors for group $i$. Hierarchical `lme` models have the form
+$$
+\bmat{y}_i = \bmat{X}_i \bs\beta + \bmat{Z}_i \bs\eta_i + \bs\epsilon_i
+$$
+where $\bmat{Z}_i$ is a $n_i \times q_i$ design matrix describing random effects for group $i$, $\bs\beta$ is a $p \times 1$ vector of regression coefficients, $\bs\eta_i$ is a $q_i \times 1$ vector of random effects, and $\bs\epsilon_i$ is a $n_i \times 1$ vector of observation-specific errors. We assume that 
+$$
+\bs\eta_i \sim N\left(\bmat{0}, \ \bmat{T}_{i}\right)
+$$
+for $q_i \times q_i$ covariance matrix $\bmat{T}_i$ and that
+$$
+\bs\epsilon_i \sim N\left(\bmat{0}, \ \sigma^2 \bmat{S}_i \bmat{R}_i \bmat{S}_i \right),
+$$
+where $\sigma^2$ is the marginal variance of the observation-specific errors, $\bmat{S}_i$ is a diagonal matrix describing a variance structure, and $\bmat{R}_i$ is a structured correlation matrix. In `lme` models, the matrices $\bmat{T}_i$, $\bmat{S}_i$, and $\bmat{R}_i$ may be functions of the unknown parameter vectors $\bs\tau$ (called the random effects structure parameters), $\bs\psi$ (called the variance structure parameters), and $\bs\phi$ (called the correlation structure parameters). For models where the lowest-level errors are conditionally independent, given the random effects $\bs\eta_i$, then $\bmat{S}_i = \bmat{R}_i = \bmat{I}_i$, an $n_i \times n_i$ identity matrix.
+
+In models with more than one level of random effects (e.g., students nested in classrooms, nested in schools), the random effects structure can typically be partitioned into design matrices and random effects covariance matrices corresponding to each level. For a model with $G$ unique levels of grouping, let $\bmat{Z}_i^{(g)}$ denote the $n_i \times q_{gi}$ design matrix and $\bs\eta_i^{(g)}$ denote the $q_{gi} \times 1$ vector of random effects corresponding to grouping level $g$. Random effects are assumed to be independent across levels, such that 
+$$
+\bs\eta_i^{(g)} \sim N\left(\bmat{0}, \bmat{T}_i^{(g)}\right),
+$$
+and $\Cov\left(\bs\eta_i^{(g)}, \bs\eta_i^{(h)}\right) = \bmat{0}$ if $g \neq h$. Let $\bs\tau_g$ be the random effects parameters corresponding to grouping level $g$. Thus, the full vector of random effects is $\bs\eta_i = \left(\bs\eta_i^{(1)'},...,\bs\eta_i^{(G)'}\right)'$, with corresponding design matrix $\bmat{Z}_i = \left[\bmat{Z}_i^{(1)} \cdots \bmat{Z}_i^{(G)} \right]$, and 
+$$
+\bmat{T}_i = \bigoplus_{g=1}^G \bmat{T}_i^{(g)}.
+$$
+
+Under this model, the marginal distribution of $\bmat{y}_i$ is
+$$
+\left(\bmat{y}_i | \bmat{X}_i\right) \sim N\left(\bmat{X}_i \bs\beta, \ \bmat{V}_i \right),
+$$
+where the marginal variance-covariance matrix for group $i$ is
+$$
+\bmat{V}_i = \bmat{Z}_i \bmat{T}_i \bmat{Z}_i' + \sigma^2 \bmat{S}_i \bmat{R}_i\bmat{S}_i = \sum_{g=1}^G \bmat{Z}_i^{(g)} \bmat{T}_i^{(g)} \bmat{Z}_i^{(g)'} + \sigma^2 \bmat{S}_i \bmat{R}_i\bmat{S}_i,
+$$
+for $i = 1,...,m$.
+
+For estimation purposes, it will be convenient to use notation for the full data vectors. Let $\bmat{y} = \left(\bmat{y}_1' \cdots \bmat{y}_m'\right)'$, $\bmat{X} = \left(\bmat{X}_1' \cdots \bmat{X}_m'\right)'$, and $\bmat{Z} = \bigoplus_{i=1}^m \bmat{Z}_i$. Let $\bmat{V} = \bigoplus_{i=1}^m \bmat{V}_i$, with $\bmat{T}$, $\bmat{S}$, and $\bmat{R}$ similarly defined, so that 
+$$
+\bmat{V} = \bmat{Z} \bmat{T} \bmat{Z}' + \sigma^2 \bmat{S} \bmat{R} \bmat{S}
+$$
+
+# Estimation
+
+Fitting hierarchical models by FML or RML entails estimating both the fixed effect coefficients $\bs\beta$ and the parameters of the random effects structure, variance structure, and correlation structure. Let $\bs\theta = \left(\bs\tau', \bs\psi', \bs\phi',\sigma^2 \right)'$ denote the vector collecting of all of the latter parameters, with a total of $r$ unique entries.
+
+## Fixed effect estimation
+
+For explanatory purposes, it is helpful to begin by considering estimation of the fixed effects, supposing that $\bs\theta$ is known (and thus, that that the marginal variance-covariances $\bmat{V}_i$ are known). In this case, the only unknowns are the fixed effects $\bs\beta$, which can be estimated efficiently using weighted least squares (WLS). The WLS estimator of $\bs\beta$ is given by
+$$
+\hat{\bs\beta} = \bmat{M} \bmat{X}' \bmat{V}^{-1} \bmat{y}, \qquad \text{where} \qquad \bmat{M} = \left(\bmat{X}' \bmat{V}^{-1} \bmat{X}\right)^{-1}.
+$$
+Assuming that the variance parameters are known, the sampling distribution of $\hat{\bs\beta}$ is multivariate normal with mean $\bs\beta$ and covariance matrix
+$$
+\Var\left(\hat{\bs\beta}\right) = \bmat{M}.
+$$
+Of course, in practice, the variance parameters must be estimated. Feasible WLS thus uses estimates of the variance parameters, $\hat{\bs\theta}$, to calculate an estimate $\hat{\bmat{V}} = \bmat{V}(\hat{\bs\theta})$ that is used in place of $\bmat{V}$ above. Thus, the estimated sampling covariance matrix of $\hat{\bs\beta}$ is
+$$
+\hat{\bmat{M}} = \bmat{M}(\hat{\bs\theta}) = \left(\bmat{X}' \hat{\bmat{V}}^{-1} \bmat{X}\right)^{-1}.
+$$
+It is known that $\hat{\bmat{M}}$ tends to underestimate the true covariance of $\hat{\bs\beta}$ when $m$ is small. Kenward and Roger [-@Kenward1997small; -@Kenward2009improved] proposed more elaborate covariance estimators and hypothesis testing procedures for use in small samples.
+
+## Variance parameter estimation
+
+The feasible WLS estimator is based on estimates of the variance parameters. In `lme`, FML and RML estimators for these parameters are obtained by maximizing the log likelihood or restricted log likelihood of the model via iterative numerical methods. Following @Lindstrom1988, -2 times the full log likelihood is given by 
+$$
+-2 l_F\left(\bs\beta, \bs\theta\right) = \log \left|\bmat{V}(\bs\theta)\right| + \bmat{r}' \bmat{V}^{-1}(\bs\theta)\bmat{r},
+$$
+where $\bmat{r} = \bmat{y} - \bmat{X} \bs\beta$ and $\left| \cdot \right|$ denotes the norm of a matrix. Similarly, -2 times the restricted log likelihood (which is a function of $\bs\theta$ alone) is given by
+$$
+-2 l_R\left(\bs\theta\right) = \log \left|\bmat{X}'\bmat{V}^{-1} \bmat{X} \right| +  \log \left|\bmat{V}(\bs\theta)\right| + \bmat{y}' \bmat{Q}(\bs\theta)\bmat{y},
+$$
+where
+$$
+\bmat{Q}(\bs\theta) = \bmat{V}^{-1}(\bs\theta) - \bmat{V}^{-1}(\bs\theta) \bmat{X} \left(\bmat{X}' \bmat{V}^{-1}(\bs\theta) \bmat{X}\right)^{-1} \bmat{X}' \bmat{V}^{-1}(\bs\theta).
+$$
+Let $\hat{\bs\theta}_F$ and $\hat{\bs\theta}_R$ denote the FML and RML estimators of the variance parameters, respectively. Let $\hat{\bs\theta}$ be a generic estimator of the variance parameters (i.e., either the FML or RML estimator).
+
+## Sampling variance of variance parameters
+
+The analyst might need to obtain estimates of the uncertainty in $\hat{\bs\theta}$, either for purposes of inference or as a component of small-sample approximations for other statistics. For purposes of inference, a recommended approach to obtain a confidence interval for a single component of $\bs\theta$ is to use profile likelihood methods. Another approach is to use approximations based on the information matrix of the full or restricted likelihood. The inverse of the observed, expected, or average Fisher information provides an approximate estimate of $\Var(\hat{\bs\theta})$, valid as the number of groups grows large. Thus, define
+$$
+\bmat{C}(\hat{\bs\theta}) = \Info^{-1},
+$$
+where $\Info$ is the observed, expected, or average information matrix. We now define these matrices in detail.
+
+### Restricted maximum likelihood 
+
+The observed information is the negative Hessian matrix (-1 times the matrix of second derivatives) of the log likelihood, evaluated using the full or restricted maximum likelihood estimator of $\theta$. For RML estimators, the observed information matrix has entries
+$$
+\begin{aligned}
+\Info^{RO}_{st} &= \left. -\frac{\partial^2 l_R(\bs\theta)}{\partial \theta_s \partial \theta_t} \right|_{\bs\theta = \hat{\bs\theta}} \\
+&= \frac{1}{2} \bmat{y}'\bmat{Q}\left(\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t + \dot{\bmat{V}}_t\bmat{Q}\dot{\bmat{V}}_s - \ddot{\bmat{V}}_{st}\right) \bmat{Q}\bmat{y} - \frac{1}{2}\trace\left(\bmat{Q}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t - \bmat{Q}\ddot{\bmat{V}}_{st}\right) \\
+&= \frac{1}{2} \hat{\bmat{r}}'\hat{\bmat{V}}^{-1}\left(\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t + \dot{\bmat{V}}_t\bmat{Q}\dot{\bmat{V}}_s - \ddot{\bmat{V}}_{st}\right) \hat{\bmat{V}}^{-1}\hat{\bmat{r}} - \frac{1}{2}\trace\left(\bmat{Q}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t - \bmat{Q}\ddot{\bmat{V}}_{st}\right)
+\end{aligned}
+$$
+for $s,t = 1,...,r$, where $\dot{\bmat{V}}_s = \left. \partial \bmat{V} / \partial \theta_s \right|_{\bs\theta = \hat{\bs\theta}}$, $\ddot{\bmat{V}}_{st} = \left. \partial^2 \bmat{V} / \partial \theta_s \partial \theta_t \right|_{\bs\theta = \hat{\bs\theta}}$, and $\bmat{Q} = \bmat{Q}(\hat{\bs\theta})$.
+
+The expected information matrix is the expected value of $\Info^{RO}$ over the distribution of $\bmat{y}$, evaluated at the maximum likelihood estimator of $\theta$. For RML estimators, the expected information has entries
+$$
+\Info^{RE}_{st} = \frac{1}{2}\trace\left(\bmat{Q}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t\right)
+$$
+for $s,t = 1,...,r$.
+
+The average information matrix is the average of $\Info^{RO}$ and $\Info^{RE}$, with the terms involving second derivatives of $\bmat{V}$ approximated by their expectations [@Gilmour1995average]. For RML estimators, the entries are given by
+$$
+\Info^{RA}_{st} = \frac{1}{2} \bmat{y}'\bmat{Q}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t\bmat{Q}\bmat{y} = \frac{1}{2} \hat{\bmat{r}}'\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t \hat{\bmat{V}}^{-1}\hat{\bmat{r}},
+$$
+for $s,t = 1,...,r$, where $\hat{\bmat{r}} = \bmat{y} - \bmat{X} \hat{\bs\beta}$. The average information matrix is used by the program `ASReml` [@Gilmour2009ASReml] due to its computational efficiency for models with large sample sizes.
+
+Numerical optimization algorithms will often use a parameterization of the model that differs from the parameter definitions of interest. For example, we might want to approximate the variance of a sum of several variance components in their natural parameterization, but the optimization algorithm may use a log likelihood defined in terms of the natural logs of standard deviations. Thus, we will sometimes need to convert information matrices from one parameterization to another. Suppose that we have the information matrix calculated in terms of a parameter $\bs\xi = g(\bs\theta)$, where $g()$ is a one-to-one function with inverse $h()$. Define the Jacobian matrix of the inverse as
+$$
+\nabla_\xi h = \left[\frac{\partial h_s}{\partial \xi_t} \right]_{s,t = 1,...,r}.
+$$
+Let $\Jnfo$ denote the information matrix (observed, expected, or average) in the $\bs\xi$ parameterization. An approximate covariance matrix for the maximum likelihood estimator $\hat{\bs\theta}$ is
+$$
+\bmat{C}(\hat{\bs\theta}) = \left(\nabla_\xi h \right) \left[\Jnfo^{-1}\right] \left(\nabla_\xi h \right)',
+$$
+where $\nabla_\xi h$ is evaluated at $\hat{\bs\xi}$.
+
+### Full maximum likelihood
+
+For FML estimators, the entries of the observed information matrix involve $\bs\beta$ in addition to $\bs\theta$. The entries for $\bs\theta$ are
+$$
+\begin{aligned}
+\Info^{FO}_{st} &= \left. -\frac{\partial^2 l_F(\bs\beta, \bs\theta)}{\partial \theta_s \partial \theta_t} \right|_{\bs\theta = \hat{\bs\theta}} \\ 
+&= \frac{1}{2} \hat{\bmat{r}}'\hat{\bmat{V}}^{-1}\left(\dot{\bmat{V}}_s\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_t + \dot{\bmat{V}}_t\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_s - \ddot{\bmat{V}}_{st}\right) \hat{\bmat{V}}^{-1}\hat{\bmat{r}} - \frac{1}{2}\trace\left(\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_s\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_t - \hat{\bmat{V}}^{-1}\ddot{\bmat{V}}_{st}\right).
+\end{aligned}
+$$
+The cross-derivatives involving $\bs\beta$ are
+$$
+\Info^{FO}_{s \bs\beta'} = \left. -\frac{\partial^2 l_F(\bs\beta, \bs\theta)}{\partial \theta_s \partial\bs\beta'} \right|_{\bs\theta = \hat{\bs\theta}} = \hat{\bmat{r}}' \hat{\bmat{V}}^{-1} \dot{\bmat{V}}_s \hat{\bmat{V}}^{-1} \bmat{X},
+$$
+which have expectation $\bmat{0}'$ and thus might be ignored, so that the sampling variance of $\hat{\bs\theta}$ would be approximated by $\bmat{C}(\hat{\bs\theta}) = \left(\bmat{I}^{FO}_{\bs\theta\bs\theta'}\right)^{-1}$.
+
+The expected information matrix for the FML estimator is simply
+$$
+\Info^{FE}_{st} = \frac{1}{2}\trace\left(\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_s \hat{\bmat{V}}^{-1} \dot{\bmat{V}}_t\right)
+$$
+and the average information matrix is
+$$
+\Info^{FA}_{st} = \frac{1}{2}\hat{\bmat{r}}'\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_s \hat{\bmat{V}}^{-1} \dot{\bmat{V}}_t \hat{\bmat{V}}^{-1} \hat{\bmat{r}}.
+$$
+
+
+# References

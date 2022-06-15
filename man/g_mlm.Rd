@@ -10,7 +10,8 @@ g_mlm(
   mod_denom = mod,
   r_const = NULL,
   infotype = "expected",
-  separate_variances = FALSE
+  separate_variances = FALSE,
+  ...
 )
 }
 \arguments{
@@ -41,6 +42,8 @@ standard error for models with a `varIdent()` variance structure. If
 \code{TRUE}, make sure the \code{r_const} matches the parameterization of
 the variance component as returned by \code{extract_varcomp(mod,
 separate_variances = TRUE)}. Default is \code{FALSE}.}
+
+\item{...}{further arguments.}
 }
 \value{
 A list with the following components \tabular{ll}{ \code{p_beta} \tab
@@ -92,15 +95,6 @@ print(Bryant_g)
 print(Bryant_g_baseline)
 print(Bryant_g_treatment)
 
-
-data(Laski, package = "scdhlm")
-Laski_AR1 <- gls(outcome ~ treatment,
-                 correlation = corAR1(0.2, ~ time | case),
-                 data = Laski)
-Laski_AR1_g <- g_mlm(Laski_AR1, p_const = c(0,1), r_const = c(0,1),
-                     infotype = "expected")
-print(Laski_AR1_g)
-summary(Laski_AR1_g)
 
 }
 \references{

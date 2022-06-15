@@ -1,5 +1,7 @@
 library(nlme)
 
+skip_if_not_installed("scdhlm")
+
 # Two-level model
 data(Laski, package = "scdhlm")
 

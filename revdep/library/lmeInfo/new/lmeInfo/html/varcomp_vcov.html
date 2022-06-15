@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Estimated sampling variance-covariance of variance component...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for varcomp_vcov {lmeInfo}"><tr><td>varcomp_vcov {lmeInfo}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Estimated sampling variance-covariance of variance component
+parameters.</h2>
+
+<h3>Description</h3>
+
+<p>Estimate the sampling variance-covariance of variance component
+parameters from a fitted linear mixed effects model (lmeStruct object)
+or generalized least squares model (glsStruct object)
+using the inverse Fisher information.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+varcomp_vcov(mod, type = "expected", separate_variances = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mod</code></td>
+<td>
+<p>Fitted model of class lmeStruct or glsStruct.</p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+<p>Type of information matrix. One of <code>"expected"</code> (the
+default), <code>"observed"</code>, or <code>"average"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>separate_variances</code></td>
+<td>
+<p>Logical indicating whether to return the Fisher
+information matrix for separate level-1 variance components if using
+<code>varIdent</code> function to allow for different variances per stratum.
+Default is <code>FALSE</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Sampling variance-covariance matrix corresponding to variance
+component parameters of <code>mod</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+library(nlme)
+data(Bryant2016)
+Bryant2016_RML &lt;- lme(fixed = outcome ~ treatment,
+                      random = ~ 1 | school/case,
+                      correlation = corAR1(0, ~ session | school/case),
+                      data = Bryant2016)
+varcomp_vcov(Bryant2016_RML, type = "expected")
+
+Bryant2016_RML2 &lt;- lme(fixed = outcome ~ treatment,
+                      random = ~ 1 | school/case,
+                      correlation = corAR1(0, ~ session | school/case),
+                      weights = varIdent(form = ~ 1 | treatment),
+                      data = Bryant2016)
+varcomp_vcov(Bryant2016_RML2, separate_variances = TRUE)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>lmeInfo</em> version 0.2.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

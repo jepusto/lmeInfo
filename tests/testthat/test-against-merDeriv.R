@@ -1,3 +1,7 @@
+skip_if_not_installed("lme4")
+skip_if_not_installed("Matrix")
+skip_if_not_installed("merDeriv")
+
 library(lme4)
 library(nlme)
 suppressWarnings(library(merDeriv))
