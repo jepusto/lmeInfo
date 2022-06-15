@@ -37,14 +37,18 @@ Found the following (possibly) invalid URLs:
     From: inst/doc/Information-matrices-for-fitted-LME-models.html
     Status: 403
     Message: Forbidden
+  URL: https://doi.org/10.2307/2533558
+    From: inst/doc/Information-matrices-for-fitted-LME-models.html
+    Status: 403
+    Message: Forbidden
+  URL: https://doi.org/10.1080/01621459.1988.10478693
+    From: inst/doc/Information-matrices-for-fitted-LME-models.html
+    Status: 403
+    Message: Forbidden
   URL: https://doi.org/10.3102/1076998614547577
     From: man/g_mlm.Rd
     Status: 503
     Message: Service Unavailable
-  URL: https://www.ncbi.nlm.nih.gov/pubmed/9333350 (moved to https://pubmed.ncbi.nlm.nih.gov/9333350/)
-    From: inst/doc/Information-matrices-for-fitted-LME-models.html
-    Status: 200
-    Message: OK
 
 Found the following (possibly) invalid DOIs:
   DOI: 10.3102/1076998614547577
