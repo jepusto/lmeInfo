@@ -877,7 +877,7 @@ sigma_sq                              2.5020536
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  5.36 0.51 5.88 NA NA 
+Time elapsed:  5.47 0.5 5.98 NA NA 
 > grDevices::dev.off()
 pdf 
   2 

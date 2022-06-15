@@ -22,9 +22,3 @@
 
 # Revdeps
 
-## New problems (1)
-
-|package                      |version |error  |warning |note |
-|:----------------------------|:-------|:------|:-------|:----|
-|[scdhlm](problems.md#scdhlm) |0.5.2   |__+2__ |1       |     |
-

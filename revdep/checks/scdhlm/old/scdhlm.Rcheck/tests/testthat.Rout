@@ -34,4 +34,4 @@ package 'nlme' was built under R version 4.1.3
 > 
 > proc.time()
    user  system elapsed 
-   1.84    0.25    2.07 
+   1.82    0.25    2.07 

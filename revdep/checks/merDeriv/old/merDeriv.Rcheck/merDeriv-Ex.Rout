@@ -241,7 +241,7 @@ lavaan is FREE software! Please report any bugs.
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  0.97 0.11 1.07 NA NA 
+Time elapsed:  1.02 0.09 1.11 NA NA 
 > grDevices::dev.off()
 null device 
           1 

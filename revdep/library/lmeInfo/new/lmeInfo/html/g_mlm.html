@@ -25,7 +25,8 @@ g_mlm(
   mod_denom = mod,
   r_const = NULL,
   infotype = "expected",
-  separate_variances = FALSE
+  separate_variances = FALSE,
+  ...
 )
 </pre>
 
@@ -72,6 +73,10 @@ standard error for models with a 'varIdent()' variance structure. If
 <code>TRUE</code>, make sure the <code>r_const</code> matches the parameterization of
 the variance component as returned by <code>extract_varcomp(mod,
 separate_variances = TRUE)</code>. Default is <code>FALSE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>further arguments.</p>
 </td></tr>
 </table>
 

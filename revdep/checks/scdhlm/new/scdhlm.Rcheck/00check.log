@@ -52,63 +52,14 @@ See 'D:/Amanda/Pusto/git/lmeInfo/revdep/checks/scdhlm/new/scdhlm.Rcheck/00instal
 * checking data for ASCII and uncompressed saves ... OK
 * checking installed files from 'inst/doc' ... OK
 * checking files in 'vignettes' ... OK
-* checking examples ... ERROR
-Running examples in 'scdhlm-Ex.R' failed
-The error most likely occurred in:
-
-> ### Name: CI_g
-> ### Title: Calculates a confidence interval for a standardized mean
-> ###   difference effect size
-> ### Aliases: CI_g
-> 
-> ### ** Examples
-> 
-> data(Laski)
-> Laski_RML <- lme(fixed = outcome ~ treatment,
-+                  random = ~ 1 | case,
-+                  correlation = corAR1(0, ~ time | case),
-+                  data = Laski)
-> Laski_g_REML <- suppressWarnings(
-+   g_REML(Laski_RML, p_const = c(0,1), 
-+          r_const = c(1,0,1), returnModel = FALSE)
-+ )
-> CI_g(Laski_g_REML, symmetric = TRUE)
-[1] 0.8046224 2.0051521
-> CI_g(Laski_g_REML, symmetric = FALSE)
-[1] 0.9143684 2.0046719
-> 
-> Laski_HPS <- with(Laski, effect_size_MB(outcome, treatment, case, time))
-> CI_g(Laski_HPS, symmetric = FALSE)
-[1] 0.8786207 2.0639828
-> 
-> Laski_g_mlm <- g_mlm(Laski_RML, p_const = c(0,1), r_const = c(1,0,1), returnModel = TRUE)
-Error in g_mlm(Laski_RML, p_const = c(0, 1), r_const = c(1, 0, 1), returnModel = TRUE) : 
-  unused argument (returnModel = TRUE)
-Execution halted
+* checking examples ... OK
 * checking for unstated dependencies in 'tests' ... OK
-* checking tests ... ERROR
+* checking tests ... OK
   Running 'testthat.R'
-Running the tests in 'tests/testthat.R' failed.
-Last 13 lines of output:
-  > 
-  > test_check("scdhlm")
-  [ FAIL 1 | WARN 0 | SKIP 8 | PASS 89 ]
-  
-  == Skipped tests ===============================================================
-  * Auxiliary dataset not included in package. (1)
-  * empty test (7)
-  
-  == Failed tests ================================================================
-  -- Error (test-g_mlm.R:22:3): g_mlm() is imported appropriately. ---------------
-  Error in `g_mlm(Laski_RML1, p_const = c(0, 1), r_const = c(1, 0, 1), returnModel = TRUE)`: unused argument (returnModel = TRUE)
-  
-  [ FAIL 1 | WARN 0 | SKIP 8 | PASS 89 ]
-  Error: Test failures
-  Execution halted
 * checking for unstated dependencies in vignettes ... OK
 * checking package vignettes in 'inst/doc' ... OK
 * checking running R code from vignettes ... NONE
   'Estimating-effect-sizes.Rmd' using 'UTF-8'... OK
 * checking re-building of vignette outputs ... SKIPPED
 * DONE
-Status: 2 ERRORs, 1 WARNING
+Status: 1 WARNING
