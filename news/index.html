@@ -65,7 +65,9 @@
       
     </div>
 
-    <div class="section level2"><h2 class="page-header" data-toc-text="0.2.0.9999" id="lmeinfo-0209999">lmeInfo 0.2.0.9999<a class="anchor" aria-label="anchor" href="#lmeinfo-0209999"></a></h2></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.2.0.9999" id="lmeinfo-0209999">lmeInfo 0.2.0.9999<a class="anchor" aria-label="anchor" href="#lmeinfo-0209999"></a></h2>
+<ul><li>Fixed a bug in <code><a href="../reference/extract_varcomp.html">extract_varcomp()</a></code> that caused some variance components to be dropped if the variables involved in the random effects formula involved special characters such as <code>.</code>, <code>(</code>, <code>)</code>, or <code>^</code>.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.0" id="lmeinfo-020">lmeInfo 0.2.0<small>2022-06-15</small><a class="anchor" aria-label="anchor" href="#lmeinfo-020"></a></h2>
 <ul><li>Added an option to return separate level-1 variance components for models that use <code>weights = varIdent(form = ~ 1 | Stratum)</code>.</li>
