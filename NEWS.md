@@ -1,5 +1,7 @@
 # lmeInfo 0.2.0.9999
 
+* Fixed a bug in `extract_varcomp()` that caused some variance components to be dropped if the variables involved in the random effects formula involved special characters such as `.`, `(`, `)`, or `^`.
+
 # lmeInfo 0.2.0
 
 * Added an option to return separate level-1 variance components for models that use `weights = varIdent(form = ~ 1 | Stratum)`.
