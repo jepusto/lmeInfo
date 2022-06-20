@@ -1,3 +1,5 @@
+# lmeInfo 0.2.0.9999
+
 # lmeInfo 0.2.0
 
 * Added an option to return separate level-1 variance components for models that use `weights = varIdent(form = ~ 1 | Stratum)`.
