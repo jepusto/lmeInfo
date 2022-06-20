@@ -103,6 +103,7 @@ extract_varcomp.lme <- function(mod, separate_variances = FALSE, vector = FALSE)
 
   # split Tau by grouping variables
   group_names <- lapply(mod$modelStruct$reStruct, function(x) attr(x, "Dimnames")[[1]])
+  group_names <- lapply(group_names, function(x) gsub("([\\(\\)\\^\\.])","\\\\\\1", x))
   group_regx <- paste0("^",names(group_names), ".+\\((",lapply(group_names, paste, collapse = "|"), ")")
   names(group_regx) <- names(group_names)
 
