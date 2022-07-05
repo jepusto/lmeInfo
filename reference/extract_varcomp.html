@@ -19,7 +19,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">lmeInfo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0.9999</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -75,7 +75,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">extract_varcomp</span><span class="op">(</span><span class="va">mod</span>, <span class="va">separate_variances</span>, <span class="va">vector</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">extract_varcomp</span><span class="op">(</span><span class="va">mod</span>, <span class="va">separate_variances</span>, <span class="va">vector</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -118,15 +118,15 @@ a numeric vector. Default is <code>FALSE</code>.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://svn.r-project.org/R-packages/trunk/nlme/" class="external-link">nlme</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Bryant2016</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">Bryant2016_RML</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">outcome</span> <span class="op">~</span> <span class="va">treatment</span>,</span>
-<span class="r-in">                      random <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">school</span><span class="op">/</span><span class="va">case</span>,</span>
-<span class="r-in">                      correlation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/corAR1.html" class="external-link">corAR1</a></span><span class="op">(</span><span class="fl">0</span>, <span class="op">~</span> <span class="va">session</span> <span class="op">|</span> <span class="va">school</span><span class="op">/</span><span class="va">case</span><span class="op">)</span>,</span>
-<span class="r-in">                      weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/varIdent.html" class="external-link">varIdent</a></span><span class="op">(</span>form <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">treatment</span><span class="op">)</span>,</span>
-<span class="r-in">                      data <span class="op">=</span> <span class="va">Bryant2016</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">extract_varcomp</span><span class="op">(</span><span class="va">Bryant2016_RML</span>, separate_variances <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://svn.r-project.org/R-packages/trunk/nlme/" class="external-link">nlme</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Bryant2016</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">Bryant2016_RML</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">outcome</span> <span class="op">~</span> <span class="va">treatment</span>,</span></span>
+<span class="r-in"><span>                      random <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">school</span><span class="op">/</span><span class="va">case</span>,</span></span>
+<span class="r-in"><span>                      correlation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/corAR1.html" class="external-link">corAR1</a></span><span class="op">(</span><span class="fl">0</span>, <span class="op">~</span> <span class="va">session</span> <span class="op">|</span> <span class="va">school</span><span class="op">/</span><span class="va">case</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                      weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/varIdent.html" class="external-link">varIdent</a></span><span class="op">(</span>form <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">treatment</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                      data <span class="op">=</span> <span class="va">Bryant2016</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">extract_varcomp</span><span class="op">(</span><span class="va">Bryant2016_RML</span>, separate_variances <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Tau</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Tau$case</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> case.var((Intercept)) </span>
@@ -148,7 +148,7 @@ a numeric vector. Default is <code>FALSE</code>.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "varcomp"</span>
-<span class="r-in"><span class="fu">extract_varcomp</span><span class="op">(</span><span class="va">Bryant2016_RML</span>, separate_variances <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">extract_varcomp</span><span class="op">(</span><span class="va">Bryant2016_RML</span>, separate_variances <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Tau</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Tau$case</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> case.var((Intercept)) </span>
@@ -168,14 +168,14 @@ a numeric vector. Default is <code>FALSE</code>.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "varcomp"</span>
-<span class="r-in"><span class="fu">extract_varcomp</span><span class="op">(</span><span class="va">Bryant2016_RML</span>, vector <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">extract_varcomp</span><span class="op">(</span><span class="va">Bryant2016_RML</span>, vector <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Tau.case.case.var((Intercept)) Tau.school.school.var((Intercept)) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                       2.171111e-05                       1.659984e+02 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                         cor_params                         var_params </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                       9.745913e-01                       1.250291e+00 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                           sigma_sq </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                       6.638410e+02 </span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -190,7 +190,7 @@ a numeric vector. Default is <code>FALSE</code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
