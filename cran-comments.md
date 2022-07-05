@@ -1,10 +1,6 @@
 ## Resubmit comments
 
-In this version we have:
-* Added an option to allow heterogeneous level-1 variance components.
-* Generalized the `g_mlm()` function to allow use of separate models for the numerator and denominator of the effect size.
-* Modified the stored results of `g_mlm` so that the `returnModel` argument is no longer necessary.
-* Fixed a bug in handling of models with missing observations.
+In this version we have fixed an important bug that matters for updating downstream dependencies. We apologize for any inconvenience caused by this rapid resubmission. Thank you.
 
 ## Test environments
 * local Windows 10 Pro, R 4.1.0
