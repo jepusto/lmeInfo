@@ -1,12 +1,13 @@
 ## Resubmit comments
 
-In this version we have fixed an important bug that matters for updating downstream dependencies. We apologize for any inconvenience caused by this rapid resubmission. Thank you.
+In this version we have fixed a bug in `extract_varcomp()` that caused some variance components to be dropped if the variables involved in the random effects formula involved special characters such as `.`, `(`, `)`, or `^`. This bug is important to correct for the package's downstream dependency (the scdhlm package). We apologize for the inconvenience caused by our rapid re-submission. Thank you.
 
 ## Test environments
+
 * local Windows 10 Pro, R 4.1.0
-- ubuntu 20.04.4 LTS (on Github), R devel, release, oldrelease
-- macOS-latest (on Github), R release
-- Windows-latest (on Github), R release
+* ubuntu 20.04.4 LTS (on Github), R devel, release, oldrelease
+* macOS-latest (on Github), R release
+* Windows-latest (on Github), R release
 * win-builder (devel, release, oldrelease)
 * r-hub:
   - Debian Linux, R-devel, clang, ISO-8859-15 locale
