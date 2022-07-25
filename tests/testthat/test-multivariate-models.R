@@ -5,13 +5,13 @@ library(nlme)
 data(bdf, package = "mlmRev")
 
 bdf_long <-
-  bdf |>
-  subset(
-    schoolNR %in% levels(schoolNR)[1:12],
-    select = c(schoolNR, pupilNR, sex, Minority, IQ.verb, IQ.perf, aritPRET)
-  ) |>
-  droplevels() |>
   reshape(
+    droplevels(
+      subset(bdf,
+             schoolNR %in% levels(schoolNR)[1:12],
+             select = c(schoolNR, pupilNR, sex, Minority, IQ.verb, IQ.perf, aritPRET)
+      )
+    ),
     direction = "long",
     idvar = "pupilNR",
     varying = c("IQ.verb","IQ.perf","aritPRET"),
@@ -43,13 +43,12 @@ bdf_long$school_id <- bdf_long$schoolNR
 levels(bdf_long$school_id) <- LETTERS[1:nlevels(bdf_long$school_id)]
 
 bdf_long_wm <-
-  bdf_long |>
-  within({
-    row_index = rbinom(n = nrow(bdf_long), size = 1, prob = 0.9)
-    score = ifelse(row_index == 1, score, as.numeric(NA))
-    measure_id = as.integer(factor(measure))
-  }) |>
   subset(
+    within(bdf_long, {
+      row_index = rbinom(n = nrow(bdf_long), size = 1, prob = 0.9)
+      score = ifelse(row_index == 1, score, as.numeric(NA))
+      measure_id = as.integer(factor(measure))
+    }),
     !is.na(score),
     select = -row_index
   )
@@ -57,8 +56,7 @@ bdf_long_wm <-
 row_numbers <- 1:nrow(bdf_long_wm)
 
 bdf_long_shuff <-
-  bdf_long_wm |>
-  within({
+  within(bdf_long_wm, {
     index = ifelse(schoolNR == 1, row_numbers, sample(row_numbers))
     id = ifelse(schoolNR == 1, "A","B")
   })
@@ -81,18 +79,18 @@ bdf_2L_wm_shuff <- lme(score ~ 0 + measure,
                        control=lmeControl(msMaxIter = 100, apVar = FALSE, returnObject = TRUE))
 
 bdf_3L_wm_shuff <- lme(score ~ 0 + measure,
-                    random = ~ 1| schoolNR / pupilNR,
-                    corr = corSymm(form = ~ measure_id | schoolNR / pupilNR),
-                    weights = varIdent(form = ~ 1 | measure_id),
-                    data = bdf_long_shuff,
-                    control=lmeControl(msMaxIter = 100, apVar = FALSE, returnObject = TRUE))
+                       random = ~ 1| schoolNR / pupilNR,
+                       corr = corSymm(form = ~ measure_id | schoolNR / pupilNR),
+                       weights = varIdent(form = ~ 1 | measure_id),
+                       data = bdf_long_shuff,
+                       control=lmeControl(msMaxIter = 100, apVar = FALSE, returnObject = TRUE))
 
 bdf_wm_id <- lme(score ~ 0 + measure,
-                  random = ~ 1| school_id / pupilNR,
-                  corr = corSymm(form = ~ measure_id | school_id / pupilNR),
-                  weights = varIdent(form = ~ 1 | measure_id),
-                  data = bdf_long_shuff,
-                  control=lmeControl(msMaxIter = 100, apVar = FALSE, returnObject = TRUE))
+                 random = ~ 1| school_id / pupilNR,
+                 corr = corSymm(form = ~ measure_id | school_id / pupilNR),
+                 weights = varIdent(form = ~ 1 | measure_id),
+                 data = bdf_long_shuff,
+                 control=lmeControl(msMaxIter = 100, apVar = FALSE, returnObject = TRUE))
 
 mod <- bdf_MV2L
 
