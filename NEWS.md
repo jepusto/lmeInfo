@@ -1,3 +1,5 @@
+# lmeInfo 0.2.1.9999
+
 # lmeInfo 0.2.1
 
 * Fixed a bug in `extract_varcomp()` that caused some variance components to be dropped if the variables involved in the random effects formula involved special characters such as `.`, `(`, `)`, or `^`.
