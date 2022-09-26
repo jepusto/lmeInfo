@@ -44,8 +44,7 @@
 #'   \tab Biased correction factor for effect size estimate \cr \code{kappa}
 #'   \tab Scaled standard error of numerator \cr \code{g_AB} \tab Corrected
 #'   effect size estimate \cr \code{SE_g_AB} \tab Approximate standard error
-#'   estimate \cr \code{cnvg_warn} \tab Indicator that model did not converge
-#'   \cr \code{theta} \tab Estimated variance component parameters \cr
+#'   estimate \cr \code{theta} \tab Estimated variance component parameters \cr
 #'   \code{info_inv} \tab Inversed information matrix \cr }
 #'
 #' @references Pustejovsky, J. E., Hedges, L. V., & Shadish, W. R. (2014).
@@ -122,7 +121,6 @@ g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "exp
   r_theta <- sum(unlist(theta) * r_const)                         # r'theta (sum of var comp)
   delta_AB <- p_beta / sqrt(r_theta)                              # delta_AB
   kappa_sq <- sum(tcrossprod(p_const) * vcov(mod)) / r_theta      # kappa^2
-  cnvg_warn <- !is.null(attr(mod_denom,"warning"))                # indicator that RML estimation has not converged
 
   # calculate inverse Fisher information
   info_inv <- varcomp_vcov(mod_denom, type = infotype, separate_variances = separate_variances)
@@ -137,7 +135,7 @@ g_mlm <- function(mod, p_const, mod_denom = mod, r_const = NULL, infotype = "exp
   SE_g_AB <- sqrt(V_g_AB)
 
   res <- c(list(p_beta = p_beta, r_theta = r_theta, delta_AB = delta_AB, nu = nu, J_nu = J_nu,
-                kappa = sqrt(kappa_sq), g_AB = g_AB, SE_g_AB = SE_g_AB, cnvg_warn=cnvg_warn),
+                kappa = sqrt(kappa_sq), g_AB = g_AB, SE_g_AB = SE_g_AB),
            list(beta = beta_coef, SE_beta = SE_beta),
            list(theta = theta, SE_theta = SE_theta),
            list(info_inv = info_inv, p_const = p_const, r_const = r_const, logLik = mod$logLik))

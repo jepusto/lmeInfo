@@ -53,8 +53,7 @@ A list with the following components \tabular{ll}{ \code{p_beta} \tab
   \tab Biased correction factor for effect size estimate \cr \code{kappa}
   \tab Scaled standard error of numerator \cr \code{g_AB} \tab Corrected
   effect size estimate \cr \code{SE_g_AB} \tab Approximate standard error
-  estimate \cr \code{cnvg_warn} \tab Indicator that model did not converge
-  \cr \code{theta} \tab Estimated variance component parameters \cr
+  estimate \cr \code{theta} \tab Estimated variance component parameters \cr
   \code{info_inv} \tab Inversed information matrix \cr }
 }
 \description{
