@@ -1,5 +1,8 @@
 # lmeInfo 0.2.1.9999
 
+* Removed `cnvg_warn` argument from the `g_mlm()` function.
+* Updated the unit tests related to Lambert et al. (2006) data.
+
 # lmeInfo 0.2.1
 
 * Fixed a bug in `extract_varcomp()` that caused some variance components to be dropped if the variables involved in the random effects formula involved special characters such as `.`, `(`, `)`, or `^`.
