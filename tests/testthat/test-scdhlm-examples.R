@@ -8,7 +8,7 @@ data(Lambert)
 Lambert_RML <- lme(fixed = outcome ~ treatment,
                     random = ~ 1 | case,
                     correlation = corAR1(0.1, ~ time | case),
-                    data = Lambert)
+                    data = subset(Lambert, measure=="academic response"))
 
 
 data(Anglesea)

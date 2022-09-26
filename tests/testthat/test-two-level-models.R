@@ -60,7 +60,7 @@ data(Lambert, package = "scdhlm")
 Lambert_RML <- lme(fixed = outcome ~ treatment,
                    random = ~ 1 | case,
                    correlation = corAR1(0.1, ~ time | case),
-                   data = Lambert)
+                   data = subset(Lambert, measure=="academic response"))
 
 data(Anglesea, package = "scdhlm")
 Anglesea_RML <- lme(fixed = outcome ~ condition,
@@ -116,7 +116,7 @@ test_that("targetVariance() works with 2-level models.", {
   test_Sigma_mats(Laski_MA2, Laski$case)
   test_Sigma_mats(Laski_AR1MA1, Laski$case)
   test_Sigma_mats(Bodyweight_Gaus)
-  test_Sigma_mats(Lambert_RML, Lambert$case)
+  test_Sigma_mats(Lambert_RML, subset(Lambert, measure=="academic response")$case)
   test_Sigma_mats(Anglesea_RML, Anglesea$case)
   test_Sigma_mats(Saddler_quality_RML, subset(Saddler, measure=="writing quality")$case )
   test_Sigma_mats(Schutte_RML3, Schutte$case)
