@@ -31,6 +31,17 @@ star_3L_RE <- lme(math ~ small,
                   random = list(~ 1 | sch, ~ 0 + small | sch, ~ 1 | tch),
                   data = star)
 
+star_3L_RE_rev <- lme(math ~ small,
+                      random = list(~ 0 + small | sch, ~ 1 | sch, ~ 1 | tch),
+                      data = star)
+
+star_3L_RE_double <- lme(math ~ small,
+                         random = list(~ 1 + sx | sch, ~ 0 + small | sch, ~ 1 | tch),
+                         data = star)
+star_3L_RE_within <- lme(math ~ small,
+                         random = list(~ 0 + small | sch, ~ 1 + sx | sch, ~ 1 | tch),
+                         data = star)
+
 star_3L_RE_control <- lme(math ~ small + schtype + ses + sx + eth,
                           random = list(~ 1 | sch, ~ 0 + small | sch, ~ 1 | tch),
                           data = star)
@@ -39,6 +50,21 @@ star_3L_RE_IID <- lme(math ~ small + schtype + ses + sx + eth,
                           random = list(~ 1 + sx | sch, ~ 1 | tch),
                           data = star)
 
+test_that("Names match up between random effects components and derivative lists.", {
+
+  check_parameter_derivatives(star_2L_basic)
+  check_parameter_derivatives(star_2L_control)
+  check_parameter_derivatives(star_3L_basic)
+  check_parameter_derivatives(star_3L_control)
+  check_parameter_derivatives(star_3L_RE)
+  check_parameter_derivatives(star_3L_RE_rev)
+  check_parameter_derivatives(star_3L_RE_control)
+  check_parameter_derivatives(star_3L_RE_double)
+  check_parameter_derivatives(star_3L_RE_within)
+  check_parameter_derivatives(star_3L_RE_IID)
+
+})
+
 test_that("Fisher information matrices can be computed for STAR models.", {
 
   check_info_dim(star_2L_basic, 2L)
@@ -46,7 +72,9 @@ test_that("Fisher information matrices can be computed for STAR models.", {
   check_info_dim(star_3L_basic, 3L)
   check_info_dim(star_3L_control, 3L)
   check_info_dim(star_3L_RE, 4L)
+  check_info_dim(star_3L_RE_rev, 4L)
   check_info_dim(star_3L_RE_control, 4L)
+  check_info_dim(star_3L_RE_within, 6L)
   check_info_dim(star_3L_RE_IID, 5L)
 
 })
