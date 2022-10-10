@@ -1,5 +1,6 @@
-# lmeInfo 0.2.1.9999
+# lmeInfo 0.3.0
 
+* Fixed a bug in the `Fisher_info()` function that causes incorrect order for the three-level models and for the models with multiple random effects at the same level.
 * Removed `cnvg_warn` argument from the `g_mlm()` function.
 * Updated the unit tests related to Lambert et al. (2006) data.
 
