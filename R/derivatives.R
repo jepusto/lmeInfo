@@ -20,9 +20,7 @@ build_dV_list.gls <- function(mod) {
 }
 
 build_dV_list.lme <- function(mod) {
-  reStruct_names <- names(mod$modelStruct$reStruct)
   Tau_params <- dV_dreStruct(mod)                           # random effects structure(s)
-  Tau_params <- Tau_params[reStruct_names]                  # make sure the order of Tau_params aligns with order of RE
   cor_params <- dV_dcorStruct(mod)                          # correlation structure
   var_params <- dV_dvarStruct(mod)                          # variance structure
   sigma_sq <- dV_dsigmasq(mod)                              # sigma_sq
@@ -81,9 +79,11 @@ dV_dreStruct <- function(mod) {
 
   }
 
-  mapply(dV_dTau_unstruct,
+  res <- mapply(dV_dTau_unstruct,
          block = blocks, pdMat_class = b, Z_design = Z_list,
          SIMPLIFY = FALSE)
+
+  res <- res[names(mod$modelStruct$reStruct)]
 }
 
 #------------------------------------------------------------------------------
