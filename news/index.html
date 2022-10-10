@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">lmeInfo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1.9999</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
       </span>
     </div>
 
@@ -65,7 +65,12 @@
       
     </div>
 
-    <div class="section level2"><h2 class="page-header" data-toc-text="0.2.1.9999" id="lmeinfo-0219999">lmeInfo 0.2.1.9999<a class="anchor" aria-label="anchor" href="#lmeinfo-0219999"></a></h2></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.3.0" id="lmeinfo-030">lmeInfo 0.3.0<a class="anchor" aria-label="anchor" href="#lmeinfo-030"></a></h2>
+<ul><li>Fixed a bug in the <code><a href="../reference/Fisher_info.html">Fisher_info()</a></code> function that returned the information matrix in an incorrect order for models with three or more sets of random effects or models with multiple sets of random effects at the same level.</li>
+<li>Removed <code>cnvg_warn</code> argument from the <code><a href="../reference/g_mlm.html">g_mlm()</a></code> function.</li>
+<li>Updated the unit tests related to Lambert et al. (2006) data.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.1" id="lmeinfo-021">lmeInfo 0.2.1<small>2022-07-06</small><a class="anchor" aria-label="anchor" href="#lmeinfo-021"></a></h2>
 <ul><li>Fixed a bug in <code><a href="../reference/extract_varcomp.html">extract_varcomp()</a></code> that caused some variance components to be dropped if the variables involved in the random effects formula involved special characters such as <code>.</code>, <code>(</code>, <code>)</code>, or <code>^</code>.</li></ul></div>
