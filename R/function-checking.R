@@ -366,3 +366,19 @@ check_info_dim <- function(mod, dim, type = "expected") {
   testthat::expect_identical(dim(Imat), rep(dim, 2))
   testthat::expect_identical(dim(Vmat), rep(dim, 2))
 }
+
+fix_names <- function(x) {
+  if (length(x) == 1L) return(x)
+  x_chr <- as.character(length(x):1 - 1)
+  res <- paste(x, x_chr, sep = ".")
+  res[length(x)] <- x[length(x)]
+  res
+}
+
+check_parameter_derivatives <- function(mod) {
+  dV_dTau <- dV_dreStruct(mod)
+  Tau_params <- extract_varcomp(mod)$Tau
+  names(Tau_params) <- unsplit(tapply(names(Tau_params), names(Tau_params), fix_names), names(Tau_params))
+  testthat::expect_true(all(names(dV_dTau) %in% names(Tau_params)))
+  testthat::expect_equal(lengths(dV_dTau)[names(Tau_params)], lengths(Tau_params))
+}

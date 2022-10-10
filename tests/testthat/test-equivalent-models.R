@@ -37,8 +37,8 @@ test_that("vcov matrices are equivalent for equivalent models.", {
   vcov_3level_exp <- varcomp_vcov(Thiemann2001_3level)
   vcov_CScorr_exp <- varcomp_vcov(Thiemann2001_CScorr)
 
-  expect_equal(vcov_3level_exp[1,1] / vcov_CScorr_exp[1,1], 1, tol = 10^-3)
-  expect_equal(sum(vcov_3level_exp[2:3,2:3]) / vcov_CScorr_exp[3,3], 1, tol = 10^-3)
-  expect_equal(sum(vcov_3level_exp[2:3,1]) / vcov_CScorr_exp[1,3], 1, tol = 10^-3)
+  expect_equal(vcov_3level_exp[2,2] / vcov_CScorr_exp[1,1], 1, tol = 10^-3)
+  expect_equal(sum(vcov_3level_exp[c(1,3),c(1,3)]) / vcov_CScorr_exp[3,3], 1, tol = 10^-3)
+  expect_equal(sum(vcov_3level_exp[c(1,3),2]) / vcov_CScorr_exp[1,3], 1, tol = 10^-3)
 
 })

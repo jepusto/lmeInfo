@@ -57,6 +57,8 @@ Bodyweight_Gaus <- lme(weight ~ Time * Diet,
 
 
 data(Lambert, package = "scdhlm")
+if ("measure" %in% names(Lambert)) Lambert <- subset(Lambert, measure=="academic response")
+
 Lambert_RML <- lme(fixed = outcome ~ treatment,
                    random = ~ 1 | case,
                    correlation = corAR1(0.1, ~ time | case),
