@@ -49,7 +49,7 @@ test_that("The degrees of freedom are not sensitive to the choice of centering v
   expect_equal(Laski_g_C1$delta_AB, Laski_g_C2$delta_AB, tol = .005)
   expect_equal(Laski_g_C1$g_AB, Laski_g_C2$g_AB, tol = .005)
   expect_equal(Laski_g_C1$SE_g_AB, Laski_g_C2$SE_g_AB, tol = .001)
-  expect_equal(Laski_g_C1$nu, Laski_g_C2$nu, tol = .005)
+  expect_equal(Laski_g_C1$nu, Laski_g_C2$nu, tol = .01)
 
 })
 
