@@ -61,29 +61,34 @@ dV_dreStruct <- function(mod) {
   blocks <- mod$groups
   blocks_names <- names(blocks)
   reStruct_names <- names(mod$modelStruct$reStruct)
-  if (!all(blocks_names %in% reStruct_names)) names(mod$modelStruct$reStruct) <- rev(blocks_names)
-  b <- lapply(blocks_names, function(x) class(mod$modelStruct$reStruct[[x]])) # pdClass
+  if (!all(blocks_names %in% reStruct_names)) {
+    reStruct_names <- rev(blocks_names)
+    names(mod$modelStruct$reStruct) <- reStruct_names
+  }
+  if (!all(blocks_names == reStruct_names)) {
+    blocks <- blocks[reStruct_names]
+  }
+
+  b <- lapply(reStruct_names, function(x) class(mod$modelStruct$reStruct[[x]])) # pdClass
+
   data <- nlme::getData(mod)
   Z_design <- model.matrix(mod$modelStruct$reStruct, data = data)
   if (inherits(mod$na.action, "exclude")) {
     Z_design <- Z_design[!(rownames(Z_design) %in% names(mod$na.action)),,drop=FALSE]
   }
-
-  Z_names <- get_RE_names(mod$modelStruct$reStruct)
+  Z_names <- get_RE_names(mod$modelStruct$reStruct)[reStruct_names]
 
   if (length(blocks) == 1L) {
     Z_list <- list(Z_design)
   } else {
-    Z_list <- sapply(Z_names[names(blocks)], function(x) Z_design[,x, drop = FALSE],
+    Z_list <- sapply(Z_names, function(x) Z_design[,x, drop = FALSE],
                      simplify = FALSE, USE.NAMES = TRUE)
-
   }
 
-  res <- mapply(dV_dTau_unstruct,
+  mapply(dV_dTau_unstruct,
          block = blocks, pdMat_class = b, Z_design = Z_list,
          SIMPLIFY = FALSE)
 
-  res <- res[names(mod$modelStruct$reStruct)]
 }
 
 #------------------------------------------------------------------------------
