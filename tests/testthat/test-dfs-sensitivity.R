@@ -46,10 +46,10 @@ test_that("The degrees of freedom are not sensitive to the choice of centering v
                                        r_const = c(1, 2*(B-C2), (B-C2)^2, 0, 1),
                                        returnModel = TRUE))
 
-  expect_equal(Laski_g_C1$delta_AB, Laski_g_C2$delta_AB, tol = .01)
-  expect_equal(Laski_g_C1$g_AB, Laski_g_C2$g_AB, tol = .01)
+  expect_equal(Laski_g_C1$delta_AB, Laski_g_C2$delta_AB, tol = .005)
+  expect_equal(Laski_g_C1$g_AB, Laski_g_C2$g_AB, tol = .005)
   expect_equal(Laski_g_C1$SE_g_AB, Laski_g_C2$SE_g_AB, tol = .001)
-  expect_equal(Laski_g_C1$nu, Laski_g_C2$nu, tol = .1)
+  expect_equal(Laski_g_C1$nu, Laski_g_C2$nu, tol = .005)
 
 })
 
@@ -87,29 +87,6 @@ test_that("The degrees of freedom are not sensitive to the choice of centering v
                     p_const = c(0,0,1,B-A),
                     r_const = c(1,2*(B-C2),(B-C2)^2,0,0,0,1,0,1),
                     returnModel = TRUE)
-
-  # check if the ordering of extract_varcomp() is the same as the ordering of build_DV_list() for Tau_params
-  theta_C1 <- extract_varcomp(Thi_RML_C1)
-  theta_Tau_length_C1 <- length(unlist(theta_C1$Tau))
-  theta_Tau_names_C1 <- names(theta_C1$Tau)
-  reStruct_names_C1 <- names(Thi_RML_C1$modelStruct$reStruct)
-  dV_list_C1 <- build_dV_list.lme(Thi_RML_C1)
-  dVlist_Tau_names_C1 <- names(dV_list_C1)[1:theta_Tau_length_C1]
-  dVlist_Tau_names_C1 <- unique(gsub("[0-9]", "", dVlist_Tau_names_C1))
-
-  theta_C2 <- extract_varcomp(Thi_RML_C1)
-  theta_Tau_length_C2 <- length(unlist(theta_C2$Tau))
-  theta_Tau_names_C2 <- names(theta_C2$Tau)
-  reStruct_names_C2 <- names(Thi_RML_C1$modelStruct$reStruct)
-  dV_list_C2 <- build_dV_list.lme(Thi_RML_C1)
-  dVlist_Tau_names_C2 <- names(dV_list_C2)[1:theta_Tau_length_C2]
-  dVlist_Tau_names_C2 <- unique(gsub("[0-9]", "", dVlist_Tau_names_C2))
-
-  expect_equal(theta_Tau_names_C1, reStruct_names_C1)
-  expect_equal(theta_Tau_names_C1, dVlist_Tau_names_C1)
-  expect_equal(theta_Tau_names_C2, reStruct_names_C2)
-  expect_equal(theta_Tau_names_C2, dVlist_Tau_names_C2)
-  expect_equal(theta_Tau_names_C1, theta_Tau_names_C2)
 
   # check whether BCSMD estimates, SE, and dfs match for different centering values
   expect_equal(Thi_g_C1$delta_AB, Thi_g_C2$delta_AB, tol = .001)
@@ -157,33 +134,10 @@ test_that("The degrees of freedom are not sensitive to the choice of centering v
                     r_const = c(1,2*(B-C2),(B-C2)^2,0,0,0,1,0,1),
                     returnModel = TRUE)
 
-  # check if the ordering of extract_varcomp() is the same as the ordering of build_DV_list() for Tau_params
-  theta_C1 <- extract_varcomp(Bry_RML_C1)
-  theta_Tau_length_C1 <- length(unlist(theta_C1$Tau))
-  theta_Tau_names_C1 <- names(theta_C1$Tau)
-  reStruct_names_C1 <- names(Bry_RML_C1$modelStruct$reStruct)
-  dV_list_C1 <- build_dV_list.lme(Bry_RML_C1)
-  dVlist_Tau_names_C1 <- names(dV_list_C1)[1:theta_Tau_length_C1]
-  dVlist_Tau_names_C1 <- unique(gsub("[0-9]", "", dVlist_Tau_names_C1))
-
-  theta_C2 <- extract_varcomp(Bry_RML_C2)
-  theta_Tau_length_C2 <- length(unlist(theta_C2$Tau))
-  theta_Tau_names_C2 <- names(theta_C2$Tau)
-  reStruct_names_C2 <- names(Bry_RML_C2$modelStruct$reStruct)
-  dV_list_C2 <- build_dV_list.lme(Bry_RML_C2)
-  dVlist_Tau_names_C2 <- names(dV_list_C2)[1:theta_Tau_length_C2]
-  dVlist_Tau_names_C2 <- unique(gsub("[0-9]", "", dVlist_Tau_names_C2))
-
-  expect_equal(theta_Tau_names_C1, reStruct_names_C1)
-  expect_equal(theta_Tau_names_C1, dVlist_Tau_names_C1)
-  expect_equal(theta_Tau_names_C2, reStruct_names_C2)
-  expect_equal(theta_Tau_names_C2, dVlist_Tau_names_C2)
-  expect_equal(theta_Tau_names_C1, theta_Tau_names_C2)
-
   # check whether BCSMD estimates, SE, and dfs match for different centering values
-  expect_equal(Bry_g_C1$delta_AB, Bry_g_C2$delta_AB, tol = .01)
-  expect_equal(Bry_g_C1$g_AB, Bry_g_C2$g_AB, tol = .01)
+  expect_equal(Bry_g_C1$delta_AB, Bry_g_C2$delta_AB, tol = .005)
+  expect_equal(Bry_g_C1$g_AB, Bry_g_C2$g_AB, tol = .005)
   expect_equal(Bry_g_C1$SE_g_AB, Bry_g_C2$SE_g_AB, tol = .001)
-  expect_equal(Bry_g_C1$nu, Bry_g_C2$nu, tol = .1)
+  expect_equal(Bry_g_C1$nu, Bry_g_C2$nu, tol = .01)
 
 })
