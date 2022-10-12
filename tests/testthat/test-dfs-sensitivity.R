@@ -1,4 +1,3 @@
-skip_if_not_installed("nlme")
 skip_if_not_installed("scdhlm")
 
 library(nlme)

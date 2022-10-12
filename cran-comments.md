@@ -1,48 +1,57 @@
 ## Resubmit comments
 
-In this version we have fixed a bug in `extract_varcomp()` that caused some variance components to be dropped if the variables involved in the random effects formula involved special characters such as `.`, `(`, `)`, or `^`. This bug is important to correct for the package's downstream dependency (the scdhlm package). We apologize for the inconvenience caused by our rapid re-submission. Thank you.
+In this version we have 
+* fixed a bug in the `Fisher_info()` function that returned the information matrix in an incorrect order for models with three or more sets of random effects or models with multiple sets of random effects at the same level;
+* removed `cnvg_warn` argument from the `g_mlm()` function;
+* and updated the unit tests related to Lambert et al. (2006) data.
+
+These updates are necessary for the package's downstream dependency (the scdhlm package). Thank you.
 
 ## Test environments
 
-* local Windows 10 Pro, R 4.1.0
-* ubuntu 20.04.4 LTS (on Github), R devel, release, oldrelease
+* local Windows 10 Pro, R 4.2.1
+* ubuntu 20.04.5 LTS (on Github), R devel, release, oldrelease
 * macOS-latest (on Github), R release
 * Windows-latest (on Github), R release
 * win-builder (devel, release, oldrelease)
 * r-hub:
   - macOS 10.13.6 High Sierra, R-release, CRAN's setup
-  - Apple Silicon (M1), macOS 11.6 Big Sur, R-release
+  - Windows Server 2022, R-oldrel, 32/64 bit
+  - Windows Server 2022, R-release, 32/64 bit
+  - Windows Server 2022, R-patched, 32/64 bit
+  - Windows Server 2022, R-devel, 64 bit
+  - Fedora Linux, R-devel, clang, gfortran
+  
 
 ## R CMD check results
 There was 1 NOTE:
 
-Found the following (possibly) invalid URLs:
-  URL: https://doi.org/10.1177/0022219414538516
-    From: man/Bryant2016.Rd
-    Status: 503
-    Message: Service Unavailable
-  URL: https://doi.org/10.2307/2533274
-    From: inst/doc/Information-matrices-for-fitted-LME-models.html
-    Status: 403
-    Message: Forbidden
-  URL: https://doi.org/10.2307/2533558
-    From: inst/doc/Information-matrices-for-fitted-LME-models.html
-    Status: 403
-    Message: Forbidden
-  URL: https://doi.org/10.1080/01621459.1988.10478693
-    From: inst/doc/Information-matrices-for-fitted-LME-models.html
-    Status: 403
-    Message: Forbidden
-  URL: https://doi.org/10.3102/1076998614547577
-    From: man/g_mlm.Rd
-    Status: 503
-    Message: Service Unavailable
+* checking CRAN incoming feasibility ... NOTE
+  Possibly mis-spelled words in DESCRIPTION:
+    Pustejovsky (24:48)
+    Shadish (24:73)
+    gls (16:77, 25:28)
+    lme (16:34, 20:57, 25:21)
+  
+  These words are spelled correctly.
 
-Found the following (possibly) invalid DOIs:
-  DOI: 10.3102/1076998614547577
-    From: DESCRIPTION
-    Status: Service Unavailable
-    Message: 503
+  Found the following (possibly) invalid URLs:
+    URL: https://doi.org/10.2307/2533274
+      From: inst/doc/Information-matrices-for-fitted-LME-models.html
+      Status: 403
+      Message: Forbidden
+    URL: https://doi.org/10.2307/2533558
+      From: inst/doc/Information-matrices-for-fitted-LME-models.html
+      Status: 403
+      Message: Forbidden
+
+  Found the following (possibly) invalid DOIs:
+    DOI: 10.3102/1076998614547577
+      From: DESCRIPTION
+      Status: Service Unavailable
+      Message: 503
+      
+  These URLs and DOIs are valid.
 
 ## revdepcheck results
 We checked 3 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
