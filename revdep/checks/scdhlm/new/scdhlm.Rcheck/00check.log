@@ -1,10 +1,10 @@
 * using log directory 'D:/Amanda/Pusto/git/lmeInfo/revdep/checks/scdhlm/new/scdhlm.Rcheck'
-* using R version 4.1.0 (2021-05-18)
+* using R version 4.2.1 (2022-06-23 ucrt)
 * using platform: x86_64-w64-mingw32 (64-bit)
-* using session charset: ISO8859-1
+* using session charset: UTF-8
 * using options '--no-manual --no-build-vignettes'
 * checking for file 'scdhlm/DESCRIPTION' ... OK
-* this is package 'scdhlm' version '0.5.2'
+* this is package 'scdhlm' version '0.6.0'
 * package encoding: UTF-8
 * checking package namespace information ... OK
 * checking package dependencies ... OK
@@ -13,10 +13,7 @@
 * checking for executable files ... OK
 * checking for hidden files and directories ... OK
 * checking for portable file names ... OK
-* checking whether package 'scdhlm' can be installed ... WARNING
-Found the following significant warnings:
-  Warning: package 'nlme' was built under R version 4.1.3
-See 'D:/Amanda/Pusto/git/lmeInfo/revdep/checks/scdhlm/new/scdhlm.Rcheck/00install.out' for details.
+* checking whether package 'scdhlm' can be installed ... OK
 * checking installed package size ... OK
 * checking package directory ... OK
 * checking 'build' directory ... OK
@@ -62,4 +59,4 @@ See 'D:/Amanda/Pusto/git/lmeInfo/revdep/checks/scdhlm/new/scdhlm.Rcheck/00instal
   'Estimating-effect-sizes.Rmd' using 'UTF-8'... OK
 * checking re-building of vignette outputs ... SKIPPED
 * DONE
-Status: 1 WARNING
+Status: OK

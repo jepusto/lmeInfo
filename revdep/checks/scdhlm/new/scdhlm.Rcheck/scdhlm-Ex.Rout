@@ -1,6 +1,6 @@
 
-R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.2.1 (2022-06-23 ucrt) -- "Funny-Looking Kid"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -23,7 +23,6 @@ Type 'q()' to quit R.
 > options(pager = "console")
 > library('scdhlm')
 Loading required package: nlme
-Warning: package 'nlme' was built under R version 4.1.3
 > 
 > base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 > base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
@@ -58,7 +57,7 @@ Warning: package 'nlme' was built under R version 4.1.3
 > CI_g(Laski_HPS, symmetric = FALSE)
 [1] 0.8786207 2.0639828
 > 
-> Laski_g_mlm <- g_mlm(Laski_RML, p_const = c(0,1), r_const = c(1,0,1), returnModel = TRUE)
+> Laski_g_mlm <- g_mlm(mod = Laski_RML, p_const = c(0,1), r_const = c(1,0,1))
 > CI_g(Laski_g_mlm, symmetric = FALSE)
 [1] 0.9143684 2.0046719
 > 
@@ -320,54 +319,10 @@ Number of Observations: 128
 Number of Groups: 8 
 > g_REML(Laski_RML, p_const = c(0,1), r_const = c(1,0,1), returnModel=FALSE)
 Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-$p_beta
-[1] 30.68366
-
-$r_theta
-[1] 438.7208
-
-$delta_AB
-[1] 1.464917
-
-$nu
-[1] 18.55241
-
-$kappa
-[1] 0.1430354
-
-$g_AB
-[1] 1.404887
-
-$V_g_AB
-[1] 0.08198192
-
-$cnvg_warn
-[1] FALSE
-
-$sigma_sq
-[1] 192.7711
-
-$phi
-[1] 0.252769
-
-$Tau
-case.var((Intercept)) 
-             245.9497 
-
-$I_E_inv
-            [,1]        [,2]          [,3]
-[1,]  798.919038  1.32235408  -132.1234582
-[2,]    1.322354  0.01002805    -0.5152126
-[3,] -132.123458 -0.51521261 20214.7623585
-
-$p_const
-[1] 0 1
-
-$r_const
-[1] 1 0 1
-
-attr(,"class")
-[1] "g_REML"
+                          est    se
+unadjusted effect size  1.465 0.299
+adjusted effect size    1.405 0.286
+degree of freedom      18.552      
 > 
 > data(Schutte)
 > Schutte$trt.week <- with(Schutte, unlist(tapply((treatment=="treatment") * week, 
@@ -417,39 +372,23 @@ Number of Groups: 12
 > Schutte_g <- g_REML(Schutte_RML, p_const = c(0,0,1,7), r_const = c(1,0,1,0,0))
 Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
 > summary(Schutte_g)
-             Length Class      Mode     
-p_beta         1    -none-     numeric  
-r_theta        1    -none-     numeric  
-delta_AB       1    -none-     numeric  
-nu             1    -none-     numeric  
-kappa          1    -none-     numeric  
-g_AB           1    -none-     numeric  
-V_g_AB         1    -none-     numeric  
-cnvg_warn      1    -none-     logical  
-sigma_sq       1    -none-     numeric  
-phi            1    -none-     numeric  
-Tau            3    -none-     numeric  
-I_E_inv       25    -none-     numeric  
-p_const        4    -none-     numeric  
-r_const        5    -none-     numeric  
-modelStruct    2    lmeStruct  list     
-dims           5    -none-     list     
-contrasts      1    -none-     list     
-coefficients   2    -none-     list     
-varFix        16    -none-     numeric  
-sigma          1    -none-     numeric  
-apVar         25    -none-     numeric  
-logLik         1    -none-     numeric  
-numIter        0    -none-     NULL     
-groups         1    data.frame list     
-call           5    -none-     call     
-terms          3    terms      call     
-method         1    -none-     character
-fitted       272    -none-     numeric  
-residuals    272    -none-     numeric  
-fixDF          2    -none-     list     
-na.action      0    -none-     NULL     
-data           5    data.frame list     
+                                          est     se
+sigma_sq                               29.394  6.670
+phi                                     0.399  0.132
+case.var((Intercept))                  95.713 46.939
+case.cov(week,(Intercept))             11.209  6.372
+case.var(week)                          1.994  1.076
+total variance                        125.107 46.784
+(Intercept)                            50.291  4.074
+week                                    0.203  0.616
+treatmenttreatment                     -0.542  1.752
+trt.week                               -1.632  0.655
+treatment effect at a specified time  -11.966  4.609
+unadjusted effect size                 -1.070  0.495
+adjusted effect size                   -1.013  0.469
+degree of freedom                      14.302       
+kappa                                   0.412       
+logLik                               -428.976       
 > 
 > 
 > 
@@ -465,18 +404,38 @@ data           5    data.frame list
 > 
 > ### ** Examples
 > 
-> data(Anglesea)
-> graph_SCD(case=case, phase=condition, 
-+           session=session, outcome=outcome, 
-+           design="TR", treatment_name = "treatment", 
-+           data=Anglesea)
->           
-> data(BartonArwood)
-> graph_SCD(case=case, phase=condition, 
-+           session=session, outcome=outcome, 
-+           design="MB", treatment_name = "B",  
-+           data=BartonArwood)
 > 
+> if (requireNamespace("ggplot2", quietly = TRUE)) {
++ 
++ data(Anglesea)
++ graph_SCD(design="TR",
++           case=case, phase=condition,
++           session=session, outcome=outcome,
++           treatment_name = "treatment",
++           data=Anglesea)
++ 
++ data(BartonArwood)
++ graph_SCD(design="MBP",
++           case=case, phase=condition,
++           session=session, outcome=outcome,
++           treatment_name = "B",
++           data=BartonArwood)
++ 
++ data(Thiemann2001)
++ graph_SCD(design="RMBB",
++           case=case, series = series, phase=treatment,
++           session=time, outcome=outcome,
++           treatment_name = "treatment",
++           data=Thiemann2001)
++ 
++ data(Bryant2018)
++ graph_SCD(design="CMB",
++           cluster=school, case=case, phase=treatment,
++           session=session, outcome=outcome,
++           treatment_name = "treatment",
++           data=Bryant2018)
++           
++ }
 > 
 > 
 > 
@@ -523,9 +482,10 @@ data           5    data.frame list
 > ### ** Examples
 > 
 > data(Laski)
-> preprocess_SCD(case = case, phase = treatment,
+> preprocess_SCD(design = "MBP", 
++                case = case, phase = treatment,
 +                session = time, outcome = outcome, 
-+                design = "MB", center = 4, data = Laski)
++                center = 4, data = Laski)
       case treatment time outcome trt time_trt
 1   Case 1  baseline   -3   27.60   0        0
 2   Case 1  baseline   -2   23.96   0        0
@@ -655,7 +615,439 @@ data           5    data.frame list
 126 Case 9 treatment   14   67.47   1        7
 127 Case 9 treatment   15   84.53   1        8
 128 Case 9 treatment   16   81.00   1        9
-> 
+>                
+> data(Anglesea) 
+> preprocess_SCD(design="TR",
++                case=case, phase=condition,
++                session=session, outcome=outcome,
++                treatment_name = "treatment",
++                data=Anglesea)
+     case condition session outcome trt condition_pair
+1  Case 1  baseline       1  103.72   0              1
+2  Case 1  baseline       2  105.32   0              1
+3  Case 1  baseline       3   77.39   0              1
+4  Case 1  baseline       4  117.29   0              1
+5  Case 1  baseline       5  102.93   0              1
+6  Case 1  baseline       6   99.73   0              1
+7  Case 1  baseline       7   49.47   0              1
+8  Case 1 treatment       8  183.51   1              1
+9  Case 1 treatment       9  152.39   1              1
+10 Case 1 treatment      10  170.74   1              1
+11 Case 1 treatment      11  169.95   1              1
+12 Case 1 treatment      12  154.79   1              1
+13 Case 1 treatment      13  153.99   1              1
+14 Case 1  baseline      14   97.34   0              2
+15 Case 1  baseline      15   57.45   0              2
+16 Case 1  baseline      16   67.82   0              2
+17 Case 1  baseline      17  107.71   0              2
+18 Case 1  baseline      18  103.72   0              2
+19 Case 1  baseline      19   90.16   0              2
+20 Case 1  baseline      20   93.35   0              2
+21 Case 1 treatment      21  153.19   1              2
+22 Case 1 treatment      22  149.20   1              2
+23 Case 1 treatment      23  149.20   1              2
+24 Case 1 treatment      24  142.02   1              2
+25 Case 1 treatment      25  143.62   1              2
+26 Case 1 treatment      26  176.33   1              2
+27 Case 1 treatment      27  173.94   1              2
+28 Case 2  baseline       1   64.00   0              1
+29 Case 2  baseline       2   62.80   0              1
+30 Case 2  baseline       3   43.60   0              1
+31 Case 2  baseline       4   63.40   0              1
+32 Case 2 treatment       5  213.20   1              1
+33 Case 2 treatment       6  220.01   1              1
+34 Case 2 treatment       7  212.80   1              1
+35 Case 2 treatment       8  217.60   1              1
+36 Case 2  baseline       9   62.40   0              2
+37 Case 2  baseline      10   72.20   0              2
+38 Case 2  baseline      11   62.01   0              2
+39 Case 2 treatment      12  189.81   1              2
+40 Case 2 treatment      13  178.60   1              2
+41 Case 2 treatment      14  181.41   1              2
+42 Case 3  baseline       1   24.02   0              1
+43 Case 3  baseline       2   26.38   0              1
+44 Case 3  baseline       3   29.92   0              1
+45 Case 3  baseline       4   23.62   0              1
+46 Case 3 treatment       5   84.65   1              1
+47 Case 3 treatment       6   89.76   1              1
+48 Case 3 treatment       7   83.46   1              1
+49 Case 3 treatment       8   89.76   1              1
+50 Case 3  baseline       9   30.71   0              2
+51 Case 3  baseline      10   41.73   0              2
+52 Case 3  baseline      11   29.92   0              2
+53 Case 3  baseline      12   33.86   0              2
+54 Case 3 treatment      13   84.25   1              2
+55 Case 3 treatment      14   78.74   1              2
+>                
+> data(Thiemann2001)
+> preprocess_SCD(design = "RMBB", 
++                case = case, series = series, phase = treatment, 
++                session = time, outcome = outcome, 
++                data = Thiemann2001)
+     case                          series treatment time outcome trt time_trt
+1   Casey            contingent responses  baseline    1     1.3   0        0
+2   Casey            contingent responses  baseline    2     4.6   0        0
+3   Casey            contingent responses  baseline    3     0.0   0        0
+4   Casey            contingent responses  baseline    4     2.3   0        0
+5   Casey            contingent responses  baseline    5     0.7   0        0
+6   Casey            contingent responses  baseline    6     2.3   0        0
+7   Casey            contingent responses  baseline    7     4.6   0        0
+8   Casey            contingent responses  baseline    8     8.9   0        0
+9   Casey            contingent responses  baseline    9     4.3   0        0
+10  Casey            contingent responses  baseline   10     3.0   0        0
+11  Casey            contingent responses  baseline   11     3.0   0        0
+12  Casey            contingent responses  baseline   12     4.9   0        0
+13  Casey            contingent responses  baseline   13     0.0   0        0
+14  Casey            contingent responses  baseline   14     4.3   0        0
+15  Casey            contingent responses  baseline   15     3.0   0        0
+16  Casey            contingent responses  baseline   16     3.0   0        0
+17  Casey            contingent responses  baseline   17     3.9   0        0
+18  Casey            contingent responses  baseline   18     1.0   0        0
+19  Casey            contingent responses  baseline   19    16.1   0        0
+20  Casey            contingent responses  baseline   20     5.9   0        0
+21  Casey            contingent responses  baseline   21     5.9   0        0
+22  Casey            contingent responses  baseline   22     1.0   0        0
+23  Casey            contingent responses  baseline   23     1.0   0        0
+24  Casey            contingent responses  baseline   24     3.0   0        0
+25  Casey            contingent responses  baseline   25     5.9   0        0
+26  Casey            contingent responses treatment   26    30.5   1        1
+27  Casey            contingent responses treatment   27    20.0   1        2
+28  Casey            contingent responses treatment   28    22.0   1        3
+29  Casey            contingent responses treatment   29    31.5   1        4
+30  Casey            contingent responses treatment   30    25.9   1        5
+31  Casey initiates comments and requests  baseline    1     0.3   0        0
+32  Casey initiates comments and requests  baseline    2     0.7   0        0
+33  Casey initiates comments and requests  baseline    3     4.0   0        0
+34  Casey initiates comments and requests  baseline    4     0.7   0        0
+35  Casey initiates comments and requests  baseline    5     3.4   0        0
+36  Casey initiates comments and requests  baseline    6     8.6   0        0
+37  Casey initiates comments and requests  baseline    7     3.7   0        0
+38  Casey initiates comments and requests  baseline    8     4.7   0        0
+39  Casey initiates comments and requests  baseline    9     2.5   0        0
+40  Casey initiates comments and requests treatment   10    11.3   1        1
+41  Casey initiates comments and requests treatment   11    10.3   1        2
+42  Casey initiates comments and requests treatment   12     9.7   1        3
+43  Casey initiates comments and requests treatment   13    21.7   1        4
+44  Casey initiates comments and requests treatment   14    23.4   1        5
+45  Casey initiates comments and requests treatment   15    20.8   1        6
+46  Casey               secures attention  baseline    1     0.0   0        0
+47  Casey               secures attention  baseline    2     0.0   0        0
+48  Casey               secures attention  baseline    3     0.0   0        0
+49  Casey               secures attention  baseline    4     0.0   0        0
+50  Casey               secures attention  baseline    5     0.0   0        0
+51  Casey               secures attention  baseline    6     0.0   0        0
+52  Casey               secures attention  baseline    7     0.0   0        0
+53  Casey               secures attention  baseline    8     0.0   0        0
+54  Casey               secures attention  baseline    9     0.0   0        0
+55  Casey               secures attention  baseline   10     0.0   0        0
+56  Casey               secures attention  baseline   11     0.0   0        0
+57  Casey               secures attention  baseline   12     0.0   0        0
+58  Casey               secures attention  baseline   13     0.0   0        0
+59  Casey               secures attention  baseline   14     0.0   0        0
+60  Casey               secures attention  baseline   15     0.0   0        0
+61  Casey               secures attention treatment   16    13.7   1        1
+62  Casey               secures attention treatment   17    11.8   1        2
+63  Casey               secures attention treatment   18    12.1   1        3
+64  Casey               secures attention treatment   19     8.9   1        4
+65  Casey               secures attention treatment   20    10.8   1        5
+66  Casey               secures attention treatment   21    12.7   1        6
+67  Casey               secures attention treatment   22    10.1   1        7
+68  Casey               secures attention treatment   23     9.1   1        8
+69  Casey               secures attention treatment   24     9.4   1        9
+70  Casey               secures attention treatment   25     9.7   1       10
+71    Dan              initiates comments  baseline    1     0.1   0        0
+72    Dan              initiates comments  baseline    2     1.2   0        0
+73    Dan              initiates comments  baseline    3     4.3   0        0
+74    Dan              initiates comments  baseline    4    11.1   0        0
+75    Dan              initiates comments  baseline    5     9.1   0        0
+76    Dan              initiates comments  baseline    6     2.9   0        0
+77    Dan              initiates comments  baseline    7     8.1   0        0
+78    Dan              initiates comments  baseline    8     5.3   0        0
+79    Dan              initiates comments  baseline    9     6.3   0        0
+80    Dan              initiates comments  baseline   10    10.4   0        0
+81    Dan              initiates comments  baseline   11     7.1   0        0
+82    Dan              initiates comments  baseline   12     5.4   0        0
+83    Dan              initiates comments  baseline   13     3.7   0        0
+84    Dan              initiates comments  baseline   14     7.2   0        0
+85    Dan              initiates comments  baseline   15     5.2   0        0
+86    Dan              initiates comments  baseline   16    10.3   0        0
+87    Dan              initiates comments  baseline   17     8.3   0        0
+88    Dan              initiates comments  baseline   18     9.2   0        0
+89    Dan              initiates comments  baseline   19    10.3   0        0
+90    Dan              initiates comments  baseline   20     8.3   0        0
+91    Dan              initiates comments treatment   21    19.3   1        1
+92    Dan              initiates comments treatment   22    12.5   1        2
+93    Dan              initiates comments treatment   23    15.3   1        3
+94    Dan              initiates comments treatment   24    14.4   1        4
+95    Dan              initiates comments treatment   25    13.5   1        5
+96    Dan              initiates comments treatment   26    20.6   1        6
+97    Dan              initiates comments treatment   27    24.4   1        7
+98    Dan              initiates comments treatment   28    16.7   1        8
+99    Dan              initiates comments treatment   29    13.7   1        9
+100   Dan              initiates comments treatment   30    39.4   1       10
+101   Dan              initiates requests  baseline    1     0.0   0        0
+102   Dan              initiates requests  baseline    2     1.9   0        0
+103   Dan              initiates requests  baseline    3     0.0   0        0
+104   Dan              initiates requests  baseline    4     0.8   0        0
+105   Dan              initiates requests  baseline    5     1.9   0        0
+106   Dan              initiates requests  baseline    6     8.0   0        0
+107   Dan              initiates requests  baseline    7     3.0   0        0
+108   Dan              initiates requests  baseline    8     5.9   0        0
+109   Dan              initiates requests  baseline    9     0.8   0        0
+110   Dan              initiates requests  baseline   10     5.9   0        0
+111   Dan              initiates requests  baseline   11     4.1   0        0
+112   Dan              initiates requests  baseline   12     1.8   0        0
+113   Dan              initiates requests  baseline   13     8.1   0        0
+114   Dan              initiates requests  baseline   14     0.9   0        0
+115   Dan              initiates requests  baseline   15     9.0   0        0
+116   Dan              initiates requests  baseline   16     8.1   0        0
+117   Dan              initiates requests  baseline   17    10.1   0        0
+118   Dan              initiates requests  baseline   18     8.0   0        0
+119   Dan              initiates requests  baseline   19    22.2   0        0
+120   Dan              initiates requests  baseline   20     9.3   0        0
+121   Dan              initiates requests  baseline   21     8.0   0        0
+122   Dan              initiates requests  baseline   22     6.9   0        0
+123   Dan              initiates requests  baseline   23    14.1   0        0
+124   Dan              initiates requests  baseline   24     7.2   0        0
+125   Dan              initiates requests  baseline   25    16.2   0        0
+126   Dan              initiates requests  baseline   26    16.1   0        0
+127   Dan              initiates requests  baseline   27    13.5   0        0
+128   Dan              initiates requests  baseline   28     2.0   0        0
+129   Dan              initiates requests  baseline   29     8.1   0        0
+130   Dan              initiates requests  baseline   30    17.3   0        0
+131   Dan              initiates requests treatment   31    12.3   1        1
+132   Dan              initiates requests treatment   32    25.6   1        2
+133   Dan              initiates requests treatment   33    23.6   1        3
+134   Dan              initiates requests treatment   34    19.7   1        4
+135   Dan              initiates requests treatment   35    17.2   1        5
+136   Dan              initiates requests treatment   36    30.7   1        6
+137   Dan               secures attention  baseline    1     0.0   0        0
+138   Dan               secures attention  baseline    2     0.0   0        0
+139   Dan               secures attention  baseline    3     0.0   0        0
+140   Dan               secures attention  baseline    4     0.0   0        0
+141   Dan               secures attention  baseline    5     0.0   0        0
+142   Dan               secures attention  baseline    6     2.2   0        0
+143   Dan               secures attention  baseline    7     0.0   0        0
+144   Dan               secures attention  baseline    8     0.0   0        0
+145   Dan               secures attention  baseline    9     0.0   0        0
+146   Dan               secures attention  baseline   10     4.2   0        0
+147   Dan               secures attention  baseline   11     0.0   0        0
+148   Dan               secures attention  baseline   12     1.4   0        0
+149   Dan               secures attention  baseline   13     0.0   0        0
+150   Dan               secures attention  baseline   14     0.0   0        0
+151   Dan               secures attention treatment   15    12.1   1        1
+152   Dan               secures attention treatment   16    15.1   1        2
+153   Dan               secures attention treatment   17     9.2   1        3
+154   Dan               secures attention treatment   18    13.1   1        4
+155   Dan               secures attention treatment   19    20.1   1        5
+156   Dan               secures attention treatment   20    14.2   1        6
+157  Greg              initiates comments  baseline    1     1.9   0        0
+158  Greg              initiates comments  baseline    2     6.2   0        0
+159  Greg              initiates comments  baseline    3     3.9   0        0
+160  Greg              initiates comments  baseline    4     3.9   0        0
+161  Greg              initiates comments  baseline    5     6.9   0        0
+162  Greg              initiates comments  baseline    6     9.2   0        0
+163  Greg              initiates comments  baseline    7    11.1   0        0
+164  Greg              initiates comments  baseline    8     5.0   0        0
+165  Greg              initiates comments  baseline    9     9.2   0        0
+166  Greg              initiates comments  baseline   10    15.1   0        0
+167  Greg              initiates comments  baseline   11     5.0   0        0
+168  Greg              initiates comments  baseline   12     4.0   0        0
+169  Greg              initiates comments  baseline   13    18.7   0        0
+170  Greg              initiates comments  baseline   14    10.9   0        0
+171  Greg              initiates comments  baseline   15     0.0   0        0
+172  Greg              initiates comments  baseline   16    13.8   0        0
+173  Greg              initiates comments  baseline   17     5.7   0        0
+174  Greg              initiates comments  baseline   18     5.1   0        0
+175  Greg              initiates comments  baseline   19     7.0   0        0
+176  Greg              initiates comments  baseline   20     0.0   0        0
+177  Greg              initiates comments  baseline   21     3.5   0        0
+178  Greg              initiates comments  baseline   22    13.9   0        0
+179  Greg              initiates comments treatment   23    16.5   1        1
+180  Greg              initiates comments treatment   24    14.9   1        2
+181  Greg              initiates comments treatment   25    16.2   1        3
+182  Greg              initiates comments treatment   26    10.0   1        4
+183  Greg              initiates comments treatment   27    11.0   1        5
+184  Greg              initiates comments treatment   28    21.1   1        6
+185  Greg              initiates comments treatment   29    13.3   1        7
+186  Greg              initiates comments treatment   30    16.3   1        8
+187  Greg              initiates requests  baseline    1    11.8   0        0
+188  Greg              initiates requests  baseline    2     0.0   0        0
+189  Greg              initiates requests  baseline    3     9.5   0        0
+190  Greg              initiates requests  baseline    4     2.3   0        0
+191  Greg              initiates requests  baseline    5     1.6   0        0
+192  Greg              initiates requests  baseline    6     0.0   0        0
+193  Greg              initiates requests  baseline    7     7.1   0        0
+194  Greg              initiates requests  baseline    8     8.8   0        0
+195  Greg              initiates requests  baseline    9    13.4   0        0
+196  Greg              initiates requests  baseline   10     5.2   0        0
+197  Greg              initiates requests  baseline   11     5.1   0        0
+198  Greg              initiates requests  baseline   12     2.5   0        0
+199  Greg              initiates requests  baseline   13     4.5   0        0
+200  Greg              initiates requests  baseline   14    11.0   0        0
+201  Greg              initiates requests  baseline   15    11.7   0        0
+202  Greg              initiates requests  baseline   16     7.7   0        0
+203  Greg              initiates requests  baseline   17    10.0   0        0
+204  Greg              initiates requests  baseline   18     9.3   0        0
+205  Greg              initiates requests  baseline   19    12.9   0        0
+206  Greg              initiates requests  baseline   20     1.4   0        0
+207  Greg              initiates requests  baseline   21    14.5   0        0
+208  Greg              initiates requests  baseline   22    10.3   0        0
+209  Greg              initiates requests  baseline   23     4.0   0        0
+210  Greg              initiates requests  baseline   24    10.3   0        0
+211  Greg              initiates requests  baseline   25     2.1   0        0
+212  Greg              initiates requests  baseline   26     0.1   0        0
+213  Greg              initiates requests  baseline   27     2.7   0        0
+214  Greg              initiates requests  baseline   28     6.9   0        0
+215  Greg              initiates requests  baseline   29     4.6   0        0
+216  Greg              initiates requests  baseline   30     8.6   0        0
+217  Greg              initiates requests treatment   31    19.7   1        1
+218  Greg              initiates requests treatment   32    17.4   1        2
+219  Greg              initiates requests treatment   33    31.8   1        3
+220  Greg              initiates requests treatment   34    15.1   1        4
+221  Greg               secures attention  baseline    1     1.9   0        0
+222  Greg               secures attention  baseline    2     0.0   0        0
+223  Greg               secures attention  baseline    3     7.1   0        0
+224  Greg               secures attention  baseline    4     2.6   0        0
+225  Greg               secures attention  baseline    5     0.0   0        0
+226  Greg               secures attention  baseline    6     2.9   0        0
+227  Greg               secures attention  baseline    7     7.1   0        0
+228  Greg               secures attention  baseline    8     4.5   0        0
+229  Greg               secures attention  baseline    9     2.9   0        0
+230  Greg               secures attention  baseline   10    18.1   0        0
+231  Greg               secures attention  baseline   11     8.1   0        0
+232  Greg               secures attention  baseline   12     8.1   0        0
+233  Greg               secures attention  baseline   13     7.1   0        0
+234  Greg               secures attention  baseline   14     2.9   0        0
+235  Greg               secures attention treatment   15    26.8   1        1
+236  Greg               secures attention treatment   16    15.8   1        2
+237  Greg               secures attention treatment   17    14.5   1        3
+238  Greg               secures attention treatment   18    16.1   1        4
+239  Greg               secures attention treatment   19    17.4   1        5
+240  Greg               secures attention treatment   20    10.0   1        6
+241  Greg               secures attention treatment   21    13.2   1        7
+242  Greg               secures attention treatment   22    18.7   1        8
+243  Greg               secures attention treatment   23     9.7   1        9
+244  Ivan              initiates comments  baseline    1    13.1   0        0
+245  Ivan              initiates comments  baseline    2     8.1   0        0
+246  Ivan              initiates comments  baseline    3     9.0   0        0
+247  Ivan              initiates comments  baseline    4     4.1   0        0
+248  Ivan              initiates comments  baseline    5    14.2   0        0
+249  Ivan              initiates comments  baseline    6     4.1   0        0
+250  Ivan              initiates comments  baseline    7    13.2   0        0
+251  Ivan              initiates comments  baseline    8    18.1   0        0
+252  Ivan              initiates comments  baseline    9     4.1   0        0
+253  Ivan              initiates comments  baseline   10     5.4   0        0
+254  Ivan              initiates comments  baseline   11     4.2   0        0
+255  Ivan              initiates comments  baseline   12    10.0   0        0
+256  Ivan              initiates comments  baseline   13     5.1   0        0
+257  Ivan              initiates comments treatment   14    12.1   1        1
+258  Ivan              initiates comments treatment   15     8.3   1        2
+259  Ivan              initiates comments treatment   16     0.0   1        3
+260  Ivan              initiates comments treatment   17     9.0   1        4
+261  Ivan              initiates comments treatment   18    14.1   1        5
+262  Ivan              initiates comments treatment   19     9.4   1        6
+263  Ivan              initiates comments treatment   20     9.4   1        7
+264  Ivan              initiates comments treatment   21     5.2   1        8
+265  Ivan              initiates comments treatment   22    19.3   1        9
+266  Ivan              initiates comments treatment   23    12.4   1       10
+267  Ivan              initiates comments treatment   24    23.2   1       11
+268  Ivan              initiates comments treatment   25    16.2   1       12
+269  Ivan              initiates comments treatment   26    17.2   1       13
+270  Ivan               secures attention  baseline    1     2.0   0        0
+271  Ivan               secures attention  baseline    2     1.0   0        0
+272  Ivan               secures attention  baseline    3     2.0   0        0
+273  Ivan               secures attention  baseline    4     0.0   0        0
+274  Ivan               secures attention  baseline    5     0.0   0        0
+275  Ivan               secures attention  baseline    6     0.0   0        0
+276  Ivan               secures attention  baseline    7     5.0   0        0
+277  Ivan               secures attention  baseline    8     6.0   0        0
+278  Ivan               secures attention  baseline    9     0.0   0        0
+279  Ivan               secures attention  baseline   10     1.0   0        0
+280  Ivan               secures attention  baseline   11     2.0   0        0
+281  Ivan               secures attention  baseline   12     5.9   0        0
+282  Ivan               secures attention  baseline   13     0.0   0        0
+283  Ivan               secures attention  baseline   14     0.0   0        0
+284  Ivan               secures attention  baseline   15     0.9   0        0
+285  Ivan               secures attention  baseline   16     0.0   0        0
+286  Ivan               secures attention  baseline   17     0.0   0        0
+287  Ivan               secures attention  baseline   18     0.9   0        0
+288  Ivan               secures attention  baseline   19     0.0   0        0
+289  Ivan               secures attention  baseline   20     0.0   0        0
+290  Ivan               secures attention  baseline   21     0.9   0        0
+291  Ivan               secures attention  baseline   22     5.0   0        0
+292  Ivan               secures attention  baseline   23     0.0   0        0
+293  Ivan               secures attention  baseline   24    15.0   0        0
+294  Ivan               secures attention  baseline   25     4.0   0        0
+295  Ivan               secures attention  baseline   26     1.0   0        0
+296  Ivan               secures attention treatment   27     7.9   1        1
+297  Ivan               secures attention treatment   28    13.0   1        2
+298  Ivan               secures attention treatment   29    11.9   1        3
+299  Ivan               secures attention treatment   30    16.8   1        4
+300  John            contingent responses  baseline    1    24.5   0        0
+301  John            contingent responses  baseline    2     8.6   0        0
+302  John            contingent responses  baseline    3    25.5   0        0
+303  John            contingent responses  baseline    4    10.0   0        0
+304  John            contingent responses  baseline    5     3.7   0        0
+305  John            contingent responses  baseline    6    14.3   0        0
+306  John            contingent responses  baseline    7     7.5   0        0
+307  John            contingent responses  baseline    8    12.8   0        0
+308  John            contingent responses  baseline    9    33.1   0        0
+309  John            contingent responses  baseline   10     6.9   0        0
+310  John            contingent responses  baseline   11     5.4   0        0
+311  John            contingent responses  baseline   12     8.3   0        0
+312  John            contingent responses  baseline   13    20.4   0        0
+313  John            contingent responses  baseline   14    16.0   0        0
+314  John            contingent responses  baseline   15     3.4   0        0
+315  John            contingent responses  baseline   16    13.5   0        0
+316  John            contingent responses  baseline   17    13.4   0        0
+317  John            contingent responses  baseline   18    23.6   0        0
+318  John            contingent responses  baseline   19    19.7   0        0
+319  John            contingent responses  baseline   20     9.0   0        0
+320  John            contingent responses  baseline   21     9.9   0        0
+321  John            contingent responses treatment   22    16.2   1        1
+322  John            contingent responses treatment   23    17.6   1        2
+323  John            contingent responses treatment   24    16.6   1        3
+324  John            contingent responses treatment   25    14.1   1        4
+325  John            contingent responses treatment   26    21.4   1        5
+326  John            contingent responses treatment   27    15.5   1        6
+327  John            contingent responses treatment   28    12.1   1        7
+328  John initiates comments and requests  baseline    1    24.5   0        0
+329  John initiates comments and requests  baseline    2    19.1   0        0
+330  John initiates comments and requests  baseline    3    15.3   0        0
+331  John initiates comments and requests  baseline    4     9.5   0        0
+332  John initiates comments and requests  baseline    5    17.4   0        0
+333  John initiates comments and requests  baseline    6    15.5   0        0
+334  John initiates comments and requests  baseline    7     9.2   0        0
+335  John initiates comments and requests  baseline    8     2.5   0        0
+336  John initiates comments and requests  baseline    9    11.3   0        0
+337  John initiates comments and requests treatment   10    32.8   1        1
+338  John initiates comments and requests treatment   11    18.8   1        2
+339  John initiates comments and requests treatment   12    15.4   1        3
+340  John initiates comments and requests treatment   13    50.6   1        4
+341  John initiates comments and requests treatment   14    22.4   1        5
+342  John initiates comments and requests treatment   15    32.2   1        6
+343  John               secures attention  baseline    1    24.5   0        0
+344  John               secures attention  baseline    2    12.3   0        0
+345  John               secures attention  baseline    3     2.5   0        0
+346  John               secures attention  baseline    4     8.5   0        0
+347  John               secures attention  baseline    5     6.5   0        0
+348  John               secures attention  baseline    6     6.0   0        0
+349  John               secures attention  baseline    7     0.2   0        0
+350  John               secures attention  baseline    8     0.2   0        0
+351  John               secures attention  baseline    9     5.1   0        0
+352  John               secures attention  baseline   10     6.6   0        0
+353  John               secures attention  baseline   11     0.0   0        0
+354  John               secures attention  baseline   12     2.7   0        0
+355  John               secures attention  baseline   13     8.2   0        0
+356  John               secures attention  baseline   14     1.3   0        0
+357  John               secures attention  baseline   15     1.3   0        0
+358  John               secures attention treatment   16    17.6   1        1
+359  John               secures attention treatment   17    11.7   1        2
+360  John               secures attention treatment   18    14.7   1        3
+361  John               secures attention treatment   19    11.3   1        4
+362  John               secures attention treatment   20     8.8   1        5
+363  John               secures attention treatment   21    14.3   1        6
 >           
 > 
 > 
@@ -700,72 +1092,76 @@ data           5    data.frame list
 +                  random = ~ 1 | case,
 +                  correlation = corAR1(0, ~ time | case), 
 +                  data = Laski)
-> Laski_g <- g_REML(Laski_RML, p_const = c(0,1), r_const = c(1,0,1))
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-> simulate(Laski_g, nsim = 20)
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
-     p_beta  r_theta delta_AB       nu      kappa     g_AB     V_g_AB cnvg_warn
-1  35.58892 570.0390 1.490605 15.09648 0.12714736 1.415304 0.09530341         0
-2  32.08493 680.4680 1.229978 13.56207 0.13721674 1.160681 0.07965909         0
-3  27.86721 450.8521 1.312431 20.11123 0.16130405 1.262871 0.07164321         0
-4  30.04390 241.0451 1.935117 67.25398 0.21566512 1.913456 0.07508296         0
-5  23.08345 474.0000 1.060258 14.14793 0.11526072 1.003041 0.05643502         0
-6  30.82006 307.6880 1.757026 26.09544 0.14327323 1.706039 0.08225797         0
-7  33.86650 428.1113 1.636786 15.88209 0.12324002 1.558256 0.10540420         0
-8  29.04710 274.7743 1.752325 44.93426 0.20334648 1.722913 0.07669992         0
-9  28.80096 337.9338 1.566719 26.51212 0.15804478 1.521977 0.07343946         0
-10 28.89421 408.6516 1.429336 18.58822 0.12914114 1.370878 0.07504239         0
-11 34.90312 556.5654 1.479470 13.94038 0.13188787 1.398420 0.10239909         0
-12 37.54411 545.8522 1.606957 15.66408 0.12673244 1.528768 0.10436661         0
-13 30.94778 650.1088 1.213770 15.36637 0.12418913 1.153549 0.06708797         0
-14 31.64174 440.2831 1.507976 15.52906 0.11589993 1.433954 0.09189157         0
-15 31.40122 975.3605 1.005458 10.33671 0.09072602 0.930697 0.06277037         0
-16 32.72776 411.8895 1.612597 19.38686 0.14940257 1.549397 0.09341771         0
-17 30.96075 290.8842 1.815312 26.39273 0.15275737 1.763234 0.08848840         0
-18 28.04121 589.5972 1.154833 17.26115 0.14383432 1.103918 0.06222671         0
-19 29.76401 429.5467 1.436105 21.50855 0.15248362 1.385439 0.07395139         0
-20 26.86512 479.7575 1.226529 16.14139 0.12839773 1.168643 0.06656480         0
-   sigma_sq        phi Tau.case.var((Intercept))
-1  204.7593 0.22596018                 365.27968
-2  228.2080 0.42991246                 452.25999
-3  218.8938 0.37804147                 231.95823
-4  209.6796 0.38294763                  31.36543
-5  155.6159 0.14817429                 318.38415
-6  165.7783 0.10755151                 141.90977
-7  159.8225 0.15210451                 268.28878
-8  207.5327 0.40495664                  67.24164
-9  188.0791 0.22486707                 149.85472
-10 175.1068 0.12155432                 233.54472
-11 187.5660 0.34022307                 368.99939
-12 202.6417 0.19636722                 343.21051
-13 235.9233 0.18328906                 414.18547
-14 158.9481 0.09092174                 281.33509
-15 190.8744 0.17528960                 784.48613
-16 189.1649 0.28781972                 222.72464
-17 159.9951 0.18293454                 130.88907
-18 246.5277 0.30277350                 343.06951
-19 211.6811 0.26364489                 217.86556
-20 183.4935 0.19368837                 296.26408
 > 
+> suppressWarnings(
++   Laski_g <- g_REML(Laski_RML, p_const = c(0,1), r_const = c(1,0,1))
++ )
+> 
+> if (requireNamespace("plyr", quietly = TRUE)) {
++   simulate(Laski_g, nsim = 20)
++ }
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+Warning: 'g_REML()' is deprecated and may be removed in a later version of the package. Please use 'g_mlm()' instead.
+     p_beta  r_theta  delta_AB       nu     kappa      g_AB     V_g_AB
+1  28.64127 689.4236 1.0908103 13.70498 0.1148833 1.0300070 0.06043094
+2  30.19504 391.2952 1.5264527 18.83005 0.1574485 1.4648361 0.09062792
+3  30.19815 387.8835 1.5333093 22.75286 0.1580271 1.4822055 0.07942691
+4  31.46314 407.1247 1.5593309 22.45973 0.1560896 1.5066739 0.08141453
+5  26.81978 343.2456 1.4476137 23.11312 0.1326546 1.4001263 0.06523248
+6  32.42608 522.7056 1.4182927 12.14834 0.1140265 1.3288921 0.10358618
+7  31.37855 794.1816 1.1134558 12.52392 0.1194838 1.0454179 0.06858451
+8  33.52507 573.6109 1.3997840 17.85250 0.1318499 1.3401426 0.07584977
+9  23.34824 588.8163 0.9621977 18.11251 0.1550397 0.9217976 0.05174441
+10 29.68307 443.0468 1.4102108 14.54153 0.1212569 1.3362049 0.08845259
+11 34.71567 373.6338 1.7959842 22.72425 0.1537655 1.7360495 0.09819144
+12 32.44389 381.6121 1.6608170 17.47674 0.1307876 1.5885101 0.10104359
+13 37.76005 287.0487 2.2287165 23.65550 0.1558402 2.1573000 0.13408705
+14 26.69602 419.6235 1.3032167 16.93366 0.1514846 1.2446317 0.07681849
+15 34.54775 281.6912 2.0584163 31.43612 0.1871706 2.0089132 0.10503002
+16 32.34436 361.9550 1.7000878 28.54197 0.1728174 1.6550197 0.08273740
+17 37.20805 558.4194 1.5745506 16.44277 0.1415909 1.5016222 0.10071260
+18 29.31525 330.3016 1.6130145 22.09830 0.1240074 1.5576436 0.07719845
+19 30.36144 412.0734 1.4956674 21.16755 0.1431639 1.4420401 0.07629262
+20 28.15023 298.0582 1.6305398 32.53495 0.1649351 1.5926613 0.06968352
+   cnvg_warn sigma_sq          phi Tau.case.var((Intercept))
+1          0 218.4038  0.168777552                  471.0197
+2          0 180.5597  0.380417745                  210.7355
+3          0 199.7420  0.286327036                  188.1415
+4          0 207.2544  0.275361435                  199.8703
+5          0 170.5249  0.058994261                  172.7207
+6          0 142.5111  0.271283460                  380.1945
+7          0 228.8336  0.303370157                  565.3480
+8          0 239.6058  0.168389246                  334.0051
+9          0 263.1338  0.381584485                  325.6825
+10         0 151.4963  0.191750717                  291.5505
+11         0 190.4641  0.250111702                  183.1697
+12         0 156.5077  0.169907673                  225.1044
+13         0 150.1845  0.250817216                  136.8642
+14         0 177.2324  0.392139998                  242.3911
+15         0 180.9792  0.398332383                  100.7119
+16         0 215.0623  0.317873754                  146.8926
+17         0 223.7115  0.312555387                  334.7078
+18         0 157.9753 -0.002643059                  172.3263
+19         0 197.4062  0.188666750                  214.6672
+20         0 183.8578  0.212085243                  114.2004
 > 
 > 
 > 
@@ -930,7 +1326,7 @@ RML_coverage2               1.0000000 0.000000000
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  3.42 0.14 3.56 NA NA 
+Time elapsed:  3.8 0.41 4.21 NA NA 
 > grDevices::dev.off()
 null device 
           1 

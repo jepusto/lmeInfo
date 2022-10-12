@@ -11,13 +11,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2021-02-01" />
+<meta name="date" content="2022-07-06" />
 
 <title>Information matrices for fitted lme() and gls() models</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
-<link href="data:text/css,%0Aa%2Eanchor%2Dsection%20%7Bmargin%2Dleft%3A%2010px%3B%20visibility%3A%20hidden%3B%20color%3A%20inherit%3B%7D%0Aa%2Eanchor%2Dsection%3A%3Abefore%20%7Bcontent%3A%20%27%23%27%3B%7D%0A%2EhasAnchor%3Ahover%20a%2Eanchor%2Dsection%20%7Bvisibility%3A%20visible%3B%7D%0A" rel="stylesheet" />
-<script src="data:application/javascript;base64,Ly8gQW5jaG9yIHNlY3Rpb25zIHYxLjAgd3JpdHRlbiBieSBBdHN1c2hpIFlhc3Vtb3RvIG9uIE9jdCAzcmQsIDIwMjAuCmRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoJ0RPTUNvbnRlbnRMb2FkZWQnLCBmdW5jdGlvbigpIHsKICAvLyBEbyBub3RoaW5nIGlmIEFuY2hvckpTIGlzIHVzZWQKICBpZiAodHlwZW9mIHdpbmRvdy5hbmNob3JzID09PSAnb2JqZWN0JyAmJiBhbmNob3JzLmhhc093blByb3BlcnR5KCdoYXNBbmNob3JKU0xpbmsnKSkgewogICAgcmV0dXJuOwogIH0KCiAgY29uc3QgaCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoJ2gxLCBoMiwgaDMsIGg0LCBoNSwgaDYnKTsKCiAgLy8gRG8gbm90aGluZyBpZiBzZWN0aW9ucyBhcmUgYWxyZWFkeSBhbmNob3JlZAogIGlmIChBcnJheS5mcm9tKGgpLnNvbWUoeCA9PiB4LmNsYXNzTGlzdC5jb250YWlucygnaGFzQW5jaG9yJykpKSB7CiAgICByZXR1cm4gbnVsbDsKICB9CgogIC8vIFVzZSBzZWN0aW9uIGlkIHdoZW4gcGFuZG9jIHJ1bnMgd2l0aCAtLXNlY3Rpb24tZGl2cwogIGNvbnN0IHNlY3Rpb25faWQgPSBmdW5jdGlvbih4KSB7CiAgICByZXR1cm4gKCh4LmNsYXNzTGlzdC5jb250YWlucygnc2VjdGlvbicpIHx8ICh4LnRhZ05hbWUgPT09ICdTRUNUSU9OJykpCiAgICAgICAgICAgID8geC5pZCA6ICcnKTsKICB9OwoKICAvLyBBZGQgYW5jaG9ycwogIGguZm9yRWFjaChmdW5jdGlvbih4KSB7CiAgICBjb25zdCBpZCA9IHguaWQgfHwgc2VjdGlvbl9pZCh4LnBhcmVudEVsZW1lbnQpOwogICAgaWYgKGlkID09PSAnJykgewogICAgICByZXR1cm4gbnVsbDsKICAgIH0KICAgIGxldCBhbmNob3IgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdhJyk7CiAgICBhbmNob3IuaHJlZiA9ICcjJyArIGlkOwogICAgYW5jaG9yLmNsYXNzTGlzdCA9IFsnYW5jaG9yLXNlY3Rpb24nXTsKICAgIHguY2xhc3NMaXN0LmFkZCgnaGFzQW5jaG9yJyk7CiAgICB4LmFwcGVuZENoaWxkKGFuY2hvcik7CiAgfSk7Cn0pOwo="></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -29,11 +39,20 @@
     </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -119,7 +138,210 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -131,21 +353,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<h1 class="title toc-ignore">Information matrices for fitted <code>lme()</code> and <code>gls()</code> models</h1>
-<h4 class="date">2021-02-01</h4>
+<h1 class="title toc-ignore">Information matrices for fitted
+<code>lme()</code> and <code>gls()</code> models</h1>
+<h4 class="date">2022-07-06</h4>
 
 
 <div id="TOC">
 <ul>
-<li><a href="#notation"><span class="toc-section-number">1</span> Notation</a></li>
+<li><a href="#notation"><span class="toc-section-number">1</span>
+Notation</a></li>
 <li><a href="#hierarchical-linear-models"><span class="toc-section-number">2</span> Hierarchical linear models</a></li>
-<li><a href="#estimation"><span class="toc-section-number">3</span> Estimation</a>
+<li><a href="#estimation"><span class="toc-section-number">3</span>
+Estimation</a>
 <ul>
 <li><a href="#fixed-effect-estimation"><span class="toc-section-number">3.1</span> Fixed effect estimation</a></li>
-<li><a href="#variance-parameter-estimation"><span class="toc-section-number">3.2</span> Variance parameter estimation</a></li>
-<li><a href="#sampling-variance-of-variance-parameters"><span class="toc-section-number">3.3</span> Sampling variance of variance parameters</a>
+<li><a href="#variance-parameter-estimation"><span class="toc-section-number">3.2</span> Variance parameter
+estimation</a></li>
+<li><a href="#sampling-variance-of-variance-parameters"><span class="toc-section-number">3.3</span> Sampling variance of variance
+parameters</a>
 <ul>
-<li><a href="#restricted-maximum-likelihood"><span class="toc-section-number">3.3.1</span> Restricted maximum likelihood</a></li>
+<li><a href="#restricted-maximum-likelihood"><span class="toc-section-number">3.3.1</span> Restricted maximum
+likelihood</a></li>
 <li><a href="#full-maximum-likelihood"><span class="toc-section-number">3.3.2</span> Full maximum likelihood</a></li>
 </ul></li>
 </ul></li>
@@ -165,111 +393,309 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \]</span></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#library(lmeInfo)</span></span></code></pre></div>
 <div id="notation" class="section level1" number="1">
-<h1 number="1"><span class="header-section-number">1</span> Notation</h1>
-<p>In what follows, we will use the following symbols for matrix operations. Let <span class="math inline">\(\bigoplus\)</span> denote the Kronecker sum, which creates a block-diagonal matrix from a sequence of sub-matrices. Thus, for matrices <span class="math inline">\(\bmat{A}_1,...,\bmat{A}_m\)</span>, <span class="math display">\[
+<h1><span class="header-section-number">1</span> Notation</h1>
+<p>In what follows, we will use the following symbols for matrix
+operations. Let <span class="math inline">\(\bigoplus\)</span> denote
+the Kronecker sum, which creates a block-diagonal matrix from a sequence
+of sub-matrices. Thus, for matrices <span class="math inline">\(\bmat{A}_1,...,\bmat{A}_m\)</span>, <span class="math display">\[
 \bigoplus_{i=1}^m \bmat{A}_i = \left[\begin{array}{cccc}
-\bmat{A}_1 &amp; \bmat{0} &amp; \cdots &amp; \bmat{0} \\ 
+\bmat{A}_1 &amp; \bmat{0} &amp; \cdots &amp; \bmat{0} \\
 \bmat{0} &amp; \bmat{A}_2 &amp;  &amp; \bmat{0} \\
 \vdots &amp; &amp; \ddots &amp;  \\
 \bmat{0} &amp; \bmat{0} &amp; &amp; \bmat{A}_m \\
 \end{array}\right].
-\]</span> Let <span class="math inline">\(\bigotimes\)</span> denote the Kronecker product, such that for <span class="math inline">\(m \times n\)</span> matrix <span class="math inline">\(\bmat{A}\)</span> and <span class="math inline">\(f \times g\)</span> matrix <span class="math inline">\(\bmat{B}\)</span>, <span class="math inline">\(\bmat{A} \bigotimes \bmat{B}\)</span> is an <span class="math inline">\((mf) \times (ng)\)</span> matrix: <span class="math display">\[
+\]</span> Let <span class="math inline">\(\bigotimes\)</span> denote the
+Kronecker product, such that for <span class="math inline">\(m \times
+n\)</span> matrix <span class="math inline">\(\bmat{A}\)</span> and
+<span class="math inline">\(f \times g\)</span> matrix <span class="math inline">\(\bmat{B}\)</span>, <span class="math inline">\(\bmat{A} \bigotimes \bmat{B}\)</span> is an <span class="math inline">\((mf) \times (ng)\)</span> matrix: <span class="math display">\[
 \bmat{A} \bigotimes \bmat{B} = \left[\begin{array}{cccc}
-a_{11} \bmat{B} &amp; a_{12} \bmat{B} &amp; \cdots &amp; a_{1n} \bmat{B} \\ 
-a_{21} \bmat{B} &amp; a_{22} \bmat{B} &amp; \cdots &amp; a_{2n} \bmat{B} \\
+a_{11} \bmat{B} &amp; a_{12} \bmat{B} &amp; \cdots &amp; a_{1n} \bmat{B}
+\\
+a_{21} \bmat{B} &amp; a_{22} \bmat{B} &amp; \cdots &amp; a_{2n} \bmat{B}
+\\
 \vdots &amp; \vdots &amp; \ddots &amp;  \vdots \\
-a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B} \\
+a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B}
+\\
 \end{array}\right],
-\]</span> where <span class="math inline">\(a_{11},...,a_{mn}\)</span> are the entries of <span class="math inline">\(\bmat{A}\)</span>. In particular, note that the Kronecker product of an <span class="math inline">\(m \times m\)</span> identity matrix and an arbitrary matrix <span class="math inline">\(\bmat{B}\)</span> is the block-diagonal matrix with each of <span class="math inline">\(m\)</span> sub-matrices equal to <span class="math inline">\(\bmat{B}\)</span>: <span class="math display">\[
+\]</span> where <span class="math inline">\(a_{11},...,a_{mn}\)</span>
+are the entries of <span class="math inline">\(\bmat{A}\)</span>. In
+particular, note that the Kronecker product of an <span class="math inline">\(m \times m\)</span> identity matrix and an
+arbitrary matrix <span class="math inline">\(\bmat{B}\)</span> is the
+block-diagonal matrix with each of <span class="math inline">\(m\)</span> sub-matrices equal to <span class="math inline">\(\bmat{B}\)</span>: <span class="math display">\[
 \bmat{I}_m \bigotimes \bmat{B} = \bigoplus_{i=1}^m \bmat{B}.
 \]</span></p>
 </div>
 <div id="hierarchical-linear-models" class="section level1" number="2">
-<h1 number="2"><span class="header-section-number">2</span> Hierarchical linear models</h1>
-<p>We shall be concerned with hierarchical linear models fitted by full maximum likelihood (FML) or restricted maximum likelihood (RML) using the <code>lme()</code> function from R package <code>nlme</code>. Consider a set of observations from each of <span class="math inline">\(m\)</span> groups, where group <span class="math inline">\(i\)</span> has <span class="math inline">\(n_i\)</span> observations for <span class="math inline">\(i = 1,...,m\)</span> and <span class="math inline">\(N = \sum_{i=1}^m n_i\)</span>. Let <span class="math inline">\(y_{hi}\)</span> denote the outcome measure and <span class="math inline">\(\bmat{x}_{hi}\)</span> denote a <span class="math inline">\(p \times 1\)</span> row vector of fixed predictor variables, both for observation <span class="math inline">\(h\)</span> from group <span class="math inline">\(i\)</span>. Let <span class="math inline">\(\bmat{y}_i = (y_{1i} \cdots y_{n_i i})&#39;\)</span> be the <span class="math inline">\(n_i \times 1\)</span> vector of outcomes and <span class="math inline">\(\bmat{X}_i = \left(\bmat{x}_{1i}&#39; \cdots \bmat{x}_{n_ii}&#39;\right)&#39;\)</span> be the <span class="math inline">\(n_i \times p\)</span> design matrix of predictors for group <span class="math inline">\(i\)</span>. Hierarchical <code>lme</code> models have the form <span class="math display">\[
+<h1><span class="header-section-number">2</span> Hierarchical linear
+models</h1>
+<p>We shall be concerned with hierarchical linear models fitted by full
+maximum likelihood (FML) or restricted maximum likelihood (RML) using
+the <code>lme()</code> function from R package <code>nlme</code>.
+Consider a set of observations from each of <span class="math inline">\(m\)</span> groups, where group <span class="math inline">\(i\)</span> has <span class="math inline">\(n_i\)</span> observations for <span class="math inline">\(i = 1,...,m\)</span> and <span class="math inline">\(N = \sum_{i=1}^m n_i\)</span>. Let <span class="math inline">\(y_{hi}\)</span> denote the outcome measure and
+<span class="math inline">\(\bmat{x}_{hi}\)</span> denote a <span class="math inline">\(p \times 1\)</span> row vector of fixed predictor
+variables, both for observation <span class="math inline">\(h\)</span>
+from group <span class="math inline">\(i\)</span>. Let <span class="math inline">\(\bmat{y}_i = (y_{1i} \cdots y_{n_i
+i})&#39;\)</span> be the <span class="math inline">\(n_i \times
+1\)</span> vector of outcomes and <span class="math inline">\(\bmat{X}_i
+= \left(\bmat{x}_{1i}&#39; \cdots
+\bmat{x}_{n_ii}&#39;\right)&#39;\)</span> be the <span class="math inline">\(n_i \times p\)</span> design matrix of predictors
+for group <span class="math inline">\(i\)</span>. Hierarchical
+<code>lme</code> models have the form <span class="math display">\[
 \bmat{y}_i = \bmat{X}_i \bs\beta + \bmat{Z}_i \bs\eta_i + \bs\epsilon_i
-\]</span> where <span class="math inline">\(\bmat{Z}_i\)</span> is a <span class="math inline">\(n_i \times q_i\)</span> design matrix describing random effects for group <span class="math inline">\(i\)</span>, <span class="math inline">\(\bs\beta\)</span> is a <span class="math inline">\(p \times 1\)</span> vector of regression coefficients, <span class="math inline">\(\bs\eta_i\)</span> is a <span class="math inline">\(q_i \times 1\)</span> vector of random effects, and <span class="math inline">\(\bs\epsilon_i\)</span> is a <span class="math inline">\(n_i \times 1\)</span> vector of observation-specific errors. We assume that <span class="math display">\[
+\]</span> where <span class="math inline">\(\bmat{Z}_i\)</span> is a
+<span class="math inline">\(n_i \times q_i\)</span> design matrix
+describing random effects for group <span class="math inline">\(i\)</span>, <span class="math inline">\(\bs\beta\)</span> is a <span class="math inline">\(p \times 1\)</span> vector of regression
+coefficients, <span class="math inline">\(\bs\eta_i\)</span> is a <span class="math inline">\(q_i \times 1\)</span> vector of random effects,
+and <span class="math inline">\(\bs\epsilon_i\)</span> is a <span class="math inline">\(n_i \times 1\)</span> vector of
+observation-specific errors. We assume that <span class="math display">\[
 \bs\eta_i \sim N\left(\bmat{0}, \ \bmat{T}_{i}\right)
-\]</span> for <span class="math inline">\(q_i \times q_i\)</span> covariance matrix <span class="math inline">\(\bmat{T}_i\)</span> and that <span class="math display">\[
-\bs\epsilon_i \sim N\left(\bmat{0}, \ \sigma^2 \bmat{S}_i \bmat{R}_i \bmat{S}_i \right),
-\]</span> where <span class="math inline">\(\sigma^2\)</span> is the marginal variance of the observation-specific errors, <span class="math inline">\(\bmat{S}_i\)</span> is a diagonal matrix describing a variance structure, and <span class="math inline">\(\bmat{R}_i\)</span> is a structured correlation matrix. In <code>lme</code> models, the matrices <span class="math inline">\(\bmat{T}_i\)</span>, <span class="math inline">\(\bmat{S}_i\)</span>, and <span class="math inline">\(\bmat{R}_i\)</span> may be functions of the unknown parameter vectors <span class="math inline">\(\bs\tau\)</span> (called the random effects structure parameters), <span class="math inline">\(\bs\psi\)</span> (called the variance structure parameters), and <span class="math inline">\(\bs\phi\)</span> (called the correlation structure parameters). For models where the lowest-level errors are conditionally independent, given the random effects <span class="math inline">\(\bs\eta_i\)</span>, then <span class="math inline">\(\bmat{S}_i = \bmat{R}_i = \bmat{I}_i\)</span>, an <span class="math inline">\(n_i \times n_i\)</span> identity matrix.</p>
-<p>In models with more than one level of random effects (e.g., students nested in classrooms, nested in schools), the random effects structure can typically be partitioned into design matrices and random effects covariance matrices corresponding to each level. For a model with <span class="math inline">\(G\)</span> unique levels of grouping, let <span class="math inline">\(\bmat{Z}_i^{(g)}\)</span> denote the <span class="math inline">\(n_i \times q_{gi}\)</span> design matrix and <span class="math inline">\(\bs\eta_i^{(g)}\)</span> denote the <span class="math inline">\(q_{gi} \times 1\)</span> vector of random effects corresponding to grouping level <span class="math inline">\(g\)</span>. Random effects are assumed to be independent across levels, such that <span class="math display">\[
+\]</span> for <span class="math inline">\(q_i \times q_i\)</span>
+covariance matrix <span class="math inline">\(\bmat{T}_i\)</span> and
+that <span class="math display">\[
+\bs\epsilon_i \sim N\left(\bmat{0}, \ \sigma^2 \bmat{S}_i \bmat{R}_i
+\bmat{S}_i \right),
+\]</span> where <span class="math inline">\(\sigma^2\)</span> is the
+marginal variance of the observation-specific errors, <span class="math inline">\(\bmat{S}_i\)</span> is a diagonal matrix
+describing a variance structure, and <span class="math inline">\(\bmat{R}_i\)</span> is a structured correlation
+matrix. In <code>lme</code> models, the matrices <span class="math inline">\(\bmat{T}_i\)</span>, <span class="math inline">\(\bmat{S}_i\)</span>, and <span class="math inline">\(\bmat{R}_i\)</span> may be functions of the
+unknown parameter vectors <span class="math inline">\(\bs\tau\)</span>
+(called the random effects structure parameters), <span class="math inline">\(\bs\psi\)</span> (called the variance structure
+parameters), and <span class="math inline">\(\bs\phi\)</span> (called
+the correlation structure parameters). For models where the lowest-level
+errors are conditionally independent, given the random effects <span class="math inline">\(\bs\eta_i\)</span>, then <span class="math inline">\(\bmat{S}_i = \bmat{R}_i = \bmat{I}_i\)</span>, an
+<span class="math inline">\(n_i \times n_i\)</span> identity matrix.</p>
+<p>In models with more than one level of random effects (e.g., students
+nested in classrooms, nested in schools), the random effects structure
+can typically be partitioned into design matrices and random effects
+covariance matrices corresponding to each level. For a model with <span class="math inline">\(G\)</span> unique levels of grouping, let <span class="math inline">\(\bmat{Z}_i^{(g)}\)</span> denote the <span class="math inline">\(n_i \times q_{gi}\)</span> design matrix and <span class="math inline">\(\bs\eta_i^{(g)}\)</span> denote the <span class="math inline">\(q_{gi} \times 1\)</span> vector of random effects
+corresponding to grouping level <span class="math inline">\(g\)</span>.
+Random effects are assumed to be independent across levels, such that
+<span class="math display">\[
 \bs\eta_i^{(g)} \sim N\left(\bmat{0}, \bmat{T}_i^{(g)}\right),
-\]</span> and <span class="math inline">\(\Cov\left(\bs\eta_i^{(g)}, \bs\eta_i^{(h)}\right) = \bmat{0}\)</span> if <span class="math inline">\(g \neq h\)</span>. Let <span class="math inline">\(\bs\tau_g\)</span> be the random effects parameters corresponding to grouping level <span class="math inline">\(g\)</span>. Thus, the full vector of random effects is <span class="math inline">\(\bs\eta_i = \left(\bs\eta_i^{(1)&#39;},...,\bs\eta_i^{(G)&#39;}\right)&#39;\)</span>, with corresponding design matrix <span class="math inline">\(\bmat{Z}_i = \left[\bmat{Z}_i^{(1)} \cdots \bmat{Z}_i^{(G)} \right]\)</span>, and <span class="math display">\[
+\]</span> and <span class="math inline">\(\Cov\left(\bs\eta_i^{(g)},
+\bs\eta_i^{(h)}\right) = \bmat{0}\)</span> if <span class="math inline">\(g \neq h\)</span>. Let <span class="math inline">\(\bs\tau_g\)</span> be the random effects
+parameters corresponding to grouping level <span class="math inline">\(g\)</span>. Thus, the full vector of random
+effects is <span class="math inline">\(\bs\eta_i =
+\left(\bs\eta_i^{(1)&#39;},...,\bs\eta_i^{(G)&#39;}\right)&#39;\)</span>,
+with corresponding design matrix <span class="math inline">\(\bmat{Z}_i
+= \left[\bmat{Z}_i^{(1)} \cdots \bmat{Z}_i^{(G)} \right]\)</span>, and
+<span class="math display">\[
 \bmat{T}_i = \bigoplus_{g=1}^G \bmat{T}_i^{(g)}.
 \]</span></p>
 <p>Under this model, the marginal distribution of <span class="math inline">\(\bmat{y}_i\)</span> is <span class="math display">\[
-\left(\bmat{y}_i | \bmat{X}_i\right) \sim N\left(\bmat{X}_i \bs\beta, \ \bmat{V}_i \right),
+\left(\bmat{y}_i | \bmat{X}_i\right) \sim N\left(\bmat{X}_i \bs\beta, \
+\bmat{V}_i \right),
 \]</span> where the marginal variance-covariance matrix for group <span class="math inline">\(i\)</span> is <span class="math display">\[
-\bmat{V}_i = \bmat{Z}_i \bmat{T}_i \bmat{Z}_i&#39; + \sigma^2 \bmat{S}_i \bmat{R}_i\bmat{S}_i = \sum_{g=1}^G \bmat{Z}_i^{(g)} \bmat{T}_i^{(g)} \bmat{Z}_i^{(g)&#39;} + \sigma^2 \bmat{S}_i \bmat{R}_i\bmat{S}_i,
+\bmat{V}_i = \bmat{Z}_i \bmat{T}_i \bmat{Z}_i&#39; + \sigma^2 \bmat{S}_i
+\bmat{R}_i\bmat{S}_i = \sum_{g=1}^G \bmat{Z}_i^{(g)} \bmat{T}_i^{(g)}
+\bmat{Z}_i^{(g)&#39;} + \sigma^2 \bmat{S}_i \bmat{R}_i\bmat{S}_i,
 \]</span> for <span class="math inline">\(i = 1,...,m\)</span>.</p>
-<p>For estimation purposes, it will be convenient to use notation for the full data vectors. Let <span class="math inline">\(\bmat{y} = \left(\bmat{y}_1&#39; \cdots \bmat{y}_m&#39;\right)&#39;\)</span>, <span class="math inline">\(\bmat{X} = \left(\bmat{X}_1&#39; \cdots \bmat{X}_m&#39;\right)&#39;\)</span>, and <span class="math inline">\(\bmat{Z} = \bigoplus_{i=1}^m \bmat{Z}_i\)</span>. Let <span class="math inline">\(\bmat{V} = \bigoplus_{i=1}^m \bmat{V}_i\)</span>, with <span class="math inline">\(\bmat{T}\)</span>, <span class="math inline">\(\bmat{S}\)</span>, and <span class="math inline">\(\bmat{R}\)</span> similarly defined, so that <span class="math display">\[
-\bmat{V} = \bmat{Z} \bmat{T} \bmat{Z}&#39; + \sigma^2 \bmat{S} \bmat{R} \bmat{S}
+<p>For estimation purposes, it will be convenient to use notation for
+the full data vectors. Let <span class="math inline">\(\bmat{y} =
+\left(\bmat{y}_1&#39; \cdots \bmat{y}_m&#39;\right)&#39;\)</span>, <span class="math inline">\(\bmat{X} = \left(\bmat{X}_1&#39; \cdots
+\bmat{X}_m&#39;\right)&#39;\)</span>, and <span class="math inline">\(\bmat{Z} = \bigoplus_{i=1}^m \bmat{Z}_i\)</span>.
+Let <span class="math inline">\(\bmat{V} = \bigoplus_{i=1}^m
+\bmat{V}_i\)</span>, with <span class="math inline">\(\bmat{T}\)</span>,
+<span class="math inline">\(\bmat{S}\)</span>, and <span class="math inline">\(\bmat{R}\)</span> similarly defined, so that <span class="math display">\[
+\bmat{V} = \bmat{Z} \bmat{T} \bmat{Z}&#39; + \sigma^2 \bmat{S} \bmat{R}
+\bmat{S}
 \]</span></p>
 </div>
 <div id="estimation" class="section level1" number="3">
-<h1 number="3"><span class="header-section-number">3</span> Estimation</h1>
-<p>Fitting hierarchical models by FML or RML entails estimating both the fixed effect coefficients <span class="math inline">\(\bs\beta\)</span> and the parameters of the random effects structure, variance structure, and correlation structure. Let <span class="math inline">\(\bs\theta = \left(\bs\tau&#39;, \bs\psi&#39;, \bs\phi&#39;,\sigma^2 \right)&#39;\)</span> denote the vector collecting of all of the latter parameters, with a total of <span class="math inline">\(r\)</span> unique entries.</p>
+<h1><span class="header-section-number">3</span> Estimation</h1>
+<p>Fitting hierarchical models by FML or RML entails estimating both the
+fixed effect coefficients <span class="math inline">\(\bs\beta\)</span>
+and the parameters of the random effects structure, variance structure,
+and correlation structure. Let <span class="math inline">\(\bs\theta =
+\left(\bs\tau&#39;, \bs\psi&#39;, \bs\phi&#39;,\sigma^2
+\right)&#39;\)</span> denote the vector collecting of all of the latter
+parameters, with a total of <span class="math inline">\(r\)</span>
+unique entries.</p>
 <div id="fixed-effect-estimation" class="section level2" number="3.1">
-<h2 number="3.1"><span class="header-section-number">3.1</span> Fixed effect estimation</h2>
-<p>For explanatory purposes, it is helpful to begin by considering estimation of the fixed effects, supposing that <span class="math inline">\(\bs\theta\)</span> is known (and thus, that that the marginal variance-covariances <span class="math inline">\(\bmat{V}_i\)</span> are known). In this case, the only unknowns are the fixed effects <span class="math inline">\(\bs\beta\)</span>, which can be estimated efficiently using weighted least squares (WLS). The WLS estimator of <span class="math inline">\(\bs\beta\)</span> is given by <span class="math display">\[
-\hat{\bs\beta} = \bmat{M} \bmat{X}&#39; \bmat{V}^{-1} \bmat{y}, \qquad \text{where} \qquad \bmat{M} = \left(\bmat{X}&#39; \bmat{V}^{-1} \bmat{X}\right)^{-1}.
-\]</span> Assuming that the variance parameters are known, the sampling distribution of <span class="math inline">\(\hat{\bs\beta}\)</span> is multivariate normal with mean <span class="math inline">\(\bs\beta\)</span> and covariance matrix <span class="math display">\[
+<h2><span class="header-section-number">3.1</span> Fixed effect
+estimation</h2>
+<p>For explanatory purposes, it is helpful to begin by considering
+estimation of the fixed effects, supposing that <span class="math inline">\(\bs\theta\)</span> is known (and thus, that that
+the marginal variance-covariances <span class="math inline">\(\bmat{V}_i\)</span> are known). In this case, the
+only unknowns are the fixed effects <span class="math inline">\(\bs\beta\)</span>, which can be estimated
+efficiently using weighted least squares (WLS). The WLS estimator of
+<span class="math inline">\(\bs\beta\)</span> is given by <span class="math display">\[
+\hat{\bs\beta} = \bmat{M} \bmat{X}&#39; \bmat{V}^{-1} \bmat{y}, \qquad
+\text{where} \qquad \bmat{M} = \left(\bmat{X}&#39; \bmat{V}^{-1}
+\bmat{X}\right)^{-1}.
+\]</span> Assuming that the variance parameters are known, the sampling
+distribution of <span class="math inline">\(\hat{\bs\beta}\)</span> is
+multivariate normal with mean <span class="math inline">\(\bs\beta\)</span> and covariance matrix <span class="math display">\[
 \Var\left(\hat{\bs\beta}\right) = \bmat{M}.
-\]</span> Of course, in practice, the variance parameters must be estimated. Feasible WLS thus uses estimates of the variance parameters, <span class="math inline">\(\hat{\bs\theta}\)</span>, to calculate an estimate <span class="math inline">\(\hat{\bmat{V}} = \bmat{V}(\hat{\bs\theta})\)</span> that is used in place of <span class="math inline">\(\bmat{V}\)</span> above. Thus, the estimated sampling covariance matrix of <span class="math inline">\(\hat{\bs\beta}\)</span> is <span class="math display">\[
-\hat{\bmat{M}} = \bmat{M}(\hat{\bs\theta}) = \left(\bmat{X}&#39; \hat{\bmat{V}}^{-1} \bmat{X}\right)^{-1}.
-\]</span> It is known that <span class="math inline">\(\hat{\bmat{M}}\)</span> tends to underestimate the true covariance of <span class="math inline">\(\hat{\bs\beta}\)</span> when <span class="math inline">\(m\)</span> is small. Kenward and Roger <span class="citation">(1997, 2009)</span> proposed more elaborate covariance estimators and hypothesis testing procedures for use in small samples.</p>
+\]</span> Of course, in practice, the variance parameters must be
+estimated. Feasible WLS thus uses estimates of the variance parameters,
+<span class="math inline">\(\hat{\bs\theta}\)</span>, to calculate an
+estimate <span class="math inline">\(\hat{\bmat{V}} =
+\bmat{V}(\hat{\bs\theta})\)</span> that is used in place of <span class="math inline">\(\bmat{V}\)</span> above. Thus, the estimated
+sampling covariance matrix of <span class="math inline">\(\hat{\bs\beta}\)</span> is <span class="math display">\[
+\hat{\bmat{M}} = \bmat{M}(\hat{\bs\theta}) = \left(\bmat{X}&#39;
+\hat{\bmat{V}}^{-1} \bmat{X}\right)^{-1}.
+\]</span> It is known that <span class="math inline">\(\hat{\bmat{M}}\)</span> tends to underestimate the
+true covariance of <span class="math inline">\(\hat{\bs\beta}\)</span>
+when <span class="math inline">\(m\)</span> is small. Kenward and Roger
+<span class="citation">(1997, 2009)</span> proposed more elaborate
+covariance estimators and hypothesis testing procedures for use in small
+samples.</p>
 </div>
 <div id="variance-parameter-estimation" class="section level2" number="3.2">
-<h2 number="3.2"><span class="header-section-number">3.2</span> Variance parameter estimation</h2>
-<p>The feasible WLS estimator is based on estimates of the variance parameters. In <code>lme</code>, FML and RML estimators for these parameters are obtained by maximizing the log likelihood or restricted log likelihood of the model via iterative numerical methods. Following <span class="citation">Lindstrom &amp; Bates (1988)</span>, -2 times the full log likelihood is given by <span class="math display">\[
--2 l_F\left(\bs\beta, \bs\theta\right) = \log \left|\bmat{V}(\bs\theta)\right| + \bmat{r}&#39; \bmat{V}^{-1}(\bs\theta)\bmat{r},
-\]</span> where <span class="math inline">\(\bmat{r} = \bmat{y} - \bmat{X} \bs\beta\)</span> and <span class="math inline">\(\left| \cdot \right|\)</span> denotes the norm of a matrix. Similarly, -2 times the restricted log likelihood (which is a function of <span class="math inline">\(\bs\theta\)</span> alone) is given by <span class="math display">\[
--2 l_R\left(\bs\theta\right) = \log \left|\bmat{X}&#39;\bmat{V}^{-1} \bmat{X} \right| +  \log \left|\bmat{V}(\bs\theta)\right| + \bmat{y}&#39; \bmat{Q}(\bs\theta)\bmat{y},
+<h2><span class="header-section-number">3.2</span> Variance parameter
+estimation</h2>
+<p>The feasible WLS estimator is based on estimates of the variance
+parameters. In <code>lme</code>, FML and RML estimators for these
+parameters are obtained by maximizing the log likelihood or restricted
+log likelihood of the model via iterative numerical methods. Following
+<span class="citation">Lindstrom &amp; Bates (1988)</span>, -2 times the
+full log likelihood is given by <span class="math display">\[
+-2 l_F\left(\bs\beta, \bs\theta\right) = \log
+\left|\bmat{V}(\bs\theta)\right| + \bmat{r}&#39;
+\bmat{V}^{-1}(\bs\theta)\bmat{r},
+\]</span> where <span class="math inline">\(\bmat{r} = \bmat{y} -
+\bmat{X} \bs\beta\)</span> and <span class="math inline">\(\left| \cdot
+\right|\)</span> denotes the norm of a matrix. Similarly, -2 times the
+restricted log likelihood (which is a function of <span class="math inline">\(\bs\theta\)</span> alone) is given by <span class="math display">\[
+-2 l_R\left(\bs\theta\right) = \log \left|\bmat{X}&#39;\bmat{V}^{-1}
+\bmat{X} \right| +  \log \left|\bmat{V}(\bs\theta)\right| +
+\bmat{y}&#39; \bmat{Q}(\bs\theta)\bmat{y},
 \]</span> where <span class="math display">\[
-\bmat{Q}(\bs\theta) = \bmat{V}^{-1}(\bs\theta) - \bmat{V}^{-1}(\bs\theta) \bmat{X} \left(\bmat{X}&#39; \bmat{V}^{-1}(\bs\theta) \bmat{X}\right)^{-1} \bmat{X}&#39; \bmat{V}^{-1}(\bs\theta).
-\]</span> Let <span class="math inline">\(\hat{\bs\theta}_F\)</span> and <span class="math inline">\(\hat{\bs\theta}_R\)</span> denote the FML and RML estimators of the variance parameters, respectively. Let <span class="math inline">\(\hat{\bs\theta}\)</span> be a generic estimator of the variance parameters (i.e., either the FML or RML estimator).</p>
+\bmat{Q}(\bs\theta) = \bmat{V}^{-1}(\bs\theta) -
+\bmat{V}^{-1}(\bs\theta) \bmat{X} \left(\bmat{X}&#39;
+\bmat{V}^{-1}(\bs\theta) \bmat{X}\right)^{-1} \bmat{X}&#39;
+\bmat{V}^{-1}(\bs\theta).
+\]</span> Let <span class="math inline">\(\hat{\bs\theta}_F\)</span> and
+<span class="math inline">\(\hat{\bs\theta}_R\)</span> denote the FML
+and RML estimators of the variance parameters, respectively. Let <span class="math inline">\(\hat{\bs\theta}\)</span> be a generic estimator of
+the variance parameters (i.e., either the FML or RML estimator).</p>
 </div>
 <div id="sampling-variance-of-variance-parameters" class="section level2" number="3.3">
-<h2 number="3.3"><span class="header-section-number">3.3</span> Sampling variance of variance parameters</h2>
-<p>The analyst might need to obtain estimates of the uncertainty in <span class="math inline">\(\hat{\bs\theta}\)</span>, either for purposes of inference or as a component of small-sample approximations for other statistics. For purposes of inference, a recommended approach to obtain a confidence interval for a single component of <span class="math inline">\(\bs\theta\)</span> is to use profile likelihood methods. Another approach is to use approximations based on the information matrix of the full or restricted likelihood. The inverse of the observed, expected, or average Fisher information provides an approximate estimate of <span class="math inline">\(\Var(\hat{\bs\theta})\)</span>, valid as the number of groups grows large. Thus, define <span class="math display">\[
+<h2><span class="header-section-number">3.3</span> Sampling variance of
+variance parameters</h2>
+<p>The analyst might need to obtain estimates of the uncertainty in
+<span class="math inline">\(\hat{\bs\theta}\)</span>, either for
+purposes of inference or as a component of small-sample approximations
+for other statistics. For purposes of inference, a recommended approach
+to obtain a confidence interval for a single component of <span class="math inline">\(\bs\theta\)</span> is to use profile likelihood
+methods. Another approach is to use approximations based on the
+information matrix of the full or restricted likelihood. The inverse of
+the observed, expected, or average Fisher information provides an
+approximate estimate of <span class="math inline">\(\Var(\hat{\bs\theta})\)</span>, valid as the
+number of groups grows large. Thus, define <span class="math display">\[
 \bmat{C}(\hat{\bs\theta}) = \Info^{-1},
-\]</span> where <span class="math inline">\(\Info\)</span> is the observed, expected, or average information matrix. We now define these matrices in detail.</p>
+\]</span> where <span class="math inline">\(\Info\)</span> is the
+observed, expected, or average information matrix. We now define these
+matrices in detail.</p>
 <div id="restricted-maximum-likelihood" class="section level3" number="3.3.1">
-<h3 number="3.3.1"><span class="header-section-number">3.3.1</span> Restricted maximum likelihood</h3>
-<p>The observed information is the negative Hessian matrix (-1 times the matrix of second derivatives) of the log likelihood, evaluated using the full or restricted maximum likelihood estimator of <span class="math inline">\(\theta\)</span>. For RML estimators, the observed information matrix has entries <span class="math display">\[
+<h3><span class="header-section-number">3.3.1</span> Restricted maximum
+likelihood</h3>
+<p>The observed information is the negative Hessian matrix (-1 times the
+matrix of second derivatives) of the log likelihood, evaluated using the
+full or restricted maximum likelihood estimator of <span class="math inline">\(\theta\)</span>. For RML estimators, the observed
+information matrix has entries <span class="math display">\[
 \begin{aligned}
-\Info^{RO}_{st} &amp;= \left. -\frac{\partial^2 l_R(\bs\theta)}{\partial \theta_s \partial \theta_t} \right|_{\bs\theta = \hat{\bs\theta}} \\
-&amp;= \frac{1}{2} \bmat{y}&#39;\bmat{Q}\left(\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t + \dot{\bmat{V}}_t\bmat{Q}\dot{\bmat{V}}_s - \ddot{\bmat{V}}_{st}\right) \bmat{Q}\bmat{y} - \frac{1}{2}\trace\left(\bmat{Q}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t - \bmat{Q}\ddot{\bmat{V}}_{st}\right) \\
-&amp;= \frac{1}{2} \hat{\bmat{r}}&#39;\hat{\bmat{V}}^{-1}\left(\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t + \dot{\bmat{V}}_t\bmat{Q}\dot{\bmat{V}}_s - \ddot{\bmat{V}}_{st}\right) \hat{\bmat{V}}^{-1}\hat{\bmat{r}} - \frac{1}{2}\trace\left(\bmat{Q}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t - \bmat{Q}\ddot{\bmat{V}}_{st}\right)
+\Info^{RO}_{st} &amp;= \left. -\frac{\partial^2 l_R(\bs\theta)}{\partial
+\theta_s \partial \theta_t} \right|_{\bs\theta = \hat{\bs\theta}} \\
+&amp;= \frac{1}{2}
+\bmat{y}&#39;\bmat{Q}\left(\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t +
+\dot{\bmat{V}}_t\bmat{Q}\dot{\bmat{V}}_s - \ddot{\bmat{V}}_{st}\right)
+\bmat{Q}\bmat{y} -
+\frac{1}{2}\trace\left(\bmat{Q}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t
+- \bmat{Q}\ddot{\bmat{V}}_{st}\right) \\
+&amp;= \frac{1}{2}
+\hat{\bmat{r}}&#39;\hat{\bmat{V}}^{-1}\left(\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t
++ \dot{\bmat{V}}_t\bmat{Q}\dot{\bmat{V}}_s - \ddot{\bmat{V}}_{st}\right)
+\hat{\bmat{V}}^{-1}\hat{\bmat{r}} -
+\frac{1}{2}\trace\left(\bmat{Q}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t
+- \bmat{Q}\ddot{\bmat{V}}_{st}\right)
 \end{aligned}
-\]</span> for <span class="math inline">\(s,t = 1,...,r\)</span>, where <span class="math inline">\(\dot{\bmat{V}}_s = \left. \partial \bmat{V} / \partial \theta_s \right|_{\bs\theta = \hat{\bs\theta}}\)</span>, <span class="math inline">\(\ddot{\bmat{V}}_{st} = \left. \partial^2 \bmat{V} / \partial \theta_s \partial \theta_t \right|_{\bs\theta = \hat{\bs\theta}}\)</span>, and <span class="math inline">\(\bmat{Q} = \bmat{Q}(\hat{\bs\theta})\)</span>.</p>
-<p>The expected information matrix is the expected value of <span class="math inline">\(\Info^{RO}\)</span> over the distribution of <span class="math inline">\(\bmat{y}\)</span>, evaluated at the maximum likelihood estimator of <span class="math inline">\(\theta\)</span>. For RML estimators, the expected information has entries <span class="math display">\[
-\Info^{RE}_{st} = \frac{1}{2}\trace\left(\bmat{Q}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t\right)
+\]</span> for <span class="math inline">\(s,t = 1,...,r\)</span>, where
+<span class="math inline">\(\dot{\bmat{V}}_s = \left. \partial \bmat{V}
+/ \partial \theta_s \right|_{\bs\theta = \hat{\bs\theta}}\)</span>,
+<span class="math inline">\(\ddot{\bmat{V}}_{st} = \left. \partial^2
+\bmat{V} / \partial \theta_s \partial \theta_t \right|_{\bs\theta =
+\hat{\bs\theta}}\)</span>, and <span class="math inline">\(\bmat{Q} =
+\bmat{Q}(\hat{\bs\theta})\)</span>.</p>
+<p>The expected information matrix is the expected value of <span class="math inline">\(\Info^{RO}\)</span> over the distribution of <span class="math inline">\(\bmat{y}\)</span>, evaluated at the maximum
+likelihood estimator of <span class="math inline">\(\theta\)</span>. For
+RML estimators, the expected information has entries <span class="math display">\[
+\Info^{RE}_{st} =
+\frac{1}{2}\trace\left(\bmat{Q}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t\right)
 \]</span> for <span class="math inline">\(s,t = 1,...,r\)</span>.</p>
-<p>The average information matrix is the average of <span class="math inline">\(\Info^{RO}\)</span> and <span class="math inline">\(\Info^{RE}\)</span>, with the terms involving second derivatives of <span class="math inline">\(\bmat{V}\)</span> approximated by their expectations <span class="citation">(Gilmour, Thompson, &amp; Cullis, 1995)</span>. For RML estimators, the entries are given by <span class="math display">\[
-\Info^{RA}_{st} = \frac{1}{2} \bmat{y}&#39;\bmat{Q}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t\bmat{Q}\bmat{y} = \frac{1}{2} \hat{\bmat{r}}&#39;\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t \hat{\bmat{V}}^{-1}\hat{\bmat{r}},
-\]</span> for <span class="math inline">\(s,t = 1,...,r\)</span>, where <span class="math inline">\(\hat{\bmat{r}} = \bmat{y} - \bmat{X} \hat{\bs\beta}\)</span>. The average information matrix is used by the program <code>ASReml</code> <span class="citation">(Gilmour, Gogel, Cullis, &amp; Thompson, 2009)</span> due to its computational efficiency for models with large sample sizes.</p>
-<p>Numerical optimization algorithms will often use a parameterization of the model that differs from the parameter definitions of interest. For example, we might want to approximate the variance of a sum of several variance components in their natural parameterization, but the optimization algorithm may use a log likelihood defined in terms of the natural logs of standard deviations. Thus, we will sometimes need to convert information matrices from one parameterization to another. Suppose that we have the information matrix calculated in terms of a parameter <span class="math inline">\(\bs\xi = g(\bs\theta)\)</span>, where <span class="math inline">\(g()\)</span> is a one-to-one function with inverse <span class="math inline">\(h()\)</span>. Define the Jacobian matrix of the inverse as <span class="math display">\[
-\nabla_\xi h = \left[\frac{\partial h_s}{\partial \xi_t} \right]_{s,t = 1,...,r}.
-\]</span> Let <span class="math inline">\(\Jnfo\)</span> denote the information matrix (observed, expected, or average) in the <span class="math inline">\(\bs\xi\)</span> parameterization. An approximate covariance matrix for the maximum likelihood estimator <span class="math inline">\(\hat{\bs\theta}\)</span> is <span class="math display">\[
-\bmat{C}(\hat{\bs\theta}) = \left(\nabla_\xi h \right) \left[\Jnfo^{-1}\right] \left(\nabla_\xi h \right)&#39;,
-\]</span> where <span class="math inline">\(\nabla_\xi h\)</span> is evaluated at <span class="math inline">\(\hat{\bs\xi}\)</span>.</p>
+<p>The average information matrix is the average of <span class="math inline">\(\Info^{RO}\)</span> and <span class="math inline">\(\Info^{RE}\)</span>, with the terms involving
+second derivatives of <span class="math inline">\(\bmat{V}\)</span>
+approximated by their expectations <span class="citation">(Gilmour,
+Thompson, &amp; Cullis, 1995)</span>. For RML estimators, the entries
+are given by <span class="math display">\[
+\Info^{RA}_{st} = \frac{1}{2}
+\bmat{y}&#39;\bmat{Q}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t\bmat{Q}\bmat{y}
+= \frac{1}{2}
+\hat{\bmat{r}}&#39;\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_s\bmat{Q}\dot{\bmat{V}}_t
+\hat{\bmat{V}}^{-1}\hat{\bmat{r}},
+\]</span> for <span class="math inline">\(s,t = 1,...,r\)</span>, where
+<span class="math inline">\(\hat{\bmat{r}} = \bmat{y} - \bmat{X}
+\hat{\bs\beta}\)</span>. The average information matrix is used by the
+program <code>ASReml</code> <span class="citation">(Gilmour, Gogel,
+Cullis, &amp; Thompson, 2009)</span> due to its computational efficiency
+for models with large sample sizes.</p>
+<p>Numerical optimization algorithms will often use a parameterization
+of the model that differs from the parameter definitions of interest.
+For example, we might want to approximate the variance of a sum of
+several variance components in their natural parameterization, but the
+optimization algorithm may use a log likelihood defined in terms of the
+natural logs of standard deviations. Thus, we will sometimes need to
+convert information matrices from one parameterization to another.
+Suppose that we have the information matrix calculated in terms of a
+parameter <span class="math inline">\(\bs\xi = g(\bs\theta)\)</span>,
+where <span class="math inline">\(g()\)</span> is a one-to-one function
+with inverse <span class="math inline">\(h()\)</span>. Define the
+Jacobian matrix of the inverse as <span class="math display">\[
+\nabla_\xi h = \left[\frac{\partial h_s}{\partial \xi_t} \right]_{s,t =
+1,...,r}.
+\]</span> Let <span class="math inline">\(\Jnfo\)</span> denote the
+information matrix (observed, expected, or average) in the <span class="math inline">\(\bs\xi\)</span> parameterization. An approximate
+covariance matrix for the maximum likelihood estimator <span class="math inline">\(\hat{\bs\theta}\)</span> is <span class="math display">\[
+\bmat{C}(\hat{\bs\theta}) = \left(\nabla_\xi h \right)
+\left[\Jnfo^{-1}\right] \left(\nabla_\xi h \right)&#39;,
+\]</span> where <span class="math inline">\(\nabla_\xi h\)</span> is
+evaluated at <span class="math inline">\(\hat{\bs\xi}\)</span>.</p>
 </div>
 <div id="full-maximum-likelihood" class="section level3" number="3.3.2">
-<h3 number="3.3.2"><span class="header-section-number">3.3.2</span> Full maximum likelihood</h3>
-<p>For FML estimators, the entries of the observed information matrix involve <span class="math inline">\(\bs\beta\)</span> in addition to <span class="math inline">\(\bs\theta\)</span>. The entries for <span class="math inline">\(\bs\theta\)</span> are <span class="math display">\[
+<h3><span class="header-section-number">3.3.2</span> Full maximum
+likelihood</h3>
+<p>For FML estimators, the entries of the observed information matrix
+involve <span class="math inline">\(\bs\beta\)</span> in addition to
+<span class="math inline">\(\bs\theta\)</span>. The entries for <span class="math inline">\(\bs\theta\)</span> are <span class="math display">\[
 \begin{aligned}
-\Info^{FO}_{st} &amp;= \left. -\frac{\partial^2 l_F(\bs\beta, \bs\theta)}{\partial \theta_s \partial \theta_t} \right|_{\bs\theta = \hat{\bs\theta}} \\ 
-&amp;= \frac{1}{2} \hat{\bmat{r}}&#39;\hat{\bmat{V}}^{-1}\left(\dot{\bmat{V}}_s\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_t + \dot{\bmat{V}}_t\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_s - \ddot{\bmat{V}}_{st}\right) \hat{\bmat{V}}^{-1}\hat{\bmat{r}} - \frac{1}{2}\trace\left(\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_s\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_t - \hat{\bmat{V}}^{-1}\ddot{\bmat{V}}_{st}\right).
+\Info^{FO}_{st} &amp;= \left. -\frac{\partial^2 l_F(\bs\beta,
+\bs\theta)}{\partial \theta_s \partial \theta_t} \right|_{\bs\theta =
+\hat{\bs\theta}} \\
+&amp;= \frac{1}{2}
+\hat{\bmat{r}}&#39;\hat{\bmat{V}}^{-1}\left(\dot{\bmat{V}}_s\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_t
++ \dot{\bmat{V}}_t\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_s -
+\ddot{\bmat{V}}_{st}\right) \hat{\bmat{V}}^{-1}\hat{\bmat{r}} -
+\frac{1}{2}\trace\left(\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_s\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_t
+- \hat{\bmat{V}}^{-1}\ddot{\bmat{V}}_{st}\right).
 \end{aligned}
 \]</span> The cross-derivatives involving <span class="math inline">\(\bs\beta\)</span> are <span class="math display">\[
-\Info^{FO}_{s \bs\beta&#39;} = \left. -\frac{\partial^2 l_F(\bs\beta, \bs\theta)}{\partial \theta_s \partial\bs\beta&#39;} \right|_{\bs\theta = \hat{\bs\theta}} = \hat{\bmat{r}}&#39; \hat{\bmat{V}}^{-1} \dot{\bmat{V}}_s \hat{\bmat{V}}^{-1} \bmat{X},
-\]</span> which have expectation <span class="math inline">\(\bmat{0}&#39;\)</span> and thus might be ignored, so that the sampling variance of <span class="math inline">\(\hat{\bs\theta}\)</span> would be approximated by <span class="math inline">\(\bmat{C}(\hat{\bs\theta}) = \left(\bmat{I}^{FO}_{\bs\theta\bs\theta&#39;}\right)^{-1}\)</span>.</p>
+\Info^{FO}_{s \bs\beta&#39;} = \left. -\frac{\partial^2 l_F(\bs\beta,
+\bs\theta)}{\partial \theta_s \partial\bs\beta&#39;} \right|_{\bs\theta
+= \hat{\bs\theta}} = \hat{\bmat{r}}&#39; \hat{\bmat{V}}^{-1}
+\dot{\bmat{V}}_s \hat{\bmat{V}}^{-1} \bmat{X},
+\]</span> which have expectation <span class="math inline">\(\bmat{0}&#39;\)</span> and thus might be ignored,
+so that the sampling variance of <span class="math inline">\(\hat{\bs\theta}\)</span> would be approximated by
+<span class="math inline">\(\bmat{C}(\hat{\bs\theta}) =
+\left(\bmat{I}^{FO}_{\bs\theta\bs\theta&#39;}\right)^{-1}\)</span>.</p>
 <p>The expected information matrix for the FML estimator is simply <span class="math display">\[
-\Info^{FE}_{st} = \frac{1}{2}\trace\left(\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_s \hat{\bmat{V}}^{-1} \dot{\bmat{V}}_t\right)
+\Info^{FE}_{st} =
+\frac{1}{2}\trace\left(\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_s
+\hat{\bmat{V}}^{-1} \dot{\bmat{V}}_t\right)
 \]</span> and the average information matrix is <span class="math display">\[
-\Info^{FA}_{st} = \frac{1}{2}\hat{\bmat{r}}&#39;\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_s \hat{\bmat{V}}^{-1} \dot{\bmat{V}}_t \hat{\bmat{V}}^{-1} \hat{\bmat{r}}.
+\Info^{FA}_{st} =
+\frac{1}{2}\hat{\bmat{r}}&#39;\hat{\bmat{V}}^{-1}\dot{\bmat{V}}_s
+\hat{\bmat{V}}^{-1} \dot{\bmat{V}}_t \hat{\bmat{V}}^{-1} \hat{\bmat{r}}.
 \]</span></p>
 </div>
 </div>
@@ -278,19 +704,31 @@ a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B} \\
 <h1 class="unnumbered">References</h1>
 <div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
 <div id="ref-Gilmour2009ASReml" class="csl-entry">
-Gilmour, A. R., Gogel, B. J., Cullis, B. R., &amp; Thompson, R. (2009). <em><span>ASReml User Guide</span></em>.
+Gilmour, A. R., Gogel, B. J., Cullis, B. R., &amp; Thompson, R. (2009).
+<em><span>ASReml User Guide</span></em>.
 </div>
 <div id="ref-Gilmour1995average" class="csl-entry">
-Gilmour, A. R., Thompson, R., &amp; Cullis, B. R. (1995). Average information <span>REML</span>: <span>An</span> efficient algorithm for variance parameter estimation in linear mixed models. <em>Biometrics</em>, <em>51</em>(4), 1440–1450. <a href="https://doi.org/10.2307/2533274">https://doi.org/10.2307/2533274</a>
+Gilmour, A. R., Thompson, R., &amp; Cullis, B. R. (1995). Average
+information <span>REML</span>: <span>An</span> efficient algorithm for
+variance parameter estimation in linear mixed models.
+<em>Biometrics</em>, <em>51</em>(4), 1440–1450. <a href="https://doi.org/10.2307/2533274">https://doi.org/10.2307/2533274</a>
 </div>
 <div id="ref-Kenward1997small" class="csl-entry">
-Kenward, M. G., &amp; Roger, J. H. (1997). Small sample inference for fixed effects from restricted maximum likelihood. <em>Biometrics</em>, <em>53</em>(3), 983–997.
+Kenward, M. G., &amp; Roger, J. H. (1997). Small sample inference for
+fixed effects from restricted maximum likelihood. <em>Biometrics</em>,
+<em>53</em>(3), 983–997. <a href="https://doi.org/10.2307/2533558">https://doi.org/10.2307/2533558</a>
 </div>
 <div id="ref-Kenward2009improved" class="csl-entry">
-Kenward, M. G., &amp; Roger, J. H. (2009). An improved approximation to the precision of fixed effects from restricted maximum likelihood. <em>Computational Statistics &amp; Data Analysis</em>, <em>53</em>(7), 2583–2595. <a href="https://doi.org/10.1016/j.csda.2008.12.013">https://doi.org/10.1016/j.csda.2008.12.013</a>
+Kenward, M. G., &amp; Roger, J. H. (2009). An improved approximation to
+the precision of fixed effects from restricted maximum likelihood.
+<em>Computational Statistics &amp; Data Analysis</em>, <em>53</em>(7),
+2583–2595. <a href="https://doi.org/10.1016/j.csda.2008.12.013">https://doi.org/10.1016/j.csda.2008.12.013</a>
 </div>
 <div id="ref-Lindstrom1988" class="csl-entry">
-Lindstrom, M. J., &amp; Bates, D. M. (1988). Newton-<span>Raphson</span> and <span>EM</span> algorithms for linear mixed-effects models for repeated-measures data. <em>Journal of the American Statistical Association</em>, <em>83</em>(404), 1014–1022.
+Lindstrom, M. J., &amp; Bates, D. M. (1988). Newton-<span>Raphson</span>
+and <span>EM</span> algorithms for linear mixed-effects models for
+repeated-measures data. <em>Journal of the American Statistical
+Association</em>, <em>83</em>(404), 1014–1022. <a href="https://doi.org/10.1080/01621459.1988.10478693">https://doi.org/10.1080/01621459.1988.10478693</a>
 </div>
 </div>
 </div>

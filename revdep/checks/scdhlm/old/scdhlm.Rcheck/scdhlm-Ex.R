@@ -34,7 +34,7 @@ CI_g(Laski_g_REML, symmetric = FALSE)
 Laski_HPS <- with(Laski, effect_size_MB(outcome, treatment, case, time))
 CI_g(Laski_HPS, symmetric = FALSE)
 
-Laski_g_mlm <- g_mlm(Laski_RML, p_const = c(0,1), r_const = c(1,0,1), returnModel = TRUE)
+Laski_g_mlm <- g_mlm(mod = Laski_RML, p_const = c(0,1), r_const = c(1,0,1))
 CI_g(Laski_g_mlm, symmetric = FALSE)
 
 
@@ -186,18 +186,38 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+
+if (requireNamespace("ggplot2", quietly = TRUE)) {
+
 data(Anglesea)
-graph_SCD(case=case, phase=condition, 
-          session=session, outcome=outcome, 
-          design="TR", treatment_name = "treatment", 
+graph_SCD(design="TR",
+          case=case, phase=condition,
+          session=session, outcome=outcome,
+          treatment_name = "treatment",
           data=Anglesea)
-          
+
 data(BartonArwood)
-graph_SCD(case=case, phase=condition, 
-          session=session, outcome=outcome, 
-          design="MB", treatment_name = "B",  
+graph_SCD(design="MBP",
+          case=case, phase=condition,
+          session=session, outcome=outcome,
+          treatment_name = "B",
           data=BartonArwood)
 
+data(Thiemann2001)
+graph_SCD(design="RMBB",
+          case=case, series = series, phase=treatment,
+          session=time, outcome=outcome,
+          treatment_name = "treatment",
+          data=Thiemann2001)
+
+data(Bryant2018)
+graph_SCD(design="CMB",
+          cluster=school, case=case, phase=treatment,
+          session=session, outcome=outcome,
+          treatment_name = "treatment",
+          data=Bryant2018)
+          
+}
 
 
 
@@ -241,10 +261,23 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(Laski)
-preprocess_SCD(case = case, phase = treatment,
+preprocess_SCD(design = "MBP", 
+               case = case, phase = treatment,
                session = time, outcome = outcome, 
-               design = "MB", center = 4, data = Laski)
-
+               center = 4, data = Laski)
+               
+data(Anglesea) 
+preprocess_SCD(design="TR",
+               case=case, phase=condition,
+               session=session, outcome=outcome,
+               treatment_name = "treatment",
+               data=Anglesea)
+               
+data(Thiemann2001)
+preprocess_SCD(design = "RMBB", 
+               case = case, series = series, phase = treatment, 
+               session = time, outcome = outcome, 
+               data = Thiemann2001)
           
 
 
@@ -289,9 +322,14 @@ Laski_RML <- lme(fixed = outcome ~ treatment,
                  random = ~ 1 | case,
                  correlation = corAR1(0, ~ time | case), 
                  data = Laski)
-Laski_g <- g_REML(Laski_RML, p_const = c(0,1), r_const = c(1,0,1))
-simulate(Laski_g, nsim = 20)
 
+suppressWarnings(
+  Laski_g <- g_REML(Laski_RML, p_const = c(0,1), r_const = c(1,0,1))
+)
+
+if (requireNamespace("plyr", quietly = TRUE)) {
+  simulate(Laski_g, nsim = 20)
+}
 
 
 

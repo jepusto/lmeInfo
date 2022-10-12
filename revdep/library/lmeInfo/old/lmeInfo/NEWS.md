@@ -1,3 +1,15 @@
+# lmeInfo 0.2.1
+
+* Fixed a bug in `extract_varcomp()` that caused some variance components to be dropped if the variables involved in the random effects formula involved special characters such as `.`, `(`, `)`, or `^`.
+
+# lmeInfo 0.2.0
+
+* Added an option to return separate level-1 variance components for models that use `weights = varIdent(form = ~ 1 | Stratum)`.
+* Generalized the `g_mlm()` function to allow use of separate models for the numerator and denominator of the effect size.
+* Modified the stored results of `g_mlm()` so that the `returnModel` argument is no longer necessary.
+* Fixed a bug in handling of models with missing observations that have `na.action` of `na.exclude()`.
+* Fixed a bug in internal functions for constructing level-1 variance covariance structures in models with multi-variate structure (i.e., models with non-null `modelStruct$corStruct`).
+
 # lmeInfo 0.1.2
 
 * Corrected a bug leading to errors in `Fisher_info()` with models that have more than two levels.

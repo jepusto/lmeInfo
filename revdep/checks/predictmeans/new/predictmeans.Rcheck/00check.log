@@ -1,7 +1,7 @@
 * using log directory 'D:/Amanda/Pusto/git/lmeInfo/revdep/checks/predictmeans/new/predictmeans.Rcheck'
-* using R version 4.1.0 (2021-05-18)
+* using R version 4.2.1 (2022-06-23 ucrt)
 * using platform: x86_64-w64-mingw32 (64-bit)
-* using session charset: ISO8859-1
+* using session charset: UTF-8
 * using options '--no-manual --no-build-vignettes'
 * checking for file 'predictmeans/DESCRIPTION' ... OK
 * checking extension type ... Package
@@ -13,12 +13,7 @@
 * checking for executable files ... OK
 * checking for hidden files and directories ... OK
 * checking for portable file names ... OK
-* checking whether package 'predictmeans' can be installed ... WARNING
-Found the following significant warnings:
-  Warning: package 'lme4' was built under R version 4.1.3
-  Warning: package 'Matrix' was built under R version 4.1.3
-  Warning: package 'nlme' was built under R version 4.1.3
-See 'D:/Amanda/Pusto/git/lmeInfo/revdep/checks/predictmeans/new/predictmeans.Rcheck/00install.out' for details.
+* checking whether package 'predictmeans' can be installed ... OK
 * checking installed package size ... OK
 * checking package directory ... OK
 * checking DESCRIPTION meta-information ... OK
@@ -49,4 +44,4 @@ See 'D:/Amanda/Pusto/git/lmeInfo/revdep/checks/predictmeans/new/predictmeans.Rch
 * checking for unstated dependencies in examples ... OK
 * checking examples ... OK
 * DONE
-Status: 1 WARNING
+Status: OK
