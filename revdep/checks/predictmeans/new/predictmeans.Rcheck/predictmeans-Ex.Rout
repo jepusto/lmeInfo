@@ -846,8 +846,8 @@ dev.new(): using pdf(file="Rplots15.pdf")
 > fm1 <- lme(yield ~ nitro*Variety, random=~1|Block/Variety, data=Oats)
 > varcomp(fm1)
                                      vcov Std.error     lower     upper
-Variety.Variety.var((Intercept)) 106.0620  67.87561  30.25374  371.8265
 Block.Block.var((Intercept))     214.4748 168.83266  45.84330 1003.4059
+Variety.Variety.var((Intercept)) 106.0620  67.87561  30.25374  371.8265
 sigma_sq                         177.0835  37.33247 117.14595  267.6879
 > 
 > data(Orthodont, package="nlme")
@@ -873,7 +873,7 @@ sigma_sq                              2.5020536
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  6.25 0.48 6.74 NA NA 
+Time elapsed:  6.07 0.42 6.51 NA NA 
 > grDevices::dev.off()
 pdf 
   2 
