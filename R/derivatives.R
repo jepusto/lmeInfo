@@ -62,21 +62,17 @@ dV_dreStruct <- function(mod) {
   blocks_names <- names(blocks)
   reStruct_names <- names(mod$modelStruct$reStruct)
   if (!all(blocks_names %in% reStruct_names)) {
-    reStruct_names <- rev(blocks_names)
-    names(mod$modelStruct$reStruct) <- reStruct_names
-  }
-  if (!all(blocks_names == reStruct_names)) {
-    blocks <- blocks[reStruct_names]
+    names(mod$modelStruct$reStruct) <- rev(blocks_names)
   }
 
-  b <- lapply(reStruct_names, function(x) class(mod$modelStruct$reStruct[[x]])) # pdClass
+  b <- lapply(rev(reStruct_names), function(x) class(mod$modelStruct$reStruct[[x]])) # pdClass
 
   data <- nlme::getData(mod)
   Z_design <- model.matrix(mod$modelStruct$reStruct, data = data)
   if (inherits(mod$na.action, "exclude")) {
     Z_design <- Z_design[!(rownames(Z_design) %in% names(mod$na.action)),,drop=FALSE]
   }
-  Z_names <- get_RE_names(mod$modelStruct$reStruct)[reStruct_names]
+  Z_names <- get_RE_names(mod$modelStruct$reStruct)[blocks_names]
 
   if (length(blocks) == 1L) {
     Z_list <- list(Z_design)

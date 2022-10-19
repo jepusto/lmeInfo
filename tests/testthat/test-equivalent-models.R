@@ -37,8 +37,11 @@ test_that("vcov matrices are equivalent for equivalent models.", {
   vcov_3level_exp <- varcomp_vcov(Thiemann2001_3level)
   vcov_CScorr_exp <- varcomp_vcov(Thiemann2001_CScorr)
 
-  expect_equal(vcov_3level_exp[2,2] / vcov_CScorr_exp[1,1], 1, tol = 10^-3)
-  expect_equal(sum(vcov_3level_exp[c(1,3),c(1,3)]) / vcov_CScorr_exp[3,3], 1, tol = 10^-3)
-  expect_equal(sum(vcov_3level_exp[c(1,3),2]) / vcov_CScorr_exp[1,3], 1, tol = 10^-3)
+  expect_equal(vcov_3level_exp["Tau.case.var((Intercept))", "Tau.case.var((Intercept))"] /
+                 vcov_CScorr_exp["Tau.case.var((Intercept))", "Tau.case.var((Intercept))"], 1, tol = 10^-3)
+  expect_equal(sum(vcov_3level_exp[c("Tau.series.var((Intercept))","sigma_sq"),c("Tau.series.var((Intercept))","sigma_sq")]) /
+                 vcov_CScorr_exp["sigma_sq","sigma_sq"], 1, tol = 10^-3)
+  expect_equal(sum(vcov_3level_exp[c("Tau.series.var((Intercept))","sigma_sq"),"Tau.case.var((Intercept))"]) /
+                 vcov_CScorr_exp["Tau.case.var((Intercept))","sigma_sq"], 1, tol = 10^-3)
 
 })

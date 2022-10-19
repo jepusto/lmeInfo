@@ -73,7 +73,7 @@ test_that("mod2_1 and mod2_2 return the same results.", {
 
 
 test_that("Fisher_info() of mod1_1 and mod2_2 return similar output.", {
-  info1 <- Fisher_info(mod1_1)[-2, -2] # remove the row and col with the cor btw intercept and slope involved
+  info1 <- Fisher_info(mod1_1)[-3, -3] # remove the row and col with the cor btw intercept and slope involved
   info2 <- Fisher_info(mod2_2)
   expect_equivalent(info1 > 0, info2 > 0)
   expect_equal(sum(diag(info1)), sum(diag(info2)), tol = 100)

@@ -70,7 +70,7 @@ test_that("The degrees of freedom are not sensitive to the choice of centering v
                                      control = lmeControl(msMaxIter = 50, apVar = FALSE, returnObject = TRUE)))
   Thi_g_C1 <- g_mlm(Thi_RML_C1,
                     p_const = c(0,0,1,B-A),
-                    r_const = c(1,0,0,0,0,0,1,0,1),
+                    r_const = c(1,1,0,0,0,0,0,0,1),
                     returnModel = TRUE)
 
   # center at start of series
@@ -84,7 +84,7 @@ test_that("The degrees of freedom are not sensitive to the choice of centering v
                                      control = lmeControl(msMaxIter = 50, apVar = FALSE, returnObject = TRUE)))
   Thi_g_C2 <- g_mlm(Thi_RML_C2,
                     p_const = c(0,0,1,B-A),
-                    r_const = c(1,2*(B-C2),(B-C2)^2,0,0,0,1,0,1),
+                    r_const = c(1,1,2*(B-C2),(B-C2)^2,0,0,0,0,1),
                     returnModel = TRUE)
 
   # check whether BCSMD estimates, SE, and dfs match for different centering values
@@ -116,7 +116,7 @@ test_that("The degrees of freedom are not sensitive to the choice of centering v
                                      control = lmeControl(msMaxIter = 50, apVar = FALSE, returnObject = TRUE)))
   Bry_g_C1 <- g_mlm(Bry_RML_C1,
                     p_const = c(0,0,1,B-A),
-                    r_const = c(1,0,0,0,0,0,1,0,1),
+                    r_const = c(1,1,0,0,0,0,0,0,1),
                     returnModel = TRUE)
 
   # center at start of series
@@ -130,7 +130,7 @@ test_that("The degrees of freedom are not sensitive to the choice of centering v
                                      control = lmeControl(msMaxIter = 50, apVar = FALSE, returnObject = TRUE)))
   Bry_g_C2 <- g_mlm(Bry_RML_C2,
                     p_const = c(0,0,1,B-A),
-                    r_const = c(1,2*(B-C2),(B-C2)^2,0,0,0,1,0,1),
+                    r_const = c(1,1,2*(B-C2),(B-C2)^2,0,0,0,0,1),
                     returnModel = TRUE)
 
   # check whether BCSMD estimates, SE, and dfs match for different centering values
