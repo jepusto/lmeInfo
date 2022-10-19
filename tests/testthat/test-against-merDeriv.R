@@ -1,6 +1,7 @@
 skip_if_not_installed("lme4")
 skip_if_not_installed("Matrix")
 skip_if_not_installed("merDeriv")
+skip_if_not_installed("mlmRev")
 
 library(lme4)
 library(nlme)
