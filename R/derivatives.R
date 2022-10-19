@@ -58,14 +58,15 @@ dV_dTau_unstruct <- function(block, pdMat_class, Z_design) {
 }
 
 dV_dreStruct <- function(mod) {
+
   blocks <- mod$groups
   blocks_names <- names(blocks)
-  reStruct_names <- names(mod$modelStruct$reStruct)
-  if (!all(blocks_names %in% reStruct_names)) {
+
+  if (!all(blocks_names %in%  names(mod$modelStruct$reStruct))) {
     names(mod$modelStruct$reStruct) <- rev(blocks_names)
   }
 
-  b <- lapply(rev(reStruct_names), function(x) class(mod$modelStruct$reStruct[[x]])) # pdClass
+  b <- lapply(blocks_names, function(x) class(mod$modelStruct$reStruct[[x]])) # pdClass
 
   data <- nlme::getData(mod)
   Z_design <- model.matrix(mod$modelStruct$reStruct, data = data)
