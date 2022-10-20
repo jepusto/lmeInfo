@@ -1,6 +1,7 @@
 skip_if_not_installed("lme4")
 skip_if_not_installed("Matrix")
 skip_if_not_installed("merDeriv")
+skip_if_not_installed("mlmRev")
 
 library(lme4)
 library(nlme)
@@ -88,17 +89,15 @@ test_that("lmeInfo results comparable to merDeriv for sleepstudy data, estimated
 data(bdf, package = "mlmRev")
 
 test_that("lmeInfo results comparable to merDeriv for bdf data, estimated by FML.", {
-  skip("Can't get the model parameter estimates to agree.")
+  skip_on_cran()
 
-  # bdf data
+  # with covariance between random effects
 
-  bdf_lme4_FML <- suppressWarnings(
-    lmer(langPOST ~ sex + Minority + aritPRET + (sex + aritPRET | schoolNR),
-         data = bdf, REML = FALSE)
-  )
+  bdf_lme4_FML <- lmer(langPOST ~ sex + Minority + aritPRET + (1 + sex | schoolNR),
+                       data = bdf, REML = FALSE)
 
   bdf_nlme_FML <- lme(langPOST ~ sex + Minority + aritPRET,
-                      random = ~ sex + aritPRET | schoolNR,
+                      random = ~ 1 + sex | schoolNR,
                       data = bdf,
                       method = "ML")
 
@@ -112,29 +111,56 @@ test_that("lmeInfo results comparable to merDeriv for bdf data, estimated by FML
   Tau_lme4_FML <- vcov_params(getME(bdf_lme4_FML, "theta"), sigma_sq = sigma_sq_lme4_FML)
   vc_FML <- extract_varcomp(bdf_nlme_FML)
   expect_equal(sigma_sq_lme4_FML, vc_FML$sigma_sq, tol = 10^-3)
-  expect_equal(Tau_lme4_FML[c(1,2,4,3,5,6)], vc_FML$Tau$schoolNR,
+  expect_equal(Tau_lme4_FML, vc_FML$Tau$schoolNR,
                check.attributes = FALSE, tol = 10^-2)
 
   expect_equal(as.matrix(vcov_merDeriv_FML[1:4,1:4]),
                vcov(bdf_nlme_FML),
                check.attributes = FALSE, tol = 5 * 10^-3)
-  # This did not agree probably due to the order of parameters.
-  expect_equal(as.matrix(vcov_merDeriv_FML[c(5,6,8,7,9:11),c(5,6,8,7,9:11)]),
+  expect_equal(as.matrix(vcov_merDeriv_FML[5:8,5:8]),
                vcov_lmeInfo_FML,
                check.attributes = FALSE, tol = 10^-2)
 
+  # without covariance between random effects
+  bdf_lme4_FML <- lmer(langPOST ~ sex + Minority + aritPRET + (1 + I(1*(sex==1)) || schoolNR),
+                       data = bdf, REML = FALSE)
+
+  bdf_nlme_FML <- lme(langPOST ~ sex + Minority + aritPRET,
+                      random = list(schoolNR = pdDiag(~ 1 + sex)),
+                      data = bdf,
+                      method = "ML")
+
+  vcov_merDeriv_FML <- vcov(bdf_lme4_FML,
+                            information = "expected",
+                            full = TRUE, ranpar = "var")
+
+  vcov_lmeInfo_FML <- varcomp_vcov(bdf_nlme_FML)
+
+  sigma_sq_lme4_FML <- getME(bdf_lme4_FML, "sigma")^2
+  Tau_lme4_FML <- getME(bdf_lme4_FML, "theta")^2 * sigma_sq_lme4_FML
+  vc_FML <- extract_varcomp(bdf_nlme_FML)
+  expect_equal(sigma_sq_lme4_FML, vc_FML$sigma_sq, tol = 10^-3)
+  expect_equal(Tau_lme4_FML, vc_FML$Tau$schoolNR,
+               check.attributes = FALSE, tol = 10^-2)
+
+  expect_equal(as.matrix(vcov_merDeriv_FML[1:4,1:4]),
+               vcov(bdf_nlme_FML),
+               check.attributes = FALSE, tol = 5 * 10^-3)
+  expect_equal(as.matrix(vcov_merDeriv_FML[5:7,5:7]),
+               vcov_lmeInfo_FML,
+               check.attributes = FALSE, tol = 10^-2)
 
 })
 
 test_that("lmeInfo results comparable to merDeriv for bdf data, estimated by REML.", {
-  skip("Can't get the model parameter estimates to agree")
+  skip_on_cran()
 
   bdf_lme4_REML <- suppressWarnings(
-    lmer(langPOST ~ sex + Minority + aritPRET + (sex + aritPRET | schoolNR),
+    lmer(langPOST ~ sex + Minority + aritPRET + (1 + sex | schoolNR),
                         data = bdf, REML = TRUE))
 
   bdf_nlme_REML <- lme(langPOST ~ sex + Minority + aritPRET,
-                       random = ~ sex + aritPRET | schoolNR,
+                       random = ~ 1 + sex | schoolNR,
                        data = bdf,
                        method = "REML")
 

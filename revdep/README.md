@@ -10,7 +10,7 @@
 |collate  |English_United States.utf8                |
 |ctype    |English_United States.utf8                |
 |tz       |America/Chicago                           |
-|date     |2022-10-12                                |
+|date     |2022-10-19                                |
 |rstudio  |2022.07.1+554 Spotted Wakerobin (desktop) |
 |pandoc   |NA                                        |
 
@@ -21,10 +21,4 @@
 |lmeInfo |0.2.1 |0.3.0 |*  |
 
 # Revdeps
-
-## New problems (1)
-
-|package                          |version |error  |warning |note |
-|:--------------------------------|:-------|:------|:-------|:----|
-|[merDeriv](problems.md#merderiv) |0.2-4   |__+1__ |        |     |
 
