@@ -16,7 +16,7 @@ egsingle$retained <- as.integer(egsingle$retained)
 egsingle$black <- as.integer(egsingle$black)
 egsingle$hispanic <- as.integer(egsingle$hispanic)
 
-tol <- 1e-5
+tol <- 1e-3
 
 test_that("Separate school random effects equivalent to pdDiag specification", {
   skip_on_cran()
