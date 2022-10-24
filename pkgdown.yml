@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   Information-matrices-for-fitted-LME-models: Information-matrices-for-fitted-LME-models.html
   Standardized-mean-differences-in-multi-level-models: Standardized-mean-differences-in-multi-level-models.html
-last_built: 2022-10-24T15:30Z
+last_built: 2022-10-24T16:17Z
 urls:
   reference: https://jepusto.github.io/lmeInfo/reference
   article: https://jepusto.github.io/lmeInfo/articles
