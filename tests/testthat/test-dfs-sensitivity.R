@@ -101,6 +101,7 @@ test_that("The degrees of freedom are not sensitive to the choice of centering v
   skip_if(packageVersion('scdhlm') <= '0.6.0')
 
   data(Bryant2018)
+  Bryant2018 <- subset(Bryant2018, !is.na(outcome))
 
   A <- 5
   B <- 49

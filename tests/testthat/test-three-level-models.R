@@ -85,6 +85,7 @@ Bryant2016_RML4 <- lme(fixed = outcome ~ session_c + treatment + trt_time,
 
 # Bryant 2018
 data(Bryant2018, package = "scdhlm")
+Bryant2018 <- subset(Bryant2018, !is.na(outcome))
 
 Bryant2018_RML1 <- lme(fixed = outcome ~ treatment,
                      random = ~ 1 | school/case,

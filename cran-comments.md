@@ -1,15 +1,12 @@
 ## Resubmit comments
 
-This is a resubmission. In this version we have: 
-* fixed a bug in the `Fisher_info()` function that returned the information matrix in an incorrect order for models with three or more sets of random effects or models with multiple sets of random effects at the same level;
-* removed `cnvg_warn` argument from the `g_mlm()` function;
-* and updated the unit tests related to Lambert et al. (2006) data.
+This is a maintenance release. The only change is to update unit tests to handle missing values in the `Bryant2018` example dataset from the scdhlm package. 
 
-These updates are necessary for the package's downstream dependency (the scdhlm package). Thank you.
+These updates are necessary for the package's downstream dependency (the scdhlm package).
 
 ## Test environments
 
-* local Windows 10 Pro, R 4.2.1
+* local Windows 10 Pro, R 4.2.2
 * ubuntu 20.04.5 LTS (on Github), R devel, release, oldrelease
 * macOS-latest (on Github), R release
 * Windows-latest (on Github), R release

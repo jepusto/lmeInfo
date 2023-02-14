@@ -3,6 +3,7 @@ library(nlme)
 skip_if_not_installed("scdhlm")
 
 data(Bryant2018, package = "scdhlm")
+Bryant2018 <- subset(Bryant2018, !is.na(outcome))
 
 #------------------------------------------------------------------------------
 # varying intercept at level 3, ALLOW intercept & trend covariance at level 2
