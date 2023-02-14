@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">lmeInfo</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1</span>
       </span>
     </div>
 
@@ -102,6 +102,7 @@
 <div class="page-header"><h1 id="lmeinfo">lmeInfo<a class="anchor" aria-label="anchor" href="#lmeinfo"></a>
 </h1></div>
 <!-- badges: start -->
+
 <div class="section level2">
 <h2 id="information-matrices-for-fitted-lme-and-gls-models">Information matrices for fitted <code>lme</code> and <code>gls</code> models<a class="anchor" aria-label="anchor" href="#information-matrices-for-fitted-lme-and-gls-models"></a>
 </h2>
@@ -234,14 +235,16 @@
 </h2>
 <p>The <code><a href="reference/Fisher_info.html">Fisher_info()</a></code> and <code><a href="reference/varcomp_vcov.html">varcomp_vcov()</a></code> functions operate on fitted <code><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme()</a></code> and <code><a href="https://rdrr.io/pkg/nlme/man/gls.html" class="external-link">gls()</a></code> models. Models fitted using <code><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme()</a></code> can include three types of variance component parameters: random effects variances and covariances, correlation structure parameters, and variance structure parameters. Models fitted using <code><a href="https://rdrr.io/pkg/nlme/man/gls.html" class="external-link">gls()</a></code> can include correlation structure parameters and variance structure parameters. The <code>nlme</code> package provides many different forms for each of these components, not all of which are supported in <code>lmeInfo</code>. The package can handle the following classes of variance components:</p>
 <ul>
-<li>Random effects structure<ul>
+<li>Random effects structure
+<ul>
 <li>
 <code>pdSymm</code> matrices, including in the <code>pdLogChol</code> and <code>pdNatural</code> parameterizations</li>
 <li>
 <code>pdDiag</code> matrices</li>
 </ul>
 </li>
-<li>Correlation structure<ul>
+<li>Correlation structure
+<ul>
 <li><code>corAR1</code></li>
 <li><code>corCAR1</code></li>
 <li>
@@ -250,7 +253,8 @@
 <li><code>corSymm</code></li>
 </ul>
 </li>
-<li>Variance structure<ul>
+<li>Variance structure
+<ul>
 <li><code>varIdent</code></li>
 <li><code>varExp</code></li>
 <li><code>varPower</code></li>
@@ -332,7 +336,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
