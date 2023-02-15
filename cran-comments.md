@@ -12,11 +12,10 @@ These updates are necessary for the package's downstream dependency (the scdhlm 
 * Windows-latest (on Github), R release
 * win-builder (devel, release, oldrelease)
 * r-hub:
-  - macOS 10.13.6 High Sierra, R-release, CRAN's setup
-  - Windows Server 2022, R-oldrel, 32/64 bit
-  - Windows Server 2022, R-release, 32/64 bit
-  - Windows Server 2022, R-patched, 32/64 bit
-  
+  * Windows Server 2022, R-devel, 64 bit
+  * Ubuntu Linux 16.04 LTS, R-release, GCC
+  * Fedora Linux, R-devel, clang, gfortran
+
 
 ## R CMD check results
 There was 1 NOTE:
@@ -53,6 +52,7 @@ There was 1 NOTE:
   These URLs and DOIs are valid.
 
 ## revdepcheck results
+
 We checked 3 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
 * We saw 0 new problems
