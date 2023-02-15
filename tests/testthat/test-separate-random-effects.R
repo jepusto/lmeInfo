@@ -3,7 +3,7 @@ library(nlme)
 skip_if_not_installed("scdhlm")
 
 data(Bryant2018, package = "scdhlm")
-Bryant2018 <- subset(Bryant2018, !is.na(outcome))
+Bryant2018 <- droplevels(subset(Bryant2018, !is.na(outcome)))
 
 #------------------------------------------------------------------------------
 # varying intercept at level 3, ALLOW intercept & trend covariance at level 2
@@ -42,7 +42,8 @@ test_that("mod1_1 and mod1_2 returns the same results.", {
 mod2_1 <- suppressWarnings(lme(fixed = outcome ~ session_c + treatment + session_trt,
               random = list( ~ 1 | school, ~ 1 | case, ~ 0 + session_c | case),
               correlation = corAR1(0, ~ session_c | school/case),
-              data = Bryant2018))
+              data = Bryant2018,
+              control = lmeControl(tolerance = 1e-6)))
 # warning: cannot use smaller level of grouping for 'correlation' than for 'random'. Replacing the former with the latter.
 VarCorr(mod2_1) # pdLogChol(1) parametrization
 
@@ -54,7 +55,8 @@ VarCorr(mod2_1) # pdLogChol(1) parametrization
 mod2_2 <- lme(fixed = outcome ~ session_c + treatment + session_trt,
               random = list(school = ~ 1, case = pdDiag(~ session_c)),
               correlation = corAR1(0, ~ session_c | school/case),
-              data = Bryant2018)
+              data = Bryant2018,
+              control = lmeControl(tolerance = 1e-6))
 VarCorr(mod2_2) # pdDiag(1) parametrization?
 
 Fisher_info(mod2_2)
@@ -107,8 +109,8 @@ test_that("Info matrices work with dropped observations.", {
 
   skip_on_cran()
 
-  test_after_deleting(mod1_1)
-  test_after_deleting(mod1_2)
-  test_after_deleting(mod2_2)
+  test_after_deleting(mod1_1, seed = 20230212)
+  test_after_deleting(mod1_2, seed = 20230213)
+  test_after_deleting(mod2_2, seed = 20230214)
 
 })
