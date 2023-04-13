@@ -5,7 +5,7 @@ This is a resubmission. This resubmission fixes the additional issues (ATLAS) in
 ## Test environments
 
 * local Windows 10 Pro, R 4.2.2
-* ubuntu 20.04.5 LTS (on Github), R devel, release, oldrelease
+* ubuntu 20.04.2 LTS (on Github), R devel, release, oldrelease
 * macOS-latest (on Github), R release
 * Windows-latest (on Github), R release
 * win-builder (devel, release, oldrelease)
