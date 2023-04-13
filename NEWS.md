@@ -1,3 +1,7 @@
+# lmeInfo 0.3.2
+
+* Fixed the "Additional issues" in the unit tests identified by the CRAN package checks. 
+
 # lmeInfo 0.3.1
 
 * Updated unit tests to handle missing values in `Bryant2018` example dataset.

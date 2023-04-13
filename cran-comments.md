@@ -1,8 +1,6 @@
 ## Resubmit comments
 
-This is a maintenance release. The only change is to update unit tests to handle missing values in the `Bryant2018` example dataset from the scdhlm package. 
-
-These updates are necessary for the package's downstream dependency (the scdhlm package).
+This is a resubmission. This resubmission fixes the additional issues (ATLAS) in CRAN package checks.
 
 ## Test environments
 
@@ -13,7 +11,7 @@ These updates are necessary for the package's downstream dependency (the scdhlm 
 * win-builder (devel, release, oldrelease)
 * r-hub:
   * Windows Server 2022, R-devel, 64 bit
-  * Ubuntu Linux 16.04 LTS, R-release, GCC
+  * Windows Server 2022, R-oldrel, 32/64 bit
   * Fedora Linux, R-devel, clang, gfortran
 
 

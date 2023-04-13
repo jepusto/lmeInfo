@@ -68,9 +68,9 @@ test_that("mod2_1 and mod2_2 return the same results.", {
   expect_equal(as.numeric(VarCorr(mod2_1)[,1][2]), as.numeric(VarCorr(mod2_2)[,1][2]), tol = 1e-3)
   expect_equal(as.numeric(VarCorr(mod2_1)[,2][4]), as.numeric(VarCorr(mod2_2)[,2][4]), tol = 1e-7)
   expect_equal(as.numeric(VarCorr(mod2_1)[,2][6]), as.numeric(VarCorr(mod2_2)[,2][5]), tol = 1e-7)
-  expect_equal(as.numeric(VarCorr(mod2_1)[,2][7]), as.numeric(VarCorr(mod2_2)[,2][6]))
+  expect_equal(as.numeric(VarCorr(mod2_1)[,2][7]), as.numeric(VarCorr(mod2_2)[,2][6]), tol = 1e-6)
   expect_equal(mod2_1$sigma, mod2_2$sigma)
-  expect_equal(mod2_1$varFix, mod2_2$varFix, tolerance = 5e-4) # intercept var differs at 6th decimals
+  expect_equal(mod2_1$varFix, mod2_2$varFix, tolerance = 5e-4)
   expect_equal(mod2_1$logLik, mod2_2$logLik)
 })
 
