@@ -31,7 +31,7 @@ jobs:
         run: |
           # Redirect the default R BLAS pointer to the installed BLIS library
           # Note: The exact path can vary, but this is standard on Ubuntu runners
-          sudo ln -sf /usr/lib/x86_64-linux-gnu/libblis.so /usr/lib/R/lib/libRblas.so
+          sudo ln -sf /usr/lib/x86_64-linux-gnu/blis-openmp/libblas.so /usr/lib/R/lib/libRblas.so
 
           # Print R's session details to verify the BLAS choice visually in the logs
           Rscript -e "sessionInfo()"
