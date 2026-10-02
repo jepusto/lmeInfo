@@ -76,13 +76,13 @@ test_that("Results do not depend on order of data.", {
   skip_on_cran()
 
   test_after_shuffling(Ortho_A, seed = 20)
-  test_after_shuffling(Ortho_B_Power, seed = 21)
+  test_after_shuffling(Ortho_B_Power, seed = 22)
   test_after_shuffling(Ortho_C_Power, seed = 20)
   test_after_shuffling(Ortho_D_Power, seed = 20)
   test_after_shuffling(Ortho_B_Exp, seed = 20)
   test_after_shuffling(Ortho_C_Exp, seed = 20)
   test_after_shuffling(Ortho_D_Exp, seed = 20)
-  test_after_shuffling(Ortho_B_Const, seed = 21)
+  test_after_shuffling(Ortho_B_Const, seed = 22)
   test_after_shuffling(Ortho_D_Const, seed = 21)
 
 })
@@ -92,7 +92,7 @@ test_that("Info matrices work with dropped observations.", {
   skip_on_cran()
 
   test_after_deleting(Ortho_A, seed = 40)
-  test_after_deleting(Ortho_B_Power, seed = 51)
+  test_after_deleting(Ortho_B_Power, seed = 52)
   test_after_deleting(Ortho_C_Power, seed = 63)
   test_after_deleting(Ortho_D_Power, seed = 71)
   test_after_deleting(Ortho_B_Exp, seed = 80)

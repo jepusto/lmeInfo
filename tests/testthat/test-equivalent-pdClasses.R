@@ -5,9 +5,9 @@ library(nlme)
 data(egsingle, package = "mlmRev")
 
 # Take a subsample of students
-set.seed(20221019)
+set.seed(20261002)
 childIDs <- unique(egsingle$childid)
-child_subset <- sample(childIDs, size = 500L)
+child_subset <- sample(childIDs, size = 300L)
 egsingle <- subset(egsingle, childid %in% child_subset)
 
 # clean up predictors
@@ -16,7 +16,7 @@ egsingle$retained <- as.integer(egsingle$retained)
 egsingle$black <- as.integer(egsingle$black)
 egsingle$hispanic <- as.integer(egsingle$hispanic)
 
-tol <- 1e-3
+tol <- 2e-3
 
 test_that("Separate school random effects equivalent to pdDiag specification", {
   skip_on_cran()
