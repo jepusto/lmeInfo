@@ -20,14 +20,21 @@ jobs:
 
       - name: Install BLIS system dependencies
         run: |
-          sudo apt-get install flexiblas-blis
-          flexiblas list
-          flexiblas set blis
+          sudo apt-get install -y libblis-dev
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
+
+      - name: Force R to use BLIS
+        run: |
+          # Redirect the default R BLAS pointer to the installed BLIS library
+          # Note: The exact path can vary, but this is standard on Ubuntu runners
+          sudo ln -sf /usr/lib/x86_64-linux-gnu/blis/libblis.so /usr/lib/R/lib/libRblas.so
+
+          # Print R's session details to verify the BLAS choice visually in the logs
+          Rscript -e "sessionInfo()"
 
       - name: Set up R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
