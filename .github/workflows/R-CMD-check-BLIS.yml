@@ -8,7 +8,6 @@ on:
 
 jobs:
   R-CMD-check:
-    if: "! contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -20,7 +19,8 @@ jobs:
 
       - name: Install BLIS system dependencies
         run: |
-          sudo apt-get install -y libblis-dev
+          sudo apt install flexiblas-blis
+          flexiblas set blis
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
