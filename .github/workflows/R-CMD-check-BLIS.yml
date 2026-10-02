@@ -34,6 +34,7 @@ jobs:
           R_HOME="$(R RHOME)"
           # Redirect the default R BLAS pointer to the installed BLIS library
           sudo ln -sf /usr/lib/x86_64-linux-gnu/blis-openmp/libblas.so "$R_HOME/lib/libRblas.so"
+          sudo update-alternatives --set libblas.so.3-x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/blis-openmp/libblas.so.3
           # Print R's session details to verify the BLAS choice visually in the logs
           Rscript -e "sessionInfo()"
 
