@@ -4,13 +4,12 @@ skip_if_not_installed("mlmRev")
 
 data(star, package = "mlmRev")
 
-star <- subset(star, gr == 3 & !is.na(math))
+star <- subset(star, gr == 3 & !is.na(math) & !is.na(ses) & eth %in% c("W","B"))
 star <- droplevels(star)
 star <- star[order(star$sch, star$tch, star$id),]
 
 star$small <- ifelse(star$cltype == "small", 1L, 0L)
 star$ses <- ifelse(is.na(star$ses), "M", as.character(star$ses))
-star$eth <- ifelse(is.na(star$eth), "M", as.character(star$eth))
 
 star_2L_basic <- lme(math ~ small,
                      random = ~ 1 | sch,
@@ -84,9 +83,9 @@ test_that("g_mlm works for STAR models.", {
   g2_basic <- g_mlm(star_2L_basic, p_const = c(0, 1), r_const = c(1, 1))
   g2_explicit <- g_mlm(star_2L_basic, p_const = c(0, 1),
                        mod_denom = star_2L_basic, r_const = c(1, 1))
-  g2_conditional <- g_mlm(mod = star_2L_control, p_const = c(0, 1, rep(0,11)),
+  g2_conditional <- g_mlm(mod = star_2L_control, p_const = c(0, 1, rep(0,6)),
                           r_const = c(1, 1))
-  g2_control <- g_mlm(mod = star_2L_control, p_const = c(0, 1, rep(0,11)),
+  g2_control <- g_mlm(mod = star_2L_control, p_const = c(0, 1, rep(0,6)),
                       mod_denom = star_2L_basic, r_const = c(1, 1))
 
   expect_identical(g2_basic, g2_explicit)
@@ -97,9 +96,9 @@ test_that("g_mlm works for STAR models.", {
   g3_basic <- g_mlm(star_3L_basic, p_const = c(0, 1), r_const = c(1, 1, 1))
   g3_explicit <- g_mlm(star_3L_basic, p_const = c(0, 1),
                        mod_denom = star_3L_basic, r_const = c(1, 1, 1))
-  g3_conditional <- g_mlm(mod = star_3L_control, p_const = c(0, 1, rep(0,11)),
+  g3_conditional <- g_mlm(mod = star_3L_control, p_const = c(0, 1, rep(0,6)),
                           r_const = c(1, 1, 1))
-  g3_control <- g_mlm(mod = star_3L_control, p_const = c(0, 1, rep(0,11)),
+  g3_control <- g_mlm(mod = star_3L_control, p_const = c(0, 1, rep(0,6)),
                       mod_denom = star_3L_basic, r_const = c(1, 1, 1))
 
   expect_identical(g3_basic, g3_explicit)
@@ -109,9 +108,9 @@ test_that("g_mlm works for STAR models.", {
   gRE_basic <- g_mlm(star_3L_RE, p_const = c(0, 1), r_const = c(0, 1, 1, 1))
   gRE_explicit <- g_mlm(star_3L_RE, p_const = c(0, 1),
                        mod_denom = star_3L_RE, r_const = c(0, 1, 1, 1))
-  gRE_conditional <- g_mlm(mod = star_3L_RE_control, p_const = c(0, 1, rep(0,11)),
+  gRE_conditional <- g_mlm(mod = star_3L_RE_control, p_const = c(0, 1, rep(0,6)),
                           r_const = c(0, 1, 1, 1))
-  gRE_control <- g_mlm(mod = star_3L_RE_control, p_const = c(0, 1, rep(0,11)),
+  gRE_control <- g_mlm(mod = star_3L_RE_control, p_const = c(0, 1, rep(0,6)),
                       mod_denom = star_3L_RE, r_const = c(0, 1, 1, 1))
 
   expect_identical(gRE_basic, gRE_explicit)
