@@ -27,7 +27,7 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Force R to use BLIS
+      - name: Tell R to use BLIS
         run: |
           sudo update-alternatives --set libblas.so.3-x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/blis-openmp/libblas.so.3
           # Print R's session details to verify the BLAS choice visually in the logs
