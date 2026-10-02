@@ -5,11 +5,11 @@
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.org/jepusto/lmeInfo.svg?branch=master)](https://travis-ci.org/jepusto/lmeInfo)
+[![R-CMD-check](https://github.com/jepusto/lmeInfo/workflows/R-CMD-check/badge.svg)](https://github.com/jepusto/lmeInfo/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/jepusto/lmeInfo/branch/master/graph/badge.svg)](https://codecov.io/gh/jepusto/lmeInfo?branch=master)
-[![](http://www.r-pkg.org/badges/version/lmeInfo)](https://CRAN.R-project.org/package=lmeInfo)
+[![CRAN
+status](http://www.r-pkg.org/badges/version/lmeInfo)](https://CRAN.R-project.org/package=lmeInfo)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/lmeInfo)](https://CRAN.R-project.org/package=lmeInfo)
 [![](http://cranlogs.r-pkg.org/badges/last-month/lmeInfo)](https://CRAN.R-project.org/package=lmeInfo)
 <!-- badges: end -->
@@ -75,7 +75,7 @@ Bryant2016_RML <- lme(fixed = outcome ~ treatment,
 
 summary(Bryant2016_RML)
 #> Linear mixed-effects model fit by REML
-#>  Data: Bryant2016 
+#>   Data: Bryant2016 
 #>        AIC      BIC    logLik
 #>   2627.572 2646.041 -1308.786
 #> 
@@ -88,7 +88,7 @@ summary(Bryant2016_RML)
 #>         (Intercept) Residual
 #> StdDev:    15.98217   18.398
 #> 
-#> Fixed effects: outcome ~ treatment 
+#> Fixed effects:  outcome ~ treatment 
 #>                       Value Std.Error  DF   t-value p-value
 #> (Intercept)        56.14333  9.019268 286  6.224821       0
 #> treatmenttreatment 49.33454  2.399065 286 20.564070       0
@@ -178,9 +178,9 @@ parameters in addition to effect size estimate.
 In our model for the Bryant data, we use the treatment effect in the
 numerator of the effect size and the sum of the school-level,
 student-level, and within-student variance components in the denominator
-of the effect size. The constants are therefore given by `p_const =
-c(0, 1)` and `r_const = c(1, 1, 1)`. The effect size estimate can be
-calculated as:
+of the effect size. The constants are therefore given by
+`p_const = c(0, 1)` and `r_const = c(1, 1, 1)`. The effect size estimate
+can be calculated as:
 
 ``` r
 Bryant2016_g <- g_mlm(Bryant2016_RML, p_const = c(0,1), r_const = c(1,1,1), infotype = "expected")
@@ -227,21 +227,21 @@ correlation structure parameters and variance structure parameters. The
 components, not all of which are supported in `lmeInfo`. The package can
 handle the following classes of variance components:
 
-  - Random effects structure
-      - `pdSymm` matrices, including in the `pdLogChol` and `pdNatural`
-        parameterizations
-      - `pdDiag` matrices
-  - Correlation structure
-      - `corAR1`
-      - `corCAR1`
-      - `corARMA` for MA(1) models only
-      - `corCompSymm`
-      - `corSymm`
-  - Variance structure
-      - `varIdent`
-      - `varExp`
-      - `varPower`
-      - `varConstPower`
+- Random effects structure
+  - `pdSymm` matrices, including in the `pdLogChol` and `pdNatural`
+    parameterizations
+  - `pdDiag` matrices
+- Correlation structure
+  - `corAR1`
+  - `corCAR1`
+  - `corARMA` for MA(1) models only
+  - `corCompSymm`
+  - `corSymm`
+- Variance structure
+  - `varIdent`
+  - `varExp`
+  - `varPower`
+  - `varConstPower`
 
 Calling `Fisher_info()` or `varcomp_vcov()` on a fitted model that
 includes variance component structures outside of the supported classes
