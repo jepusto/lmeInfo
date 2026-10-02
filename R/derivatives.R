@@ -4,11 +4,15 @@
 
 build_dV_list <- function(mod) UseMethod("build_dV_list")
 
+#' @exportS3Method
+
 build_dV_list.default <- function(mod) {
   mod_class <- paste(class(mod), collapse = "-")
   stop(paste0("Derivatives not available for models of class ", mod_class, "."))
 
 }
+
+#' @exportS3Method
 
 build_dV_list.gls <- function(mod) {
   cor_params <- dV_dcorStruct(mod)                          # correlation structure
@@ -18,6 +22,8 @@ build_dV_list.gls <- function(mod) {
   # Create a list of derivative matrices
   c(cor_params, var_params, sigma_sq)
 }
+
+#' @exportS3Method
 
 build_dV_list.lme <- function(mod) {
   Tau_params <- dV_dreStruct(mod)                           # random effects structure(s)
@@ -116,12 +122,16 @@ dV_dcorStruct <- function(mod) {
 
 dR_dcorStruct <- function(struct) UseMethod("dR_dcorStruct")
 
+#' @exportS3Method
+
 dR_dcorStruct.default <- function(struct) {
   cor_class <- class(struct)[[1]]
   stop(paste0("Derivatives not available for correlation structures of class ", cor_class, "."))
 }
 
+
 # corAR1
+#' @exportS3Method
 
 dR_dcorStruct.corAR1 <- function(struct) {
   cor_AR1 <- as.double(coef(struct, FALSE))
@@ -132,6 +142,7 @@ dR_dcorStruct.corAR1 <- function(struct) {
 }
 
 # corCAR1
+#' @exportS3Method
 
 dR_dcorStruct.corCAR1 <- function(struct) {
   cor_CAR1 <- as.double(coef(struct, FALSE))
@@ -142,13 +153,7 @@ dR_dcorStruct.corCAR1 <- function(struct) {
 }
 
 # corARMA
-
-dR_dcorMA1 <- function(covariate, cor) {
-  dist_mat <- as.matrix(dist(covariate))
-  dist_mat[dist_mat != 1] <- 0
-  dist_mat[dist_mat == 1] <- (1 - cor^2) / ((1 + cor^2)^2)
-  return(dist_mat)
-}
+#' @exportS3Method
 
 dR_dcorStruct.corMA1 <- function(struct) {
   cor_MA1 <- as.double(coef(struct, FALSE))
@@ -157,6 +162,16 @@ dR_dcorStruct.corMA1 <- function(struct) {
   dR <- lapply(covariate, dR_dcorMA1, cor = cor_MA1)
   list(dR)
 }
+
+
+dR_dcorMA1 <- function(covariate, cor) {
+  dist_mat <- as.matrix(dist(covariate))
+  dist_mat[dist_mat != 1] <- 0
+  dist_mat[dist_mat == 1] <- (1 - cor^2) / ((1 + cor^2)^2)
+  return(dist_mat)
+}
+
+#' @exportS3Method
 
 dR_dcorStruct.corARMA <- function(struct) {
   cor_ARMA <- coef(struct, FALSE)
@@ -174,6 +189,7 @@ dR_dcorStruct.corARMA <- function(struct) {
 }
 
 # corCompSymm
+#' @exportS3Method
 
 dR_dcorStruct.corCompSymm <- function(struct) {
   covariate <- attr(struct, "covariate")
@@ -200,6 +216,7 @@ dR_dcor_index <- function(row, col, covariate) {
 }
 
 # return a list of derivative matrices for all cor parameters
+#' @exportS3Method
 
 dR_dcorStruct.corSymm <- function(struct) {
   cor_Symm <- as.double(coef(struct, FALSE)) # parameters
@@ -284,12 +301,15 @@ dV_dvarStruct <- function(mod) {
 
 dsd_dvarStruct <- function(struct) UseMethod("dsd_dvarStruct")
 
+#' @exportS3Method
+
 dsd_dvarStruct.default <- function(struct) {
   var_class <- class(struct)[[1]]
   stop(paste0("Derivatives not available for variance structures of class ", var_class, "."))
 }
 
 # varIdent
+#' @exportS3Method
 
 dsd_dvarStruct.varIdent <- function(struct) {
   grps <- attr(struct, "groups")
@@ -298,10 +318,7 @@ dsd_dvarStruct.varIdent <- function(struct) {
 }
 
 # varExp
-
-dsd_dvarExp <- function(val, grp, groups, covariate) {
-  exp(covariate * val) * covariate * as.integer(grp == groups)
-}
+#' @exportS3Method
 
 dsd_dvarStruct.varExp <- function(struct) {
   var_Exp <- coef(struct, FALSE)
@@ -323,12 +340,13 @@ dsd_dvarStruct.varExp <- function(struct) {
   }
 }
 
-# varPower
 
-dsd_dvarPower <- function(val, grp, groups, covariate) {
-  abs_covariate <- abs(covariate)
-  abs_covariate^val * log(abs_covariate) * as.integer(grp == groups)
+dsd_dvarExp <- function(val, grp, groups, covariate) {
+  exp(covariate * val) * covariate * as.integer(grp == groups)
 }
+
+# varPower
+#' @exportS3Method
 
 dsd_dvarStruct.varPower <- function(struct) {
   var_Power <- coef(struct, FALSE)
@@ -351,29 +369,14 @@ dsd_dvarStruct.varPower <- function(struct) {
   }
 }
 
+
+dsd_dvarPower <- function(val, grp, groups, covariate) {
+  abs_covariate <- abs(covariate)
+  abs_covariate^val * log(abs_covariate) * as.integer(grp == groups)
+}
+
 # varConstPower
-
-# for one stratum (two parameters: const and power)
-
-dsd_dConstPower1 <- function(x, val, covariate) {
-  abs_covariate <- abs(covariate)
-  if (x == "const") {
-    rep(1, length(covariate))
-  } else {
-    abs_covariate^val[2] * log(abs_covariate) # [2] is the power par
-  }
-}
-
-# for two or more strata (multiple const and power parameters)
-
-dsd_dConstPower2 <- function(val, type, grp, groups, covariate) {
-  abs_covariate <- abs(covariate)
-  if (type == "const") {
-    as.integer(grp == groups)
-  } else {
-    abs_covariate^val * log(abs_covariate) * as.integer(grp == groups)
-  }
-}
+#' @exportS3Method
 
 dsd_dvarStruct.varConstPower <- function(struct) {
   groups <- attr(struct, "groups")
@@ -400,3 +403,26 @@ dsd_dvarStruct.varConstPower <- function(struct) {
 
   }
 }
+
+# for one stratum (two parameters: const and power)
+
+dsd_dConstPower1 <- function(x, val, covariate) {
+  abs_covariate <- abs(covariate)
+  if (x == "const") {
+    rep(1, length(covariate))
+  } else {
+    abs_covariate^val[2] * log(abs_covariate) # [2] is the power par
+  }
+}
+
+# for two or more strata (multiple const and power parameters)
+
+dsd_dConstPower2 <- function(val, type, grp, groups, covariate) {
+  abs_covariate <- abs(covariate)
+  if (type == "const") {
+    as.integer(grp == groups)
+  } else {
+    abs_covariate^val * log(abs_covariate) * as.integer(grp == groups)
+  }
+}
+

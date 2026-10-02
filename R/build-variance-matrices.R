@@ -172,10 +172,14 @@ build_RE_mats <- function(mod, sigma_scale = FALSE) {
 
 build_Sigma_mats <- function(mod, invert = FALSE, sigma_scale = FALSE) UseMethod("build_Sigma_mats")
 
+#' @exportS3Method
+
 build_Sigma_mats.default <- function(mod, invert = FALSE, sigma_scale = FALSE) {
   mod_class <- paste(class(mod), collapse = "-")
   stop(paste0("Sigma matrices not available for models of class ", mod_class, "."))
 }
+
+#' @exportS3Method
 
 build_Sigma_mats.gls <- function(mod, invert = FALSE, sigma_scale = FALSE) {
 
@@ -191,6 +195,8 @@ build_Sigma_mats.gls <- function(mod, invert = FALSE, sigma_scale = FALSE) {
 
   return(V_list)
 }
+
+#' @exportS3Method
 
 build_Sigma_mats.lme <- function(mod, invert = FALSE, sigma_scale = FALSE) {
 

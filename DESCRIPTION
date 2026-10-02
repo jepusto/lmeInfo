@@ -45,5 +45,5 @@ Imports:
     nlme,
     stats
 VignetteBuilder: knitr
-RoxygenNote: 7.2.3
 Language: en-US
+Config/roxygen2/version: 8.1.0
