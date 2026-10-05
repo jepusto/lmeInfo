@@ -1,6 +1,7 @@
-# lmeInfo 0.3.2.999
+# lmeInfo 0.3.3
 
 * Updated documentation to use recent version of roxygen2.
+* Fixed the "Additional issues" in the unit tests identified by the CRAN package checks.
 
 # lmeInfo 0.3.2
 
