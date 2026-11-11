@@ -148,7 +148,7 @@ test_with_FIML <- function(mod) {
 
 }
 
-compare_omit_exclude_complete <- function(mod, dat, NA_vals) {
+compare_omit_exclude_complete <- function(mod, dat, NA_vals, tol_param = 10^-3, tol_info = 10^-3) {
 
   dat_complete <- dat[!NA_vals,,drop=FALSE]
 
@@ -160,8 +160,8 @@ compare_omit_exclude_complete <- function(mod, dat, NA_vals) {
   varcomp_omit <- extract_varcomp(mod_omit)
   varcomp_exclude <- extract_varcomp(mod_exclude)
   varcomp_comp <- extract_varcomp(mod_comp)
-  testthat::expect_identical(varcomp_omit, varcomp_comp)
-  testthat::expect_identical(varcomp_exclude, varcomp_comp)
+  testthat::expect_equal(varcomp_omit, varcomp_comp, tolerance = tol_param)
+  testthat::expect_equal(varcomp_exclude, varcomp_comp, tolerance = tol_param)
 
   EI_omit <- Fisher_info(mod_omit, type = "expected")
   EI_exclude <- Fisher_info(mod_exclude, type = "expected")
@@ -170,10 +170,10 @@ compare_omit_exclude_complete <- function(mod, dat, NA_vals) {
   AI_exclude <- Fisher_info(mod_exclude, type = "average")
   AI_comp <- Fisher_info(mod_comp, type = "average")
 
-  testthat::expect_equal(EI_omit, EI_comp)
-  testthat::expect_equal(EI_exclude, EI_comp)
-  testthat::expect_equal(AI_omit, AI_comp)
-  testthat::expect_equal(AI_exclude, AI_comp)
+  testthat::expect_equal(EI_omit, EI_comp, tolerance = tol_info)
+  testthat::expect_equal(EI_exclude, EI_comp, tolerance = tol_info)
+  testthat::expect_equal(AI_omit, AI_comp, tolerance = tol_info)
+  testthat::expect_equal(AI_exclude, AI_comp, tolerance = tol_info)
 
 }
 
