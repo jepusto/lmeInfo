@@ -1,0 +1,94 @@
+name: R-CMD-check-MKL
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  R-CMD-check:
+    runs-on: ubuntu-latest
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install MKL system dependencies
+        run: |
+          sudo add-apt-repository -y multiverse
+          sudo apt-get update
+          sudo apt-get install -y libmkl-rt
+
+      - name: Set up R-devel
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: devel
+          use-public-rspm: true
+
+      - name: Tell R to use MKL
+        shell: bash
+        run: |
+          MKL_LIB="$(dpkg -L libmkl-rt | grep -E '/libmkl_rt\.so(\.[0-9]+)*$' | head -n 1)"
+          test -n "$MKL_LIB"
+          test -f "$MKL_LIB"
+          echo "Using MKL library: $MKL_LIB"
+          sudo update-alternatives --install /usr/lib/x86_64-linux-gnu/libblas.so.3 libblas.so.3-x86_64-linux-gnu "$MKL_LIB" 100
+          sudo update-alternatives --set libblas.so.3-x86_64-linux-gnu "$MKL_LIB"
+          sudo update-alternatives --install /usr/lib/x86_64-linux-gnu/liblapack.so.3 liblapack.so.3-x86_64-linux-gnu "$MKL_LIB" 100
+          sudo update-alternatives --set liblapack.so.3-x86_64-linux-gnu "$MKL_LIB"
+          sudo ldconfig
+          dpkg-query -W libmkl-rt
+
+      - name: Verify R uses MKL
+        shell: Rscript {0}
+        run: |
+          print(sessionInfo())
+
+          blas <- normalizePath(
+            unname(extSoftVersion()["BLAS"]),
+            mustWork = TRUE
+          )
+          lapack <- normalizePath(
+            La_library(),
+            mustWork = TRUE
+          )
+
+          print(c(BLAS = blas, LAPACK = lapack))
+
+          stopifnot(
+            grepl("mkl", blas, ignore.case = TRUE),
+            grepl("mkl", lapack, ignore.case = TRUE)
+          )
+
+          # Exercise matrix multiplication and a LAPACK solve.
+          A <- crossprod(matrix(seq_len(9), 3)) + diag(3)
+          stopifnot(max(abs(A %*% solve(A) - diag(3))) < 1e-10)
+
+      - name: Set up Pandoc
+        uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Set up R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+
+      - name: Record installed package versions
+        shell: Rscript {0}
+        run: |
+          print(sessionInfo())
+          packages <- installed.packages()
+          print(packages[, c("Package", "Version")])
+
+      - name: Check R Package
+        uses: r-lib/actions/check-r-package@v2
+        with:
+          args: 'c("--no-manual", "--as-cran", "--no-stop-on-test-error")'
+          error-on: '"warning"'
+          upload-snapshots: true
