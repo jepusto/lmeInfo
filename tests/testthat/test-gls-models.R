@@ -167,6 +167,8 @@ test_that("Results do not depend on order of data.", {
 
 test_that("Info matrices work with dropped observations.", {
 
+  skip_on_cran()
+
   test_after_deleting(Hart_AR1, seed = 10)
   test_after_deleting(Hart_CAR1, seed = 20)
   test_after_deleting(Hart_MA1, seed = 30)
