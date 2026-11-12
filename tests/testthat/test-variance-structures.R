@@ -82,7 +82,7 @@ test_that("Results do not depend on order of data.", {
   test_after_shuffling(Ortho_B_Exp, seed = 20)
   test_after_shuffling(Ortho_C_Exp, seed = 20)
   test_after_shuffling(Ortho_D_Exp, seed = 20)
-  test_after_shuffling(Ortho_B_Const, seed = 22)
+  test_after_shuffling(Ortho_B_Const, seed = 23)
   test_after_shuffling(Ortho_D_Const, seed = 21)
 
 })
