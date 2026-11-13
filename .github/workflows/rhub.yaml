@@ -9,7 +9,7 @@
 name: R-hub
 run-name: >-
   ${{ github.event.inputs.id || github.event_name }}:
-  ${{ github.event.inputs.name || github.event.inputs.config || 'mkl,blis' }}
+  ${{ github.event.inputs.name || github.event.inputs.config || 'mkl' }}
 
 on:
   # Automatically run when you push to main or master
@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: r-hub/actions/setup@v1
         with:
-          config: ${{ github.event.inputs.config || 'mkl,blis' }}
+          config: ${{ github.event.inputs.config || 'mkl' }}
         id: rhub-setup
 
   linux-containers:
