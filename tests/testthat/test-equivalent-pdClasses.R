@@ -19,6 +19,7 @@ egsingle$hispanic <- as.integer(egsingle$hispanic)
 tol <- 2e-3
 
 test_that("Separate school random effects equivalent to pdDiag specification", {
+
   skip_on_cran()
 
   m1 <- lme(math ~ year + size + female + black + hispanic,
@@ -90,6 +91,7 @@ test_that("Separate school random effects equivalent to pdDiag specification", {
 
 
 test_that("Separate child random effects equivalent to pdDiag specification", {
+
   skip_on_cran()
 
   m1 <- lme(math ~ year + size + female + black + hispanic + retained,
@@ -167,6 +169,7 @@ test_that("Separate child random effects equivalent to pdDiag specification", {
 
 test_that("Separate order of same-level random effects does not matter.", {
 
+  skip_on_cran()
 
   m1 <- lme(math ~ year + size + female + black + hispanic,
             random = list(schoolid = pdDiag(~ 1 + year),
