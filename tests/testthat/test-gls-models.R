@@ -7,67 +7,127 @@ data(Hartnagel, package = "carData")
 
 Hart_AR <- gls(fconvict ~ tfr + partic + degrees + mconvict,
                 correlation=corAR1(0.3), method="REML",
-                data=Hartnagel)
+                data=Hartnagel,
+               control = lmeControl(
+                 maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                 tolerance = 5e-7, apVar = FALSE
+               ))
 Hart_CAR <- gls(fconvict ~ tfr + partic + degrees + mconvict,
                 correlation=corAR1(0.3), method="REML",
-                data=Hartnagel)
+                data=Hartnagel,
+                control = lmeControl(
+                  maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                  tolerance = 5e-7, apVar = FALSE
+                ))
 
 Hart_AR1 <- gls(fconvict ~ tfr + partic + degrees + mconvict,
                 correlation=corAR1(0.3, form = ~ year), method="REML",
-                data=Hartnagel)
+                data=Hartnagel,
+                control = lmeControl(
+                  maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                  tolerance = 5e-7, apVar = FALSE
+                ))
 Hart_CAR1 <- gls(fconvict ~ tfr + partic + degrees + mconvict,
                  correlation=corCAR1(0.3, form = ~ year), method="REML",
-                 data=Hartnagel)
+                 data=Hartnagel,
+                 control = lmeControl(
+                   maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                   tolerance = 5e-7, apVar = FALSE
+                 ))
 Hart_MA1 <- gls(fconvict ~ tfr + partic + degrees + mconvict,
                 correlation=corARMA(0.3, form = ~ year, p=0,q=1), method="REML",
-                data=Hartnagel)
+                data=Hartnagel,
+                control = lmeControl(
+                  maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                  tolerance = 5e-7, apVar = FALSE
+                ))
 
 
 data(Orthodont)
 
 Ortho_hom <- gls(distance ~ Subject:age + Sex,
-                 data = Orthodont)
+                 data = Orthodont,
+                 control = lmeControl(
+                   maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                   tolerance = 5e-7, apVar = FALSE
+                 ))
 
 Ortho_power <- gls(distance ~ Subject:age + Sex,
                    weights = varPower(),
-                   data = Orthodont)
+                   data = Orthodont,
+                   control = lmeControl(
+                     maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                     tolerance = 5e-7, apVar = FALSE
+                   ))
 
 Ortho_AR1 <- gls(distance ~ age + Sex,
                  correlation = corAR1(0.2, form = ~ age | Subject),
-                 data = Orthodont)
+                 data = Orthodont,
+                 control = lmeControl(
+                   maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                   tolerance = 5e-7, apVar = FALSE
+                 ))
 
 Ortho_AR1_power <- gls(distance ~ age + Sex,
                        correlation = corAR1(0.2, form = ~ age | Subject),
                        weights = varPower(),
-                       data = Orthodont)
+                       data = Orthodont,
+                       control = lmeControl(
+                         maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                         tolerance = 5e-7, apVar = FALSE
+                       ))
 
 Ortho_CAR1 <- gls(distance ~ age + Sex,
                  correlation = corCAR1(0.2, form = ~ age | Subject),
-                 data = Orthodont)
+                 data = Orthodont,
+                 control = lmeControl(
+                   maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                   tolerance = 5e-7, apVar = FALSE
+                 ))
 
 Ortho_CAR1_power <- gls(distance ~ age + Sex,
                        correlation = corCAR1(0.2, form = ~ age | Subject),
                        weights = varPower(),
-                       data = Orthodont)
+                       data = Orthodont,
+                       control = lmeControl(
+                         maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                         tolerance = 5e-7, apVar = FALSE
+                       ))
 
 data(Laski, package = "scdhlm")
 
 Laski_AR1 <- gls(outcome ~ 0 + case + case:treatment,
                  correlation = corAR1(0.2, ~ time | case),
-                 data = Laski)
+                 data = Laski,
+                 control = lmeControl(
+                   maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                   tolerance = 5e-7, apVar = FALSE
+                 ))
 
 Laski_het <- gls(outcome ~ 0 + case + case:treatment,
                   weights = varIdent(form = ~ 1 | treatment),
-                  data = Laski)
+                  data = Laski,
+                 control = lmeControl(
+                   maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                   tolerance = 5e-7, apVar = FALSE
+                 ))
 
 Laski_hetAR1 <- gls(outcome ~ 0 + case + case:treatment,
                     correlation = corAR1(0.2, ~ time | case),
                     weights = varIdent(form = ~ 1 | treatment),
-                    data = Laski)
+                    data = Laski,
+                    control = lmeControl(
+                      maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                      tolerance = 5e-7, apVar = FALSE
+                    ))
 
 Laski_CAR1 <- gls(outcome ~ 0 + case + case:treatment,
                   correlation = corCAR1(0.2, ~ time | case),
-                  data = Laski)
+                  data = Laski,
+                  control = lmeControl(
+                    maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                    tolerance = 5e-7, apVar = FALSE
+                  ))
 
 # mod <- Hart_AR1
 # Fisher_info(mod, type = "expected")
@@ -76,6 +136,7 @@ Laski_CAR1 <- gls(outcome ~ 0 + case + case:treatment,
 
 
 test_that("targetVariance() works with gls models.", {
+
   test_Sigma_mats(Hart_AR, rep("A", nrow(Hartnagel)))
   test_Sigma_mats(Hart_CAR, rep("A", nrow(Hartnagel)))
   test_Sigma_mats(Hart_AR1, rep("A", nrow(Hartnagel)))
@@ -91,9 +152,11 @@ test_that("targetVariance() works with gls models.", {
   test_Sigma_mats(Laski_het, 1:nrow(Laski))
   test_Sigma_mats(Laski_hetAR1, Laski$case)
   test_Sigma_mats(Laski_CAR1, Laski$case)
+
 })
 
 test_that("Derivative matrices are of correct dimension with gls models.", {
+
   test_deriv_dims.gls(Hart_AR)
   test_deriv_dims.gls(Hart_CAR)
   test_deriv_dims.gls(Hart_AR1)
@@ -109,9 +172,11 @@ test_that("Derivative matrices are of correct dimension with gls models.", {
   test_deriv_dims.gls(Laski_het)
   test_deriv_dims.gls(Laski_hetAR1)
   test_deriv_dims.gls(Laski_CAR1)
+
 })
 
 test_that("Information matrices work with FIML too.", {
+
   test_with_FIML(Hart_AR)
   test_with_FIML(Hart_CAR)
   test_with_FIML(Hart_AR1)
@@ -127,9 +192,11 @@ test_that("Information matrices work with FIML too.", {
   test_with_FIML(Laski_het)
   test_with_FIML(Laski_hetAR1)
   test_with_FIML(Laski_CAR1)
+
 })
 
 test_that("dR_dcorStruct.corCAR1 returns the same result as dR_dcorStruct.corAR1.", {
+
   expect_equal(dR_dcorStruct.corCAR1(Hart_AR1$modelStruct$corStruct),
                dR_dcorStruct.corAR1(Hart_CAR1$modelStruct$corStruct),
                tol = 10^-5)
@@ -150,6 +217,7 @@ test_that("dR_dcorStruct.corCAR1 returns the same result as dR_dcorStruct.corAR1
 
 
 test_that("Results do not depend on order of data.", {
+
   test_after_shuffling(Hart_AR1, seed = 20)
   test_after_shuffling(Hart_CAR1, seed = 20)
   test_after_shuffling(Hart_MA1, seed = 20)
@@ -160,14 +228,13 @@ test_that("Results do not depend on order of data.", {
   test_after_shuffling(Ortho_CAR1, seed = 20)
   test_after_shuffling(Ortho_CAR1_power, seed = 20)
   test_after_shuffling(Laski_AR1, seed = 20)
-  test_after_shuffling(Laski_het, seed = 26) # 21
-  test_after_shuffling(Laski_hetAR1, seed = 17) # 20
+  test_after_shuffling(Laski_het, seed = 26)
+  test_after_shuffling(Laski_hetAR1, seed = 17)
   test_after_shuffling(Laski_CAR1, seed = 20)
+
 })
 
 test_that("Info matrices work with dropped observations.", {
-
-  skip_on_cran()
 
   test_after_deleting(Hart_AR1, seed = 10)
   test_after_deleting(Hart_CAR1, seed = 20)
@@ -203,6 +270,7 @@ test_that("New REML calculations work.", {
   check_REML2(Laski_het)
   check_REML2(Laski_hetAR1)
   check_REML2(Laski_CAR1)
+
 })
 
 test_that("g_mlm() works for gls models.", {
