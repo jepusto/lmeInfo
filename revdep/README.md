@@ -10,8 +10,8 @@
 |collate  |English_United States.utf8                                           |
 |ctype    |English_United States.utf8                                           |
 |tz       |America/Chicago                                                      |
-|date     |2026-10-05                                                           |
-|rstudio  |2026.09.0+174 Autumn Hawkbit (desktop)                               |
+|date     |2026-11-13                                                           |
+|rstudio  |2026.10.1+239 Blue Mistflower (desktop)                              |
 |pandoc   |NA                                                                   |
 |quarto   |1.10.18 @ C:\PROGRA~1\RStudio\RESOUR~1\app\bin\quarto\bin\quarto.exe |
 

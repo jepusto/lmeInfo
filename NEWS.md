@@ -1,4 +1,4 @@
-# lmeInfo 0.3.3.9999
+# lmeInfo 0.3.4
 
 * Fixed the "Additional issues" in the unit tests identified by the CRAN package checks.
 
