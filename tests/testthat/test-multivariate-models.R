@@ -97,8 +97,6 @@ mod <- bdf_MV2L
 
 test_that("targetVariance() works with multivariate models.", {
 
-  skip_on_cran()
-
   test_Sigma_mats(bdf_MV2L, bdf_long$schoolNR)
   test_Sigma_mats(bdf_MV3L, bdf_long$schoolNR)
   test_Sigma_mats(bdf_wm, bdf_long_wm$schoolNR)

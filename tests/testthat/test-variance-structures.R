@@ -5,6 +5,9 @@ data(Orthodont)
 data(Dialyzer)
 data(BodyWeight)
 
+# Skip on platforms that do not have long double vectors.
+skip_if_not(capabilities()["long.double"])
+
 # Orthodont
 
 Orthodont$age_c <- Orthodont$age - 11

@@ -111,8 +111,6 @@ Bryant2018_RML4 <- lme(fixed = outcome ~ session_c + treatment + session_trt,
 
 test_that("targetVariance() works with 3-level models.", {
 
-  skip_on_cran()
-
   test_Sigma_mats(Thiemann2001_RML1, Thiemann2001$case)
   test_Sigma_mats(Thiemann2001_RML2, Thiemann2001$case)
   test_Sigma_mats(Thiemann2001_RML3, Thiemann2001$case)
@@ -133,8 +131,6 @@ test_that("targetVariance() works with 3-level models.", {
 })
 
 test_that("Derivative matrices are of correct dimension with 3-level models.", {
-
-  skip_on_cran()
 
   test_deriv_dims(Thiemann2001_RML1)
   test_deriv_dims(Thiemann2001_RML2)
@@ -177,7 +173,7 @@ test_that("Results do not depend on order of data.", {
   skip_on_cran()
 
   test_after_shuffling(Thiemann2001_RML1, seed = 20)
-  # test_after_shuffling(Thiemann2001_RML2, test = "diag-info", seed = 16) # 20
+  test_after_shuffling(Thiemann2001_RML2, seed = 16, tol_param = 5e-3, tol_info = 5e-3)
   test_after_shuffling(Thiemann2001_RML3, seed = 21)
   test_after_shuffling(Thiemann2001_RML4, seed = 20)
 
