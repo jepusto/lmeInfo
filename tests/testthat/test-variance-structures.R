@@ -1,7 +1,5 @@
 # fit some example models for varPower, varExp and varConstPower
 
-skip_on_cran()
-
 library(nlme)
 data(Orthodont)
 data(Dialyzer)
@@ -25,8 +23,6 @@ Ortho_D_Comb <- update(Ortho_A, weights = varComb(varIdent(form = ~1|Sex), varPo
 
 test_that("targetVariance() works with Orthodont models.", {
 
-  skip_on_cran()
-
   test_Sigma_mats(Ortho_A, Orthodont$Subject)
   test_Sigma_mats(Ortho_B_Power, Orthodont$Subject)
   test_Sigma_mats(Ortho_C_Power, Orthodont$Subject)
@@ -40,8 +36,6 @@ test_that("targetVariance() works with Orthodont models.", {
 })
 
 test_that("Derivative matrices are of correct dimension with Orthodont models.", {
-
-  skip_on_cran()
 
   test_deriv_dims(Ortho_A)
   test_deriv_dims(Ortho_B_Power)
@@ -57,8 +51,6 @@ test_that("Derivative matrices are of correct dimension with Orthodont models.",
 
 test_that("Information matrices work with FIML with Orthodont models.", {
 
-  skip_on_cran()
-
   test_with_FIML(Ortho_A)
   test_with_FIML(Ortho_B_Power)
   test_with_FIML(Ortho_C_Power)
@@ -73,8 +65,6 @@ test_that("Information matrices work with FIML with Orthodont models.", {
 
 test_that("Results do not depend on order of data.", {
 
-  skip_on_cran()
-
   test_after_shuffling(Ortho_A, seed = 20)
   test_after_shuffling(Ortho_B_Power, seed = 22)
   test_after_shuffling(Ortho_C_Power, seed = 20)
@@ -88,8 +78,6 @@ test_that("Results do not depend on order of data.", {
 })
 
 test_that("Info matrices work with dropped observations.", {
-
-  skip_on_cran()
 
   test_after_deleting(Ortho_A, seed = 40)
   test_after_deleting(Ortho_B_Power, seed = 52)
@@ -113,8 +101,6 @@ Dialyzer_D_Power <- update(Dialyzer_A, weights = varPower(form = ~ pressure | QB
 
 test_that("targetVariance() works with Dialyzer models.", {
 
-  skip_on_cran()
-
   test_Sigma_mats(Dialyzer_A, Dialyzer$Subject)
   test_Sigma_mats(Dialyzer_B_Power, Dialyzer$Subject)
   test_Sigma_mats(Dialyzer_C_Power, Dialyzer$Subject)
@@ -123,8 +109,6 @@ test_that("targetVariance() works with Dialyzer models.", {
 
 test_that("Derivative matrices are of correct dimension with Dialyzer models.", {
 
-  skip_on_cran()
-
   test_deriv_dims(Dialyzer_A)
   test_deriv_dims(Dialyzer_B_Power)
   test_deriv_dims(Dialyzer_C_Power)
@@ -132,8 +116,6 @@ test_that("Derivative matrices are of correct dimension with Dialyzer models.", 
 })
 
 test_that("Information matrices work with FIML with Dialyzer models.", {
-
-  skip_on_cran()
 
   test_with_FIML(Dialyzer_A)
   test_with_FIML(Dialyzer_B_Power)
@@ -152,8 +134,6 @@ Bodyweight_D_Power <- update(BodyWeight_A, weights = varPower(form = ~ Time | Di
 
 test_that("targetVariance() works with BodyWeight models.", {
 
-  skip_on_cran()
-
   test_Sigma_mats(BodyWeight_A, BodyWeight$Rat)
   test_Sigma_mats(Bodyweight_B_Power, BodyWeight$Rat)
   test_Sigma_mats(Bodyweight_C_Power, BodyWeight$Rat)
@@ -162,8 +142,6 @@ test_that("targetVariance() works with BodyWeight models.", {
 
 test_that("Derivative matrices are of correct dimension with BodyWeight models.", {
 
-  skip_on_cran()
-
   test_deriv_dims(BodyWeight_A)
   test_deriv_dims(Bodyweight_B_Power)
   test_deriv_dims(Bodyweight_C_Power)
@@ -171,8 +149,6 @@ test_that("Derivative matrices are of correct dimension with BodyWeight models."
 })
 
 test_that("Information matrices work with FIML with Dialyzer models.", {
-
-  skip_on_cran()
 
   test_with_FIML(BodyWeight_A)
   test_with_FIML(Bodyweight_B_Power)
