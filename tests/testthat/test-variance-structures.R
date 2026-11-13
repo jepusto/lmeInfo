@@ -9,7 +9,11 @@ data(BodyWeight)
 
 Ortho_A <- lme(distance ~ age + Sex,
                data = Orthodont,
-               random = ~ age | Subject)
+               random = ~ age | Subject,
+               control = lmeControl(
+                 maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                 tolerance = 5e-7, apVar = FALSE
+               ))
 
 Ortho_B_Power <- update(Ortho_A, weights = varPower()) # fitted(.) is used by default
 Ortho_C_Power <- update(Ortho_A, weights = varPower(form = ~ age))
@@ -59,7 +63,7 @@ test_that("Information matrices work with FIML with Orthodont models.", {
   test_with_FIML(Ortho_C_Exp)
   test_with_FIML(Ortho_D_Exp)
   test_with_FIML(Ortho_B_Const)
-  expect_error(test_with_FIML(Ortho_D_Const))
+  test_with_FIML(Ortho_D_Const)
 
 })
 
@@ -94,7 +98,12 @@ test_that("Info matrices work with dropped observations.", {
 
 Dialyzer_A <- lme(rate ~ (pressure + I(pressure^2)) * QB,
                   data = Dialyzer,
-                  random = ~ pressure | Subject)
+                  random = ~ pressure | Subject,
+                  control = lmeControl(
+                    maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                    tolerance = 5e-7, apVar = FALSE
+                  ))
+
 Dialyzer_B_Power <- update(Dialyzer_A, weights = varPower())
 Dialyzer_C_Power <- update(Dialyzer_A, weights = varPower(form = ~ pressure))
 Dialyzer_D_Power <- update(Dialyzer_A, weights = varPower(form = ~ pressure | QB))
@@ -127,7 +136,12 @@ test_that("Information matrices work with FIML with Dialyzer models.", {
 
 BodyWeight_A <- lme(weight ~ Time * Diet,
                     data = BodyWeight,
-                    random = ~ Time | Rat)
+                    random = ~ Time | Rat,
+                    control = lmeControl(
+                      maxIter = 200, msMaxIter = 200, msMaxEval = 800,
+                      tolerance = 5e-7, apVar = FALSE
+                    ))
+
 Bodyweight_B_Power <- update(BodyWeight_A, weights = varPower())
 Bodyweight_C_Power <- update(BodyWeight_A, weights = varPower(form = ~ Time))
 Bodyweight_D_Power <- update(BodyWeight_A, weights = varPower(form = ~ Time | Diet))
