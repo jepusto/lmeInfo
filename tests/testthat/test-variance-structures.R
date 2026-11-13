@@ -7,9 +7,11 @@ data(BodyWeight)
 
 # Orthodont
 
-Ortho_A <- lme(distance ~ age + Sex,
+Orthodont$age_c <- Orthodont$age - 11
+
+Ortho_A <- lme(distance ~ age_c + Sex,
                data = Orthodont,
-               random = ~ age | Subject,
+               random = ~ age_c | Subject,
                control = lmeControl(
                  maxIter = 200, msMaxIter = 200, msMaxEval = 800,
                  tolerance = 5e-7, apVar = FALSE
@@ -82,6 +84,8 @@ test_that("Results do not depend on order of data.", {
 })
 
 test_that("Info matrices work with dropped observations.", {
+
+  skip_on_cran()
 
   test_after_deleting(Ortho_A, seed = 40)
   test_after_deleting(Ortho_B_Power, seed = 52)
