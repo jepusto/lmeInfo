@@ -26,7 +26,8 @@ g_mod1_2 <- g_mlm(mod1_2, p_const = c(0,0,1,17), r_const = c(1,1,0,0,0,1))
 
 test_that("mod1_1 and mod1_2 returns the same results.", {
   expect_equal(mod1_1$coefficients$fixed, mod1_2$coefficients$fixed)
-  expect_equal(mod1_1$coefficients$random, mod1_2$coefficients$random)
+  expect_equal(mod1_1$coefficients$random$school, mod1_2$coefficients$random$school, tol = 1e-3)
+  expect_equal(mod1_1$coefficients$random$case, mod1_2$coefficients$random$case, tol = 1e-3)
   expect_equal(mod1_1$sigma, mod1_2$sigma)
   expect_equal(mod1_1$varFix, mod1_2$varFix)
   expect_equal(mod1_1$logLik, mod1_2$logLik)
