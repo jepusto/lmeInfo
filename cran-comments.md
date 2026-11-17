@@ -9,6 +9,7 @@ This is a resubmission. This resubmission fixes the additional issues (MKL) in C
 * macOS-latest (on Github), R release
 * Windows-latest (on Github), R release
 * win-builder (devel, release)
+* R-hub platforms: atlas, clang23, gcc16, lto, mkl, nold
 
 ## R CMD check results
 
