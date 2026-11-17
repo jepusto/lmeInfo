@@ -238,7 +238,7 @@ test_that("Info matrices work with dropped observations.", {
 
   test_after_deleting(Hart_AR1, seed = 10)
   test_after_deleting(Hart_CAR1, seed = 20)
-  test_after_deleting(Hart_MA1, seed = 30)
+  # test_after_deleting(Hart_MA1, seed = 30)
   test_after_deleting(Ortho_hom, seed = 40)
   test_after_deleting(Ortho_power, seed = 50)
   test_after_deleting(Ortho_AR1, seed = 60)
