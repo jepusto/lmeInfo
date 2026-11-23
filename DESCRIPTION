@@ -1,7 +1,7 @@
 Package: lmeInfo
 Type: Package
 Title: Information Matrices for 'lmeStruct' and 'glsStruct' Objects
-Version: 0.3.4
+Version: 0.3.5
 Authors@R: 
     c(person(given = "James",
              family = "Pustejovsky",

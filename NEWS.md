@@ -1,3 +1,7 @@
+# lmeInfo 0.3.5
+
+* Fixed the "Additional issues" on MKL.
+
 # lmeInfo 0.3.4
 
 * Fixed the "Additional issues" in the unit tests identified by the CRAN package checks.

@@ -25,14 +25,14 @@ mod1_2 <- lme(fixed = outcome ~ session_c + treatment + session_trt,
 g_mod1_2 <- g_mlm(mod1_2, p_const = c(0,0,1,17), r_const = c(1,1,0,0,0,1))
 
 test_that("mod1_1 and mod1_2 returns the same results.", {
-  expect_equal(mod1_1$coefficients$fixed, mod1_2$coefficients$fixed)
-  expect_equal(mod1_1$coefficients$random$school, mod1_2$coefficients$random$school, tol = 1e-3)
-  expect_equal(mod1_1$coefficients$random$case, mod1_2$coefficients$random$case, tol = 1e-3)
+  expect_equal(mod1_1$coefficients$fixed, mod1_2$coefficients$fixed, tolerance = 1e-5)
+  expect_equal(mod1_1$coefficients$random$school, mod1_2$coefficients$random$school, tolerance = 1e-5)
+  expect_equal(mod1_1$coefficients$random$case, mod1_2$coefficients$random$case, tolerance = 1e-5)
   expect_equal(mod1_1$sigma, mod1_2$sigma)
-  expect_equal(mod1_1$varFix, mod1_2$varFix)
+  expect_equal(mod1_1$varFix, mod1_2$varFix, tolerance = 1e-5)
   expect_equal(mod1_1$logLik, mod1_2$logLik)
-  expect_equal(g_mod1_1$g_AB, g_mod1_2$g_AB)
-  expect_equal(g_mod1_1$SE_g_AB, g_mod1_2$SE_g_AB)
+  expect_equal(g_mod1_1$g_AB, g_mod1_2$g_AB, tolerance = 1e-5)
+  expect_equal(g_mod1_1$SE_g_AB, g_mod1_2$SE_g_AB, tolerance = 1e-5)
 })
 
 #-------------------------------------------------------------------------------------
@@ -65,11 +65,11 @@ g_mod2_2 <- g_mlm(mod2_2, p_const = c(0,0,1,17), r_const = c(1,1,0,0,1))
 #summary(g_mod2_2)
 
 test_that("mod2_1 and mod2_2 return the same results.", {
-  expect_equal(mod2_1$coefficients$fixed, mod2_2$coefficients$fixed, tol = 1e-5)
-  expect_equal(as.numeric(VarCorr(mod2_1)[,1][2]), as.numeric(VarCorr(mod2_2)[,1][2]), tol = 1e-3)
-  expect_equal(as.numeric(VarCorr(mod2_1)[,2][4]), as.numeric(VarCorr(mod2_2)[,2][4]), tol = 1e-7)
-  expect_equal(as.numeric(VarCorr(mod2_1)[,2][6]), as.numeric(VarCorr(mod2_2)[,2][5]), tol = 1e-7)
-  expect_equal(as.numeric(VarCorr(mod2_1)[,2][7]), as.numeric(VarCorr(mod2_2)[,2][6]), tol = 1e-6)
+  expect_equal(mod2_1$coefficients$fixed, mod2_2$coefficients$fixed, tolerance = 1e-5)
+  expect_equal(as.numeric(VarCorr(mod2_1)[,1][2]), as.numeric(VarCorr(mod2_2)[,1][2]), tolerance = 1e-3)
+  expect_equal(as.numeric(VarCorr(mod2_1)[,2][4]), as.numeric(VarCorr(mod2_2)[,2][4]), tolerance = 1e-7)
+  expect_equal(as.numeric(VarCorr(mod2_1)[,2][6]), as.numeric(VarCorr(mod2_2)[,2][5]), tolerance = 1e-7)
+  expect_equal(as.numeric(VarCorr(mod2_1)[,2][7]), as.numeric(VarCorr(mod2_2)[,2][6]), tolerance = 1e-6)
   expect_equal(mod2_1$sigma, mod2_2$sigma)
   expect_equal(mod2_1$varFix, mod2_2$varFix, tolerance = 5e-4)
   expect_equal(mod2_1$logLik, mod2_2$logLik)
@@ -80,8 +80,8 @@ test_that("Fisher_info() of mod1_1 and mod2_2 return similar output.", {
   info1 <- Fisher_info(mod1_1)[-3, -3] # remove the row and col with the cor btw intercept and slope involved
   info2 <- Fisher_info(mod2_2)
   expect_equivalent(info1 > 0, info2 > 0)
-  expect_equal(sum(diag(info1)), sum(diag(info2)), tol = 100)
-  expect_equal(det(info1), det(info2), tol = 1e-3)
+  expect_equal(sum(diag(info1)), sum(diag(info2)), tolerance = 100)
+  expect_equal(det(info1), det(info2), tolerance = 1e-3)
   # expect_equal(info1[, c(1:2, 5)], info2[, c(1:2, 5)], tolerance = 4e-2)
 })
 
