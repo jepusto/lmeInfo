@@ -117,20 +117,20 @@ Default is <code>FALSE</code>.</p></dd>
 <span class="r-in"><span>                      data <span class="op">=</span> <span class="va">Bryant2016</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">varcomp_vcov</span><span class="op">(</span><span class="va">Bryant2016_RML</span>, type <span class="op">=</span> <span class="st">"expected"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                             Tau.school.var((Intercept))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.school.var((Intercept))                8.133897e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.case.var((Intercept))                 -2.140288e+04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.school.var((Intercept))                8.133900e+04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.case.var((Intercept))                 -2.140289e+04</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> cor_params                                -1.004342e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq                                  -4.701742e+02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq                                  -4.701744e+02</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                             Tau.case.var((Intercept))    cor_params</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.school.var((Intercept))             -2.140288e+04 -0.0100434221</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.case.var((Intercept))                3.996247e+05 -8.2280388991</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cor_params                              -8.228039e+00  0.0002154736</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq                                -3.815475e+05  9.8729705216</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.school.var((Intercept))             -2.140289e+04 -0.0100434219</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.case.var((Intercept))                3.996251e+05 -8.2280432954</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cor_params                              -8.228043e+00  0.0002154736</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq                                -3.815479e+05  9.8729751566</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                  sigma_sq</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.school.var((Intercept)) -4.701742e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.case.var((Intercept))   -3.815475e+05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cor_params                   9.872971e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq                     4.602103e+05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.school.var((Intercept)) -4.701744e+02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.case.var((Intercept))   -3.815479e+05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cor_params                   9.872975e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq                     4.602107e+05</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">Bryant2016_RML2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">outcome</span> <span class="op">~</span> <span class="va">treatment</span>,</span></span>
 <span class="r-in"><span>                      random <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">school</span><span class="op">/</span><span class="va">case</span>,</span></span>
@@ -139,23 +139,23 @@ Default is <code>FALSE</code>.</p></dd>
 <span class="r-in"><span>                      data <span class="op">=</span> <span class="va">Bryant2016</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">varcomp_vcov</span><span class="op">(</span><span class="va">Bryant2016_RML2</span>, separate_variances <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                             Tau.school.var((Intercept))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.school.var((Intercept))                7.650378e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.case.var((Intercept))                 -1.002118e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cor_params                                 4.502481e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.school.var((Intercept))                7.650379e+04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.case.var((Intercept))                 -1.002119e+04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cor_params                                 4.502482e-02</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq.baseline                          1.053266e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq.treatment                         1.828454e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq.treatment                         1.828455e+03</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                             Tau.case.var((Intercept))    cor_params</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.school.var((Intercept))             -10021.184354  0.0450248142</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.case.var((Intercept))                75198.149335 -1.9990654661</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cor_params                                  -1.999065  0.0001064976</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq.baseline                       -61234.457840  2.9076385249</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq.treatment                      -76051.465717  4.0240881687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.school.var((Intercept))             -10021.187218  0.0450248187</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.case.var((Intercept))                75198.172793 -1.9990656266</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cor_params                                  -1.999066  0.0001064976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq.baseline                       -61234.477912  2.9076387815</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq.treatment                      -76051.489397  4.0240884606</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                             sigma_sq.baseline sigma_sq.treatment</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.school.var((Intercept))       1053.265670        1828.454300</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.case.var((Intercept))       -61234.457840      -76051.465717</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.school.var((Intercept))       1053.266060        1828.454893</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Tau.case.var((Intercept))       -61234.477912      -76051.489397</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> cor_params                           2.907639           4.024088</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq.baseline                88587.503628      111841.989456</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq.treatment              111841.989456      160901.347522</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq.baseline                88587.532453      111842.025342</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_sq.treatment              111842.025342      160901.395806</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
